@@ -1,0 +1,69 @@
+# Visual reference index
+
+63 reference image files, plus contact sheets. Originals are retained at their downloaded resolution. These files are research material and are not bundled in the Android app.
+
+| File | Dimensions | Source |
+| --- | --- | --- |
+| [conversation-filters-f5f3c2a1ea.gif](conversation-filters-f5f3c2a1ea.gif) | 600 × 750 | [source](https://miro.medium.com/v2/resize:fit:1200/1*h9bwa2yRk0kwKQbuqJNSHQ.gif) |
+| [designer-18916ffe19.jpg](designer-18916ffe19.jpg) | 1200 × 745 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-19d78e0620.jpg](designer-19d78e0620.jpg) | 1200 × 745 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-23028883e2.jpg](designer-23028883e2.jpg) | 1200 × 720 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-5c869a597e.jpg](designer-5c869a597e.jpg) | 1200 × 745 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-5f1400fef5.jpg](designer-5f1400fef5.jpg) | 1200 × 720 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-6db72c34c5.jpg](designer-6db72c34c5.jpg) | 1497 × 1818 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-6ea3ae7c90.jpg](designer-6ea3ae7c90.jpg) | 1200 × 720 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-d0f82cf9c4.jpg](designer-d0f82cf9c4.jpg) | 1200 × 748 | [source](https://singyulam.com/blloc-ratio) |
+| [designer-d29e09c97d.jpg](designer-d29e09c97d.jpg) | 1200 × 720 | [source](https://singyulam.com/blloc-ratio) |
+| [fairphone-caf40c003f.jpg](fairphone-caf40c003f.jpg) | 1080 × 2160 | [source](https://forum.fairphone.com/t/minimalistic-android-launcher/60302) |
+| [guide.jpg](guide.jpg) | 650 × 465 | [source](https://i.blogs.es/dc32dd/ratio-launcher-1/650_1200.jpg) |
+| [hands-on-fdbf59236b.jpg](hands-on-fdbf59236b.jpg) | 2000 × 1000 | [source](https://9to5google.com/2020/05/29/blloc-ratio-hands-on/) |
+| [images.jpg](images.jpg) | 388 × 774 | User-provided |
+| [malavida-b51e1376b8.jpg](malavida-b51e1376b8.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-5e65cdb4db.jpg](malavida-gallery-5e65cdb4db.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-82ea353c32.jpg](malavida-gallery-82ea353c32.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-a7e212f17a.jpg](malavida-gallery-a7e212f17a.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-c3db808a62.jpg](malavida-gallery-c3db808a62.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-c915e06dbf.jpg](malavida-gallery-c915e06dbf.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-f00d98ad59.jpg](malavida-gallery-f00d98ad59.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [malavida-gallery-f8300d2454.jpg](malavida-gallery-f8300d2454.jpg) | 720 × 1520 | [source](https://www.malavida.com/en/soft/ratio/android/) |
+| [nothing-home-4f6e1194c2.jpg](nothing-home-4f6e1194c2.jpg) | 1080 × 2412 | [source](https://s3-nothing-prod.s3.eu-central-1.amazonaws.com/2024-06-21/1718962713-333803-screenshot-20240621-150741.png) |
+| [Nudge.jpg](Nudge.jpg) | 1760 × 2402 | User-provided |
+| [overview.jpg](overview.jpg) | 1940 × 1320 | [source](https://www.blessthisstuff.com/imagens/listagem/2020/grande/grande_blloc-ratio-launcher.jpg) |
+| [play-01.jpg](play-01.jpg) | 1000 × 562 | [source](https://play-lh.googleusercontent.com/UjiSSDhTenCAwGRVRedV9qD9H8eGR3BovHqt-udxzHbYSej5fkwAUW8ugl326SszrEKzQgDV6yd6nt7ACPKIpw=w1000) |
+| [play-02.jpg](play-02.jpg) | 1000 × 562 | [source](https://play-lh.googleusercontent.com/VbK62wbfaYVx4oaWViaI55PXpNyVV2CK7Dtdm_fMjgdUvxMuUhN_lxTwFEBZNIUeJoxQY5qKALPRTseDuiY4kA=w1000) |
+| [play-03.jpg](play-03.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/CGp59KWDjBJjo48Rm3J7jdPHRdTposW8xiNhEZXNYB7Xw6Uu5GaNxYgUMxXBrbyhDqQi47Fmxx6AxgomnGI9Fw=w1000) |
+| [play-04.jpg](play-04.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/zETShi7tUYe6Xb3x1BxgJCO6kghURMmK_Fzto8T_h-axQDmSlFCGxMG3wPZNB4y3KnEQgO0myy_RkjueMPCaHq0=w1000) |
+| [play-05.jpg](play-05.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/UBe8gTfzduqZ_0uUU-qkMoKwgsVCWjFVjq7TsBFgFQZ4zpBOI3Fg1PkYEbBdB7md0_5MEW2qcJ1DqyYdxA5DoA=w1000) |
+| [play-06.jpg](play-06.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/SpzMeu6xZEW7CbRNSAAb5rD7ZrXpwQWTHjCez0cHQTbarSAGGTEuRsLWebUrMmAcuoDCrTNweIjXx9qnbmCkvw=w1000) |
+| [play-07.jpg](play-07.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/RwoQ8aPD9an9ZbAe3er0IccUgAzQiCBhDuvpLGbVkjGyKMDLLjTAaKVJB-8U-nf5YPZS980C6GkSL8T3np0WJw=w1000) |
+| [play-08.jpg](play-08.jpg) | 1000 × 1778 | [source](https://play-lh.googleusercontent.com/uQ0TSzem_zYk3ZvUSFQjrPNorWWZQ9LOs4SGZMmNGDbtuNWV5qHMLCeJShQo3ZPxv4xt2sUBLNSsD5EsoDdBOA=w1000) |
+| [Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_06.jpg](Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_06.jpg) | 1050 × 1432 | User-provided |
+| [review.jpg](review.jpg) | 824 × 494 | [source](https://hd2.tudocdn.net/946255?h=494&w=824) |
+| [root.jpg](root.jpg) | 1358 × 719 | [source](https://miro.medium.com/v2/resize:fit:1358/1*Nc4Ym4xcES9VQm_cNRsq1w.png) |
+| [settings-six-8ecf262cba.jpg](settings-six-8ecf262cba.jpg) | 461 × 1024 | [source](https://shakeuptech.com/wp-content/uploads/2023/06/ratio-Android-Launcher-1-461x1024.webp) |
+| [six-review-3df8032ebe.jpg](six-review-3df8032ebe.jpg) | 3000 × 1500 | [source](https://9to5google.com/2022/03/11/the-best-android-launchers-to-use-with-your-smartphone-in-2022-video/) |
+| [six-review-d2ae587263.jpg](six-review-d2ae587263.jpg) | 3000 × 1500 | [source](https://9to5google.com/2022/03/11/the-best-android-launchers-to-use-with-your-smartphone-in-2022-video/) |
+| [tree.jpg](tree.jpg) | 650 × 465 | [source](https://i.blogs.es/a88539/ratio-launcher-3/650_1200.jpg) |
+| [user-compact-media-card.png](user-compact-media-card.png) | 440 × 188 | User-provided |
+| [user-drawer-icon-picker.png](user-drawer-icon-picker.png) | 407 × 738 | User-provided |
+| [user-weather-and-drawer-icons.png](user-weather-and-drawer-icons.png) | 670 × 975 | User-provided |
+| [xataka-oled-c16d982880.jpg](xataka-oled-c16d982880.jpg) | 180 × 180 | [source](https://www.xatakandroid.com/aplicaciones-android/este-genial-launcher-tiene-diseno-minimalista-ahorra-bateria-pantallas-oled) |
+| [xataka-oled-db34b6a123.jpg](xataka-oled-db34b6a123.jpg) | 450 × 253 | [source](https://www.xatakandroid.com/aplicaciones-android/este-genial-launcher-tiene-diseno-minimalista-ahorra-bateria-pantallas-oled) |
+| [xataka-tour-6a71709e2e.jpg](xataka-tour-6a71709e2e.jpg) | 450 × 322 | [source](https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable) |
+| [xataka-tour-71d219e62c.jpg](xataka-tour-71d219e62c.jpg) | 450 × 322 | [source](https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable) |
+| [xataka-tour-a1231c164b.jpg](xataka-tour-a1231c164b.jpg) | 450 × 237 | [source](https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable) |
+| [xataka-tour-e1d402c201.jpg](xataka-tour-e1d402c201.jpg) | 180 × 180 | [source](https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable) |
+| [xataka-tour-f7118ede05.jpg](xataka-tour-f7118ede05.jpg) | 450 × 322 | [source](https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable) |
+| [yanko-0c4329e562.jpg](yanko-0c4329e562.jpg) | 1050 × 700 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-0fb61bf301.jpg](yanko-0fb61bf301.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-12b41c050a.jpg](yanko-12b41c050a.jpg) | 1050 × 700 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-2b3604560a.jpg](yanko-2b3604560a.jpg) | 1050 × 700 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-30a5712447.jpg](yanko-30a5712447.jpg) | 1050 × 703 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-392b8c9e11.jpg](yanko-392b8c9e11.jpg) | 1050 × 1432 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-45047ff0d5.jpg](yanko-45047ff0d5.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-4ebabe3c4c.jpg](yanko-4ebabe3c4c.jpg) | 1050 × 900 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-55e66a074d.jpg](yanko-55e66a074d.jpg) | 1050 × 1106 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-5eb51b5898.jpg](yanko-5eb51b5898.jpg) | 1050 × 700 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-6589682514.jpg](yanko-6589682514.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-bf4822c46a.jpg](yanko-bf4822c46a.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
+| [yanko-drawers-6589682514.jpg](yanko-drawers-6589682514.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_09.jpg) |

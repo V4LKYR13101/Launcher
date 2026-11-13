@@ -1,0 +1,72 @@
+[
+  {
+    "name": "cover",
+    "caption": "Launcher.",
+    "title": "A home screen with less noise.",
+    "file": "launcher-cover-v1.webp",
+    "kind": "Generated product scene using an app capture."
+  },
+  {
+    "name": "home",
+    "caption": "Your everyday apps.",
+    "title": "Grouped your way.",
+    "file": "launcher-home-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "themes",
+    "caption": "Make it yours.",
+    "title": "A little colour. A lot of choice.",
+    "file": "launcher-themes-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "icons",
+    "caption": "A symbol for each space.",
+    "title": "Small details. Your choices.",
+    "file": "launcher-icons-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "root",
+    "caption": "A place to pause.",
+    "title": "Notes. Focus. A clearer day.",
+    "file": "launcher-root-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "conversations",
+    "caption": "Choose what comes through.",
+    "title": "Your notifications, in one place.",
+    "file": "launcher-conversations-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "panel",
+    "caption": "The quick things.",
+    "title": "A panel within reach.",
+    "file": "launcher-panel-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "weather",
+    "caption": "Before you head out.",
+    "title": "Your city. Your forecast.",
+    "file": "launcher-weather-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "appearance",
+    "caption": "A home that fits.",
+    "title": "Set the pace. Shape the layout.",
+    "file": "launcher-appearance-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  },
+  {
+    "name": "search",
+    "caption": "Find it. Open it.",
+    "title": "Search at your fingertips.",
+    "file": "launcher-search-v1.webp",
+    "kind": "Device mockup using actual app captures."
+  }
+]

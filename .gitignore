@@ -1,0 +1,7 @@
+**/bin/
+**/obj/
+.vs/
+.android-qa/
+*.user
+artifacts/*.apk
+artifacts/*.log

@@ -1,0 +1,1397 @@
+{
+  "source": "https://www.youtube.com/watch?v=VVnmrUmSvqo",
+  "creator": "TechAltar",
+  "published": "2020-04-04",
+  "title": "Ratio hands-on: the ultimate Android launcher",
+  "durationSeconds": 681,
+  "frameIntervalSeconds": 2,
+  "notes": "Contact-sheet times are nominal two-second samples. Named detail frames are extracted at the exact requested time. Research references only, not Launcher marketing assets.",
+  "frames": [
+    {
+      "file": "frame-0001.jpg",
+      "nominalSeconds": 0
+    },
+    {
+      "file": "frame-0002.jpg",
+      "nominalSeconds": 2
+    },
+    {
+      "file": "frame-0003.jpg",
+      "nominalSeconds": 4
+    },
+    {
+      "file": "frame-0004.jpg",
+      "nominalSeconds": 6
+    },
+    {
+      "file": "frame-0005.jpg",
+      "nominalSeconds": 8
+    },
+    {
+      "file": "frame-0006.jpg",
+      "nominalSeconds": 10
+    },
+    {
+      "file": "frame-0007.jpg",
+      "nominalSeconds": 12
+    },
+    {
+      "file": "frame-0008.jpg",
+      "nominalSeconds": 14
+    },
+    {
+      "file": "frame-0009.jpg",
+      "nominalSeconds": 16
+    },
+    {
+      "file": "frame-0010.jpg",
+      "nominalSeconds": 18
+    },
+    {
+      "file": "frame-0011.jpg",
+      "nominalSeconds": 20
+    },
+    {
+      "file": "frame-0012.jpg",
+      "nominalSeconds": 22
+    },
+    {
+      "file": "frame-0013.jpg",
+      "nominalSeconds": 24
+    },
+    {
+      "file": "frame-0014.jpg",
+      "nominalSeconds": 26
+    },
+    {
+      "file": "frame-0015.jpg",
+      "nominalSeconds": 28
+    },
+    {
+      "file": "frame-0016.jpg",
+      "nominalSeconds": 30
+    },
+    {
+      "file": "frame-0017.jpg",
+      "nominalSeconds": 32
+    },
+    {
+      "file": "frame-0018.jpg",
+      "nominalSeconds": 34
+    },
+    {
+      "file": "frame-0019.jpg",
+      "nominalSeconds": 36
+    },
+    {
+      "file": "frame-0020.jpg",
+      "nominalSeconds": 38
+    },
+    {
+      "file": "frame-0021.jpg",
+      "nominalSeconds": 40
+    },
+    {
+      "file": "frame-0022.jpg",
+      "nominalSeconds": 42
+    },
+    {
+      "file": "frame-0023.jpg",
+      "nominalSeconds": 44
+    },
+    {
+      "file": "frame-0024.jpg",
+      "nominalSeconds": 46
+    },
+    {
+      "file": "frame-0025.jpg",
+      "nominalSeconds": 48
+    },
+    {
+      "file": "frame-0026.jpg",
+      "nominalSeconds": 50
+    },
+    {
+      "file": "frame-0027.jpg",
+      "nominalSeconds": 52
+    },
+    {
+      "file": "frame-0028.jpg",
+      "nominalSeconds": 54
+    },
+    {
+      "file": "frame-0029.jpg",
+      "nominalSeconds": 56
+    },
+    {
+      "file": "frame-0030.jpg",
+      "nominalSeconds": 58
+    },
+    {
+      "file": "frame-0031.jpg",
+      "nominalSeconds": 60
+    },
+    {
+      "file": "frame-0032.jpg",
+      "nominalSeconds": 62
+    },
+    {
+      "file": "frame-0033.jpg",
+      "nominalSeconds": 64
+    },
+    {
+      "file": "frame-0034.jpg",
+      "nominalSeconds": 66
+    },
+    {
+      "file": "frame-0035.jpg",
+      "nominalSeconds": 68
+    },
+    {
+      "file": "frame-0036.jpg",
+      "nominalSeconds": 70
+    },
+    {
+      "file": "frame-0037.jpg",
+      "nominalSeconds": 72
+    },
+    {
+      "file": "frame-0038.jpg",
+      "nominalSeconds": 74
+    },
+    {
+      "file": "frame-0039.jpg",
+      "nominalSeconds": 76
+    },
+    {
+      "file": "frame-0040.jpg",
+      "nominalSeconds": 78
+    },
+    {
+      "file": "frame-0041.jpg",
+      "nominalSeconds": 80
+    },
+    {
+      "file": "frame-0042.jpg",
+      "nominalSeconds": 82
+    },
+    {
+      "file": "frame-0043.jpg",
+      "nominalSeconds": 84
+    },
+    {
+      "file": "frame-0044.jpg",
+      "nominalSeconds": 86
+    },
+    {
+      "file": "frame-0045.jpg",
+      "nominalSeconds": 88
+    },
+    {
+      "file": "frame-0046.jpg",
+      "nominalSeconds": 90
+    },
+    {
+      "file": "frame-0047.jpg",
+      "nominalSeconds": 92
+    },
+    {
+      "file": "frame-0048.jpg",
+      "nominalSeconds": 94
+    },
+    {
+      "file": "frame-0049.jpg",
+      "nominalSeconds": 96
+    },
+    {
+      "file": "frame-0050.jpg",
+      "nominalSeconds": 98
+    },
+    {
+      "file": "frame-0051.jpg",
+      "nominalSeconds": 100
+    },
+    {
+      "file": "frame-0052.jpg",
+      "nominalSeconds": 102
+    },
+    {
+      "file": "frame-0053.jpg",
+      "nominalSeconds": 104
+    },
+    {
+      "file": "frame-0054.jpg",
+      "nominalSeconds": 106
+    },
+    {
+      "file": "frame-0055.jpg",
+      "nominalSeconds": 108
+    },
+    {
+      "file": "frame-0056.jpg",
+      "nominalSeconds": 110
+    },
+    {
+      "file": "frame-0057.jpg",
+      "nominalSeconds": 112
+    },
+    {
+      "file": "frame-0058.jpg",
+      "nominalSeconds": 114
+    },
+    {
+      "file": "frame-0059.jpg",
+      "nominalSeconds": 116
+    },
+    {
+      "file": "frame-0060.jpg",
+      "nominalSeconds": 118
+    },
+    {
+      "file": "frame-0061.jpg",
+      "nominalSeconds": 120
+    },
+    {
+      "file": "frame-0062.jpg",
+      "nominalSeconds": 122
+    },
+    {
+      "file": "frame-0063.jpg",
+      "nominalSeconds": 124
+    },
+    {
+      "file": "frame-0064.jpg",
+      "nominalSeconds": 126
+    },
+    {
+      "file": "frame-0065.jpg",
+      "nominalSeconds": 128
+    },
+    {
+      "file": "frame-0066.jpg",
+      "nominalSeconds": 130
+    },
+    {
+      "file": "frame-0067.jpg",
+      "nominalSeconds": 132
+    },
+    {
+      "file": "frame-0068.jpg",
+      "nominalSeconds": 134
+    },
+    {
+      "file": "frame-0069.jpg",
+      "nominalSeconds": 136
+    },
+    {
+      "file": "frame-0070.jpg",
+      "nominalSeconds": 138
+    },
+    {
+      "file": "frame-0071.jpg",
+      "nominalSeconds": 140
+    },
+    {
+      "file": "frame-0072.jpg",
+      "nominalSeconds": 142
+    },
+    {
+      "file": "frame-0073.jpg",
+      "nominalSeconds": 144
+    },
+    {
+      "file": "frame-0074.jpg",
+      "nominalSeconds": 146
+    },
+    {
+      "file": "frame-0075.jpg",
+      "nominalSeconds": 148
+    },
+    {
+      "file": "frame-0076.jpg",
+      "nominalSeconds": 150
+    },
+    {
+      "file": "frame-0077.jpg",
+      "nominalSeconds": 152
+    },
+    {
+      "file": "frame-0078.jpg",
+      "nominalSeconds": 154
+    },
+    {
+      "file": "frame-0079.jpg",
+      "nominalSeconds": 156
+    },
+    {
+      "file": "frame-0080.jpg",
+      "nominalSeconds": 158
+    },
+    {
+      "file": "frame-0081.jpg",
+      "nominalSeconds": 160
+    },
+    {
+      "file": "frame-0082.jpg",
+      "nominalSeconds": 162
+    },
+    {
+      "file": "frame-0083.jpg",
+      "nominalSeconds": 164
+    },
+    {
+      "file": "frame-0084.jpg",
+      "nominalSeconds": 166
+    },
+    {
+      "file": "frame-0085.jpg",
+      "nominalSeconds": 168
+    },
+    {
+      "file": "frame-0086.jpg",
+      "nominalSeconds": 170
+    },
+    {
+      "file": "frame-0087.jpg",
+      "nominalSeconds": 172
+    },
+    {
+      "file": "frame-0088.jpg",
+      "nominalSeconds": 174
+    },
+    {
+      "file": "frame-0089.jpg",
+      "nominalSeconds": 176
+    },
+    {
+      "file": "frame-0090.jpg",
+      "nominalSeconds": 178
+    },
+    {
+      "file": "frame-0091.jpg",
+      "nominalSeconds": 180
+    },
+    {
+      "file": "frame-0092.jpg",
+      "nominalSeconds": 182
+    },
+    {
+      "file": "frame-0093.jpg",
+      "nominalSeconds": 184
+    },
+    {
+      "file": "frame-0094.jpg",
+      "nominalSeconds": 186
+    },
+    {
+      "file": "frame-0095.jpg",
+      "nominalSeconds": 188
+    },
+    {
+      "file": "frame-0096.jpg",
+      "nominalSeconds": 190
+    },
+    {
+      "file": "frame-0097.jpg",
+      "nominalSeconds": 192
+    },
+    {
+      "file": "frame-0098.jpg",
+      "nominalSeconds": 194
+    },
+    {
+      "file": "frame-0099.jpg",
+      "nominalSeconds": 196
+    },
+    {
+      "file": "frame-0100.jpg",
+      "nominalSeconds": 198
+    },
+    {
+      "file": "frame-0101.jpg",
+      "nominalSeconds": 200
+    },
+    {
+      "file": "frame-0102.jpg",
+      "nominalSeconds": 202
+    },
+    {
+      "file": "frame-0103.jpg",
+      "nominalSeconds": 204
+    },
+    {
+      "file": "frame-0104.jpg",
+      "nominalSeconds": 206
+    },
+    {
+      "file": "frame-0105.jpg",
+      "nominalSeconds": 208
+    },
+    {
+      "file": "frame-0106.jpg",
+      "nominalSeconds": 210
+    },
+    {
+      "file": "frame-0107.jpg",
+      "nominalSeconds": 212
+    },
+    {
+      "file": "frame-0108.jpg",
+      "nominalSeconds": 214
+    },
+    {
+      "file": "frame-0109.jpg",
+      "nominalSeconds": 216
+    },
+    {
+      "file": "frame-0110.jpg",
+      "nominalSeconds": 218
+    },
+    {
+      "file": "frame-0111.jpg",
+      "nominalSeconds": 220
+    },
+    {
+      "file": "frame-0112.jpg",
+      "nominalSeconds": 222
+    },
+    {
+      "file": "frame-0113.jpg",
+      "nominalSeconds": 224
+    },
+    {
+      "file": "frame-0114.jpg",
+      "nominalSeconds": 226
+    },
+    {
+      "file": "frame-0115.jpg",
+      "nominalSeconds": 228
+    },
+    {
+      "file": "frame-0116.jpg",
+      "nominalSeconds": 230
+    },
+    {
+      "file": "frame-0117.jpg",
+      "nominalSeconds": 232
+    },
+    {
+      "file": "frame-0118.jpg",
+      "nominalSeconds": 234
+    },
+    {
+      "file": "frame-0119.jpg",
+      "nominalSeconds": 236
+    },
+    {
+      "file": "frame-0120.jpg",
+      "nominalSeconds": 238
+    },
+    {
+      "file": "frame-0121.jpg",
+      "nominalSeconds": 240
+    },
+    {
+      "file": "frame-0122.jpg",
+      "nominalSeconds": 242
+    },
+    {
+      "file": "frame-0123.jpg",
+      "nominalSeconds": 244
+    },
+    {
+      "file": "frame-0124.jpg",
+      "nominalSeconds": 246
+    },
+    {
+      "file": "frame-0125.jpg",
+      "nominalSeconds": 248
+    },
+    {
+      "file": "frame-0126.jpg",
+      "nominalSeconds": 250
+    },
+    {
+      "file": "frame-0127.jpg",
+      "nominalSeconds": 252
+    },
+    {
+      "file": "frame-0128.jpg",
+      "nominalSeconds": 254
+    },
+    {
+      "file": "frame-0129.jpg",
+      "nominalSeconds": 256
+    },
+    {
+      "file": "frame-0130.jpg",
+      "nominalSeconds": 258
+    },
+    {
+      "file": "frame-0131.jpg",
+      "nominalSeconds": 260
+    },
+    {
+      "file": "frame-0132.jpg",
+      "nominalSeconds": 262
+    },
+    {
+      "file": "frame-0133.jpg",
+      "nominalSeconds": 264
+    },
+    {
+      "file": "frame-0134.jpg",
+      "nominalSeconds": 266
+    },
+    {
+      "file": "frame-0135.jpg",
+      "nominalSeconds": 268
+    },
+    {
+      "file": "frame-0136.jpg",
+      "nominalSeconds": 270
+    },
+    {
+      "file": "frame-0137.jpg",
+      "nominalSeconds": 272
+    },
+    {
+      "file": "frame-0138.jpg",
+      "nominalSeconds": 274
+    },
+    {
+      "file": "frame-0139.jpg",
+      "nominalSeconds": 276
+    },
+    {
+      "file": "frame-0140.jpg",
+      "nominalSeconds": 278
+    },
+    {
+      "file": "frame-0141.jpg",
+      "nominalSeconds": 280
+    },
+    {
+      "file": "frame-0142.jpg",
+      "nominalSeconds": 282
+    },
+    {
+      "file": "frame-0143.jpg",
+      "nominalSeconds": 284
+    },
+    {
+      "file": "frame-0144.jpg",
+      "nominalSeconds": 286
+    },
+    {
+      "file": "frame-0145.jpg",
+      "nominalSeconds": 288
+    },
+    {
+      "file": "frame-0146.jpg",
+      "nominalSeconds": 290
+    },
+    {
+      "file": "frame-0147.jpg",
+      "nominalSeconds": 292
+    },
+    {
+      "file": "frame-0148.jpg",
+      "nominalSeconds": 294
+    },
+    {
+      "file": "frame-0149.jpg",
+      "nominalSeconds": 296
+    },
+    {
+      "file": "frame-0150.jpg",
+      "nominalSeconds": 298
+    },
+    {
+      "file": "frame-0151.jpg",
+      "nominalSeconds": 300
+    },
+    {
+      "file": "frame-0152.jpg",
+      "nominalSeconds": 302
+    },
+    {
+      "file": "frame-0153.jpg",
+      "nominalSeconds": 304
+    },
+    {
+      "file": "frame-0154.jpg",
+      "nominalSeconds": 306
+    },
+    {
+      "file": "frame-0155.jpg",
+      "nominalSeconds": 308
+    },
+    {
+      "file": "frame-0156.jpg",
+      "nominalSeconds": 310
+    },
+    {
+      "file": "frame-0157.jpg",
+      "nominalSeconds": 312
+    },
+    {
+      "file": "frame-0158.jpg",
+      "nominalSeconds": 314
+    },
+    {
+      "file": "frame-0159.jpg",
+      "nominalSeconds": 316
+    },
+    {
+      "file": "frame-0160.jpg",
+      "nominalSeconds": 318
+    },
+    {
+      "file": "frame-0161.jpg",
+      "nominalSeconds": 320
+    },
+    {
+      "file": "frame-0162.jpg",
+      "nominalSeconds": 322
+    },
+    {
+      "file": "frame-0163.jpg",
+      "nominalSeconds": 324
+    },
+    {
+      "file": "frame-0164.jpg",
+      "nominalSeconds": 326
+    },
+    {
+      "file": "frame-0165.jpg",
+      "nominalSeconds": 328
+    },
+    {
+      "file": "frame-0166.jpg",
+      "nominalSeconds": 330
+    },
+    {
+      "file": "frame-0167.jpg",
+      "nominalSeconds": 332
+    },
+    {
+      "file": "frame-0168.jpg",
+      "nominalSeconds": 334
+    },
+    {
+      "file": "frame-0169.jpg",
+      "nominalSeconds": 336
+    },
+    {
+      "file": "frame-0170.jpg",
+      "nominalSeconds": 338
+    },
+    {
+      "file": "frame-0171.jpg",
+      "nominalSeconds": 340
+    },
+    {
+      "file": "frame-0172.jpg",
+      "nominalSeconds": 342
+    },
+    {
+      "file": "frame-0173.jpg",
+      "nominalSeconds": 344
+    },
+    {
+      "file": "frame-0174.jpg",
+      "nominalSeconds": 346
+    },
+    {
+      "file": "frame-0175.jpg",
+      "nominalSeconds": 348
+    },
+    {
+      "file": "frame-0176.jpg",
+      "nominalSeconds": 350
+    },
+    {
+      "file": "frame-0177.jpg",
+      "nominalSeconds": 352
+    },
+    {
+      "file": "frame-0178.jpg",
+      "nominalSeconds": 354
+    },
+    {
+      "file": "frame-0179.jpg",
+      "nominalSeconds": 356
+    },
+    {
+      "file": "frame-0180.jpg",
+      "nominalSeconds": 358
+    },
+    {
+      "file": "frame-0181.jpg",
+      "nominalSeconds": 360
+    },
+    {
+      "file": "frame-0182.jpg",
+      "nominalSeconds": 362
+    },
+    {
+      "file": "frame-0183.jpg",
+      "nominalSeconds": 364
+    },
+    {
+      "file": "frame-0184.jpg",
+      "nominalSeconds": 366
+    },
+    {
+      "file": "frame-0185.jpg",
+      "nominalSeconds": 368
+    },
+    {
+      "file": "frame-0186.jpg",
+      "nominalSeconds": 370
+    },
+    {
+      "file": "frame-0187.jpg",
+      "nominalSeconds": 372
+    },
+    {
+      "file": "frame-0188.jpg",
+      "nominalSeconds": 374
+    },
+    {
+      "file": "frame-0189.jpg",
+      "nominalSeconds": 376
+    },
+    {
+      "file": "frame-0190.jpg",
+      "nominalSeconds": 378
+    },
+    {
+      "file": "frame-0191.jpg",
+      "nominalSeconds": 380
+    },
+    {
+      "file": "frame-0192.jpg",
+      "nominalSeconds": 382
+    },
+    {
+      "file": "frame-0193.jpg",
+      "nominalSeconds": 384
+    },
+    {
+      "file": "frame-0194.jpg",
+      "nominalSeconds": 386
+    },
+    {
+      "file": "frame-0195.jpg",
+      "nominalSeconds": 388
+    },
+    {
+      "file": "frame-0196.jpg",
+      "nominalSeconds": 390
+    },
+    {
+      "file": "frame-0197.jpg",
+      "nominalSeconds": 392
+    },
+    {
+      "file": "frame-0198.jpg",
+      "nominalSeconds": 394
+    },
+    {
+      "file": "frame-0199.jpg",
+      "nominalSeconds": 396
+    },
+    {
+      "file": "frame-0200.jpg",
+      "nominalSeconds": 398
+    },
+    {
+      "file": "frame-0201.jpg",
+      "nominalSeconds": 400
+    },
+    {
+      "file": "frame-0202.jpg",
+      "nominalSeconds": 402
+    },
+    {
+      "file": "frame-0203.jpg",
+      "nominalSeconds": 404
+    },
+    {
+      "file": "frame-0204.jpg",
+      "nominalSeconds": 406
+    },
+    {
+      "file": "frame-0205.jpg",
+      "nominalSeconds": 408
+    },
+    {
+      "file": "frame-0206.jpg",
+      "nominalSeconds": 410
+    },
+    {
+      "file": "frame-0207.jpg",
+      "nominalSeconds": 412
+    },
+    {
+      "file": "frame-0208.jpg",
+      "nominalSeconds": 414
+    },
+    {
+      "file": "frame-0209.jpg",
+      "nominalSeconds": 416
+    },
+    {
+      "file": "frame-0210.jpg",
+      "nominalSeconds": 418
+    },
+    {
+      "file": "frame-0211.jpg",
+      "nominalSeconds": 420
+    },
+    {
+      "file": "frame-0212.jpg",
+      "nominalSeconds": 422
+    },
+    {
+      "file": "frame-0213.jpg",
+      "nominalSeconds": 424
+    },
+    {
+      "file": "frame-0214.jpg",
+      "nominalSeconds": 426
+    },
+    {
+      "file": "frame-0215.jpg",
+      "nominalSeconds": 428
+    },
+    {
+      "file": "frame-0216.jpg",
+      "nominalSeconds": 430
+    },
+    {
+      "file": "frame-0217.jpg",
+      "nominalSeconds": 432
+    },
+    {
+      "file": "frame-0218.jpg",
+      "nominalSeconds": 434
+    },
+    {
+      "file": "frame-0219.jpg",
+      "nominalSeconds": 436
+    },
+    {
+      "file": "frame-0220.jpg",
+      "nominalSeconds": 438
+    },
+    {
+      "file": "frame-0221.jpg",
+      "nominalSeconds": 440
+    },
+    {
+      "file": "frame-0222.jpg",
+      "nominalSeconds": 442
+    },
+    {
+      "file": "frame-0223.jpg",
+      "nominalSeconds": 444
+    },
+    {
+      "file": "frame-0224.jpg",
+      "nominalSeconds": 446
+    },
+    {
+      "file": "frame-0225.jpg",
+      "nominalSeconds": 448
+    },
+    {
+      "file": "frame-0226.jpg",
+      "nominalSeconds": 450
+    },
+    {
+      "file": "frame-0227.jpg",
+      "nominalSeconds": 452
+    },
+    {
+      "file": "frame-0228.jpg",
+      "nominalSeconds": 454
+    },
+    {
+      "file": "frame-0229.jpg",
+      "nominalSeconds": 456
+    },
+    {
+      "file": "frame-0230.jpg",
+      "nominalSeconds": 458
+    },
+    {
+      "file": "frame-0231.jpg",
+      "nominalSeconds": 460
+    },
+    {
+      "file": "frame-0232.jpg",
+      "nominalSeconds": 462
+    },
+    {
+      "file": "frame-0233.jpg",
+      "nominalSeconds": 464
+    },
+    {
+      "file": "frame-0234.jpg",
+      "nominalSeconds": 466
+    },
+    {
+      "file": "frame-0235.jpg",
+      "nominalSeconds": 468
+    },
+    {
+      "file": "frame-0236.jpg",
+      "nominalSeconds": 470
+    },
+    {
+      "file": "frame-0237.jpg",
+      "nominalSeconds": 472
+    },
+    {
+      "file": "frame-0238.jpg",
+      "nominalSeconds": 474
+    },
+    {
+      "file": "frame-0239.jpg",
+      "nominalSeconds": 476
+    },
+    {
+      "file": "frame-0240.jpg",
+      "nominalSeconds": 478
+    },
+    {
+      "file": "frame-0241.jpg",
+      "nominalSeconds": 480
+    },
+    {
+      "file": "frame-0242.jpg",
+      "nominalSeconds": 482
+    },
+    {
+      "file": "frame-0243.jpg",
+      "nominalSeconds": 484
+    },
+    {
+      "file": "frame-0244.jpg",
+      "nominalSeconds": 486
+    },
+    {
+      "file": "frame-0245.jpg",
+      "nominalSeconds": 488
+    },
+    {
+      "file": "frame-0246.jpg",
+      "nominalSeconds": 490
+    },
+    {
+      "file": "frame-0247.jpg",
+      "nominalSeconds": 492
+    },
+    {
+      "file": "frame-0248.jpg",
+      "nominalSeconds": 494
+    },
+    {
+      "file": "frame-0249.jpg",
+      "nominalSeconds": 496
+    },
+    {
+      "file": "frame-0250.jpg",
+      "nominalSeconds": 498
+    },
+    {
+      "file": "frame-0251.jpg",
+      "nominalSeconds": 500
+    },
+    {
+      "file": "frame-0252.jpg",
+      "nominalSeconds": 502
+    },
+    {
+      "file": "frame-0253.jpg",
+      "nominalSeconds": 504
+    },
+    {
+      "file": "frame-0254.jpg",
+      "nominalSeconds": 506
+    },
+    {
+      "file": "frame-0255.jpg",
+      "nominalSeconds": 508
+    },
+    {
+      "file": "frame-0256.jpg",
+      "nominalSeconds": 510
+    },
+    {
+      "file": "frame-0257.jpg",
+      "nominalSeconds": 512
+    },
+    {
+      "file": "frame-0258.jpg",
+      "nominalSeconds": 514
+    },
+    {
+      "file": "frame-0259.jpg",
+      "nominalSeconds": 516
+    },
+    {
+      "file": "frame-0260.jpg",
+      "nominalSeconds": 518
+    },
+    {
+      "file": "frame-0261.jpg",
+      "nominalSeconds": 520
+    },
+    {
+      "file": "frame-0262.jpg",
+      "nominalSeconds": 522
+    },
+    {
+      "file": "frame-0263.jpg",
+      "nominalSeconds": 524
+    },
+    {
+      "file": "frame-0264.jpg",
+      "nominalSeconds": 526
+    },
+    {
+      "file": "frame-0265.jpg",
+      "nominalSeconds": 528
+    },
+    {
+      "file": "frame-0266.jpg",
+      "nominalSeconds": 530
+    },
+    {
+      "file": "frame-0267.jpg",
+      "nominalSeconds": 532
+    },
+    {
+      "file": "frame-0268.jpg",
+      "nominalSeconds": 534
+    },
+    {
+      "file": "frame-0269.jpg",
+      "nominalSeconds": 536
+    },
+    {
+      "file": "frame-0270.jpg",
+      "nominalSeconds": 538
+    },
+    {
+      "file": "frame-0271.jpg",
+      "nominalSeconds": 540
+    },
+    {
+      "file": "frame-0272.jpg",
+      "nominalSeconds": 542
+    },
+    {
+      "file": "frame-0273.jpg",
+      "nominalSeconds": 544
+    },
+    {
+      "file": "frame-0274.jpg",
+      "nominalSeconds": 546
+    },
+    {
+      "file": "frame-0275.jpg",
+      "nominalSeconds": 548
+    },
+    {
+      "file": "frame-0276.jpg",
+      "nominalSeconds": 550
+    },
+    {
+      "file": "frame-0277.jpg",
+      "nominalSeconds": 552
+    },
+    {
+      "file": "frame-0278.jpg",
+      "nominalSeconds": 554
+    },
+    {
+      "file": "frame-0279.jpg",
+      "nominalSeconds": 556
+    },
+    {
+      "file": "frame-0280.jpg",
+      "nominalSeconds": 558
+    },
+    {
+      "file": "frame-0281.jpg",
+      "nominalSeconds": 560
+    },
+    {
+      "file": "frame-0282.jpg",
+      "nominalSeconds": 562
+    },
+    {
+      "file": "frame-0283.jpg",
+      "nominalSeconds": 564
+    },
+    {
+      "file": "frame-0284.jpg",
+      "nominalSeconds": 566
+    },
+    {
+      "file": "frame-0285.jpg",
+      "nominalSeconds": 568
+    },
+    {
+      "file": "frame-0286.jpg",
+      "nominalSeconds": 570
+    },
+    {
+      "file": "frame-0287.jpg",
+      "nominalSeconds": 572
+    },
+    {
+      "file": "frame-0288.jpg",
+      "nominalSeconds": 574
+    },
+    {
+      "file": "frame-0289.jpg",
+      "nominalSeconds": 576
+    },
+    {
+      "file": "frame-0290.jpg",
+      "nominalSeconds": 578
+    },
+    {
+      "file": "frame-0291.jpg",
+      "nominalSeconds": 580
+    },
+    {
+      "file": "frame-0292.jpg",
+      "nominalSeconds": 582
+    },
+    {
+      "file": "frame-0293.jpg",
+      "nominalSeconds": 584
+    },
+    {
+      "file": "frame-0294.jpg",
+      "nominalSeconds": 586
+    },
+    {
+      "file": "frame-0295.jpg",
+      "nominalSeconds": 588
+    },
+    {
+      "file": "frame-0296.jpg",
+      "nominalSeconds": 590
+    },
+    {
+      "file": "frame-0297.jpg",
+      "nominalSeconds": 592
+    },
+    {
+      "file": "frame-0298.jpg",
+      "nominalSeconds": 594
+    },
+    {
+      "file": "frame-0299.jpg",
+      "nominalSeconds": 596
+    },
+    {
+      "file": "frame-0300.jpg",
+      "nominalSeconds": 598
+    },
+    {
+      "file": "frame-0301.jpg",
+      "nominalSeconds": 600
+    },
+    {
+      "file": "frame-0302.jpg",
+      "nominalSeconds": 602
+    },
+    {
+      "file": "frame-0303.jpg",
+      "nominalSeconds": 604
+    },
+    {
+      "file": "frame-0304.jpg",
+      "nominalSeconds": 606
+    },
+    {
+      "file": "frame-0305.jpg",
+      "nominalSeconds": 608
+    },
+    {
+      "file": "frame-0306.jpg",
+      "nominalSeconds": 610
+    },
+    {
+      "file": "frame-0307.jpg",
+      "nominalSeconds": 612
+    },
+    {
+      "file": "frame-0308.jpg",
+      "nominalSeconds": 614
+    },
+    {
+      "file": "frame-0309.jpg",
+      "nominalSeconds": 616
+    },
+    {
+      "file": "frame-0310.jpg",
+      "nominalSeconds": 618
+    },
+    {
+      "file": "frame-0311.jpg",
+      "nominalSeconds": 620
+    },
+    {
+      "file": "frame-0312.jpg",
+      "nominalSeconds": 622
+    },
+    {
+      "file": "frame-0313.jpg",
+      "nominalSeconds": 624
+    },
+    {
+      "file": "frame-0314.jpg",
+      "nominalSeconds": 626
+    },
+    {
+      "file": "frame-0315.jpg",
+      "nominalSeconds": 628
+    },
+    {
+      "file": "frame-0316.jpg",
+      "nominalSeconds": 630
+    },
+    {
+      "file": "frame-0317.jpg",
+      "nominalSeconds": 632
+    },
+    {
+      "file": "frame-0318.jpg",
+      "nominalSeconds": 634
+    },
+    {
+      "file": "frame-0319.jpg",
+      "nominalSeconds": 636
+    },
+    {
+      "file": "frame-0320.jpg",
+      "nominalSeconds": 638
+    },
+    {
+      "file": "frame-0321.jpg",
+      "nominalSeconds": 640
+    },
+    {
+      "file": "frame-0322.jpg",
+      "nominalSeconds": 642
+    },
+    {
+      "file": "frame-0323.jpg",
+      "nominalSeconds": 644
+    },
+    {
+      "file": "frame-0324.jpg",
+      "nominalSeconds": 646
+    },
+    {
+      "file": "frame-0325.jpg",
+      "nominalSeconds": 648
+    },
+    {
+      "file": "frame-0326.jpg",
+      "nominalSeconds": 650
+    },
+    {
+      "file": "frame-0327.jpg",
+      "nominalSeconds": 652
+    },
+    {
+      "file": "frame-0328.jpg",
+      "nominalSeconds": 654
+    },
+    {
+      "file": "frame-0329.jpg",
+      "nominalSeconds": 656
+    },
+    {
+      "file": "frame-0330.jpg",
+      "nominalSeconds": 658
+    },
+    {
+      "file": "frame-0331.jpg",
+      "nominalSeconds": 660
+    },
+    {
+      "file": "frame-0332.jpg",
+      "nominalSeconds": 662
+    },
+    {
+      "file": "frame-0333.jpg",
+      "nominalSeconds": 664
+    },
+    {
+      "file": "frame-0334.jpg",
+      "nominalSeconds": 666
+    },
+    {
+      "file": "frame-0335.jpg",
+      "nominalSeconds": 668
+    },
+    {
+      "file": "frame-0336.jpg",
+      "nominalSeconds": 670
+    },
+    {
+      "file": "frame-0337.jpg",
+      "nominalSeconds": 672
+    },
+    {
+      "file": "frame-0338.jpg",
+      "nominalSeconds": 674
+    },
+    {
+      "file": "frame-0339.jpg",
+      "nominalSeconds": 676
+    },
+    {
+      "file": "frame-0340.jpg",
+      "nominalSeconds": 678
+    },
+    {
+      "file": "frame-0341.jpg",
+      "nominalSeconds": 680
+    }
+  ],
+  "details": {
+    "drawers": 108,
+    "usage-indicators": 119,
+    "app-usage-editor": 136,
+    "locked-highlighted-tiles": 144,
+    "app-icon-picker": 153,
+    "per-app-controls": 159,
+    "app-monochrome": 169,
+    "biometric-lock": 209,
+    "drawer-editing": 225,
+    "root-command-input": 249,
+    "root-weather": 262,
+    "root-player": 275,
+    "timer-command": 286,
+    "root-notes": 291,
+    "extra-cards": 302,
+    "root-pin": 312,
+    "focus-sun-menu": 346,
+    "desktop-files": 435,
+    "desktop-notes": 443,
+    "late-home": 614
+  }
+}

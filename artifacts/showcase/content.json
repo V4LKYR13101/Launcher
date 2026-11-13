@@ -1,0 +1,281 @@
+{
+  "project": {
+    "slug": "launcher",
+    "title": "Launcher",
+    "category": "A customisable Android home screen",
+    "dates": "2026",
+    "organisation": "Personal project",
+    "role": "Design & development",
+    "collaborators": "",
+    "description": "Launcher puts apps into named drawers, with monochrome icons, a weather strip and a compact media player. A separate page holds notes, focus sessions and Android widgets. Choose the colours, layout and notification sources that work for you.",
+    "stack": "C# · .NET 11 · Native Android views",
+    "url": "/projects/launcher/#screenshots",
+    "linkLabel": "Explore Launcher",
+    "cover": "/media/launcher-cover-v1.webp",
+    "banner": "/media/launcher-cover-v1.webp",
+    "socialImage": "/media/launcher-cover-v1.webp",
+    "coverType": "landscape",
+    "problem": "An Android home screen should make everyday apps easy to find without filling the screen with competing colours and controls.",
+    "approach": "Group apps into editable drawers, use their real icons in monochrome, and give weather, media, cards and notifications their own places. Test the gestures and native integrations on a Galaxy A26.",
+    "result": "A working Android launcher with adjustable themes and layouts, native widget hosting, filtered notifications, playback controls and updates from Settings.",
+    "notes": [
+      "Android 7 or later. Download the APK, approve installation and choose Launcher as the default Home app in Android settings.",
+      "Custom drawer names and symbols, app assignment, pinned apps, hidden apps, tile sizing and three themes with custom accent colours.",
+      "Weather uses Open-Meteo with an editable city and manual or scheduled foreground refresh. Root also supports existing Android widgets.",
+      "The media card uses active Android media sessions. Controls depend on the playing app. Tap the card body to open that app.",
+      "Notification access enables Conversations, notification count badges and media access. Notification sources are selectable. Usage access is optional for time totals.",
+      "The quick panel is part of Launcher. Android controls the system status bar and notification shade across other apps.",
+      "Settings, notes and layout remain on the device. JSON layout backup is available. Widget bindings remain local to the device.",
+      "Settings includes App updates: check Kevlog, download a verified APK and open Android’s installer. Layout and settings are retained.",
+      "Gallery screens use sample content. Device frames are mockups. The studio cover is a generated product scene based on an app capture."
+    ],
+    "buttons": [
+      {
+        "filename": "Launcher.apk",
+        "label": "Download Android APK",
+        "icon": "file_download",
+        "colour": "#e4ff00",
+        "text_colour": "#11120f",
+        "note": "v1.0.1 · Android 7+ · 18 MB"
+      }
+    ],
+    "releases": [
+      {
+        "id": "launcher-1-0-1",
+        "version": "1.0.1",
+        "date": "2026-11-13",
+        "status": "published",
+        "kind": "release",
+        "platforms": "Android 7+",
+        "title": "Launcher for Android",
+        "summary": "Custom drawers, cards, notifications and app updates.",
+        "body": "<p>Named drawers and geometric symbols, monochrome app icons, adjustable themes and accents, weather, media controls, Android widgets and notification filters.</p><p>Check, download and install updates from Settings. Downloads are verified before Android opens its installer.</p>",
+        "created_at": "2026-11-13T13:00:00+00:00",
+        "updated_at": "2026-11-13T13:00:00+00:00"
+      }
+    ]
+  },
+  "gallery": [
+    {
+      "src": "/media/launcher-cover-v1.webp",
+      "caption": "Launcher.",
+      "alt": "A home screen with less noise.",
+      "note": "Generated product scene using an app capture. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": true
+    },
+    {
+      "src": "/media/launcher-home-v1.webp",
+      "caption": "Your everyday apps.",
+      "alt": "Grouped your way.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-themes-v1.webp",
+      "caption": "Make it yours.",
+      "alt": "A little colour. A lot of choice.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-icons-v1.webp",
+      "caption": "A symbol for each space.",
+      "alt": "Small details. Your choices.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-root-v1.webp",
+      "caption": "A place to pause.",
+      "alt": "Notes. Focus. A clearer day.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-conversations-v1.webp",
+      "caption": "Choose what comes through.",
+      "alt": "Your notifications, in one place.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-panel-v1.webp",
+      "caption": "The quick things.",
+      "alt": "A panel within reach.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-weather-v1.webp",
+      "caption": "Before you head out.",
+      "alt": "Your city. Your forecast.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-appearance-v1.webp",
+      "caption": "A home that fits.",
+      "alt": "Set the pace. Shape the layout.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-search-v1.webp",
+      "caption": "Find it. Open it.",
+      "alt": "Search at your fingertips.",
+      "note": "Device mockup using actual app captures. Sample weather, notes and notifications.",
+      "width": 1920,
+      "height": 1080,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-appearance-v1.webp",
+      "caption": "Appearance",
+      "alt": "Actual Launcher appearance screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-conversations-v1.webp",
+      "caption": "Conversations",
+      "alt": "Actual Launcher conversations screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-drawer-icons-v1.webp",
+      "caption": "Drawer icons",
+      "alt": "Actual Launcher drawer icons screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-drawers-v1.webp",
+      "caption": "Drawers",
+      "alt": "Actual Launcher drawers screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-home-v1.webp",
+      "caption": "Home",
+      "alt": "Actual Launcher home screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-light-v1.webp",
+      "caption": "Light",
+      "alt": "Actual Launcher light screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-mint-v1.webp",
+      "caption": "Mint",
+      "alt": "Actual Launcher mint screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-notification-filters-v1.webp",
+      "caption": "Notification filters",
+      "alt": "Actual Launcher notification filters screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-quick-panel-v1.webp",
+      "caption": "Quick panel",
+      "alt": "Actual Launcher quick panel screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-root-v1.webp",
+      "caption": "Root",
+      "alt": "Actual Launcher root screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-search-v1.webp",
+      "caption": "Search",
+      "alt": "Actual Launcher search screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    },
+    {
+      "src": "/media/launcher-screen-weather-settings-v1.webp",
+      "caption": "Weather settings",
+      "alt": "Actual Launcher weather settings screen",
+      "note": "Actual Android app capture with sample content.",
+      "width": 1080,
+      "height": 2400,
+      "heroEnabled": false
+    }
+  ],
+  "post": {
+    "slug": "building-launcher-for-android",
+    "title": "Launcher, a home screen with less noise",
+    "excerpt": "Named app drawers, monochrome icons, useful cards and a few details that took more work than expected. Building a native Android launcher in C#.",
+    "body": "Launcher started with a fairly simple brief: make the home screen calmer, give apps a sensible place to live, and leave enough room to make it your own.\n\nI built it in C# with native Android views and .NET for Android. There is no account to create and no feed waiting behind the home screen. It opens to your apps, grouped into drawers you can name and arrange yourself.\n\n![Launcher on Android](/media/launcher-cover-v1.webp)\n\n## Apps with a place to go\n\nA drawer can be as broad as Essentials or as specific as the handful of tools you use for work. Tap its heading to show the apps inside. Hold it to rename it, change its symbol, choose its apps or move it in the list.\n\nThe drawer symbols are deliberately simple. The apps keep their own identities. Launcher uses an app's monochrome icon where Android provides one and falls back to its real icon in grayscale. Original colour icons are an option too.\n\nYou can change the column count, tile height and corners, hide labels, centre headings or pin a few apps. Dark, Light and Sun themes give you a starting point. The accent can be one of the supplied colours or a hex value of your own.\n\n![Drawer symbols and selection](/media/launcher-icons-v1.webp)\n\n## The useful things stay close\n\nThe weather strip sits above the app drawers. Set the city in Settings and choose Celsius or Fahrenheit. The temperature and conditions use your accent colour.\n\nWeather comes from Open-Meteo. It is separate from the weather service supplied with a phone. Refreshing happens while Launcher is open, with a choice of intervals or manual updates. You can also turn the strip off and add your existing Android weather widget on the Root page.\n\nWhen an app exposes an active Android media session, a compact player appears below the weather. Artwork sits behind the title, progress and playback controls. Tap the card to open the playing app. The transport buttons control playback without opening it. Available controls depend on what that app supports.\n\n![Weather and the compact player](/media/launcher-home-v1.webp)\n\n## A separate space for cards\n\nSwipe across to Root for the date, notes, a focus timer and a calculator. Each card can collapse. You can hide the cards you do not want, including Focus, and add Android widgets from installed apps.\n\nFocus mode keeps Essentials and pinned apps visible. It helps narrow the home screen, but it does not block another app or silence the phone. Notes and layout settings stay on the device. A JSON backup lets you save and restore the layout; widget bindings stay tied to their own device.\n\n![The Root page](/media/launcher-root-v1.webp)\n\n## Notifications you can choose\n\nConversations brings notifications together with a small icon identifying the source app. Choose which apps appear and whether to show all notification types or messages only. Count badges use the selected accent and reflect current dismissible notifications, rather than claiming to know an app's internal unread count.\n\nPull down on the home screen to open Launcher's quick panel. It combines connection shortcuts, brightness and a scrollable notification list. Swipe a dismissible notification sideways to clear it, or swipe up from the panel header or bottom handle to close the panel.\n\nThis panel belongs to Launcher. Android's system notification shade still belongs to the phone. A regular launcher cannot replace Samsung's system interface across other apps.\n\n![Notification sources and filters](/media/launcher-conversations-v1.webp)\n\n## The details took the work\n\nMuch of the testing happened on a Galaxy A26. The small interactions mattered: a sheet needed to follow a finger down, a notification list needed to scroll without closing its panel, and the music card needed to open the right app without its buttons doing the same thing.\n\nThe bottom search bar leaves more space for the drawers and keeps app search within reach. Time and battery placement are adjustable for screens with camera cutouts. The battery icon follows the reported level and uses the accent colour, with an animation while charging.\n\n## Install Launcher\n\n[Download the Android APK from the project page](/projects/launcher/). It requires Android 7 or later. Open the downloaded file and approve installation. Android may first ask you to allow installs from your browser or file manager.\n\nTo use it as your home screen, choose Launcher under Android's default Home app setting. You can change that choice later in the same place.\n\nNotification access enables Conversations, badges and media-session access. Usage access is optional for time totals. Connection permissions let the quick panel show the network or device name. Launcher does not need those optional permissions just to open apps.\n\nSettings includes App updates. It checks Kevlog for a newer release, downloads the APK and verifies it before opening Android's installer. Updating keeps the existing layout and settings.\n\nThe gallery pairs actual app screenshots with device mockups. Weather, notes and notifications shown there are sample content. The studio cover is a generated product scene using an app capture.\n",
+    "cover": "/media/launcher-cover-v1.webp",
+    "reading_minutes": 4,
+    "published_at": "2026-11-13T13:00:00+00:00",
+    "section": "personal",
+    "tags": [
+      "Android",
+      "C#",
+      ".NET",
+      "Launcher"
+    ]
+  },
+  "release": {
+    "version": "1.0.1",
+    "build": 2,
+    "bytes": 19340810,
+    "sha256": "5ee1a2e0377c5b1ec6adec9a9463fa452921978287c9bca2ccb5dba9c8825d39",
+    "notes": "https://kevlog.co.za/projects/launcher/#release-launcher-1-0-1"
+  }
+}

@@ -1,0 +1,578 @@
+{
+  "images": [
+    {
+      "file": "conversation-filters-f5f3c2a1ea.gif",
+      "page": "https://miro.medium.com/v2/resize:fit:1200/1*h9bwa2yRk0kwKQbuqJNSHQ.gif",
+      "url": "https://miro.medium.com/v2/resize:fit:1200/1*h9bwa2yRk0kwKQbuqJNSHQ.gif",
+      "description": "Direct reference from image search",
+      "width": 600,
+      "height": 750,
+      "sha256": "7716da640adc04112a52b987b0fd2c7c37cf190ba48ba7604cb0857ff334e251"
+    },
+    {
+      "file": "designer-18916ffe19.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/99474605-7007-4b0e-96d3-73fef8e76839/onboarding_comparison_labels.png",
+      "description": "",
+      "width": 1200,
+      "height": 745,
+      "sha256": "4d97ffd5629a09e0846c3fd5ba8833a5b07fe2ca7493808eb34ecca7df638910"
+    },
+    {
+      "file": "designer-19d78e0620.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/a9514c32-fa19-4eb9-a010-1373818d3b48/ratio_onboarding.png",
+      "description": "",
+      "width": 1200,
+      "height": 745,
+      "sha256": "d6c17c3ecd1c9dbf634dd8fbf74c185a69da9f1227e521a32a1d63b9f9c308eb"
+    },
+    {
+      "file": "designer-23028883e2.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/6c8160d7-b126-4b30-b2fa-a63f495ac559/widgets_architecture.png",
+      "description": "",
+      "width": 1200,
+      "height": 720,
+      "sha256": "b71d1809b1cd366e10383ba26a48f4802c3cea879a3d9f2a9d0c6631ac8af448"
+    },
+    {
+      "file": "designer-5c869a597e.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/135a5bdd-2c03-4061-b2c7-462615b93c29/designsystem_tokens.png",
+      "description": "",
+      "width": 1200,
+      "height": 745,
+      "sha256": "7af71675e1e7260432425a42b9f73419463556884a9204b0830b410f05ba7a58"
+    },
+    {
+      "file": "designer-5f1400fef5.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/7c7b9b94-b773-479b-b4fa-c7bdfca2e6af/designsystem_stylesheet.png",
+      "description": "",
+      "width": 1200,
+      "height": 720,
+      "sha256": "032c7700c73d693fe78738ce0df6389a7fb474027dc4e31e33a3c2623b6f5ff3"
+    },
+    {
+      "file": "designer-6db72c34c5.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/da9f980c-e475-4ad1-8975-01d5eed6f1d0/onboarding_figjam.jpg",
+      "description": "",
+      "width": 1497,
+      "height": 1818,
+      "sha256": "b5ef1d041ecb50341ee68a105bf618df3818beac90e723713aa3dbc526ea5908"
+    },
+    {
+      "file": "designer-6ea3ae7c90.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/e0e816fd-7c6f-4d89-b72c-cebf9a93fa25/widgets_sketches.png",
+      "description": "",
+      "width": 1200,
+      "height": 720,
+      "sha256": "b7735d3c787483e7985616d6a3ad7c843214ae7be86a6c39cb269b086ebcbb46"
+    },
+    {
+      "file": "designer-d0f82cf9c4.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/bfe4c793-f09c-45ef-b03e-04a084ed892b/ratio_process.png",
+      "description": "",
+      "width": 1200,
+      "height": 748,
+      "sha256": "fcd15f398caf43a7b1faaf9d4028a6861b2726d943d6342c5b6907317e10a99d"
+    },
+    {
+      "file": "designer-d29e09c97d.jpg",
+      "page": "https://singyulam.com/blloc-ratio",
+      "url": "https://images.squarespace-cdn.com/content/v1/528f7950e4b048b3c8a45869/5e45a70f-3793-4c8f-8b19-fba002b55003/designsystem_icons.png",
+      "description": "",
+      "width": 1200,
+      "height": 720,
+      "sha256": "5431abb0a92385c84035d6c6435d7625a3aa5cd6ee34bd8f71c3b0df5f5c5c60"
+    },
+    {
+      "file": "fairphone-caf40c003f.jpg",
+      "page": "https://forum.fairphone.com/t/minimalistic-android-launcher/60302",
+      "url": "https://forum.fairphone.com/uploads/default/original/3X/b/2/b221616e00dc8336b6313a250b5f49bf5a03720f.png",
+      "description": "Screenshot_20200629-205226",
+      "width": 1080,
+      "height": 2160,
+      "sha256": "52d59a28e6f8cfd101a2ac0a0a30a2b5789b5e5857d24431561b01f9c916ef53"
+    },
+    {
+      "file": "guide.jpg",
+      "url": "https://i.blogs.es/dc32dd/ratio-launcher-1/650_1200.jpg",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 650,
+      "height": 465
+    },
+    {
+      "file": "hands-on-fdbf59236b.jpg",
+      "page": "https://9to5google.com/2020/05/29/blloc-ratio-hands-on/",
+      "url": "https://9to5google.com/wp-content/client-mu-plugins/9to5-core/includes/obfuscate-images/images/9to5google-default.jpg?quality=82&strip=all&w=1600",
+      "description": "blloc ratio hands-on",
+      "width": 2000,
+      "height": 1000,
+      "sha256": "62a7b5bd044fb4fed0754dbb2d9bbd65effcef85f4459d902109ebe139a6ba37"
+    },
+    {
+      "file": "images.jpg",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 388,
+      "height": 774
+    },
+    {
+      "file": "malavida-b51e1376b8.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-1.jpg",
+      "description": "Ratio app productivity menu",
+      "width": 720,
+      "height": 1520,
+      "sha256": "d627b7ac13ee6e95300ab4924936e1a70a6e8b9f50f276d33f87e13555f3d6ef"
+    },
+    {
+      "file": "malavida-gallery-5e65cdb4db.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-8.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "427b1e0b9cbd413e798f5749c786074189310e0b938df3f14e996e564163d760"
+    },
+    {
+      "file": "malavida-gallery-82ea353c32.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-4.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "f9c33cdc27f56f3c2f414c61365a8eee216c2bd73908f935de63772c2cd5c680"
+    },
+    {
+      "file": "malavida-gallery-a7e212f17a.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-6.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "26063bfe52d9c1df42e1671dc4d28e97a011c91004b744ebbbdb891104ab4608"
+    },
+    {
+      "file": "malavida-gallery-c3db808a62.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-7.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "6a27b807cf02847dceeb3429e4cd3be5aa7cb093e36fff0116e7cca5fcf2b443"
+    },
+    {
+      "file": "malavida-gallery-c915e06dbf.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-5.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "899be48d014b2c551b023d361efb890a341d0807a81d1ab5e22933f8e554e171"
+    },
+    {
+      "file": "malavida-gallery-f00d98ad59.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-2.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "cbaf0069fba5c963520088a453b73f42caccd93899f376171b25f2a6d4a407e6"
+    },
+    {
+      "file": "malavida-gallery-f8300d2454.jpg",
+      "page": "https://www.malavida.com/en/soft/ratio/android/",
+      "url": "https://imag.malavida.com/mvimgbig/download-fs/ratio-36661-3.jpg",
+      "description": "Screenshot gallery",
+      "width": 720,
+      "height": 1520,
+      "sha256": "72854f53b6481b546658f60c0fe7a279213b8e3664a2362169f0d9c927adfbe5"
+    },
+    {
+      "file": "nothing-home-4f6e1194c2.jpg",
+      "page": "https://s3-nothing-prod.s3.eu-central-1.amazonaws.com/2024-06-21/1718962713-333803-screenshot-20240621-150741.png",
+      "url": "https://s3-nothing-prod.s3.eu-central-1.amazonaws.com/2024-06-21/1718962713-333803-screenshot-20240621-150741.png",
+      "description": "Direct reference from image search",
+      "width": 1080,
+      "height": 2412,
+      "sha256": "7e4f29674904d936e5b40bdf9cb57d9027654aa8d7f79c30f48c45791fbb25d0"
+    },
+    {
+      "file": "Nudge.jpg",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 1760,
+      "height": 2402
+    },
+    {
+      "file": "overview.jpg",
+      "url": "https://www.blessthisstuff.com/imagens/listagem/2020/grande/grande_blloc-ratio-launcher.jpg",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1940,
+      "height": 1320
+    },
+    {
+      "file": "play-01.jpg",
+      "url": "https://play-lh.googleusercontent.com/UjiSSDhTenCAwGRVRedV9qD9H8eGR3BovHqt-udxzHbYSej5fkwAUW8ugl326SszrEKzQgDV6yd6nt7ACPKIpw=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 562
+    },
+    {
+      "file": "play-02.jpg",
+      "url": "https://play-lh.googleusercontent.com/VbK62wbfaYVx4oaWViaI55PXpNyVV2CK7Dtdm_fMjgdUvxMuUhN_lxTwFEBZNIUeJoxQY5qKALPRTseDuiY4kA=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 562
+    },
+    {
+      "file": "play-03.jpg",
+      "url": "https://play-lh.googleusercontent.com/CGp59KWDjBJjo48Rm3J7jdPHRdTposW8xiNhEZXNYB7Xw6Uu5GaNxYgUMxXBrbyhDqQi47Fmxx6AxgomnGI9Fw=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "play-04.jpg",
+      "url": "https://play-lh.googleusercontent.com/zETShi7tUYe6Xb3x1BxgJCO6kghURMmK_Fzto8T_h-axQDmSlFCGxMG3wPZNB4y3KnEQgO0myy_RkjueMPCaHq0=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "play-05.jpg",
+      "url": "https://play-lh.googleusercontent.com/UBe8gTfzduqZ_0uUU-qkMoKwgsVCWjFVjq7TsBFgFQZ4zpBOI3Fg1PkYEbBdB7md0_5MEW2qcJ1DqyYdxA5DoA=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "play-06.jpg",
+      "url": "https://play-lh.googleusercontent.com/SpzMeu6xZEW7CbRNSAAb5rD7ZrXpwQWTHjCez0cHQTbarSAGGTEuRsLWebUrMmAcuoDCrTNweIjXx9qnbmCkvw=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "play-07.jpg",
+      "url": "https://play-lh.googleusercontent.com/RwoQ8aPD9an9ZbAe3er0IccUgAzQiCBhDuvpLGbVkjGyKMDLLjTAaKVJB-8U-nf5YPZS980C6GkSL8T3np0WJw=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "play-08.jpg",
+      "url": "https://play-lh.googleusercontent.com/uQ0TSzem_zYk3ZvUSFQjrPNorWWZQ9LOs4SGZMmNGDbtuNWV5qHMLCeJShQo3ZPxv4xt2sUBLNSsD5EsoDdBOA=w1000",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1000,
+      "height": 1778
+    },
+    {
+      "file": "Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_06.jpg",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 1050,
+      "height": 1432
+    },
+    {
+      "file": "review.jpg",
+      "url": "https://hd2.tudocdn.net/946255?h=494&w=824",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 824,
+      "height": 494
+    },
+    {
+      "file": "root.jpg",
+      "url": "https://miro.medium.com/v2/resize:fit:1358/1*Nc4Ym4xcES9VQm_cNRsq1w.png",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 1358,
+      "height": 719
+    },
+    {
+      "file": "settings-six-8ecf262cba.jpg",
+      "page": "https://shakeuptech.com/wp-content/uploads/2023/06/ratio-Android-Launcher-1-461x1024.webp",
+      "url": "https://shakeuptech.com/wp-content/uploads/2023/06/ratio-Android-Launcher-1-461x1024.webp",
+      "description": "Direct reference from image search",
+      "width": 461,
+      "height": 1024,
+      "sha256": "731da87dc2fd47b3246661034ddd82c7496be7677bb718018821afe314d13950"
+    },
+    {
+      "file": "six-review-3df8032ebe.jpg",
+      "page": "https://9to5google.com/2022/03/11/the-best-android-launchers-to-use-with-your-smartphone-in-2022-video/",
+      "url": "https://9to5google.com/wp-content/uploads/sites/4/2022/03/Blloc-Ratio-2.jpg?quality=82&strip=all",
+      "description": "",
+      "width": 3000,
+      "height": 1500,
+      "sha256": "9cc8587195ea25c8db1422d0d34bc57367dc703cd68acb110ae2d256469a3741"
+    },
+    {
+      "file": "six-review-d2ae587263.jpg",
+      "page": "https://9to5google.com/2022/03/11/the-best-android-launchers-to-use-with-your-smartphone-in-2022-video/",
+      "url": "https://9to5google.com/wp-content/uploads/sites/4/2022/03/Blloc-Ratio-1.jpg?quality=82&strip=all",
+      "description": "",
+      "width": 3000,
+      "height": 1500,
+      "sha256": "963abca4652e1b838345efc53c450998595514c2838c81661a38c3c15c02092f"
+    },
+    {
+      "file": "tree.jpg",
+      "url": "https://i.blogs.es/a88539/ratio-launcher-3/650_1200.jpg",
+      "page": "",
+      "description": "Initial online reference",
+      "width": 650,
+      "height": 465
+    },
+    {
+      "file": "user-compact-media-card.png",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 440,
+      "height": 188
+    },
+    {
+      "file": "user-drawer-icon-picker.png",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 407,
+      "height": 738
+    },
+    {
+      "file": "user-weather-and-drawer-icons.png",
+      "url": "",
+      "page": "",
+      "description": "User-provided reference",
+      "width": 670,
+      "height": 975
+    },
+    {
+      "file": "xataka-oled-c16d982880.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/este-genial-launcher-tiene-diseno-minimalista-ahorra-bateria-pantallas-oled",
+      "url": "https://lh3.googleusercontent.com/ApbHA_5Dd3QS8YXaMWnO0VzBj7dg68Fpu3v72cBd7JqMZzh5wpbNuBKyNCV4dT1uqnc=s180-rw",
+      "description": "Ratio",
+      "width": 180,
+      "height": 180,
+      "sha256": "c237b5978c0452b11d994262abc21d29e5b7303a2c32be73a0e4e22e70c8e5f4"
+    },
+    {
+      "file": "xataka-oled-db34b6a123.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/este-genial-launcher-tiene-diseno-minimalista-ahorra-bateria-pantallas-oled",
+      "url": "https://i.blogs.es/8c739d/ratio-launcher1/450_1000.webp",
+      "description": "Este genial launcher tiene un diseño minimalista y ahorra batería en pantallas OLED",
+      "width": 450,
+      "height": 253,
+      "sha256": "bc75a250ed1fab7627f7e4b4849046f818121095fe007ed410ed00612a1fac20"
+    },
+    {
+      "file": "xataka-tour-6a71709e2e.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable",
+      "url": "https://i.blogs.es/dc32dd/ratio-launcher-1/450_1000.jpg",
+      "description": "Ratio Launcher",
+      "width": 450,
+      "height": 322,
+      "sha256": "0eed6a430196cd41aeaf9d89c7c8502c5b17fee8377956964005ee60636578f8"
+    },
+    {
+      "file": "xataka-tour-71d219e62c.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable",
+      "url": "https://i.blogs.es/a88539/ratio-launcher-3/450_1000.jpg",
+      "description": "Ratio Launcher",
+      "width": 450,
+      "height": 322,
+      "sha256": "2dc20033829e282a73881958e6a081b97b5ee3c88bded26110175f7c36e3b266"
+    },
+    {
+      "file": "xataka-tour-a1231c164b.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable",
+      "url": "https://i.blogs.es/b58a41/ratio-launcher-2/450_1000.webp",
+      "description": "Ratio: minimalismo al extremo en un launcher súper personalizable",
+      "width": 450,
+      "height": 237,
+      "sha256": "42c50f972225633cd73c348000ccfc9d8dfc93037b30bec8a49ef24d94a7aea7"
+    },
+    {
+      "file": "xataka-tour-e1d402c201.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable",
+      "url": "https://play-lh.googleusercontent.com/ApbHA_5Dd3QS8YXaMWnO0VzBj7dg68Fpu3v72cBd7JqMZzh5wpbNuBKyNCV4dT1uqnc=s180",
+      "description": "Ratio",
+      "width": 180,
+      "height": 180,
+      "sha256": "422964ba39b978979a59945d30b79584848a8e632c52ec40d9241f43fc13bb08"
+    },
+    {
+      "file": "xataka-tour-f7118ede05.jpg",
+      "page": "https://www.xatakandroid.com/aplicaciones-android/ratio-minimalismo-al-extremo-launcher-super-personalizable",
+      "url": "https://i.blogs.es/412978/ratio-launcher-4/450_1000.jpg",
+      "description": "Ratio Launcher",
+      "width": 450,
+      "height": 322,
+      "sha256": "6580663b10593ae32f99018d378ecd1ee59e0a07627178dde0ffbd6ba1ed3b6a"
+    },
+    {
+      "file": "yanko-0c4329e562.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-online-this-android-launcher-makes-your-smartphone-less-addictive/ratio7.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 700,
+      "sha256": "951c9b868b3c0d851105dd79abac964ec8c8c047cfb9efaae333fc8375d27444"
+    },
+    {
+      "file": "yanko-0fb61bf301.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_08.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 800,
+      "sha256": "cd27a752e3a0850e180979f5ea6eac65cd30b28c3aec1df41dc163e6f1877229"
+    },
+    {
+      "file": "yanko-12b41c050a.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_01.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 700,
+      "sha256": "a8f89256031d3bf32eb8301b414c45900edab575327d150e121986fd0747a215"
+    },
+    {
+      "file": "yanko-2b3604560a.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_10.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 700,
+      "sha256": "489be881e0140ea4de9f996b4a8816eaca7a84910ab8528117b800b9faac8325"
+    },
+    {
+      "file": "yanko-30a5712447.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-online-this-android-launcher-makes-your-smartphone-less-addictive/ratio9.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 703,
+      "sha256": "f3f4daa3b823c0a21e3000cd68b5801624c4036ca5e875dcf965613eeee3ea96"
+    },
+    {
+      "file": "yanko-392b8c9e11.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_06.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 1432,
+      "sha256": "1bc6f52b0b58beeed386f15b8470adbbd52c663208c9902d9bce00439e178e53"
+    },
+    {
+      "file": "yanko-45047ff0d5.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_03.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 800,
+      "sha256": "00aad8c75cca5227b71aba9567b4eb17f0bc5b4b07994864052b7376428b7f76"
+    },
+    {
+      "file": "yanko-4ebabe3c4c.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_11.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 900,
+      "sha256": "34744495a712628833955a47737a140862cd8b6fe8b1d9e3f885edcbdb252b24"
+    },
+    {
+      "file": "yanko-55e66a074d.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_07.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 1106,
+      "sha256": "12c68697ca02e4fddc6f23f3cbd20aa84bfa94a0e19ba98e61fc6ed1e5b86ae8"
+    },
+    {
+      "file": "yanko-5eb51b5898.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 700,
+      "sha256": "af7924ee34220628cacd50db07d8ff8948843b8a6b78f197478e71774b534852"
+    },
+    {
+      "file": "yanko-6589682514.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_09.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 800,
+      "sha256": "fb228ba09fa28085e43a19ca7f993489d626e7d92ecf2070e635922af1bc367a"
+    },
+    {
+      "file": "yanko-bf4822c46a.jpg",
+      "page": "https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_04.jpg",
+      "description": "",
+      "width": 1050,
+      "height": 800,
+      "sha256": "3483f87f4709480e98b69dc936d2e35ca26b2b3cbc780909aea791e8f6fd0694"
+    },
+    {
+      "file": "yanko-drawers-6589682514.jpg",
+      "page": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_09.jpg",
+      "url": "https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_09.jpg",
+      "description": "Direct reference from image search",
+      "width": 1050,
+      "height": 800,
+      "sha256": "a0c128122e7568ed1afbfe9df975fdcd2f54ed37145bd746d8b5db2fdcd54205"
+    }
+  ],
+  "unavailable_pages": [
+    [
+      "ERROR",
+      "https://medium.com/blloc/announcing-ratio-6-46b76617c764",
+      "",
+      "403 Client Error: Forbidden for url: https://medium.com/blloc/announcing-ratio-6-46b76617c764"
+    ],
+    [
+      "ERROR",
+      "https://mrnoob.net/ratio-launcher-tips-and-tricks/",
+      "",
+      "406 Client Error: Not Acceptable for url: https://mrnoob.net/ratio-launcher-tips-and-tricks/"
+    ],
+    [
+      "ERROR",
+      "https://medium.com/tech-right-now/what-my-minimalist-phone-looks-like-the-android-version-13cc0e4605ee",
+      "",
+      "403 Client Error: Forbidden for url: https://medium.com/tech-right-now/what-my-minimalist-phone-looks-like-the-android-version-13cc0e4605ee"
+    ],
+    [
+      "ERROR",
+      "https://medium.com/tech-right-now/ratio-a-new-minimalist-launcher-c228b240bd65",
+      "",
+      "403 Client Error: Forbidden for url: https://medium.com/tech-right-now/ratio-a-new-minimalist-launcher-c228b240bd65"
+    ]
+  ]
+}
