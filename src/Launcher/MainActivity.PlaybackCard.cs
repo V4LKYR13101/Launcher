@@ -33,14 +33,15 @@ public partial class MainActivity
         string title=metadata?.GetString(MediaMetadata.MetadataKeyTitle)??app;
         string artist=metadata?.GetString(MediaMetadata.MetadataKeyArtist)??metadata?.GetString(MediaMetadata.MetadataKeyAlbumArtist)??"";
         var card=new FrameLayout(this){Background=Background(palette.Card,24),ClipToOutline=true};
-        void OpenPlayer()
+        void OpenPlayer()=>WithAppUnlock(controller.PackageName!,OpenPlayerUnlocked);
+        void OpenPlayerUnlocked()
         {
             try
             {
                 var intent=PackageManager?.GetLaunchIntentForPackage(controller.PackageName!);
                 if(intent is not null){intent.AddFlags(Android.Content.ActivityFlags.NewTask|Android.Content.ActivityFlags.ResetTaskIfNeeded);OpenIntent(intent);return;}
                 var appEntry=apps.FirstOrDefault(a=>a.PackageName==controller.PackageName);
-                if(appEntry is not null){LaunchDirect(appEntry);return;}
+                if(appEntry is not null){StartAppDirect(appEntry);return;}
                 if(controller.SessionActivity is {} activity){activity.Send();return;}
                 Toast("This player does not expose an app screen.");
             }

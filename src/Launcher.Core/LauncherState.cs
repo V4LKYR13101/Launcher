@@ -19,6 +19,8 @@ public sealed class AppRule
     public bool Pinned { get; set; }
     public bool Highlight { get; set; }
     public bool Wide { get; set; }
+    public bool BiometricLocked { get; set; }
+    public bool OpenInGrayscale { get; set; }
     public int Order { get; set; }
     public int DailyGoalMinutes { get; set; }
 }
@@ -181,13 +183,13 @@ public static class AppOrganization
             {
                 string drawer = GuessDrawer(app);
                 if (!state.Drawers.Any(d => d.Id == drawer)) drawer = "other";
-                state.Apps[app.Id] = new() { DrawerId = drawer, Order = next++ };
+                var siblings=state.Apps.Where(p=>p.Key.StartsWith(app.PackageName+"/",StringComparison.Ordinal)).Select(p=>p.Value).ToArray();
+                state.Apps[app.Id] = new() { DrawerId = drawer, Order = next++,BiometricLocked=siblings.Any(r=>r.BiometricLocked),OpenInGrayscale=siblings.Any(r=>r.OpenInGrayscale) };
             }
     }
 
     public static IEnumerable<AppEntry> Visible(LauncherState state, IEnumerable<AppEntry> apps, string query = "") =>
         apps.Where(a => state.Apps.TryGetValue(a.Id, out var r) && !r.Hidden
-            && (!state.Focus || r.Pinned || r.DrawerId == "essentials")
             && (DisplayName(state, a).Contains(query, StringComparison.CurrentCultureIgnoreCase)
                 || a.Label.Contains(query, StringComparison.CurrentCultureIgnoreCase)
                 || a.PackageName.Contains(query, StringComparison.OrdinalIgnoreCase)))

@@ -133,6 +133,8 @@ public partial class MainActivity : Activity
     }
     protected override void OnDestroy()
     {
+        StopDrawerAnimations();
+        appAuthentication?.Cancel();credentialAction=null;authenticationPending=false;
         updateLifetime.Cancel();
         ConversationService.Changed -= ConversationsChanged;
         if(OperatingSystem.IsAndroidVersionAtLeast(33) && backCallback is not null) OnBackInvokedDispatcher.UnregisterOnBackInvokedCallback(backCallback);
@@ -180,7 +182,7 @@ public partial class MainActivity : Activity
         else foreach(var (badge,package) in badgeViews)UpdateBadge(badge,package);
     });
     private static long Now => DateTimeOffset.Now.ToUnixTimeMilliseconds();
-    private void Save() => store.Save(state);
+    private void Save() {store.Save(state);GrayscaleService.RulesChanged();}
     private int Dp(float value) => (int)(value * Resources!.DisplayMetrics!.Density + .5f);
     private LinearLayout Stack(bool horizontal = false) => new(this) { Orientation = horizontal ? Orientation.Horizontal : Orientation.Vertical };
     private static LinearLayout.LayoutParams Match(int height = -2) => new(-1, height);
@@ -286,6 +288,7 @@ public partial class MainActivity : Activity
     }
     private void RenderBody()
     {
+        StopDrawerAnimations();
         int previousFeedY=page=="Quick panel"?scroll.ScrollY:0;
         body.RemoveAllViews(); badgeViews.Clear();badgeCounts=ConversationService.Enabled(this)?ConversationService.BadgeCounts():new();timerText = null;mediaProgress=null;mediaTime=null; body.SetGravity(GravityFlags.Top);
         if (searching)
@@ -300,6 +303,7 @@ public partial class MainActivity : Activity
             case "Conversations": RenderConversations(); break;
             case "Settings": RenderSettings(); break;
             case "Updates": RenderUpdates(); break;
+            case "Grayscale setup": RenderGrayscaleSetup(); break;
             case "Appearance": RenderAppearance(); break;
             case "Drawers": RenderDrawerSettings(); break;
             case "Hidden": RenderHidden(); break;
@@ -418,7 +422,8 @@ public partial class MainActivity : Activity
             Confirm("Your daily goal",$"You have used {app.Label} for {AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName))} today. Open it intentionally?","Open app",()=>LaunchDirect(app));
         else LaunchDirect(app);
     }
-    private void LaunchDirect(AppEntry app)
+    private void LaunchDirect(AppEntry app)=>WithAppUnlock(app.PackageName,()=>StartAppDirect(app));
+    private void StartAppDirect(AppEntry app)
     {
         try
         {

@@ -1393,5 +1393,27 @@
     "desktop-files": 435,
     "desktop-notes": 443,
     "late-home": 614
+  },
+  "motionStudies": {
+    "drawer-gestures": {
+      "startSeconds": 104,
+      "durationSeconds": 12,
+      "framesPerSecond": 3
+    },
+    "app-lock": {
+      "startSeconds": 204,
+      "durationSeconds": 12,
+      "framesPerSecond": 3
+    },
+    "pin-cards": {
+      "startSeconds": 306,
+      "durationSeconds": 12,
+      "framesPerSecond": 3
+    },
+    "focus-sun": {
+      "startSeconds": 342,
+      "durationSeconds": 12,
+      "framesPerSecond": 3
+    }
   }
 }

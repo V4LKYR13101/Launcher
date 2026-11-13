@@ -67,3 +67,7 @@
 | [yanko-6589682514.jpg](yanko-6589682514.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
 | [yanko-bf4822c46a.jpg](yanko-bf4822c46a.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/2020/05/02/spending-more-time-on-screen-this-premium-andriod-launcher-makes-your-smartphone-less-addictive/) |
 | [yanko-drawers-6589682514.jpg](yanko-drawers-6589682514.jpg) | 1050 × 800 | [source](https://www.yankodesign.com/images/design_news/2020/05/spending-more-time-on-screen-this-android-launcher-makes-your-smartphone-less-addictive/Ratio_by_Blloc_is_a_minimal_launcher_to_refine_your_smartphone_experience_09.jpg) |
+
+## Video study
+
+[Full timeline, detail frames and motion studies](E:/Repository/launcher/featureImages/video-VVnmrUmSvqo/INDEX.md) from the user-provided TechAltar video.

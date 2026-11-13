@@ -19,14 +19,16 @@ public partial class MainActivity
     private void RootCard(string id,string title,string glyph,Action<LinearLayout> build)
     {
         bool collapsed=state.CollapsedCards.GetValueOrDefault(id);
-        var card=Stack(); card.Background=Background(palette.Card,20); card.SetPadding(Dp(12),Dp(4),Dp(12),Dp(collapsed?4:12));
+        var card=Stack(); card.SetPadding(Dp(4),0,Dp(4),Dp(collapsed?4:10));
         var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);
         header.AddView(new GlyphView(this,glyph,palette.Text),new LinearLayout.LayoutParams(Dp(19),Dp(19)));
         var name=Text(title,16,true);name.SetPadding(Dp(10),0,0,0);header.AddView(name,new LinearLayout.LayoutParams(0,-2,1));
         header.AddView(new GlyphView(this,collapsed?"down":"up",palette.Muted),new LinearLayout.LayoutParams(Dp(17),Dp(17)));
-        header.Click+=(_,_)=>{state.CollapsedCards[id]=!collapsed;Save();RenderBody();};card.AddView(header,Match(Dp(48)));
+        header.Click+=(_,_)=>{state.CollapsedCards[id]=!collapsed;Save();RenderBody();};card.AddView(header,Match(Dp(46)));
         if(!collapsed)build(card);
-        var lp=Match();lp.SetMargins(0,0,0,Dp(14));body.AddView(card,lp);
+        var divider=new View(this){Background=new Android.Graphics.Drawables.ColorDrawable(palette.Panel)};
+        var dividerLayout=Match(Dp(1));dividerLayout.SetMargins(0,Dp(12),0,0);card.AddView(divider,dividerLayout);
+        var lp=Match();lp.SetMargins(0,0,0,Dp(8));body.AddView(card,lp);
     }
 
     private void RenderRoot()
@@ -49,7 +51,7 @@ public partial class MainActivity
         if(state.FocusCardVisible)RootCard("focus","Focus","focus",card=>
         {
             timerText=Text(FocusTime(),42,true);timerText.SetPadding(Dp(6),Dp(6),0,Dp(12));card.AddView(timerText,Match());
-            Paragraph(state.Focus?"Essentials and pinned apps. One thing at a time.":"Make room for one thing. Choose a focus session.",card);
+            Paragraph(state.Focus?"Quiet outlines. One thing at a time.":"Make room for one thing. Choose a focus session.",card);
             var controls=Stack(true);
             foreach(int minutes in new[]{15,25,50})
             {
@@ -61,7 +63,7 @@ public partial class MainActivity
         });
         if(state.NotesVisible)RootCard("notes","Notes","note",card=>
         {
-            var note=new EditText(this){Text=state.Note,Hint="A thought worth keeping…",TextSize=16,Typeface=regular,Gravity=GravityFlags.Top};
+            var note=new EditText(this){Text=state.Note,Hint="A thought worth keepingâ€¦",TextSize=16,Typeface=regular,Gravity=GravityFlags.Top};
             note.SetTextColor(palette.Text);note.SetHintTextColor(palette.Muted);note.Background=Background(palette.Panel,12);
             note.SetPadding(Dp(14),Dp(12),Dp(14),Dp(12));note.SetMinLines(3);note.SetMaxLines(9);
             note.SetFilters([new Android.Text.InputFilterLengthFilter(20_000)]);
@@ -70,7 +72,7 @@ public partial class MainActivity
         });
         if(state.CalculatorVisible)RootCard("calculator","Calculator","calculator",card=>
         {
-            var expression=new EditText(this){Hint="(24 + 6) × 3",TextSize=21,Typeface=regular};
+            var expression=new EditText(this){Hint="(24 + 6) Ã— 3",TextSize=21,Typeface=regular};
             expression.SetSingleLine(true);expression.SetTextColor(palette.Text);expression.SetHintTextColor(palette.Muted);
             expression.InputType=Android.Text.InputTypes.ClassText|Android.Text.InputTypes.TextFlagNoSuggestions;
             expression.Background=Background(palette.Panel,12);expression.SetPadding(Dp(14),Dp(12),Dp(14),Dp(12));
@@ -118,7 +120,7 @@ public partial class MainActivity
     {
         var info=AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(slot.Id);
         if(info is null)return;
-        var card=Stack();card.Background=Background(palette.Card,20);card.SetPadding(Dp(8),0,Dp(8),Dp(slot.Collapsed?0:8));
+        var card=Stack();card.SetPadding(0,0,0,Dp(slot.Collapsed?0:8));
         var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);
         header.SetPadding(Dp(8),0,Dp(8),0);
         var providerApp=apps.FirstOrDefault(a=>a.PackageName==info.Provider?.PackageName);
@@ -140,7 +142,7 @@ public partial class MainActivity
                     view.UpdateAppWidgetSize(new Bundle(),new System.Collections.Generic.List<Android.Util.SizeF>{new(width,height)});
                 else
                 {
-#pragma warning disable CA1422 // Android 7–11 widget size API.
+#pragma warning disable CA1422 // Android 7â€“11 widget size API.
                     view.UpdateAppWidgetSize(null,width,height,width,height);
 #pragma warning restore CA1422
                 }
@@ -150,7 +152,7 @@ public partial class MainActivity
         }
         var lp=Match();lp.SetMargins(0,0,0,Dp(14));body.AddView(card,lp);
     }
-    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id),["Fit widget automatically","Compact · 72 dp","Small · 140 dp","Medium · 220 dp","Large · 320 dp","Tall · 440 dp","Move up","Move down","Remove widget"],i=>
+    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id),["Fit widget automatically","Compact Â· 72 dp","Small Â· 140 dp","Medium Â· 220 dp","Large Â· 320 dp","Tall Â· 440 dp","Move up","Move down","Remove widget"],i=>
     {
         if(i==0)slot.AutoHeight=true;
         else if(i<6){slot.AutoHeight=false;slot.Height=new[]{0,72,140,220,320,440}[i];}
@@ -179,7 +181,7 @@ public partial class MainActivity
         if(keyguard?.IsDeviceLocked==true){Paragraph("Unlock your phone to view message previews.");return;}
         var messages=(state.ConversationMessagesOnly?ConversationService.Snapshot():ConversationService.NotificationSnapshot())
             .Where(m=>!state.ConversationExcludedApps.Contains(m.Package)).ToArray();
-        Paragraph(state.ConversationMessagesOnly?"Messages only":"All notification types · choose sources with the filter icon");
+        Paragraph(state.ConversationMessagesOnly?"Messages only":"All notification types Â· choose sources with the filter icon");
         var filters=Stack(true);
         var filterScroll=new HorizontalScrollView(this){HorizontalScrollBarEnabled=false};filterScroll.AddView(filters);
         foreach(var package in new[]{"All"}.Concat(messages.Select(m=>m.Package).Distinct()))
@@ -205,12 +207,12 @@ public partial class MainActivity
             card.AddView(Text(apps.FirstOrDefault(a=>a.PackageName==message.Package)?.Label??message.Package,10,color:palette.Muted),Match());
             card.Click+=(_,_)=>
             {
-                try{message.Open?.Send();}catch(PendingIntent.CanceledException){Toast("This notification is no longer available.");}
+                OpenNotification(message);
             };
             card.LongClick+=(_,_)=>Choose(message.Title,["Open conversation","Dismiss notification"],i=>
             {
                 if(i==1)ConversationService.Dismiss(message.Key);
-                else try{message.Open?.Send();}catch(PendingIntent.CanceledException){Toast("This notification is no longer available.");}
+                else OpenNotification(message);
             });
             var lp=Match();lp.SetMargins(0,0,0,Dp(10));body.AddView(card,lp);
         }
@@ -219,6 +221,7 @@ public partial class MainActivity
     protected override void OnActivityResult(int requestCode,Result resultCode,Intent? data)
     {
         base.OnActivityResult(requestCode,resultCode,data);
+        if(requestCode==811){CompleteCredentialAuthentication(resultCode);return;}
         if(requestCode is 801 or 802)
         {
             if(resultCode!=Result.Ok)

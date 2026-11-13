@@ -88,7 +88,7 @@ public partial class MainActivity
             var origin=Text(apps.FirstOrDefault(a=>a.PackageName==notification.Package)?.Label??notification.Package,10,true,palette.Muted);origin.SetPadding(Dp(8),0,0,0);
             source.AddView(origin,new LinearLayout.LayoutParams(0,-2,1));card.AddView(source,Match());Gap(card,8);card.AddView(Text(notification.Title,15,true),Match());
             var preview=Text(notification.Text,13,color:palette.Muted);preview.SetMaxLines(3);preview.SetPadding(0,Dp(8),0,0);card.AddView(preview,Match());
-            card.Click+=(_,_)=>{try{notification.Open?.Send();}catch(PendingIntent.CanceledException){Toast("Notification is no longer available.");}};
+            card.Click+=(_,_)=>OpenNotification(notification);
             card.LongClick+=(_,_)=>Choose(notification.Title,["Dismiss notification"],_=>ConversationService.Dismiss(notification.Key));
             card.SetOnTouchListener(new NotificationSwipeListener(Dp(90),notification.Dismissible,
                 ()=>{ConversationService.Dismiss(notification.Key);},()=>Toast("Android keeps this notification while its service is active.")));

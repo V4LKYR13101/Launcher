@@ -86,7 +86,7 @@ public partial class MainActivity
             SettingRow(panel,"Light",state.Theme=="Light"?"On":"Soft light theme",()=>Go(()=>{state.Theme="Light";Save();Render();}),"sun");
             SettingRow(panel,"Sun",state.Theme=="Sun"?"On":"High contrast, outdoors",()=>Go(()=>{state.Theme="Sun";state.UseWallpaper=false;Save();Render();}),"sun");
             SettingRow(panel,"Dark",state.Theme=="Dark"?"On":"Quiet, dark surfaces",()=>Go(()=>{state.Theme="Dark";Save();Render();}),"focus");
-            SettingRow(panel,"Focus",state.Focus?"On · tap to turn off":"Essentials and pinned apps only",()=>Go(()=>{state.Focus=!state.Focus;state.FocusEndsAt=0;Save();Render();}),"focus");
+            SettingRow(panel,"Focus",state.Focus?"On Â· tap to turn off":"Quiet outlined tiles",()=>Go(()=>{state.Focus=!state.Focus;state.FocusEndsAt=0;Save();Render();}),"focus");
             SettingRow(panel,page=="Root"?"Add widget":"Add drawer","",()=>Go(()=>{if(page=="Root")AddWidget();else NewDrawer();}),"plus");
             SettingRow(panel,"All apps","Search your installed apps",()=>Go(()=>{page="Tiles";StartSearch();}),"grid");
             SettingRow(panel,"Settings","Make Launcher your own",()=>Go(()=>Navigate("Settings")),"settings");
@@ -102,16 +102,17 @@ public partial class MainActivity
         SettingRow(body,"Conversations","Choose notification sources & filters",PickConversationSources,"message");
         SettingRow(body,"Weather",string.IsNullOrEmpty(state.Weather.City)?"Choose a city, units & home strip":state.Weather.City,()=>Navigate("Weather"),"cloud");
         SettingRow(body,"App updates","Check, download & install from Kevlog",()=>Navigate("Updates"),"down");
-        SettingRow(body,"Hidden apps",$"{apps.Count(a=>state.Apps[a.Id].Hidden)} hidden · tap to restore",()=>Navigate("Hidden"),"app");
+        SettingRow(body,"App grayscale","Display permission & foreground detection",()=>Navigate("Grayscale setup"),"photo");
+        SettingRow(body,"Hidden apps",$"{apps.Count(a=>state.Apps[a.Id].Hidden)} hidden Â· tap to restore",()=>Navigate("Hidden"),"app");
         SettingRow(body,"Permissions","Default home, usage & conversations",()=>Navigate("Permissions"),"settings");
         SettingRow(body,"Quick panel","Launcher controls & current notifications",()=>Navigate("Quick panel"),"down");
         Gap(body,12);
         ToggleRow(body,"Focus mode",state.Focus,v=>{state.Focus=v;if(!v)state.FocusEndsAt=0;Save();});
-        Paragraph("Focus keeps Essentials and pinned apps visible. It doesn’t block other apps or change your notification settings.");
+        Paragraph("Focus keeps Essentials and pinned apps visible. It doesnâ€™t block other apps or change your notification settings.");
         SettingRow(body,"Back up layout","Save a JSON file",ExportBackup,"file");
         SettingRow(body,"Restore layout","Import your saved customization",ImportBackup,"file");
         SettingRow(body,"How to use Launcher","Gestures, drawers, tiles & privacy",ShowGuide,"note");
-        Gap(body); Paragraph("Launcher · 1.0\nBuilt with C# and .NET for Android. Settings and notes stay on this device. No ads or accounts. Weather uses Open-Meteo.");
+        Gap(body); Paragraph("Launcher Â· 1.0\nBuilt with C# and .NET for Android. Settings and notes stay on this device. No ads or accounts. Weather uses Open-Meteo.");
     }
 
     private void RenderAppearance()
@@ -128,7 +129,7 @@ public partial class MainActivity
         SettingRow(body,"Theme",state.Theme,()=>Choose("Theme",["Dark","Light","Sun"],i=>{state.Theme=new[]{"Dark","Light","Sun"}[i];if(i==2)state.UseWallpaper=false;Save();Render();}),"sun");
         SettingRow(body,"Accent",state.Accent,()=>Choose("Accent",["Acid yellow","Warm white","Mint","Sky","Lilac","Peach","Custom hex color"],i=>
         {
-            if(i==6)Prompt("Accent · #RRGGBB",state.Accent,s=>
+            if(i==6)Prompt("Accent Â· #RRGGBB",state.Accent,s=>
             {
                 if(!System.Text.RegularExpressions.Regex.IsMatch(s,"^#[0-9a-fA-F]{6}$")){Toast("Use a color such as #E4FF00.");return;}
                 state.Accent=s;Save();Render();
@@ -136,8 +137,8 @@ public partial class MainActivity
             else {state.Accent=new[]{"#E4FF00","#F4F4E8","#9FE7C1","#9BCBFF","#CEB8FF","#FFBB98"}[i];Save();Render();}
         }),"photo");
         SettingRow(body,"Columns",state.Columns.ToString(),()=>Choose("Columns",["3","4","5","6"],i=>{state.Columns=i+3;Save();Render();}),"grid");
-        SettingRow(body,"Tile height",state.TileHeight+" dp",()=>Choose("Tile height",["Compact · 88","Balanced · 100","Classic · 112","Spacious · 132","Large · 152"],i=>{state.TileHeight=new[]{88,100,112,132,152}[i];Save();Render();}));
-        SettingRow(body,"Corners",state.CornerRadius+" dp",()=>Choose("Tile corners",["Square","Subtle · 6","Soft · 12","Round · 20","Pill · 28"],i=>{state.CornerRadius=new[]{0,6,12,20,28}[i];Save();Render();}));
+        SettingRow(body,"Tile height",state.TileHeight+" dp",()=>Choose("Tile height",["Compact Â· 88","Balanced Â· 100","Classic Â· 112","Spacious Â· 132","Large Â· 152"],i=>{state.TileHeight=new[]{88,100,112,132,152}[i];Save();Render();}));
+        SettingRow(body,"Corners",state.CornerRadius+" dp",()=>Choose("Tile corners",["Square","Subtle Â· 6","Soft Â· 12","Round Â· 20","Pill Â· 28"],i=>{state.CornerRadius=new[]{0,6,12,20,28}[i];Save();Render();}));
         SettingRow(body,"Icon style",state.IconStyle,()=>Choose("Icon style",["Monochrome","Grayscale","Original"],i=>{state.IconStyle=new[]{"Monochrome","Grayscale","Original"}[i];Save();Render();}),"photo");
         SettingRow(body,"Drawer alignment",state.Alignment,()=>Choose("Drawer alignment",["Top","Center","Bottom"],i=>{state.Alignment=new[]{"Top","Center","Bottom"}[i];Save();Render();}));
         ToggleRow(body,"Centered drawer headings",state.CenterHeadings,v=>{state.CenterHeadings=v;Save();});
@@ -148,7 +149,7 @@ public partial class MainActivity
         ToggleRow(body,"Minimal status bar",state.MinimalStatusBar,v=>{state.MinimalStatusBar=v;Save();Render();});
         SettingRow(body,"Status row position",state.StatusPlacement=="Top"?"Top corners":"Below camera cutout",()=>Choose("Status row position",["Top corners","Below camera cutout"],i=>{state.StatusPlacement=i==0?"Top":"Safe";Save();Render();}));
         ToggleRow(body,"Media playback card",state.ShowMediaCard,v=>{state.ShowMediaCard=v;Save();});
-        Paragraph("Monochrome uses each app’s own themed icon when available, otherwise its real icon in grayscale. Every app keeps its identity. Pull down on the home screen for Launcher’s quick panel. Android’s system shade remains available from the screen edge.");
+        Paragraph("Monochrome uses each appâ€™s own themed icon when available, otherwise its real icon in grayscale. Every app keeps its identity. Pull down on the home screen for Launcherâ€™s quick panel. Androidâ€™s system shade remains available from the screen edge.");
     }
 
     private void RenderDrawerSettings()
@@ -226,13 +227,13 @@ public partial class MainActivity
     }
     private void RenderPermissions()
     {
-        Title("You’re in control.");
+        Title("Youâ€™re in control.");
         Paragraph("Launcher works without optional permissions. Enable only the features you want.");
-        SettingRow(body,"Default home app",IsDefaultHome()?"Launcher is your home":"Choose Launcher in Android’s chooser",RequestHome,"grid");
-        SettingRow(body,"Usage access",AppCatalog.HasUsageAccess(this)?"Enabled":"Optional · real app usage and daily goals",()=>OpenIntent(new Intent(Android.Provider.Settings.ActionUsageAccessSettings,Uri.Parse("package:"+PackageName))),"clock");
-        SettingRow(body,"Notification access",ConversationService.Enabled(this)?"Enabled · quick panel and conversations":"Optional · current notifications and messages",()=>
+        SettingRow(body,"Default home app",IsDefaultHome()?"Launcher is your home":"Choose Launcher in Androidâ€™s chooser",RequestHome,"grid");
+        SettingRow(body,"Usage access",AppCatalog.HasUsageAccess(this)?"Enabled":"Optional Â· real app usage and daily goals",()=>OpenIntent(new Intent(Android.Provider.Settings.ActionUsageAccessSettings,Uri.Parse("package:"+PackageName))),"clock");
+        SettingRow(body,"Notification access",ConversationService.Enabled(this)?"Enabled Â· quick panel and conversations":"Optional Â· current notifications and messages",()=>
             Confirm("Notification access","Launcher shows current notifications in its quick panel and message previews in Conversations. These stay in memory on your device. You can revoke access in Android settings.","Open settings",()=>OpenIntent(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))),"message");
-        SettingRow(body,"Connection names",connections.CanReadBluetooth&&connections.CanReadWifiName?"Enabled":"Optional · Wi-Fi and connected Bluetooth names",RequestConnectionDetails,"wifi");
+        SettingRow(body,"Connection names",connections.CanReadBluetooth&&connections.CanReadWifiName?"Enabled":"Optional Â· Wi-Fi and connected Bluetooth names",RequestConnectionDetails,"wifi");
         Paragraph("No accessibility service, contacts, SMS or storage permission. Connection names optionally require nearby-device and precise location access. Weather uses internet access for your chosen city; Launcher does not request GPS coordinates. Work-profile and private-space apps are not supported in this version.");
     }
     private bool IsDefaultHome()
@@ -255,8 +256,8 @@ public partial class MainActivity
         Paragraph("Tap a drawer heading to expand it. Hold it to rename, reorder or choose its apps.",panel);
         Paragraph("Tap an app to open it. Hold an app to move, rename, pin, highlight, expand, hide or set a daily usage goal.",panel);
         Paragraph("Swipe right for Root; swipe left for Conversations. The menu inside search also opens Root, Apps and Notifications.",panel);
-        Paragraph("Pull down within the top of the Tiles screen for Launcher’s quick panel. Tap the minimal status row to open it too. The screen-edge notification shade belongs to Android.",panel);
-        Paragraph("Hold the search icon, or tap the three dots, for theme and focus controls. Focus leaves Essentials and pinned apps visible.",panel);
+        Paragraph("Pull down within the top of the Tiles screen for Launcherâ€™s quick panel. Tap the minimal status row to open it too. The screen-edge notification shade belongs to Android.",panel);
+        Paragraph("Hold the search icon, or tap the three dots, for theme and focus controls. Focus gives app tiles a quiet outlined appearance.",panel);
         Paragraph("Root has editable notes, calendar, calculator, a focus timer and support for your installed Android widgets.",panel);
         panel.AddView(Button("Got it",()=>dialog.Dismiss(),true),Match());
     });

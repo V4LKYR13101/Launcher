@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Launcher</string>
+    <string name="grayscale_description">Applies your chosen grayscale setting when an app comes to the foreground, then restores your display settings when you leave it. Detects app window changes only. Does not read screen text or send activity data anywhere.</string>
 </resources>
