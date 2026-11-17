@@ -1,0 +1,82 @@
+[
+  {
+    "id": "builtin:material-outlined",
+    "label": "Material / Outlined",
+    "count": 2195,
+    "repository": "google/material-design-icons",
+    "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7",
+    "sha256": "d52be417911a4ee6324266c177d7df38df3b060ec3fdc6af21e2a03bd0666be8"
+  },
+  {
+    "id": "builtin:material-rounded",
+    "label": "Material / Rounded",
+    "count": 2200,
+    "repository": "google/material-design-icons",
+    "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7",
+    "sha256": "96cb556678f06b0031fae4c0906eb5e35663ec24cccd6ad58e0f9081fccbfb59"
+  },
+  {
+    "id": "builtin:material-filled",
+    "label": "Material / Filled",
+    "count": 2234,
+    "repository": "google/material-design-icons",
+    "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7",
+    "sha256": "f51b3ffbe7c5acd1ac7f011d47f21fc4aa488cc8743bed2559bd854372e79e3f"
+  },
+  {
+    "id": "builtin:material-sharp",
+    "label": "Material / Sharp",
+    "count": 2200,
+    "repository": "google/material-design-icons",
+    "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7",
+    "sha256": "fee8f2b8ae8f2c940c928739a1f9d0056f09b8d2242a24678b4be143c8644e57"
+  },
+  {
+    "id": "builtin:phosphor-light",
+    "label": "Phosphor / Light",
+    "count": 1530,
+    "repository": "phosphor-icons/web",
+    "commit": "3d40a3eaa73b25d20d263f0e1e55c9fed3e66809",
+    "sha256": "a10ef7a0631da04626fca2eab921d14b391749fddfa3465749368f21b28fd46c"
+  },
+  {
+    "id": "builtin:phosphor-thin",
+    "label": "Phosphor / Thin",
+    "count": 1530,
+    "repository": "phosphor-icons/web",
+    "commit": "3d40a3eaa73b25d20d263f0e1e55c9fed3e66809",
+    "sha256": "f40473506b4ab4fcfd2b5c32fb235f9e22def891e58e01da866e1e18974e79f2"
+  },
+  {
+    "id": "builtin:phosphor-regular",
+    "label": "Phosphor / Regular",
+    "count": 1530,
+    "repository": "phosphor-icons/web",
+    "commit": "3d40a3eaa73b25d20d263f0e1e55c9fed3e66809",
+    "sha256": "06b91e022b7ee899a63efced879392a74f0bacbda54e4467e9f663220d173a10"
+  },
+  {
+    "id": "builtin:phosphor-bold",
+    "label": "Phosphor / Bold",
+    "count": 1530,
+    "repository": "phosphor-icons/web",
+    "commit": "3d40a3eaa73b25d20d263f0e1e55c9fed3e66809",
+    "sha256": "10a0a1cb4f8156a420f9f84cf34c4e9871e58ed2ddea1f6a8079ad07243a7fb2"
+  },
+  {
+    "id": "builtin:phosphor-fill",
+    "label": "Phosphor / Fill",
+    "count": 1530,
+    "repository": "phosphor-icons/web",
+    "commit": "3d40a3eaa73b25d20d263f0e1e55c9fed3e66809",
+    "sha256": "a53f5d2630cab5e3b7536ecb9d69d71519a2190298c22b1f8d770dd37bc2940a"
+  },
+  {
+    "id": "builtin:bootstrap",
+    "label": "Bootstrap",
+    "count": 2078,
+    "repository": "twbs/icons",
+    "commit": "829d2bc2b87543c7d781c815ca4f0feee8cf9e45",
+    "sha256": "d9e7f0c8bf41e59798dbb5eb1a0399d871e4de609af85ca5f19a98270d0d6236"
+  }
+]

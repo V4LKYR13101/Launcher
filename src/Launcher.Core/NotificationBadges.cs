@@ -1,4 +1,4 @@
-namespace Launcher.Core;
+﻿namespace Launcher.Core;
 
 public sealed record BadgeSignal(string Key,string Package,string Group,int Count,bool Summary,bool Clearable);
 

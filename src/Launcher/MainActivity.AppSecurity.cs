@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Hardware.Biometrics;
 using Android.OS;
@@ -12,6 +12,9 @@ public partial class MainActivity
     private Action? credentialAction;
     private bool authenticationPending;
     private bool PackageLocked(string package) => state.Apps.Any(p=>p.Key.StartsWith(package+"/",StringComparison.Ordinal)&&p.Value.BiometricLocked);
+    private bool ConcealPreview(string package)=>state.HideProtectedPreviews&&PackageLocked(package);
+    private void WithProtectedSettings(Action action)
+    {if(state.Apps.Values.Any(r=>r.BiometricLocked))AuthenticateDevice("protected settings",action);else action();}
     private void WithAppUnlock(string package,Action action)
     {
         if(!PackageLocked(package)){action();return;}
@@ -78,7 +81,25 @@ public partial class MainActivity
     }
     private void OpenNotification(Services.Conversation notification)=>WithAppUnlock(notification.Package,()=>
     {
-        try{notification.Open?.Send();}
-        catch(PendingIntent.CanceledException){Toast("This notification is no longer available.");}
+        HideKeyboard();
+        try
+        {
+            if(notification.Open is {} pending){StartIntentSender(pending.IntentSender,null,0,0,0);return;}
+        }
+        catch(Exception e)when(e is IntentSender.SendIntentException or Java.Lang.SecurityException){}
+        // A notification may have no content intent, or its token may have expired.
+        // Launch the source app directly, as with the now-playing card.
+        try
+        {
+            var launch=PackageManager?.GetLaunchIntentForPackage(notification.Package);
+            if(launch is not null)
+            {
+                launch.AddFlags(ActivityFlags.NewTask|ActivityFlags.ResetTaskIfNeeded);StartActivity(launch);return;
+            }
+            var entry=apps.FirstOrDefault(a=>a.PackageName==notification.Package);
+            if(entry is not null){StartAppDirect(entry);return;}
+        }
+        catch(Exception e)when(e is ActivityNotFoundException or Java.Lang.SecurityException){}
+        Toast("This notification no longer has an available app screen.");
     });
 }

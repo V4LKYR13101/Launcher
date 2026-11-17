@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
@@ -14,16 +14,20 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private readonly Dictionary<string,Android.Animation.ValueAnimator> drawerAnimations=new();
+    private bool drawerTouchActive;
     private void StopDrawerAnimations()
     {
         foreach(var animation in drawerAnimations.Values.ToArray())animation.Cancel();
         drawerAnimations.Clear();
+        drawerTouchActive=false;
     }
-    private void FoldDrawer(Drawer drawer,LinearLayout content,View heading,Action populate)
+    private void FoldDrawer(Drawer drawer,LinearLayout content,View heading,Action populate,bool? force=null)
     {
+        ResetDeviceDepth();
         int from=content.Visibility==ViewStates.Gone?0:content.Height;
         if(drawerAnimations.Remove(drawer.Id,out var previous))previous.Cancel();
-        drawer.Expanded=!drawer.Expanded;Save();
+        bool wasExpanded=drawer.Expanded;drawer.Expanded=force??!drawer.Expanded;Save();
+        if(force.HasValue&&wasExpanded!=drawer.Expanded)Haptic(heading,HapticCue.Commit);
         bool expanding=drawer.Expanded;
         heading.ContentDescription=drawer.Name+(expanding?", expanded":", collapsed");
         if(content.ChildCount==0)populate();
@@ -33,21 +37,27 @@ public partial class MainActivity
         int natural=content.MeasuredHeight,target=expanding?natural:0;
         var layout=content.LayoutParameters!;layout.Height=from;content.LayoutParameters=layout;
         content.PivotY=0;content.SetCameraDistance(Dp(1200));
+        heading.Selected=expanding;
+        if(!LayerMotionEnabled)
+        {
+            content.Visibility=expanding?ViewStates.Visible:ViewStates.Gone;content.Alpha=1;content.RotationX=0;PaintDrawerCells(content,1);
+            layout.Height=-2;content.LayoutParameters=layout;return;
+        }
         var animation=Android.Animation.ValueAnimator.OfInt(from,target)!;
-        animation.SetDuration(230);animation.SetInterpolator(new Android.Views.Animations.DecelerateInterpolator(1.5f));
+        animation.SetDuration(240);animation.SetInterpolator(new Android.Views.Animations.DecelerateInterpolator(1.5f));
         bool cancelled=false;animation.AnimationCancel+=(_,_)=>cancelled=true;
         animation.Update+=(_,e)=>
         {
             int height=((Java.Lang.Integer)e.Animation!.AnimatedValue!).IntValue();
             var lp=content.LayoutParameters!;lp.Height=height;content.LayoutParameters=lp;
             float fraction=natural>0?Math.Clamp(height/(float)natural,0,1):1;
-            content.Alpha=.35f+.65f*fraction;content.RotationX=-7*(1-fraction);
+            content.Alpha=state.LayeredInterface ? .35f+.65f*fraction : 1;content.RotationX=state.LayeredInterface?-9*(1-fraction):0;PaintDrawerCells(content,fraction);
         };
         animation.AnimationEnd+=(_,_)=>
         {
             if(cancelled)return;
             content.Visibility=expanding?ViewStates.Visible:ViewStates.Gone;
-            content.Alpha=1;content.RotationX=0;
+            content.Alpha=1;content.RotationX=0;PaintDrawerCells(content,1);
             var lp=content.LayoutParameters!;lp.Height=-2;content.LayoutParameters=lp;
             drawerAnimations.Remove(drawer.Id);
         };
@@ -69,32 +79,56 @@ public partial class MainActivity
             Paragraph("Installed apps will appear here in drawers. Tap the three dots below to customize Launcher.");
             return;
         }
-        var visible=AppOrganization.Visible(state,apps).ToArray();
+        var visible=AppOrganization.Visible(state,apps).Where(a=>!a.PrivateProfile).ToArray();
         bool hasUsage=AppCatalog.HasUsageAccess(this);
         foreach (var drawer in state.Drawers)
         {
             var contents=visible.Where(a=>state.Apps[a.Id].DrawerId==drawer.Id).ToArray();
             if(contents.Length==0) continue;
             var heading = new FrameLayout(this) { ContentDescription = drawer.Name + (drawer.Expanded ? ", expanded" : ", collapsed") };
-            var name=Text(drawer.Name, state.CenterHeadings ? 23 : 27,true);
+            int detailWidth=(int)(54+Math.Max(0,FontScale-1)*24),headingInset=FontScale>1.15f?detailWidth+8:40;
+            var name=Text(drawer.Name, state.CenterHeadings ? 21 : 23,true);
             name.Gravity=state.CenterHeadings ? GravityFlags.Center : GravityFlags.CenterVertical;
-            name.SetPadding(state.CenterHeadings ? Dp(40):Dp(32),0,state.CenterHeadings?Dp(40):Dp(54),0);
+            name.SetPadding(state.CenterHeadings?Dp(headingInset):Dp(32),0,state.CenterHeadings?Dp(headingInset):Dp(detailWidth+8),0);
             name.SetSingleLine(true);name.Ellipsize=Android.Text.TextUtils.TruncateAt.End;
             heading.AddView(name,new FrameLayout.LayoutParams(-1,-1));
             var drawerIcon=DrawerIcons.All.Contains(drawer.Icon)?drawer.Icon:DrawerIcons.ForDrawer(drawer.Id);
-            heading.AddView(new GlyphView(this,drawerIcon,palette.Text),new FrameLayout.LayoutParams(Dp(19),Dp(19),GravityFlags.Left|GravityFlags.CenterVertical));
-            var detail=Text(hasUsage && state.ShowUsage ? AppOrganization.FormatDuration(contents.Select(a=>a.PackageName).Distinct().Sum(p=>usage.GetValueOrDefault(p))) : "",9,color:palette.Muted);
-            detail.Gravity=GravityFlags.Right|GravityFlags.CenterVertical;
-            heading.AddView(detail,new FrameLayout.LayoutParams(Dp(54),-1,GravityFlags.Right));
+            heading.AddView(DrawerIconView(drawer),new FrameLayout.LayoutParams(Dp(19),Dp(19),GravityFlags.Left|GravityFlags.CenterVertical));
+            bool showDuration=hasUsage&&state.ShowUsage;
+            var detail=Text(showDuration?AppOrganization.FormatDuration(contents.Select(a=>a.PackageName).Distinct().Sum(p=>usage.GetValueOrDefault(p))):contents.Length.ToString(),9,true,palette.Muted);
+            detail.ContentDescription=showDuration?"Drawer usage "+detail.Text:Counted(contents.Length,"app");
+            if(!showDuration){detail.Background=Surface(palette.Card,10);detail.SetPadding(Dp(6),0,Dp(6),0);}
+            detail.SetSingleLine(true);detail.Ellipsize=Android.Text.TextUtils.TruncateAt.End;detail.Gravity=GravityFlags.Right|GravityFlags.CenterVertical;
+            heading.AddView(detail,new FrameLayout.LayoutParams(Dp(detailWidth),showDuration?-1:Dp(Math.Max(28,9*FontScale*1.3f+10)),GravityFlags.Right|GravityFlags.CenterVertical));
+            heading.Selected=drawer.Expanded;TouchFeedback(heading,10);
             var drawerContent=Stack();drawerContent.SetClipChildren(true);
-            void Populate(){AddTileGrid(drawerContent,contents);Gap(drawerContent,8);}
+            void Populate(){AddTileGrid(drawerContent,contents);Gap(drawerContent,12);}
             heading.Click+=(_,_)=>FoldDrawer(drawer,drawerContent,heading,Populate);
-            heading.LongClick+=(_,_)=>EditDrawer(drawer);
-            body.AddView(heading,Match(Dp(state.CenterHeadings?58:54)));
-            body.AddView(drawerContent,Match());
+            BindHoldHaptics(heading);heading.LongClick+=(_,_)=>EditDrawer(drawer);
+            int dragStart=0,naturalHeight=0;bool startedExpanded=false;
+            if(state.DragDrawerHeadings)heading.SetOnTouchListener(new DrawerPullListener(Dp(8),()=>drawer.Expanded,()=>
+            {
+                if(drawerAnimations.Remove(drawer.Id,out var running))running.Cancel();
+                startedExpanded=drawer.Expanded;dragStart=drawerContent.Visibility==ViewStates.Gone?0:drawerContent.Height;
+                if(drawerContent.ChildCount==0)Populate();drawerContent.Visibility=ViewStates.Visible;
+                var lp=drawerContent.LayoutParameters!;lp.Height=-2;drawerContent.LayoutParameters=lp;
+                drawerContent.Measure(View.MeasureSpec.MakeMeasureSpec(body.Width,MeasureSpecMode.Exactly),View.MeasureSpec.MakeMeasureSpec(0,MeasureSpecMode.Unspecified));naturalHeight=drawerContent.MeasuredHeight;
+            },dy=>
+            {
+                int height=(int)Math.Clamp(dragStart+dy,0,naturalHeight);var lp=drawerContent.LayoutParameters!;lp.Height=height;drawerContent.LayoutParameters=lp;
+                float fraction=height/(float)Math.Max(1,naturalHeight);drawerContent.Alpha=LayerMotionEnabled ? .35f+.65f*fraction : 1;drawerContent.PivotY=0;drawerContent.RotationX=LayerMotionEnabled?-7*(1-fraction):0;
+            },(dy,cancel)=>
+            {
+                bool open=cancel?startedExpanded:Math.Abs(dy)>Dp(32)?dy>0:startedExpanded;
+                FoldDrawer(drawer,drawerContent,heading,Populate,open);
+            },active=>drawerTouchActive=active));
+            var section=Stack();section.Tag="drawer:"+drawer.Id;
+            depthHeadings.Add(heading);section.AddView(heading,Match(Math.Max(Dp(48),Dp(23*FontScale*1.3f))));
+            section.AddView(drawerContent,Match());body.AddView(section,Match());
             if(drawer.Expanded)Populate();else drawerContent.Visibility=ViewStates.Gone;
         }
-        if(visible.Length==0) Paragraph("No apps are visible in focus. Pin an app in settings or turn focus off below.");
+        if(visible.Length==0) Paragraph("No apps are visible. Restore hidden apps in Settings.");
+        RenderPrivateSpace();
         var pinned=visible.Where(a=>state.Apps[a.Id].Pinned).Take(5).ToArray();
         if(pinned.Length>0)
         {
@@ -102,35 +136,63 @@ public partial class MainActivity
             var dock=Stack(true); dock.SetPadding(Dp(8),Dp(8),Dp(8),Dp(8)); dock.Background=Background(palette.Card,20);
             foreach(var app in pinned)
             {
-                var icon=new FrameLayout(this) { ContentDescription=app.Label+", pinned" };
+                var icon=new FrameLayout(this) { ContentDescription=app.Label+", pinned",Tag="app-tile:"+app.Id };
                 icon.AddView(AppIcon(app,palette.Text),new FrameLayout.LayoutParams(Dp(30),Dp(30),GravityFlags.Center));
                 AddBadge(icon,app.PackageName);
-                icon.Click+=(_,_)=>Launch(app); icon.LongClick+=(_,_)=>EditApp(app);
+                TouchFeedback(icon,12);BindHoldHaptics(icon);icon.Click+=(_,_)=>Launch(app); icon.LongClick+=(_,_)=>InspectAppTile(app,icon);
                 dock.AddView(icon,new LinearLayout.LayoutParams(0,Dp(52),1));
             }
             body.AddView(dock,Match());
         }
     }
 
+    private int EffectiveColumns=>Math.Min(state.Columns,FontScale>=1.8f?2:FontScale>=1.3f?3:state.Columns);
+    private int RequestedTileIconSize(int percent,bool wide=false)=>Math.Min((int)Math.Round((wide?44:EffectiveColumns>=6?38:EffectiveColumns==5?44:52)*percent/100d),
+        Math.Max(24,wide?(Math.Min(720,Resources!.Configuration!.ScreenWidthDp)-32)*2/EffectiveColumns-72:(Math.Min(720,Resources!.Configuration!.ScreenWidthDp)-32)/EffectiveColumns-20));
+    private int TileIconSize=>RequestedTileIconSize(state.TileIconScale);
+    private Action<int> FitTileIcon(FrameLayout slot,View icon,int size)
+    {
+        int desired=size;
+        slot.AddView(icon,new FrameLayout.LayoutParams(Dp(size),Dp(size),GravityFlags.Center));
+        void Resize()
+        {
+            int available=slot.Width>0&&slot.Height>0?Math.Min(slot.Width,slot.Height):Dp(desired);
+            int fit=Math.Min(Dp(desired),available);if(fit<=0)return;
+            if(icon.LayoutParameters is FrameLayout.LayoutParams lp&&(lp.Width!=fit||lp.Height!=fit)){lp.Width=lp.Height=fit;icon.LayoutParameters=lp;}
+            if(icon is TextView initials)initials.SetTextSize(Android.Util.ComplexUnitType.Px,fit*.5f);
+        }
+        slot.LayoutChange+=(_,_)=>Resize();
+        return value=>{desired=value;Resize();};
+    }
+    private float DisplayTileHeight
+    {
+        get
+        {
+            if(FontScale<=1.1f)return state.TileHeight;
+            int icon=RequestedTileIconSize(100);
+            float text=(state.ShowLabels?(EffectiveColumns>=5?10:11)*2*FontScale*1.2f:0)+(state.ShowUsage?9*FontScale*1.2f+3:0);
+            return Math.Max(state.TileHeight+(FontScale-1)*((state.ShowLabels?26:0)+(state.ShowUsage?12:0)),icon+12+text);
+        }
+    }
     private void AddTileGrid(LinearLayout parent,IEnumerable<AppEntry> entries)
     {
         LinearLayout? row=null; int used=0;
         void Finish()
         {
             if(row is null) return;
-            if(used<state.Columns) row.AddView(new View(this),new LinearLayout.LayoutParams(0,1,state.Columns-used));
+            if(used<EffectiveColumns) row.AddView(new View(this),new LinearLayout.LayoutParams(0,1,EffectiveColumns-used));
         }
         foreach(var app in entries)
         {
             int span=state.Apps[app.Id].Wide?2:1;
-            if(row is null || used+span>state.Columns)
+            if(row is null || used+span>EffectiveColumns)
             {
-                Finish(); row=Stack(true); row.WeightSum=state.Columns; parent.AddView(row,Match()); used=0;
+                Finish(); row=Stack(true); row.WeightSum=EffectiveColumns; parent.AddView(row,Match()); used=0;
             }
             var cell=new FrameLayout(this);
             var inner=new FrameLayout.LayoutParams(-1,-1);inner.SetMargins(Dp(4),Dp(4),Dp(4),Dp(4));
             cell.AddView(AppTile(app),inner);
-            row.AddView(cell,new LinearLayout.LayoutParams(0,Dp(state.TileHeight+8),span));used+=span;
+            row.AddView(cell,new LinearLayout.LayoutParams(0,Dp(DisplayTileHeight+8),span));used+=span;
         }
         Finish();
     }
@@ -142,17 +204,21 @@ public partial class MainActivity
         {
             if(!iconCache.TryGetValue(app.Id,out var cached))
             {
-                cached=PackageManager!.GetActivityIcon(new ComponentName(app.PackageName,app.ActivityName));
+                cached=(app.ShortcutId.Length>0||app.ProfileSerial>=0?ProfileCatalog.Icon(this,app):null)??IconPacks.ForApp(this,state,app)??PackageManager!.GetActivityIcon(new ComponentName(app.PackageName,app.ActivityName));
                 iconCache[app.Id]=cached;
+                iconQualityCache[app.Id]=(OperatingSystem.IsAndroidVersionAtLeast(33)&&cached is AdaptiveIconDrawable a&&a.Monochrome is {} mono&&IconQuality.UsableMonochrome(mono),cached is not FontIconDrawable&&state.Apps[app.Id].IconPackage.Length==0&&IconQuality.Blank(cached));
             }
             var actual=cached.GetConstantState()?.NewDrawable(Resources)?.Mutate()??cached.Mutate();
+            if(actual is FontIconDrawable fontIcon){fontIcon.SetInk(color);icon.SetImageDrawable(fontIcon);return icon;}
             if(state.IconStyle=="Monochrome" && OperatingSystem.IsAndroidVersionAtLeast(33)
-                && actual is AdaptiveIconDrawable adaptive && adaptive.Monochrome is { } monochrome)
+                && actual is AdaptiveIconDrawable adaptive && adaptive.Monochrome is { } monochrome&&iconQualityCache.GetValueOrDefault(app.Id).Mono)
             {
-                var drawable=monochrome.Mutate()!;drawable.SetTint(color);icon.SetImageDrawable(drawable);
+                var drawable=monochrome.Mutate()!;drawable.SetTint(color);icon.SetImageDrawable(OpticallySized(app.Id+":mono",drawable));
                 return icon;
             }
-            icon.SetImageDrawable(actual);
+            if(iconQualityCache.GetValueOrDefault(app.Id).Blank)
+            {var initials=Text(string.Concat(app.Label.Split(' ',StringSplitOptions.RemoveEmptyEntries).Take(2).Select(w=>w[0])).ToUpperInvariant(),23,true,color);initials.Gravity=GravityFlags.Center;return initials;}
+            icon.SetImageDrawable(OpticallySized(app.Id+":full",actual));
             if(state.IconStyle!="Original")
             {
                 using var matrix=new ColorMatrix(); matrix.SetSaturation(0);
@@ -167,14 +233,20 @@ public partial class MainActivity
         return icon;
     }
 
+    private Drawable OpticallySized(string key,Drawable drawable)
+    {
+        if(!iconGeometryCache.TryGetValue(key,out var geometry))iconGeometryCache[key]=geometry=IconGeometry.Measure(drawable);
+        return new OpticalIconDrawable(drawable,geometry);
+    }
+
     private View AppTile(AppEntry app)
     {
         var rule=state.Apps[app.Id];
-        var foreground=rule.Highlight?palette.OnAccent:palette.Text;
+        var colours=TileColours(rule);var foreground=colours.Ink;
         bool locked=PackageLocked(app.PackageName);
-        bool outlined=state.Focus||state.Theme=="Sun";
+        bool outlined=colours.Outline;
         var tile=Stack();
-        var surface=rule.Highlight?palette.Accent:outlined?palette.Base:palette.Card;
+        var surface=colours.Surface;
         var border=outlined&&!rule.Highlight?palette.Muted:(Color?)null;
         tile.Background = locked
     ? new FingerprintDrawable(
@@ -182,24 +254,20 @@ public partial class MainActivity
         rule.Highlight ? palette.OnAccent : palette.Accent,
         Dp(state.CornerRadius),
         border)
-    : Background(surface, state.CornerRadius, border);
+    : outlined?Background(surface,state.CornerRadius,border):Surface(surface,state.CornerRadius,rule.Highlight);
 
-        tile.SetPadding(
-            locked ? 0 : Dp(0),
-            locked ? 0 : Dp(0),
-            locked ? 0 : Dp(0),
-            locked ? 0 : Dp(0));
+        tile.SetPadding(Dp(6),Dp(6),Dp(6),Dp(10));
 
         tile.SetGravity(GravityFlags.Center);
 
         tile.ContentDescription =
             AppOrganization.DisplayName(state, app)
             + (locked ? ", locked" : "")
-            + ", hold to customize";
+            + (state.LayeredInterface?", hold for app actions":", hold to customize");
         if (rule.Wide)
         {
             var top=Stack(true); top.SetGravity(GravityFlags.CenterVertical);
-            top.AddView(AppIcon(app,foreground),new LinearLayout.LayoutParams(Dp(44),Dp(44)));
+            var wideIcon=new FrameLayout(this);FitTileIcon(wideIcon,AppIcon(app,foreground),RequestedTileIconSize(state.TileIconScale,true));top.AddView(wideIcon,new LinearLayout.LayoutParams(Dp(RequestedTileIconSize(state.TileIconScale,true)),-1));
             var labels=Stack(); labels.SetPadding(Dp(10),0,0,0);
             var label=Text(AppOrganization.DisplayName(state,app),12,true,foreground); label.SetMaxLines(2); labels.AddView(label,Match());
             if(state.ShowUsage && AppCatalog.HasUsageAccess(this)) labels.AddView(Text(AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName)),9,color:foreground),Match());
@@ -208,31 +276,32 @@ public partial class MainActivity
             foreach(var (name,action) in new (string,Action)[]{("Open",()=>Launch(app)),("Info",()=>AppInfo(app))})
             {
                 var chip=Text(name,10,color:foreground); chip.Gravity=GravityFlags.Center;
-                chip.Background=Background(Color.Transparent,24,foreground); chip.Click+=(_,_)=>action();
-                var cp=new LinearLayout.LayoutParams(0,Dp(30),1); cp.SetMargins(Dp(2),Dp(4),Dp(2),0); actions.AddView(chip,cp);
+                chip.Background=Background(Color.Transparent,24,foreground);TouchFeedback(chip,24);chip.Click+=(_,_)=>action();
+                var cp=new LinearLayout.LayoutParams(0,Dp(48),1); cp.SetMargins(Dp(2),Dp(4),Dp(2),0); actions.AddView(chip,cp);
             }
             tile.AddView(actions,Match());
         }
         else
         {
             var iconBox=new FrameLayout(this);
-            int iconSize=state.Columns>=6?38:state.Columns==5?44:52;
-            iconBox.AddView(AppIcon(app,foreground),new FrameLayout.LayoutParams(Dp(iconSize),Dp(iconSize),GravityFlags.Center));
+            int iconSize=TileIconSize;
+            FitTileIcon(iconBox,AppIcon(app,foreground),iconSize);
             tile.AddView(iconBox,new LinearLayout.LayoutParams(-1,0,1));
             if(state.ShowLabels)
             {
-                var label=Text(AppOrganization.DisplayName(state,app),state.Columns>=5?10:11,color:foreground);
-                label.Gravity=GravityFlags.Center; label.SetMaxLines(2); label.Ellipsize=Android.Text.TextUtils.TruncateAt.End;
+                var label=Text(AppOrganization.DisplayName(state,app),EffectiveColumns>=5?10:11,color:foreground);
+                label.Gravity=GravityFlags.Center; label.SetMaxLines(AppLabelLines(AppOrganization.DisplayName(state,app))); label.Ellipsize=Android.Text.TextUtils.TruncateAt.End;
                 tile.AddView(label,Match());
             }
             if(state.ShowUsage && AppCatalog.HasUsageAccess(this))
             {
-                var time=Text(AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName)),9,color:rule.Highlight?foreground:palette.Muted);
-                time.Gravity=GravityFlags.Center; time.SetPadding(0,Dp(3),0,0); tile.AddView(time,Match());
+                var time=Text(AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName)),9,color:rule.Highlight?foreground:new Color(foreground.R,foreground.G,foreground.B,(byte)175));
+                time.Gravity=GravityFlags.Center; time.SetPadding(0,Dp(2),0,0); tile.AddView(time,Match());
             }
         }
-        tile.Click+=(_,_)=>Launch(app); tile.LongClick+=(_,_)=>EditApp(app);
-        return WithBadge(tile,app);
+        var wrapped=WithBadge(tile,app);wrapped.Tag="app-tile:"+app.Id;
+        TouchFeedback(tile,state.CornerRadius);BindHoldHaptics(tile);tile.Click+=(_,_)=>Launch(app); tile.LongClick+=(_,_)=>InspectAppTile(app,wrapped);
+        return wrapped;
     }
 
     private View NotificationIcon(string package)
@@ -244,10 +313,10 @@ public partial class MainActivity
             var raw=PackageManager!.GetApplicationIcon(package);
             var icon=new ImageView(this);icon.SetScaleType(ImageView.ScaleType.FitCenter);
             if(state.IconStyle=="Monochrome" && OperatingSystem.IsAndroidVersionAtLeast(33) && raw is AdaptiveIconDrawable adaptive && adaptive.Monochrome is {} mono)
-            {var drawable=mono.Mutate()!;drawable.SetTint(palette.Text);icon.SetImageDrawable(drawable);}
+            {var drawable=mono.Mutate()!;drawable.SetTint(palette.Text);icon.SetImageDrawable(OpticallySized(package+":notification-mono",drawable));}
             else
             {
-                icon.SetImageDrawable(raw);
+                icon.SetImageDrawable(OpticallySized(package+":notification-full",raw));
                 if(state.IconStyle!="Original"){using var matrix=new ColorMatrix();matrix.SetSaturation(0);icon.SetColorFilter(new ColorMatrixColorFilter(matrix));}
             }
             return icon;
@@ -262,72 +331,75 @@ public partial class MainActivity
         AddBadge(frame,app.PackageName);
         return frame;
     }
-    private void AddBadge(FrameLayout frame,string package)
+    private TextView AddBadge(FrameLayout frame,string package)
     {
         var badge=Text("",9,true,palette.OnAccent);badge.Gravity=GravityFlags.Center;
         badge.SetPadding(Dp(5),0,Dp(5),0);badge.SetMinimumWidth(Dp(19));badge.Background=Background(palette.Accent,20);
         var lp=new FrameLayout.LayoutParams(-2,Dp(19),GravityFlags.Top|GravityFlags.Right);lp.SetMargins(0,Dp(6),Dp(6),0);
-        frame.AddView(badge,lp);badgeViews.Add((badge,package));UpdateBadge(badge,package);
+        frame.AddView(badge,lp);badgeViews.Add((badge,package));UpdateBadge(badge,package);return badge;
     }
     private void UpdateBadge(TextView badge,string package)
     {
         int count=badgeCounts.GetValueOrDefault(package);
-        badge.Visibility=state.ShowNotificationBadges&&count>0?ViewStates.Visible:ViewStates.Gone;
+        bool muted=state.Apps.Any(p=>p.Key.StartsWith(package+"/",StringComparison.Ordinal)&&p.Value.MuteBadge);
+        badge.Visibility=state.ShowNotificationBadges&&!muted&&count>0?ViewStates.Visible:ViewStates.Gone;
         badge.Text=NotificationBadges.Label(count);badge.ContentDescription=$"{count} unread notifications";
     }
 
     private void RenderSearchResults()
     {
+        if(page=="Root"){RenderRootCommands();return;}
         if(page=="Conversations") { RenderConversations(); return; }
-        Title(query.Length==0?"All apps":"Results");
-        var results=AppOrganization.Visible(state,apps,query).OrderBy(a=>AppOrganization.DisplayName(state,a),StringComparer.CurrentCultureIgnoreCase).ToArray();
-        if(results.Length==0) { Paragraph("No apps found. Hidden apps can be restored in Settings → Hidden apps."); return; }
-        if(query.Length==0) Paragraph($"{results.Length} apps · hold any app to customize");
-        foreach(var app in results.Take(searchLimit))
-        {
-            var row=Stack(true); row.SetGravity(GravityFlags.CenterVertical); row.SetPadding(Dp(10),Dp(10),Dp(10),Dp(10));
-            var iconBox=new FrameLayout(this);iconBox.AddView(AppIcon(app,palette.Text),new FrameLayout.LayoutParams(Dp(28),Dp(28),GravityFlags.Center));AddBadge(iconBox,app.PackageName);
-            row.AddView(iconBox,new LinearLayout.LayoutParams(Dp(44),Dp(44)));
-            var label=Text(AppOrganization.DisplayName(state,app),16); label.SetPadding(Dp(18),0,0,0);
-            row.AddView(label,new LinearLayout.LayoutParams(0,-2,1));
-            if(state.Apps[app.Id].Pinned) row.AddView(new GlyphView(this,"pin",palette.Muted),new LinearLayout.LayoutParams(Dp(18),Dp(18)));
-            row.SetMinimumHeight(Dp(62)); row.Click+=(_,_)=>Launch(app); row.LongClick+=(_,_)=>EditApp(app); body.AddView(row,Match());
-        }
-        if(results.Length>searchLimit)body.AddView(Button($"Show more apps · {results.Length-searchLimit} remaining",()=>
-        {int y=scroll.ScrollY;searchLimit+=24;RenderBody();scroll.Post(()=>scroll.ScrollTo(0,y));}),Match());
+        RenderAppSearch();
     }
 
     private void AppInfo(AppEntry app) => OpenIntent(new Intent(Android.Provider.Settings.ActionApplicationDetailsSettings,Uri.Parse("package:"+app.PackageName)));
 
-    private Dialog Sheet(string title,Action<LinearLayout,Dialog> build,Action<LinearLayout,Dialog>? footer=null)
+    private Dialog Sheet(string title,Action<LinearLayout,Dialog> build,Action<LinearLayout,Dialog>? footer=null,Action<LinearLayout,Dialog>? fixedHeader=null)
     {
         var dialog=new Dialog(this,Android.Resource.Style.ThemeMaterialNoActionBar);
         var overlay=new FrameLayout(this);overlay.SetOnApplyWindowInsetsListener(new InsetListener());
         var outside=new View(this);outside.Click+=(_,_)=>dialog.Dismiss();overlay.AddView(outside,new FrameLayout.LayoutParams(-1,-1));
         var container=new MaxHeightStack(this,(int)(Resources!.DisplayMetrics!.HeightPixels*.87));
-        var shape=Background(palette.Card,0);shape.SetCornerRadii([Dp(28),Dp(28),Dp(28),Dp(28),0,0,0,0]);container.Background=shape;
-        container.SetPadding(Dp(22),0,Dp(22),Dp(20));
+        var shape=(GradientDrawable)Surface(palette.Sheet,24);shape.SetCornerRadii([Dp(24),Dp(24),Dp(24),Dp(24),0,0,0,0]);container.Background=shape;if(LayerMotionEnabled)container.Elevation=Dp(8);
+        container.SetPadding(Dp(20),0,Dp(20),Dp(16));
         var handle=new FrameLayout(this){ContentDescription="Drag down to close sheet"};
         var line=new View(this){Background=Background(palette.Muted,4)};
         handle.AddView(line,new FrameLayout.LayoutParams(Dp(38),Dp(4),GravityFlags.Center));
-        handle.SetOnTouchListener(new SheetDragListener(container,dialog,Dp(100)));
+        handle.SetOnTouchListener(new SheetDragListener(container,dialog,Dp(100),view=>Haptic(view,HapticCue.Commit)));
         container.AddView(handle,Match(Dp(32)));
-        var heading=Text(title,27,true);heading.SetPadding(Dp(2),Dp(4),Dp(2),Dp(18));
-        heading.SetOnTouchListener(new SheetDragListener(container,dialog,Dp(100)));container.AddView(heading,Match());
+        handle.ImportantForAccessibility=Android.Views.ImportantForAccessibility.No;
+        var titleRow=Stack(true);titleRow.SetGravity(GravityFlags.CenterVertical);
+        var heading=Text(title,24,true);heading.SetPadding(0,Dp(4),Dp(8),Dp(16));heading.SetMaxLines(2);heading.Ellipsize=Android.Text.TextUtils.TruncateAt.End;
+        if(OperatingSystem.IsAndroidVersionAtLeast(28))heading.AccessibilityHeading=true;
+        heading.SetOnTouchListener(new SheetDragListener(container,dialog,Dp(100),view=>Haptic(view,HapticCue.Commit)));titleRow.AddView(heading,new LinearLayout.LayoutParams(0,-2,1));titleRow.AddView(IconButton("close","Close "+title,dialog.Dismiss),new LinearLayout.LayoutParams(Dp(48),Dp(48)));container.AddView(titleRow,Match());
+        if(fixedHeader is not null)
+        {
+            var controls=Stack();controls.SetPadding(0,0,0,Dp(10));controls.FocusableInTouchMode=true;fixedHeader(controls,dialog);container.AddView(controls,Match());controls.RequestFocus();
+        }
         var content=Stack();build(content,dialog);
-        var scroller=new ScrollView(this){VerticalScrollBarEnabled=false,FillViewport=false};scroller.AddView(content);
+        var scroller=new ScrollView(this){VerticalScrollBarEnabled=false,FillViewport=false,OverScrollMode=OverScrollMode.Never};scroller.AddView(content);
         container.AddView(scroller,new LinearLayout.LayoutParams(-1,0,1));
-        if(footer is not null){var actions=Stack();actions.SetPadding(0,Dp(16),0,0);footer(actions,dialog);container.AddView(actions,Match());}
-        overlay.AddView(container,new FrameLayout.LayoutParams(-1,-2,GravityFlags.Bottom));
+        if(footer is not null)
+        {
+            var actions=Stack();actions.SetPadding(0,Dp(12),0,0);
+            actions.AddView(new View(this){Background=new ColorDrawable(palette.Divider)},Match(Dp(1)));Gap(actions,12);
+            footer(actions,dialog);container.AddView(actions,Match());
+        }
+        overlay.AddView(container,new FrameLayout.LayoutParams(-1,-2,GravityFlags.Bottom|GravityFlags.CenterHorizontal));
         dialog.SetContentView(overlay);dialog.Window!.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
         dialog.Window.SetSoftInputMode(SoftInput.AdjustResize);
-        dialog.Show();dialog.Window.DecorView.SetPadding(0,0,0,0);dialog.Window.SetLayout(-1,-1);
+        dialog.Show();activeSheets.Add(dialog);openSheetCount++;SyncDepthMotion();dialog.DismissEvent+=(_,_)=>{activeSheets.Remove(dialog);openSheetCount=Math.Max(0,openSheetCount-1);SyncDepthMotion();};dialog.Window.DecorView.SetPadding(0,0,0,0);dialog.Window.SetLayout(-1,-1);
         dialog.Window.SetGravity(GravityFlags.Fill);dialog.Window.AddFlags(WindowManagerFlags.DimBehind);
-        dialog.Window.SetDimAmount(.5f);
+        dialog.Window.SetDimAmount(.4f);
+        if(OperatingSystem.IsAndroidVersionAtLeast(30))dialog.Window.InsetsController?.SetSystemBarsAppearance(palette.Light?24:0,24);
         if(OperatingSystem.IsAndroidVersionAtLeast(30) && state.MinimalStatusBar && IsHomePage)
             dialog.Window.InsetsController?.Hide(WindowInsets.Type.StatusBars());
-        container.TranslationY=Dp(40);container.Alpha=0;
-        container.Animate()!.TranslationY(0).Alpha(1).SetDuration(180).Start();
+        if(LayerMotionEnabled)
+        {
+            container.TranslationY=Dp(32);container.Alpha=0;
+            container.Animate()!.TranslationY(0).Alpha(1).SetDuration(220).SetInterpolator(new Android.Views.Animations.DecelerateInterpolator(1.5f))!.Start();
+        }
         overlay.RequestApplyInsets();
         return dialog;
     }
@@ -338,7 +410,9 @@ public partial class MainActivity
         {
             Orientation=Orientation.Vertical;
             int available=MeasureSpec.GetSize(heightMeasureSpec);
-            base.OnMeasure(widthMeasureSpec,MeasureSpec.MakeMeasureSpec(Math.Min(maxHeight,available),MeasureSpecMode.AtMost));
+            int maxWidth=(int)(640*Resources!.DisplayMetrics!.Density+.5f);
+            int width=Math.Min(MeasureSpec.GetSize(widthMeasureSpec),maxWidth);
+            base.OnMeasure(MeasureSpec.MakeMeasureSpec(width,MeasureSpecMode.Exactly),MeasureSpec.MakeMeasureSpec(Math.Min(maxHeight,available),MeasureSpecMode.AtMost));
         }
     }
 
@@ -357,6 +431,13 @@ public partial class MainActivity
                 Paragraph(rule.DailyGoalMinutes>0?$"Daily goal · {rule.DailyGoalMinutes} minutes":"Set a daily goal below for a mindful launch reminder.",card); panel.AddView(card,Match()); Gap(panel);
             }
             void Change(Action action) { action(); Save(); dialog.Dismiss(); Render(); }
+            SectionCaption(panel,"Appearance");
+            SettingRow(panel,"App icon",rule.UseOriginalIcon?"App’s own icon":rule.IconPackage.Length>0?rule.IconResource.Replace('_',' ').Replace('-',' '):"Follow the global selection",()=>{dialog.Dismiss();PickIconPack(app);},"photo");
+            SettingRow(panel,"Tile appearance",rule.TileStyle,()=>PickTileStyle(app,()=>{dialog.Dismiss();Render();}),"photo");
+            SectionCaption(panel,"Notifications");
+            ToggleRow(panel,"Mute notification badge",rule.MuteBadge,v=>Change(()=>{foreach(var p in state.Apps.Where(p=>p.Key.StartsWith(app.PackageName+"/",StringComparison.Ordinal)))p.Value.MuteBadge=v;}));
+            SettingRow(panel,"App dashboard","Usage charts, version, storage & data",()=>{dialog.Dismiss();ShowAppDashboard(app);},"clock");
+            SectionCaption(panel,"App behaviour");
             SettingRow(panel,"Biometric lock",PackageLocked(app.PackageName)?"On · authenticate to open":"Off",()=>
             {dialog.Dismiss();SetAppLock(app,!PackageLocked(app.PackageName));},"lock");
             SettingRow(panel,"Open app in grayscale",rule.OpenInGrayscale?"On · app display, not icon colour":"Off · keep app colours",()=>
@@ -366,22 +447,23 @@ public partial class MainActivity
                     if(i==2){dialog.Dismiss();Navigate("Grayscale setup");return;}
                     Change(()=>{foreach(var p in state.Apps.Where(p=>p.Key.StartsWith(app.PackageName+"/",StringComparison.Ordinal)))p.Value.OpenInGrayscale=i==1;});
                     if(i==1&&!Services.GrayscaleService.Ready(this))Navigate("Grayscale setup");
-                });
+                },rule.OpenInGrayscale?1:0);
             },"photo");
             Paragraph("App lock protects launches and app editing through Launcher. Android notifications, Recents and other launchers remain controlled by Android.",panel);
+            SectionCaption(panel,"Layout");
             SettingRow(panel,"Drawer",state.Drawers.First(d=>d.Id==rule.DrawerId).Name,()=>
-                Choose("Move to drawer",state.Drawers.Select(d=>d.Name).ToArray(),i=>Change(()=>rule.DrawerId=state.Drawers[i].Id)));
+                Choose("Move to drawer",state.Drawers.Select(d=>d.Name).ToArray(),i=>Change(()=>rule.DrawerId=state.Drawers[i].Id),state.Drawers.FindIndex(d=>d.Id==rule.DrawerId)));
             SettingRow(panel,"Rename",rule.Label??app.Label,()=>Prompt("App name",rule.Label??app.Label,s=>Change(()=>rule.Label=LauncherState.CleanName(s,app.Label))));
-            ToggleRow(panel,"Highlight tile",rule.Highlight,v=>Change(()=>rule.Highlight=v));
+            SettingRow(panel,"Search aliases",rule.SearchAliases.Length==0?"Find this app using your own words":rule.SearchAliases,()=>Prompt("Search aliases",rule.SearchAliases,s=>Change(()=>rule.SearchAliases=s.Trim()[..Math.Min(s.Trim().Length,240)])));
             ToggleRow(panel,"Expanded tile",rule.Wide,v=>Change(()=>rule.Wide=v));
             ToggleRow(panel,"Pin to favorites",rule.Pinned,v=>Change(()=>rule.Pinned=v));
             SettingRow(panel,"Daily usage goal",rule.DailyGoalMinutes==0?"Off":rule.DailyGoalMinutes+" min",()=>
-                Choose("Daily goal",["Off","15 minutes","30 minutes","45 minutes","60 minutes","90 minutes","120 minutes"],i=>Change(()=>rule.DailyGoalMinutes=new[]{0,15,30,45,60,90,120}[i])));
+                Choose("Daily goal",["Off","15 minutes","30 minutes","45 minutes","60 minutes","90 minutes","120 minutes"],i=>Change(()=>rule.DailyGoalMinutes=new[]{0,15,30,45,60,90,120}[i]),Array.IndexOf(new[]{0,15,30,45,60,90,120},rule.DailyGoalMinutes)));
             var move=Stack(true);
-            move.AddView(Button("Move earlier",()=>Change(()=>MoveApp(app,-1))),new LinearLayout.LayoutParams(0,-2,1));
-            move.AddView(Button("Move later",()=>Change(()=>MoveApp(app,1))),new LinearLayout.LayoutParams(0,-2,1)); panel.AddView(move,Match()); Gap(panel);
+            RootActions(panel,("Move earlier",()=>Change(()=>MoveApp(app,-1))),("Move later",()=>Change(()=>MoveApp(app,1))));
             panel.AddView(Button(rule.Hidden?"Show app":"Hide from Launcher",()=>Change(()=>rule.Hidden=!rule.Hidden)),Match()); Gap(panel);
             panel.AddView(Button("Android app info",()=>{dialog.Dismiss();AppInfo(app);}),Match()); Gap(panel);
+            if(app.ShortcutId.Length>0){panel.AddView(Button("Remove shortcut",()=>Confirm("Remove shortcut?","Remove this shortcut from Launcher? The app stays installed.","Remove shortcut",()=>{RemovePinnedShortcut(app);dialog.Dismiss();})),Match());Gap(panel);}
             panel.AddView(Button("Done",()=>dialog.Dismiss(),true),Match());
         });
     }
@@ -389,10 +471,10 @@ public partial class MainActivity
     private void MoveApp(AppEntry app,int direction)
     {
         var rule=state.Apps[app.Id];
-        var siblings=apps.Where(a=>state.Apps[a.Id].DrawerId==rule.DrawerId).OrderByDescending(a=>state.Apps[a.Id].Pinned).ThenBy(a=>state.Apps[a.Id].Order).ToList();
+        var siblings=apps.Where(a=>!a.PrivateProfile&&state.Apps[a.Id].DrawerId==rule.DrawerId&&state.Apps[a.Id].Pinned==rule.Pinned).OrderBy(a=>state.Apps[a.Id].Order).ToList();
         int index=siblings.FindIndex(a=>a.Id==app.Id),target=index+direction;
         if(target<0 || target>=siblings.Count) return;
-        var other=state.Apps[siblings[target].Id]; other.Pinned=rule.Pinned;
+        var other=state.Apps[siblings[target].Id];
         (other.Order,rule.Order)=(rule.Order,other.Order);
     }
 }

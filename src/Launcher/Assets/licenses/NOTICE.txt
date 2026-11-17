@@ -1,0 +1,2 @@
+Fingerprint artwork: Google Material Design Icons, Apache License 2.0. Native path conversion, nonuniform scaling and opacity changes made for Launcher.
+Source: https://github.com/google/material-design-icons

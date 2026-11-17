@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.App.Roles;
 using Android.Appwidget;
 using Android.Content;
@@ -22,6 +22,8 @@ namespace LauncherApp;
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.KeyboardHidden,
     WindowSoftInputMode = SoftInput.AdjustResize)]
 [IntentFilter([Intent.ActionMain], Categories = [Intent.CategoryHome, Intent.CategoryDefault])]
+[IntentFilter([Intent.ActionSend],Categories=[Intent.CategoryDefault],DataMimeType="text/plain")]
+[IntentFilter(["android.content.pm.action.CONFIRM_PIN_SHORTCUT","android.content.pm.action.CONFIRM_PIN_APPWIDGET"],Categories=[Intent.CategoryDefault])]
 public partial class MainActivity : Activity
 {
     private LauncherState state = new();
@@ -38,8 +40,11 @@ public partial class MainActivity : Activity
     private Android.Window.IOnBackInvokedCallback? backCallback;
     private string page = "Tiles", query = "";
     private bool searching, resumed, loading;
+    private bool? appliedWallpaper;
+    private int? appliedBackdropColor;
     private float touchX, touchY;
     private bool panelDragging;
+    private int openSheetCount;
     private long panelTouchStarted;
     private long nextWeatherCheck;
     private bool panelTouchInNotifications;
@@ -47,7 +52,12 @@ public partial class MainActivity : Activity
     private readonly List<(TextView View,string Package)> badgeViews=[];
     private Dictionary<string,int> badgeCounts=new();
     private readonly Dictionary<string,Drawable> iconCache=new();
-    private int searchLimit=24;
+    private readonly Dictionary<string,IconGeometry> iconGeometryCache=new();
+    private readonly Dictionary<string,(bool Mono,bool Blank)> iconQualityCache=new();
+    private bool catalogLoaded,catalogDirty=true;
+    private int catalogRevision;
+    private AppCatalogWatcher catalogWatcher=null!;
+    private Action? pendingCatalogRefresh;
     private bool searchOpening;
     private Action? pendingSearch;
     private Action? tick;
@@ -61,14 +71,17 @@ public partial class MainActivity : Activity
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        Window!.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
+        Window.SetFormat(Format.Translucent);
 #if DEBUG
         if(Intent?.GetBooleanExtra("qa_keep_awake",false)==true)Window!.AddFlags(WindowManagerFlags.KeepScreenOn);
 #endif
-        store = new(this); state = store.Load();
+        store = new(this); state = store.Load();companion=new(this);ambient=new(this);depthMotion=new(this,ApplyDeviceDepth);
         if (savedInstanceState is not null)
         {
             pendingWidget = savedInstanceState.GetInt("pending-widget", -1);
             page = savedInstanceState.GetString("page") ?? "Tiles";
+            foreach(string home in new[]{"Root","Tiles","Conversations"})homeScrollPositions[home]=Math.Max(0,savedInstanceState.GetInt("scroll:"+home,0));
         }
         try
         {
@@ -83,17 +96,23 @@ public partial class MainActivity : Activity
         root.SetOnApplyWindowInsetsListener(new InsetListener(()=>state.MinimalStatusBar && IsHomePage && state.StatusPlacement=="Top"));
         // Android 15+ enforces edge-to-edge; older versions opt in here.
         if (OperatingSystem.IsAndroidVersionAtLeast(30) && !OperatingSystem.IsAndroidVersionAtLeast(35)) Window!.SetDecorFitsSystemWindows(false);
-        SetContentView(root);
+        SetContentView(root);catalogWatcher=new(this,CatalogChanged);catalogWatcher.Start();
         ConversationService.Changed += ConversationsChanged;
         if(OperatingSystem.IsAndroidVersionAtLeast(33))
         {
             backCallback=new BackCallback(HandleBack);
             OnBackInvokedDispatcher.RegisterOnBackInvokedCallback(0,backCallback);
         }
-        Render();
+        if(Intent?.GetBooleanExtra("open_root",false)==true)page="Root";
+        StateStore.WorkspaceChanged+=WorkspaceUpdated;
+        var alertOwner=ApplicationContext??this;_=Task.Run(()=>TimerAlerts.Restore(alertOwner));
+        SyncSystemTheme();Render();HandleSharedContent(Intent);HandlePinRequest(Intent);
+        HandleSystemPanelIntent(Intent);
+        if(Intent?.GetBooleanExtra("open_system_panel_settings",false)==true){Intent.RemoveExtra("open_system_panel_settings");handler.Post(ShowSystemPanelSettings);}
     }
     protected override void OnSaveInstanceState(Bundle outState)
     {
+        RememberHomeScroll();foreach(var saved in homeScrollPositions)outState.PutInt("scroll:"+saved.Key,saved.Value);
         outState.PutInt("pending-widget", pendingWidget); outState.PutString("page", page);
         base.OnSaveInstanceState(outState);
     }
@@ -105,8 +124,8 @@ public partial class MainActivity : Activity
     protected override void OnStop() { widgetHost.StopListening(); base.OnStop(); }
     protected override void OnResume()
     {
-        base.OnResume(); resumed = true; connections.Start();media.Start();StartBatteryUpdates();RefreshApps();RefreshWeather();
-        ResumeUpdateInstall();
+        base.OnResume();string previousTheme=state.Theme;SyncSystemTheme();if(previousTheme!=state.Theme)Render(); state.SystemPanelEnabled=store.Load().SystemPanelEnabled;RefreshSystemPanelSettings();SystemPanelService.Refresh(); resumed = true; connections.Start();media.Start();StartBatteryUpdates();RefreshApps();RefreshWeather();
+        SyncDepthMotion();ResumeUpdateInstall();WorkspaceUpdated();if(companionSession)companion.Start();SyncAutomaticTheme();
         tick = () =>
         {
             if (!resumed) return;
@@ -118,14 +137,22 @@ public partial class MainActivity : Activity
             string time=DateTime.Now.ToString("HH:mm   ·   ddd, d MMM");
             if (statusTime is not null && statusTime.Text!=time) statusTime.Text = time;
             UpdateMediaProgress();
+            UpdateWorkspaceTimers();UpdateResources();EvaluateAutomaticTheme();
             if(Now>=nextWeatherCheck){nextWeatherCheck=Now+60_000L;RefreshWeather();}
             handler.PostDelayed(tick!, 1000);
         };
         handler.Post(tick);
+        if(pendingAppInspect is {} inspect){pendingAppInspect=null;handler.Post(inspect);}
     }
     protected override void OnPause()
     {
-        resumed = false;
+        FlushNoteSaves();
+        CancelBodyRefresh();
+        depthMotion.Stop();depthTouchActive=false;ResetDeviceDepth();StopRootFolds();
+        StopAppLayer();StopHomePageAnimation();
+        resumed = false;ambient.Stop();lightCandidate=null;
+        WorkspaceEditing.NoteId=null;
+        companion.Stop();
         connections.Stop();
         media.Stop();StopBatteryUpdates();
         if (tick is not null) handler.RemoveCallbacks(tick);
@@ -133,56 +160,98 @@ public partial class MainActivity : Activity
     }
     protected override void OnDestroy()
     {
+        FlushNoteSaves();
+        StopAppLayer();StopHomePageAnimation();
         StopDrawerAnimations();
-        appAuthentication?.Cancel();credentialAction=null;authenticationPending=false;
+        feedLifetime?.Cancel();feedLifetime?.Dispose();feedImageLifetime?.Cancel();feedImageLifetime?.Dispose();
+        catalogWatcher.Stop();catalogWatcher.Dispose();if(pendingCatalogRefresh is not null)handler.RemoveCallbacks(pendingCatalogRefresh);if(pendingSearch is not null)handler.RemoveCallbacks(pendingSearch);
+        depthMotion.Dispose();StopRootFolds();ambient.Dispose();companion.Dispose();StateStore.WorkspaceChanged-=WorkspaceUpdated;
+        pendingAppInspect=null;appAuthentication?.Cancel();credentialAction=null;authenticationPending=false;
         updateLifetime.Cancel();
         ConversationService.Changed -= ConversationsChanged;
         if(OperatingSystem.IsAndroidVersionAtLeast(33) && backCallback is not null) OnBackInvokedDispatcher.UnregisterOnBackInvokedCallback(backCallback);
         base.OnDestroy();
     }
+    public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+    {base.OnConfigurationChanged(newConfig);SyncSystemTheme();FlushNoteSaves();if(openSheetCount==0)Render();else root.RequestLayout();}
     protected override void OnNewIntent(Intent? intent)
     {
-        base.OnNewIntent(intent);
+        base.OnNewIntent(intent);HandleSystemPanelIntent(intent);HandleSharedContent(intent);HandlePinRequest(intent);
+        if(intent?.GetBooleanExtra("open_system_panel_settings",false)==true){intent.RemoveExtra("open_system_panel_settings");handler.Post(ShowSystemPanelSettings);}
+        if(intent?.GetBooleanExtra("open_root",false)==true){WorkspaceUpdated();Navigate("Root");return;}
 #if DEBUG
         if(intent?.GetBooleanExtra("qa_keep_awake",false)==true)Window!.AddFlags(WindowManagerFlags.KeepScreenOn);
 #endif
         if (intent?.HasCategory(Intent.CategoryHome) == true)
         {
-            HideKeyboard(); searching = false; query = ""; page = "Tiles"; Render();
+            DismissSheets();
+            if(page=="Tiles"&&!searching)scroll.ScrollTo(0,0);
+            Navigate("Tiles");
         }
     }
     public override void OnBackPressed() => HandleBack();
     private void HandleBack()
     {
+        if(appLayer is not null){AnimateAppLayer(false);return;}
         if (searching) { HideKeyboard(); searching = false; query = ""; Render(); }
-        else if (page != "Tiles") { page = "Tiles"; Render(); }
+        else if (page != "Tiles") Navigate(IsHomePage||page is "Settings" or "Quick panel"?"Tiles":"Settings");
         else scroll.SmoothScrollTo(0, 0);
     }
-    private async void RefreshApps()
+    private void CatalogChanged()
     {
-        if (loading) return;
-        loading = true;
+        // Remove private identities immediately; reload only after profile access is checked.
+        if(apps.RemoveAll(a=>a.PrivateProfile)>0&&resumed)RenderBody();
+        catalogDirty=true;catalogRevision++;if(resumed)ScheduleCatalogRefresh();
+    }
+    private void ScheduleCatalogRefresh()
+    {
+        if(pendingCatalogRefresh is not null)handler.RemoveCallbacks(pendingCatalogRefresh);
+        pendingCatalogRefresh=()=>{pendingCatalogRefresh=null;if(resumed&&!IsDestroyed)RefreshApps();};handler.PostDelayed(pendingCatalogRefresh,200);
+    }
+    private async void RefreshApps(bool force=false)
+    {
+        if(force){catalogDirty=true;catalogRevision++;}
+        if(loading)return;
+        bool reload=!catalogLoaded||catalogDirty,successful=false;int revision=catalogRevision;
+        if(reload)catalogDirty=false;loading=true;
         try
         {
-            var result = await Task.Run(() => (Apps: AppCatalog.Load(this), Usage: AppCatalog.UsageToday(this)));
-            if (IsDestroyed) return;
-            apps = result.Apps; usage = result.Usage;
-            AppOrganization.Reconcile(state, apps); Save();
-            if (!searching && resumed) Render();
+            var result=await Task.Run(()=>(Catalog:reload?AppCatalog.Load(this):null,Usage:AppCatalog.UsageToday(this)));
+            if(IsDestroyed)return;
+            if(result.Catalog is {} updated)
+            {
+                apps=updated;catalogLoaded=true;packageLabels.Clear();iconCache.Clear();iconQualityCache.Clear();iconGeometryCache.Clear();
+                AppOrganization.Reconcile(state,apps);Save();
+            }
+            usage=result.Usage;successful=true;
+            if(resumed)
+            {
+                if(searching&&page=="Tiles"){searchOpening=false;if(appSearchAdapter is not null)RefreshAppSearch();else RenderBody();}
+                else if(!searching){if(appLayer is not null)pendingLayerRefresh=true;else RefreshBodyInPlace();}
+            }
         }
-        catch (Exception e) when (e is Java.Lang.RuntimeException or InvalidOperationException)
-        { Toast("Could not refresh apps. Reopen Launcher to retry."); }
-        finally { loading = false; }
+        catch(Exception e)when(e is Java.Lang.RuntimeException or InvalidOperationException)
+        {if(reload)catalogDirty=true;Toast("Could not refresh apps. Reopen Launcher to retry.");}
+        finally
+        {
+            loading=false;
+            if(catalogDirty&&resumed&&!IsDestroyed&&(successful||revision!=catalogRevision))ScheduleCatalogRefresh();
+        }
     }
     private void ConversationsChanged() => RunOnUiThread(() =>
     {
         badgeCounts=ConversationService.BadgeCounts();
         if(!resumed)return;
-        if(page is "Conversations" or "Quick panel" && !searching)RenderBody();
+        if(page is "Conversations" or "Quick panel" && !searching)RefreshBodyInPlace();
         else foreach(var (badge,package) in badgeViews)UpdateBadge(badge,package);
     });
     private static long Now => DateTimeOffset.Now.ToUnixTimeMilliseconds();
-    private void Save() {store.Save(state);GrayscaleService.RulesChanged();}
+    private void Save()
+    {
+        FlushNoteSaves();
+        try{store.Save(state);SystemPanelService.Refresh();GrayscaleService.RulesChanged();SyncAutomaticTheme();SyncDepthMotion();}
+        catch(Exception e)when(e is IOException or UnauthorizedAccessException){Toast("Changes are kept in this session. Could not save; check free storage.");}
+    }
     private int Dp(float value) => (int)(value * Resources!.DisplayMetrics!.Density + .5f);
     private LinearLayout Stack(bool horizontal = false) => new(this) { Orientation = horizontal ? Orientation.Horizontal : Orientation.Vertical };
     private static LinearLayout.LayoutParams Match(int height = -2) => new(-1, height);
@@ -193,8 +262,11 @@ public partial class MainActivity : Activity
         return bg;
     }
     private Android.Content.Res.ColorStateList AccentTint()=>new(
-        [new[]{Android.Resource.Attribute.StateChecked},Array.Empty<int>()],
-        [palette.Accent.ToArgb(),palette.Muted.ToArgb()]);
+        [new[]{-Android.Resource.Attribute.StateEnabled},new[]{Android.Resource.Attribute.StateChecked},Array.Empty<int>()],
+        [new Color(palette.Muted.R,palette.Muted.G,palette.Muted.B,(byte)100).ToArgb(),palette.Accent.ToArgb(),palette.Muted.ToArgb()]);
+    private Android.Content.Res.ColorStateList SwitchTrackTint()=>new(
+        [new[]{-Android.Resource.Attribute.StateEnabled},new[]{Android.Resource.Attribute.StateChecked},Array.Empty<int>()],
+        [new Color(palette.Muted.R,palette.Muted.G,palette.Muted.B,(byte)35).ToArgb(),new Color(palette.Accent.R,palette.Accent.G,palette.Accent.B,(byte)85).ToArgb(),new Color(palette.Muted.R,palette.Muted.G,palette.Muted.B,(byte)65).ToArgb()]);
     private TextView Text(string value, float size = 14, bool strong = false, Color? color = null)
     {
         var view = new TextView(this) { Text = value, TextSize = size, Typeface = strong ? bold : regular };
@@ -204,8 +276,11 @@ public partial class MainActivity : Activity
     private TextView Button(string value, Action action, bool filled = false)
     {
         var view = Text(value, 14, true, filled ? palette.OnAccent : palette.Text);
-        view.Gravity = GravityFlags.Center; view.SetPadding(Dp(16), Dp(12), Dp(16), Dp(12)); view.SetMinimumHeight(Dp(48));
-        view.Background = Background(filled ? palette.Accent : palette.Panel, 28);
+        view.SetTextColor(new Android.Content.Res.ColorStateList([new[]{-Android.Resource.Attribute.StateEnabled},Array.Empty<int>()],[palette.Muted.ToArgb(),(filled?palette.OnAccent:palette.Text).ToArgb()]));
+        view.Gravity = GravityFlags.Center; view.SetPadding(Dp(14), Dp(10), Dp(14), Dp(10)); view.SetMinimumHeight(Dp(48));
+        view.Background = Background(filled ? palette.Accent : Color.Transparent, 12, filled?null:palette.Divider);
+        if(filled)view.BackgroundTintList=new Android.Content.Res.ColorStateList([new[]{-Android.Resource.Attribute.StateEnabled},Array.Empty<int>()],[palette.Panel.ToArgb(),palette.Accent.ToArgb()]);
+        TouchFeedback(view);
         view.Click += (_, _) => action(); return view;
     }
     private View IconButton(string glyph, string description, Action action)
@@ -213,17 +288,19 @@ public partial class MainActivity : Activity
         var frame = new FrameLayout(this) { ContentDescription = description };
         frame.SetMinimumWidth(Dp(48)); frame.SetMinimumHeight(Dp(48));
         frame.AddView(new GlyphView(this, glyph, palette.Text), new FrameLayout.LayoutParams(Dp(22), Dp(22), GravityFlags.Center));
-        frame.Click += (_, _) => action(); return frame;
+        TouchFeedback(frame,24);frame.Click += (_, _) => action(); return frame;
     }
     private void Gap(LinearLayout parent, int height = 12) => parent.AddView(new View(this), Match(Dp(height)));
     private void Paragraph(string text, LinearLayout? parent = null)
     {
+        if(FilteringSettings&&(parent is null||ReferenceEquals(parent,body)))return;
         var v = Text(text, 13, color: palette.Muted); v.SetLineSpacing(Dp(3), 1);
-        v.SetPadding(0, Dp(4), 0, Dp(12)); (parent ?? body).AddView(v, Match());
+        v.SetPadding(0, Dp(4), 0, Dp(8)); (parent ?? body).AddView(v, Match());
     }
     private new void Title(string title)
     {
-        var v = Text(title, 28, true); v.SetPadding(0, Dp(14), 0, Dp(18)); body.AddView(v, Match());
+        if(!IsHomePage)return; // Settings pages already have a fixed, accessible title.
+        var v = Text(title, 26, true); v.SetPadding(0, Dp(8), 0, Dp(16)); body.AddView(v, Match());
     }
     private void Toast(string message) => Android.Widget.Toast.MakeText(this, message, ToastLength.Short)!.Show();
     private void ApplySystemBars()
@@ -249,20 +326,31 @@ public partial class MainActivity : Activity
     }
     private void Render()
     {
+        depthAllowed=new DeviceCapabilities(this).AllowDepth;
+        CancelBodyRefresh();RememberHomeScroll();depthMotion.Stop();ResetDeviceDepth();StopAppLayer();StopHomePageAnimation();
         palette = new(state); timerText = null; statusTime=null;batteryIcon=null;batteryPercentText=null; root.RemoveAllViews();
-        Window!.SetBackgroundDrawable(new ColorDrawable(state.UseWallpaper ? Color.Transparent : palette.Base));
-        if (state.UseWallpaper) Window.AddFlags(WindowManagerFlags.ShowWallpaper);
-        else Window.ClearFlags(WindowManagerFlags.ShowWallpaper);
-        root.SetBackgroundColor(state.UseWallpaper ? new Color(0,0,0,110) : palette.Base);
+        // Wallpaper is a stable window layer. Scrolling and content refreshes
+        // must never reset the surface's opacity or reattach its wallpaper.
+        if(appliedWallpaper!=state.UseWallpaper)
+        {
+            if(state.UseWallpaper)Window!.AddFlags(WindowManagerFlags.ShowWallpaper);
+            else Window!.ClearFlags(WindowManagerFlags.ShowWallpaper);
+            appliedWallpaper=state.UseWallpaper;
+        }
+        var backdrop=state.UseWallpaper?new Color(palette.Base.R,palette.Base.G,palette.Base.B,(byte)(state.WallpaperDim*255/100)):palette.Base;
+        if(appliedBackdropColor!=backdrop.ToArgb())
+        {root.SetBackgroundColor(backdrop);appliedBackdropColor=backdrop.ToArgb();}
         ApplySystemBars();
         shell = Stack(); root.AddView(shell, new FrameLayout.LayoutParams(-1, -1));
         if(IsHomePage && state.MinimalStatusBar) AddMinimalStatus();
         if (!IsHomePage) AddPageHeader(page);
-        body = Stack(); body.SetPadding(Dp(16), Dp(14), Dp(16), Dp(12));
-        body.LongClick += (_, _) => { if(page=="Tiles" && !searching) QuickControls(); };
-        scroll = new ScrollView(this) { FillViewport = true, VerticalScrollBarEnabled = false };
-        scroll.SetClipToPadding(false);
-        if(page=="Quick panel")shell.AddView(body,new LinearLayout.LayoutParams(-1,0,1));
+        if(page=="Settings")AddSettingsSearch();
+        body = Stack();int side=Math.Max(16,(Resources!.Configuration!.ScreenWidthDp-720)/2);body.SetPadding(Dp(side), Dp(12), Dp(side), Dp(12));
+        body.HapticFeedbackEnabled=false;body.LongClick += (_, _) => { if(page=="Tiles" && !searching){Haptic(body,HapticCue.Hold);QuickControls();} };
+        scroll = new ScrollView(this) { FillViewport = true, VerticalScrollBarEnabled = false,OverScrollMode=OverScrollMode.Never,VerticalFadingEdgeEnabled=state.LayeredInterface };
+        scroll.SetBackgroundColor(Color.Transparent);
+        scroll.SetClipToPadding(false);scroll.SetFadingEdgeLength(Dp(14));
+        if(page=="Quick panel"||searching&&page=="Tiles")shell.AddView(body,new LinearLayout.LayoutParams(-1,0,1));
         else
         {
             scroll.AddView(body, new ScrollView.LayoutParams(-1, -2));
@@ -270,30 +358,41 @@ public partial class MainActivity : Activity
         }
         RenderBody();
         if (IsHomePage) AddSearchBar();
+        if(IsHomePage)AddHomeNavigation();
         if(page=="Quick panel")
         {
             var close=new FrameLayout(this){ContentDescription="Close quick panel"};
             var handle=new View(this){Background=Background(palette.Muted,4)};
             close.AddView(handle,new FrameLayout.LayoutParams(Dp(38),Dp(4),GravityFlags.Center));
-            close.Click+=(_,_)=>Navigate("Tiles");shell.AddView(close,Match(Dp(30)));
+            BindTapHaptics(close);close.Click+=(_,_)=>Navigate("Tiles");shell.AddView(close,Match(Dp(30)));
         }
-        root.RequestApplyInsets();
+        root.RequestApplyInsets();RestoreHomeScroll();SyncDepthMotion();
     }
     private bool IsHomePage => page is "Tiles" or "Root" or "Conversations";
     private void AddPageHeader(string title)
     {
         var row = Stack(true); row.SetGravity(GravityFlags.CenterVertical);
         row.AddView(IconButton("back", "Back", () => Navigate(page is "Settings" or "Quick panel" ? "Tiles" : "Settings")), new LinearLayout.LayoutParams(Dp(52), Dp(52)));
-        row.AddView(Text(title, 21, true), new LinearLayout.LayoutParams(0, -2, 1)); shell.AddView(row, Match(Dp(58)));
+        string label=title switch {"Updates"=>"App updates","Root settings"=>"Today cards","Grayscale setup"=>"App grayscale","Integrations"=>"Online cards","Hidden"=>"Hidden apps",_=>PageLabel(title)};
+        var heading=Text(label,22,true);heading.SetMaxLines(2);heading.Ellipsize=Android.Text.TextUtils.TruncateAt.End;heading.SetPadding(0,Dp(10),Dp(16),Dp(10));
+        if(OperatingSystem.IsAndroidVersionAtLeast(28))heading.AccessibilityHeading=true;
+        row.AddView(heading,new LinearLayout.LayoutParams(0,-2,1));row.SetMinimumHeight(Dp(58));shell.AddView(row,Match());
     }
     private void RenderBody()
     {
+        depthAllowed=new DeviceCapabilities(this).AllowDepth;
+        if(appLayer is not null){pendingLayerRefresh=true;return;}
+        ResetDeviceDepth();depthHeadings.Clear();StopRootFolds();scroll.VerticalFadingEdgeEnabled=state.LayeredInterface;
+        resourcesPanel=null;memoryDonut=null;storageDonut=null;powerDonut=null;memoryAmount=null;storageAmount=null;powerStatus=null;resourcesFootnote=null;
+        feedImageLifetime?.Cancel();feedRows.Clear();feedPanel=null;feedStatus=null;feedRefresh=null;feedRefreshGlyph=null;feedRefreshProgress=null;
         StopDrawerAnimations();
         int previousFeedY=page=="Quick panel"?scroll.ScrollY:0;
+        appSearchAdapter=null;appSearchList=null;appSearchTitle=null;appSearchCount=null;
         body.RemoveAllViews(); badgeViews.Clear();badgeCounts=ConversationService.Enabled(this)?ConversationService.BadgeCounts():new();timerText = null;mediaProgress=null;mediaTime=null; body.SetGravity(GravityFlags.Top);
         if (searching)
         {
-            if(searchOpening){Title("Search");Paragraph(page=="Conversations"?"Find a notification.":"Find an app by name.");}
+            if(page=="Tiles"){RenderAppSearch();return;}
+            if(searchOpening){Title("Search");Paragraph(page=="Conversations"?"Find a notification.":page=="Root"?"Choose a card or type a command.":"Find an app by name.");}
             else RenderSearchResults();return;
         }
         switch (page)
@@ -304,7 +403,10 @@ public partial class MainActivity : Activity
             case "Settings": RenderSettings(); break;
             case "Updates": RenderUpdates(); break;
             case "Grayscale setup": RenderGrayscaleSetup(); break;
+            case "Integrations": RenderIntegrations(); break;
+            case "Desktop companion": RenderCompanion(); break;
             case "Appearance": RenderAppearance(); break;
+            case "Automatic theme": RenderAutomaticTheme(); break;
             case "Drawers": RenderDrawerSettings(); break;
             case "Hidden": RenderHidden(); break;
             case "Permissions": RenderPermissions(); break;
@@ -314,57 +416,68 @@ public partial class MainActivity : Activity
         }
         if(page=="Quick panel" && previousFeedY>0){var feed=scroll;feed.Post(()=>feed.ScrollTo(0,previousFeedY));}
     }
-    private void Navigate(string target) { HideKeyboard(); searching = false; query = ""; page = target; Render(); }
     private void AddSearchBar()
     {
+        int barHeight=(int)Math.Max(52,15*FontScale*1.3f+8);
         var bottom = Stack(); bottom.SetPadding(Dp(16), Dp(4), Dp(16), 0);
         var pill = Stack(true); pill.SetGravity(GravityFlags.CenterVertical); pill.Background = Background(palette.Card, 30);
         if (searching)
         {
-            pill.AddView(IconButton("back", "Close search", () => { HideKeyboard(); searching=false; query=""; Render(); }), new LinearLayout.LayoutParams(Dp(44), Dp(52)));
-            searchInput = new EditText(this) { Text = query, Hint = page == "Conversations" ? "Search notifications" : "Search apps", TextSize = 15, Typeface = regular };
+            pill.AddView(IconButton("back", "Close search", () => { HideKeyboard(); searching=false; query=""; Render(); }), new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
+            var input = new EditText(this) { Text = query, Hint = page == "Conversations" ? "Search notifications" : page=="Root"?"Type a command":"Search apps", TextSize = 15, Typeface = regular };
+            searchInput=input;
             searchInput.SetSingleLine(true); searchInput.SetTextColor(palette.Text); searchInput.SetHintTextColor(palette.Muted);
-            searchInput.Background = null; searchInput.SetPadding(Dp(4),0,0,0); searchInput.ImeOptions = ImeAction.Search;
+            searchInput.Background = null; StyleEntry(input); searchInput.SetPadding(Dp(4),0,0,0); searchInput.ImeOptions = ImeAction.Search;
             searchInput.TextChanged += (_, _) =>
             {
-                query=searchInput.Text??"";searchLimit=24;
+                query=input.Text??"";
                 if(pendingSearch is not null)handler.RemoveCallbacks(pendingSearch);
-                pendingSearch=()=>{if(searching)RenderBody();};handler.PostDelayed(pendingSearch,40);
+                pendingSearch=()=>{pendingSearch=null;if(searching){if(page=="Tiles")RefreshAppSearch();else RenderBody();}};handler.PostDelayed(pendingSearch,40);
             };
             searchInput.EditorAction += (_, e) =>
             {
-                if (page != "Conversations")
+                if(page=="Root")ExecuteRootCommand(query);
+                else if (page != "Conversations")
                 {
-                    var first = AppOrganization.Visible(state, apps, query).FirstOrDefault(); if (first is not null) Launch(first);
+                    OpenFirstSearchResult();
                 }
                 e.Handled = true;
             };
-            pill.AddView(searchInput, new LinearLayout.LayoutParams(0, Dp(52), 1));
+            pill.AddView(searchInput, new LinearLayout.LayoutParams(0, Dp(barHeight), 1));
         }
         else
         {
             var control = IconButton("search", "Search; hold for launcher controls", StartSearch);
-            control.LongClick += (_, _) => QuickControls(); pill.AddView(control, new LinearLayout.LayoutParams(Dp(44), Dp(52)));
-            var prompt = Text(page == "Conversations" ? "Search notifications" : "Search apps", 15, color: palette.Muted);
-            prompt.SetPadding(Dp(4),0,0,0); prompt.Gravity=GravityFlags.CenterVertical; prompt.Click += (_, _) => StartSearch();
-            pill.AddView(prompt, new LinearLayout.LayoutParams(0, Dp(52), 1));
-            pill.LongClick += (_, _) => QuickControls();
+            BindHoldHaptics(control);control.LongClick += (_, _) => QuickControls(); pill.AddView(control, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
+            var prompt = Text(FontScale>=1.4f?"Search":page == "Conversations" ? "Search notifications" : page=="Root"?"Type a command":"Search apps", 15, color: palette.Muted);
+            prompt.SetSingleLine(true);prompt.Ellipsize=Android.Text.TextUtils.TruncateAt.End;prompt.ContentDescription=page=="Root"?"Search Today or enter a command":page=="Conversations"?"Search notifications":"Search apps";
+            prompt.SetPadding(Dp(4),0,0,0); prompt.Gravity=GravityFlags.CenterVertical; BindTapHaptics(prompt);prompt.Click += (_, _) => StartSearch();
+            pill.AddView(prompt, new LinearLayout.LayoutParams(0, Dp(barHeight), 1));
+            BindHoldHaptics(pill);pill.LongClick += (_, _) => QuickControls();
         }
-        pill.AddView(IconButton("more","Launcher settings",()=>{HideKeyboard();QuickControls();}),new LinearLayout.LayoutParams(Dp(48),Dp(52)));
-        bottom.AddView(pill, Match(Dp(52)));shell.AddView(bottom, Match());
+        pill.AddView(IconButton("more","Launcher settings",()=>{HideKeyboard();QuickControls();}),new LinearLayout.LayoutParams(Dp(48),Dp(barHeight)));
+        bottom.AddView(pill, Match(Dp(barHeight)));shell.AddView(bottom, Match());
     }
     private void StartSearch()
     {
-        searching = true;searchOpening=true; query="";searchLimit=12; Render(); searchInput?.RequestFocus();
-        searchInput?.Post(() =>
+        if(pendingSearch is not null){handler.RemoveCallbacks(pendingSearch);pendingSearch=null;}
+        searching=true;searchOpening=true;query="";Render();var input=searchInput;input?.RequestFocus();
+        input?.Post(()=>
         {
-            ((InputMethodManager?)GetSystemService(InputMethodService))?.ShowSoftInput(searchInput, ShowFlags.Implicit);
-            searchOpening=false;handler.Post(()=>{if(searching)RenderBody();});
+            if(!searching||!ReferenceEquals(searchInput,input)||IsDestroyed)return;
+            ((InputMethodManager?)GetSystemService(InputMethodService))?.ShowSoftInput(input,ShowFlags.Implicit);
+            searchOpening=false;if(page!="Tiles")handler.Post(()=>{if(searching)RenderBody();});
         });
     }
     private void HideKeyboard() => ((InputMethodManager?)GetSystemService(InputMethodService))?.HideSoftInputFromWindow(root.WindowToken, HideSoftInputFlags.None);
     public override bool DispatchTouchEvent(MotionEvent? ev)
     {
+        if(ev is not null)lastHomeTouch=System.Environment.TickCount64;
+        if(ev?.ActionMasked==MotionEventActions.Down)depthTouchActive=true;
+        else if(ev?.ActionMasked is MotionEventActions.Up or MotionEventActions.Cancel)depthTouchActive=false;
+        if(ev?.ActionMasked==MotionEventActions.Down){StopHomePageAnimation();drawerTouchActive=false;}
+        if(appLayer is not null)return base.DispatchTouchEvent(ev);
+        if(drawerTouchActive)return base.DispatchTouchEvent(ev);
         if (ev is not null && (IsHomePage || page=="Quick panel") && !searching)
         {
             if (ev.Action == MotionEventActions.Down)
@@ -374,6 +487,8 @@ public partial class MainActivity : Activity
                 panelTouchInNotifications=page=="Quick panel" && scroll.GetGlobalVisibleRect(notificationBounds)
                     && notificationBounds.Contains((int)ev.RawX,(int)ev.RawY);
             }
+            if(ev.ActionMasked==MotionEventActions.Move&&(Math.Abs(ev.GetX()-touchX)>ViewConfiguration.Get(this)!.ScaledTouchSlop||Math.Abs(ev.GetY()-touchY)>ViewConfiguration.Get(this)!.ScaledTouchSlop))
+                body.CancelLongPress();
             if(page=="Quick panel" && !panelTouchInNotifications)
             {
                 float dx=ev.GetX()-touchX,dy=ev.GetY()-touchY;
@@ -392,25 +507,25 @@ public partial class MainActivity : Activity
                     float speed=distance/Math.Max(.001f,(System.Environment.TickCount64-panelTouchStarted)/1000f);
                     panelDragging=false;
                     if(distance>Dp(45) || distance>Dp(15) && speed>Dp(450))
-                        shell.Animate()!.TranslationY(-root.Height).SetDuration(140).WithEndAction(new Java.Lang.Runnable(()=>Navigate("Tiles"))).Start();
-                    else shell.Animate()!.TranslationY(0).SetDuration(130).Start();
+                        shell.Animate()!.TranslationY(-root.Height).SetDuration(LayerMotionEnabled?140:0).WithEndAction(new Java.Lang.Runnable(()=>{Haptic(root,HapticCue.Commit);Navigate("Tiles");})).Start();
+                    else shell.Animate()!.TranslationY(0).SetDuration(LayerMotionEnabled?130:0).Start();
                     return true;
                 }
                 if(ev.Action==MotionEventActions.Cancel && panelDragging)
-                {panelDragging=false;shell.Animate()!.TranslationY(0).SetDuration(130).Start();return true;}
+                {panelDragging=false;shell.Animate()!.TranslationY(0).SetDuration(LayerMotionEnabled?130:0).Start();return true;}
             }
             if(ev.Action==MotionEventActions.Up && page=="Tiles" && scroll.ScrollY==0 && ev.GetY()-touchY>Dp(130)
                 && Math.Abs(ev.GetX()-touchX)<Dp(65))
             {
                 var canceled=MotionEvent.Obtain(ev)!;canceled.Action=MotionEventActions.Cancel;base.DispatchTouchEvent(canceled);canceled.Recycle();
-                Navigate("Quick panel");return true;
+                Haptic(root,HapticCue.Commit);Navigate("Quick panel");return true;
             }
-            if (ev.Action == MotionEventActions.Up && IsHomePage && Math.Abs(ev.GetX()-touchX)>Dp(80) && Math.Abs(ev.GetX()-touchX)>Math.Abs(ev.GetY()-touchY)*1.8f)
+            if (ev.Action == MotionEventActions.Up && IsHomePage && Math.Abs(ev.GetX()-touchX)>Dp(60) && Math.Abs(ev.GetX()-touchX)>Math.Abs(ev.GetY()-touchY)*1.8f)
             {
                 var cancel=MotionEvent.Obtain(ev)!; cancel.Action=MotionEventActions.Cancel; base.DispatchTouchEvent(cancel); cancel.Recycle();
                 string[] pages=["Root","Tiles","Conversations"];
                 int index=Array.IndexOf(pages,page)+(ev.GetX()<touchX ? 1 : -1);
-                if(index>=0 && index<pages.Length) Navigate(pages[index]); return true;
+                if(index>=0 && index<pages.Length){Haptic(root,HapticCue.Commit);Navigate(pages[index]);} return true;
             }
         }
         return base.DispatchTouchEvent(ev);
@@ -428,11 +543,19 @@ public partial class MainActivity : Activity
         try
         {
             HideKeyboard();
+            if(app.ProfileSerial>=0||app.ShortcutId.Length>0)
+            {
+                var launcher=GetSystemService(LauncherAppsService) as LauncherApps;var user=ProfileCatalog.User(this,app.ProfileSerial);
+                if(launcher is null||user is null){Toast("This profile is no longer available.");return;}
+                if(app.ShortcutId.Length>0&&OperatingSystem.IsAndroidVersionAtLeast(25))launcher.StartShortcut(app.PackageName,app.ShortcutId,null,null,user);
+                else launcher.StartMainActivity(new ComponentName(app.PackageName,app.ActivityName),user,null,null);
+                return;
+            }
             var intent = new Intent(Intent.ActionMain).AddCategory(Intent.CategoryLauncher)!
                 .SetComponent(new ComponentName(app.PackageName,app.ActivityName))!.AddFlags(ActivityFlags.NewTask | ActivityFlags.ResetTaskIfNeeded);
             StartActivity(intent);
         }
-        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast("This app is no longer available."); RefreshApps(); }
+        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast("This app is no longer available."); RefreshApps(true); }
     }
     private void OpenIntent(Intent intent)
     {

@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 using Android.Widget;
 using LauncherApp.UI;

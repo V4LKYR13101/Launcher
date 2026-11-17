@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Views;
 
@@ -32,6 +32,12 @@ public sealed class GlyphView(Context context, string glyph, Color color) : View
         }
         switch (glyph)
         {
+            case "close": L(6,6,18,18);L(18,6,6,18);break;
+            case "battery": R(2,7,18,10,2);L(22,10,22,14);R(5,10,10,4,1);break;
+            case "resources": C(12,12,8);L(12,4,12,12);L(12,12,19,16);break;
+            case "refresh": canvas.DrawArc(4,4,20,20,40,285,false,p);Path(13,3,19,5,17,11);break;
+            case "rss":C(5,19,1);canvas.DrawArc(-3,11,13,27,-90,90,false,p);canvas.DrawArc(-11,3,21,35,-90,90,false,p);break;
+            case "lock": R(5,10,14,11,2);using(var shackle=new Android.Graphics.Path()){shackle.MoveTo(8,10);shackle.LineTo(8,7);shackle.CubicTo(8,1,16,1,16,7);shackle.LineTo(16,10);canvas.DrawPath(shackle,p);}C(12,15,1);L(12,16,12,18);break;
             case "arrow": L(12,4,12,20);Path(7,9,12,4,17,9);break;
             case "filter": L(3,6,21,6);L(6,12,18,12);L(9,18,15,18);break;
             case "previous": L(4,5,4,19);Path(20,5,8,12,20,19,20,5);break;

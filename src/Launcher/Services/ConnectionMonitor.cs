@@ -1,4 +1,4 @@
-using Android;
+﻿using Android;
 using Android.Bluetooth;
 using Android.Content;
 using Android.Content.PM;

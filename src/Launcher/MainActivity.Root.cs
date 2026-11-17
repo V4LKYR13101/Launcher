@@ -1,8 +1,9 @@
-using Android.App;
+﻿using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Media.Session;
 using Android.Views;
 using Android.Widget;
 using Launcher.Core;
@@ -16,75 +17,57 @@ public partial class MainActivity
 {
     private string conversationFilter="All";
 
-    private void RootCard(string id,string title,string glyph,Action<LinearLayout> build)
+    private void RootCard(string id,string title,string glyph,Action<LinearLayout> build,string? summary=null)
     {
         bool collapsed=state.CollapsedCards.GetValueOrDefault(id);
-        var card=Stack(); card.SetPadding(Dp(4),0,Dp(4),Dp(collapsed?4:10));
-        var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);
-        header.AddView(new GlyphView(this,glyph,palette.Text),new LinearLayout.LayoutParams(Dp(19),Dp(19)));
-        var name=Text(title,16,true);name.SetPadding(Dp(10),0,0,0);header.AddView(name,new LinearLayout.LayoutParams(0,-2,1));
-        header.AddView(new GlyphView(this,collapsed?"down":"up",palette.Muted),new LinearLayout.LayoutParams(Dp(17),Dp(17)));
-        header.Click+=(_,_)=>{state.CollapsedCards[id]=!collapsed;Save();RenderBody();};card.AddView(header,Match(Dp(46)));
-        if(!collapsed)build(card);
-        var divider=new View(this){Background=new Android.Graphics.Drawables.ColorDrawable(palette.Panel)};
-        var dividerLayout=Match(Dp(1));dividerLayout.SetMargins(0,Dp(12),0,0);card.AddView(divider,dividerLayout);
-        var lp=Match();lp.SetMargins(0,0,0,Dp(8));body.AddView(card,lp);
+        var card=Stack();card.Tag="root-card:"+id;card.SetPadding(Dp(16),Dp(8),Dp(16),Dp(8));card.Background=Surface(palette.Card,22,id=="overview");if(LayerMotionEnabled)card.Elevation=Dp(2);
+        var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);header.ContentDescription=title+(collapsed?", collapsed":", expanded");
+        header.AddView(new GlyphView(this,glyph,palette.Muted),new LinearLayout.LayoutParams(Dp(16),Dp(16)));
+        bool note=id.StartsWith("note:");var name=Text(note?title:title.ToUpperInvariant(),note?15:11,true,note?palette.Text:palette.Muted);name.LetterSpacing=note?0:.10f;name.SetPadding(Dp(10),0,0,0);name.SetSingleLine(true);name.Ellipsize=Android.Text.TextUtils.TruncateAt.End;header.AddView(name,new LinearLayout.LayoutParams(0,-2,1));
+        if(id=="feeds")header.AddView(FeedRefreshControl(),new LinearLayout.LayoutParams(Dp(44),Dp(44)));
+        header.AddView(new GlyphView(this,collapsed?"down":"up",palette.Muted),new LinearLayout.LayoutParams(Dp(14),Dp(14)));
+        depthHeadings.Add(header);
+        TouchFeedback(header,8);BindHoldHaptics(header);header.LongClick+=(_,_)=>{if(id=="private-space")ShowProfiles();else RootOptions(id,title);};
+        card.AddView(header,Match(Dp(Math.Max(48,15*FontScale*1.3f+12))));
+        var viewport=new FrameLayout(this);viewport.SetClipChildren(true);card.AddView(viewport,Match());
+        LinearLayout Contents(bool folded)
+        {
+            var inner=Stack();inner.SetPadding(0,Dp(4),0,Dp(4));
+            if(!folded)build(inner);
+            else
+            {
+                if(!string.IsNullOrEmpty(summary)){var preview=Text(summary,13,color:id=="weather"?palette.Accent:palette.Muted);preview.SetMaxLines(2);inner.AddView(preview,Match());}
+                if(id=="media"&&media.Controller is {} controller)
+                {
+                    var actions=Stack(true);var transport=controller.GetTransportControls();long supported=controller.PlaybackState?.Actions??0;
+                    void Control(string glyph,string label,long required,Action action){var control=IconButton(glyph,label,action);control.Enabled=(supported&required)!=0;control.Alpha=control.Enabled?1:.32f;actions.AddView(control,new LinearLayout.LayoutParams(Dp(48),Dp(48)));}
+                    Control("previous","Previous track",PlaybackState.ActionSkipToPrevious,()=>transport?.SkipToPrevious());
+                    Control(media.Playing?"pause":"play",media.Playing?"Pause":"Play",media.Playing?PlaybackState.ActionPause|PlaybackState.ActionPlayPause:PlaybackState.ActionPlay|PlaybackState.ActionPlayPause,()=>{if(media.Playing)transport?.Pause();else transport?.Play();});
+                    Control("next","Next track",PlaybackState.ActionSkipToNext,()=>transport?.SkipToNext());inner.AddView(actions,Match());
+                }
+                if(id=="timers")foreach(var timer in state.Timers.Take(3))
+                {
+                    var row=Stack(true);row.SetGravity(GravityFlags.CenterVertical);var value=Text(TimerDisplay(timer),21,true,palette.Accent);workspaceTimerViews.Add((timer,value));row.AddView(value,new LinearLayout.LayoutParams(0,-2,1));
+                    row.AddView(IconButton(timer.EndsAt>0?"pause":"play",timer.EndsAt>0?"Pause timer":"Start timer",()=>ToggleTimer(timer)));inner.AddView(row,Match());
+                }
+            }
+            return inner;
+        }
+        viewport.AddView(Contents(collapsed),new FrameLayout.LayoutParams(-1,-2));
+        header.Click+=(_,_)=>
+        {
+            bool folded=!state.CollapsedCards.GetValueOrDefault(id);state.CollapsedCards[id]=folded;Save();
+            if(!LayerMotionEnabled){RefreshBodyInPlace();return;}
+            header.ContentDescription=title+(folded?", collapsed":", expanded");
+            header.RemoveViewAt(header.ChildCount-1);header.AddView(new GlyphView(this,folded?"down":"up",palette.Muted),new LinearLayout.LayoutParams(Dp(14),Dp(14)));
+            if(folded&&id=="feeds"){feedImageLifetime?.Cancel();feedPanel=null;feedStatus=null;}
+            if(folded&&id=="resources")resourcesPanel=null;
+            SwapRootPane(id,viewport,Contents(folded));
+        };
+        var lp=Match();lp.SetMargins(0,0,0,Dp(12));body.AddView(card,lp);
     }
 
-    private void RenderRoot()
-    {
-        if(state.CalendarVisible)RootCard("calendar","Today","calendar",card=>
-        {
-            var date=Text(DateTime.Now.ToString("dddd, d MMMM"),21,true);date.SetPadding(Dp(6),Dp(6),0,Dp(14));card.AddView(date,Match());
-            var days=Stack(true);var start=DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek+6)%7);
-            for(int i=0;i<7;i++)
-            {
-                var day=start.AddDays(i);bool today=day==DateTime.Today;
-                var col=Stack();col.SetGravity(GravityFlags.Center);col.Background=Background(today?palette.Accent:Color.Transparent,14);
-                var name=Text(day.ToString("ddd")[..1],11,color:today?palette.OnAccent:palette.Muted);name.Gravity=GravityFlags.Center;col.AddView(name,Match());
-                var number=Text(day.Day.ToString(),19,true,today?palette.OnAccent:palette.Text);number.Gravity=GravityFlags.Center;number.SetPadding(0,Dp(10),0,0);col.AddView(number,Match());
-                var dl=new LinearLayout.LayoutParams(0,Dp(72),1);dl.SetMargins(Dp(2),0,Dp(2),0);days.AddView(col,dl);
-                col.Click+=(_,_)=>OpenIntent(new Intent(Intent.ActionView,Uri.Parse("content://com.android.calendar/time/"+new DateTimeOffset(day).ToUnixTimeMilliseconds())));
-            }
-            card.AddView(days,Match());
-        });
-        if(state.FocusCardVisible)RootCard("focus","Focus","focus",card=>
-        {
-            timerText=Text(FocusTime(),42,true);timerText.SetPadding(Dp(6),Dp(6),0,Dp(12));card.AddView(timerText,Match());
-            Paragraph(state.Focus?"Quiet outlines. One thing at a time.":"Make room for one thing. Choose a focus session.",card);
-            var controls=Stack(true);
-            foreach(int minutes in new[]{15,25,50})
-            {
-                var b=Button(minutes+" min",()=>{state.Focus=true;state.FocusEndsAt=Now+minutes*60_000L;Save();Render();});
-                var lp=new LinearLayout.LayoutParams(0,-2,1);lp.SetMargins(Dp(3),0,Dp(3),0);controls.AddView(b,lp);
-            }
-            card.AddView(controls,Match());
-            if(state.Focus){Gap(card,8);card.AddView(Button("End focus",()=>{state.Focus=false;state.FocusEndsAt=0;Save();Render();}),Match());}
-        });
-        if(state.NotesVisible)RootCard("notes","Notes","note",card=>
-        {
-            var note=new EditText(this){Text=state.Note,Hint="A thought worth keepingâ€¦",TextSize=16,Typeface=regular,Gravity=GravityFlags.Top};
-            note.SetTextColor(palette.Text);note.SetHintTextColor(palette.Muted);note.Background=Background(palette.Panel,12);
-            note.SetPadding(Dp(14),Dp(12),Dp(14),Dp(12));note.SetMinLines(3);note.SetMaxLines(9);
-            note.SetFilters([new Android.Text.InputFilterLengthFilter(20_000)]);
-            note.TextChanged+=(_,_)=>{state.Note=note.Text??"";Save();};card.AddView(note,Match());
-            var foot=Text("Saved on this device",10,color:palette.Muted);foot.SetPadding(Dp(4),Dp(8),0,0);card.AddView(foot,Match());
-        });
-        if(state.CalculatorVisible)RootCard("calculator","Calculator","calculator",card=>
-        {
-            var expression=new EditText(this){Hint="(24 + 6) Ã— 3",TextSize=21,Typeface=regular};
-            expression.SetSingleLine(true);expression.SetTextColor(palette.Text);expression.SetHintTextColor(palette.Muted);
-            expression.InputType=Android.Text.InputTypes.ClassText|Android.Text.InputTypes.TextFlagNoSuggestions;
-            expression.Background=Background(palette.Panel,12);expression.SetPadding(Dp(14),Dp(12),Dp(14),Dp(12));
-            var answer=Text("=",30,true);answer.SetPadding(Dp(10),Dp(12),Dp(10),Dp(8));answer.Gravity=GravityFlags.Right;
-            expression.TextChanged+=(_,_)=>answer.Text=string.IsNullOrWhiteSpace(expression.Text)?"=":"= "+Calculator.Evaluate(expression.Text!);
-            card.AddView(expression,Match());card.AddView(answer,Match());
-        });
-        foreach(var slot in state.Widgets.ToArray())RenderWidget(slot);
-        body.AddView(Button("+  Add Android widget",AddWidget),Match());Gap(body,8);
-        var settings=Text("Customize Root",12,color:palette.Muted);settings.Gravity=GravityFlags.Center;settings.SetPadding(0,Dp(12),0,Dp(12));
-        settings.Click+=(_,_)=>Navigate("Root settings");body.AddView(settings,Match());
-    }
+    private void RenderRoot()=>RenderWorkspace();
 
     private string FocusTime()
     {
@@ -94,10 +77,11 @@ public partial class MainActivity
 
     private void RenderRootSettings()
     {
-        Title("Only what you need.");
+        Title("Root cards");
         ToggleRow(body,"Calendar card",state.CalendarVisible,v=>{state.CalendarVisible=v;Save();});
         ToggleRow(body,"Focus card",state.FocusCardVisible,v=>{state.FocusCardVisible=v;Save();});
         ToggleRow(body,"Notes card",state.NotesVisible,v=>{state.NotesVisible=v;Save();});
+        ToggleRow(body,"Phone resources card",state.ResourcesVisible,v=>{state.ResourcesVisible=v;if(v)state.RootHidden.Remove("resources");Save();});
         ToggleRow(body,"Calculator card",state.CalculatorVisible,v=>{state.CalculatorVisible=v;Save();});
         Gap(body);body.AddView(Button("+  Add Android widget",AddWidget,true),Match());Gap(body);
         Paragraph("Your installed apps provide Android widgets. Tap a widget header to collapse it; hold the header to resize or remove it. Provider setup may open a separate screen.");
@@ -120,16 +104,16 @@ public partial class MainActivity
     {
         var info=AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(slot.Id);
         if(info is null)return;
-        var card=Stack();card.SetPadding(0,0,0,Dp(slot.Collapsed?0:8));
-        var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);
-        header.SetPadding(Dp(8),0,Dp(8),0);
+        var card=Stack();card.Tag="root-widget:"+slot.Id;card.SetPadding(0,0,0,Dp(slot.Collapsed?0:8));
+        var header=Stack(true);header.SetGravity(GravityFlags.CenterVertical);header.ContentDescription=WidgetLabel(slot.Id)+(slot.Collapsed?", collapsed":", expanded");
+        header.SetPadding(0,0,0,0);
         var providerApp=apps.FirstOrDefault(a=>a.PackageName==info.Provider?.PackageName);
         header.AddView(providerApp is not null?AppIcon(providerApp,palette.Text):new GlyphView(this,"grid",palette.Muted),new LinearLayout.LayoutParams(Dp(19),Dp(19)));
         var label=Text(info.LoadLabel(PackageManager)??"Widget",15,true);label.Gravity=GravityFlags.CenterVertical;
         label.SetPadding(Dp(10),0,Dp(8),0);label.SetSingleLine(true);label.Ellipsize=Android.Text.TextUtils.TruncateAt.End;
-        header.AddView(label,new LinearLayout.LayoutParams(0,Dp(48),1));
+        header.AddView(label,new LinearLayout.LayoutParams(0,Math.Max(Dp(48),Dp(15*FontScale*1.3f+16)),1));
         header.AddView(new GlyphView(this,slot.Collapsed?"down":"up",palette.Muted),new LinearLayout.LayoutParams(Dp(18),Dp(18)));
-        header.Click+=(_,_)=>{slot.Collapsed=!slot.Collapsed;Save();RenderBody();};header.LongClick+=(_,_)=>WidgetOptions(slot);card.AddView(header,Match());
+        TouchFeedback(header,8);BindHoldHaptics(header);header.Click+=(_,_)=>{slot.Collapsed=!slot.Collapsed;Save();RenderBody();};header.LongClick+=(_,_)=>WidgetOptions(slot);card.AddView(header,Match());
         if(!slot.Collapsed)
         {
             try
@@ -142,7 +126,7 @@ public partial class MainActivity
                     view.UpdateAppWidgetSize(new Bundle(),new System.Collections.Generic.List<Android.Util.SizeF>{new(width,height)});
                 else
                 {
-#pragma warning disable CA1422 // Android 7â€“11 widget size API.
+#pragma warning disable CA1422 // Android 7–11 widget size API.
                     view.UpdateAppWidgetSize(null,width,height,width,height);
 #pragma warning restore CA1422
                 }
@@ -152,15 +136,14 @@ public partial class MainActivity
         }
         var lp=Match();lp.SetMargins(0,0,0,Dp(14));body.AddView(card,lp);
     }
-    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id),["Fit widget automatically","Compact Â· 72 dp","Small Â· 140 dp","Medium Â· 220 dp","Large Â· 320 dp","Tall Â· 440 dp","Move up","Move down","Remove widget"],i=>
+    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id),["Fit widget automatically","Compact · 72 dp","Small · 140 dp","Medium · 220 dp","Large · 320 dp","Tall · 440 dp","Move up","Move down","Remove widget"],i=>
     {
         if(i==0)slot.AutoHeight=true;
         else if(i<6){slot.AutoHeight=false;slot.Height=new[]{0,72,140,220,320,440}[i];}
-        else if(i==8){widgetHost.DeleteAppWidgetId(slot.Id);state.Widgets.Remove(slot);}
+        else if(i==8){widgetHost.DeleteAppWidgetId(slot.Id);state.Widgets.Remove(slot);state.RootOrder.Remove("widget:"+slot.Id);state.RootPinned.Remove("widget:"+slot.Id);state.RootHidden.Remove("widget:"+slot.Id);}
         else
         {
-            int index=state.Widgets.IndexOf(slot),target=index+(i==6?-1:1);
-            if(target>=0&&target<state.Widgets.Count)(state.Widgets[index],state.Widgets[target])=(state.Widgets[target],state.Widgets[index]);
+            MoveTodayCard("widget:"+slot.Id,i==6?-1:1);
         }
         Save();Render();
     });
@@ -168,53 +151,47 @@ public partial class MainActivity
     private void RenderConversations()
     {
         var conversationHeader=Stack(true);conversationHeader.SetGravity(GravityFlags.CenterVertical);
-        var heading=Text("Conversations",27,true);heading.Gravity=GravityFlags.CenterVertical;
-        conversationHeader.AddView(heading,new LinearLayout.LayoutParams(0,Dp(64),1));
+        var heading=Text("Notifications",27,true);heading.Gravity=GravityFlags.CenterVertical;
+        conversationHeader.AddView(heading,new LinearLayout.LayoutParams(0,Math.Max(Dp(52),Dp(27*FontScale*1.25f+12)),1));
         conversationHeader.AddView(IconButton("filter","Filter notification apps",PickConversationSources),new LinearLayout.LayoutParams(Dp(48),Dp(48)));body.AddView(conversationHeader,Match());
         if(!ConversationService.Enabled(this))
         {
             Paragraph("Your messages, in one quiet place. Connect Android notifications to see current conversations from your messaging apps.");
             body.AddView(Button("Set up conversations",()=>Navigate("Permissions"),true),Match());Gap(body);
-            Paragraph("Only active message notifications appear here. No chat history is imported or stored.");return;
+            Paragraph("Launcher displays current notifications. Optional local history can save new message notifications after you enable it.");return;
         }
         var keyguard=(KeyguardManager?)GetSystemService(KeyguardService);
         if(keyguard?.IsDeviceLocked==true){Paragraph("Unlock your phone to view message previews.");return;}
         var messages=(state.ConversationMessagesOnly?ConversationService.Snapshot():ConversationService.NotificationSnapshot())
             .Where(m=>!state.ConversationExcludedApps.Contains(m.Package)).ToArray();
-        Paragraph(state.ConversationMessagesOnly?"Messages only":"All notification types Â· choose sources with the filter icon");
+        Paragraph(state.ConversationMessagesOnly?"Messages only":"All notification types · choose sources with the filter icon");
+        if(conversationFilter!="All"&&!messages.Any(m=>m.Package==conversationFilter))conversationFilter="All";
         var filters=Stack(true);
         var filterScroll=new HorizontalScrollView(this){HorizontalScrollBarEnabled=false};filterScroll.AddView(filters);
         foreach(var package in new[]{"All"}.Concat(messages.Select(m=>m.Package).Distinct()))
         {
-            string label=package=="All"?"All":apps.FirstOrDefault(a=>a.PackageName==package)?.Label??package.Split('.').Last();
-            var chip=Button(label,()=>{conversationFilter=package;RenderBody();},conversationFilter==package);
-            var lp=new LinearLayout.LayoutParams(-2,Dp(44));lp.SetMargins(0,0,Dp(8),0);filters.AddView(chip,lp);
+            string label=package=="All"?"All":PackageLabel(package);
+            var chip=RootAction(label,()=>{conversationFilter=package;RenderBody();});chip.SetTextColor(conversationFilter==package?palette.OnAccent:palette.Text);chip.Background=Background(conversationFilter==package?palette.Accent:Color.Transparent,20,conversationFilter==package?null:palette.Divider);
+            var lp=new LinearLayout.LayoutParams(-2,-2);lp.SetMargins(0,0,Dp(8),0);filters.AddView(chip,lp);
         }
-        body.AddView(filterScroll,Match());Gap(body);
-        if(!messages.Any(m=>m.Package==conversationFilter))conversationFilter="All";
+        body.AddView(filterScroll,Match());Gap(body,16);
+        if(conversationFilter!="All"&&!messages.Any(m=>m.Package==conversationFilter))conversationFilter="All";
         var visible=messages.Where(m=>(conversationFilter=="All"||m.Package==conversationFilter)
-            && (m.Title.Contains(query,StringComparison.CurrentCultureIgnoreCase)||m.Text.Contains(query,StringComparison.CurrentCultureIgnoreCase))).ToArray();
-        if(visible.Length==0)Paragraph("All quiet. New message notifications will appear here. If access was just enabled, wait for the next incoming message.");
+            && (ConcealPreview(m.Package)?PackageLabel(m.Package).Contains(query,StringComparison.CurrentCultureIgnoreCase):m.Title.Contains(query,StringComparison.CurrentCultureIgnoreCase)||m.Text.Contains(query,StringComparison.CurrentCultureIgnoreCase))).ToArray();
+        if(visible.Length==0)Paragraph(query.Trim().Length>0?"No notifications match your search.":"No notifications from the selected apps. Use the filter icon to choose which apps appear here.");
+        string? previousPackage=null;DateTime? previousDate=null;
         foreach(var message in visible)
         {
-            var card=Stack();card.Background=Background(palette.Card,16);card.SetPadding(Dp(14),Dp(14),Dp(14),Dp(14));
-            var row=Stack(true);row.SetGravity(GravityFlags.CenterVertical);
-            var sourceIcon=NotificationIcon(message.Package);sourceIcon.ContentDescription=apps.FirstOrDefault(a=>a.PackageName==message.Package)?.Label??message.Package;
-            row.AddView(sourceIcon,new LinearLayout.LayoutParams(Dp(24),Dp(24)));
-            var title=Text(message.Title,15,true);title.SetPadding(Dp(10),0,Dp(8),0);row.AddView(title,new LinearLayout.LayoutParams(0,-2,1));
-            row.AddView(Text(DateTimeOffset.FromUnixTimeMilliseconds(message.Time).ToLocalTime().ToString("HH:mm"),10,color:palette.Muted));card.AddView(row,Match());
-            var preview=Text(message.Text,13,color:palette.Muted);preview.SetMaxLines(3);preview.SetPadding(0,Dp(10),0,Dp(6));card.AddView(preview,Match());
-            card.AddView(Text(apps.FirstOrDefault(a=>a.PackageName==message.Package)?.Label??message.Package,10,color:palette.Muted),Match());
-            card.Click+=(_,_)=>
+            var date=DateTimeOffset.FromUnixTimeMilliseconds(message.Time).LocalDateTime.Date;
+            bool newDay=previousDate!=date;
+            if(newDay)
             {
-                OpenNotification(message);
-            };
-            card.LongClick+=(_,_)=>Choose(message.Title,["Open conversation","Dismiss notification"],i=>
-            {
-                if(i==1)ConversationService.Dismiss(message.Key);
-                else OpenNotification(message);
-            });
-            var lp=Match();lp.SetMargins(0,0,0,Dp(10));body.AddView(card,lp);
+                string label=date==DateTime.Today?"Today":date==DateTime.Today.AddDays(-1)?"Yesterday":date.ToString("ddd, d MMM");
+                SectionCaption(body,label);previousPackage=null;
+            }
+            bool compact=previousPackage==message.Package&&!newDay;
+            var lp=Match();lp.SetMargins(0,Dp(compact?4:10),0,0);body.AddView(NotificationCard(message,actions:true,compact:compact),lp);
+            previousPackage=message.Package;previousDate=date;
         }
     }
 
@@ -222,6 +199,20 @@ public partial class MainActivity
     {
         base.OnActivityResult(requestCode,resultCode,data);
         if(requestCode==811){CompleteCredentialAuthentication(resultCode);return;}
+        if(requestCode==815)
+        {
+            if(resultCode==Result.Ok&&data?.Data is {} folder)
+            {
+                try{ContentResolver!.TakePersistableUriPermission(folder,data.Flags&(ActivityFlags.GrantReadUriPermission|ActivityFlags.GrantWriteUriPermission));companion.SetFolder(folder.ToString()!);if(companionSession&&resumed)companion.Start();RenderBody();}
+                catch(Java.Lang.SecurityException){Toast("Folder access was not granted.");}
+            }
+            return;
+        }
+        if(requestCode==813)
+        {
+            if(resultCode==Result.Ok&&data?.Data is {} attachment&&state.Tickets.FirstOrDefault(t=>t.Id==attachingTicket) is {} ticket)
+            {try{ContentResolver!.TakePersistableUriPermission(attachment,ActivityFlags.GrantReadUriPermission);}catch(Java.Lang.SecurityException){}ticket.Attachment=attachment.ToString()??"";Save();RenderBody();}attachingTicket=null;return;
+        }
         if(requestCode is 801 or 802)
         {
             if(resultCode!=Result.Ok)
@@ -255,13 +246,10 @@ public partial class MainActivity
             if(requestCode==702)
             {
                 using var stream=ContentResolver!.OpenInputStream(data.Data)!;using var reader=new StreamReader(stream);
-                var buffer=new char[2_000_001];int count=0,n;
-                while(count<buffer.Length&&(n=reader.Read(buffer,count,buffer.Length-count))>0)count+=n;
-                var restored=LauncherState.Deserialize(new string(buffer,0,count));
-                Confirm("Restore layout?",$"Replace your layout and notes with this backup ({restored.Drawers.Count} drawers)? Existing Android widgets will be kept.","Restore",()=>
-                    {
-                        restored.Widgets=state.Widgets;state=restored;AppOrganization.Reconcile(state,apps);Save();Navigate("Tiles");Toast("Layout restored.");
-                    });
+                var text=new System.Text.StringBuilder();var buffer=new char[16384];int n;
+                while((n=reader.Read(buffer))>0){if(text.Length+n>LauncherState.MaximumJsonCharacters)throw new InvalidDataException("Backup too large.");text.Append(buffer,0,n);}
+                var restored=LauncherState.Deserialize(text.ToString());
+                ShowRestoreOptions(restored);
             }
         }
         catch(Exception e) when(e is IOException or System.Text.Json.JsonException or InvalidDataException or Java.Lang.RuntimeException or UnauthorizedAccessException)

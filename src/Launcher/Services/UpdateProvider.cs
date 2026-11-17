@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using Android.Database;
 using Android.OS;
 using Uri = Android.Net.Uri;

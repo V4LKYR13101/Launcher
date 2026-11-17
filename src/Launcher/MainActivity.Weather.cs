@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
@@ -21,7 +21,7 @@ public partial class MainActivity
     }
     private void AddWeatherStrip()
     {
-        var weather=state.Weather;if(!weather.Enabled)return;
+        var weather=state.Weather;if(!weather.Enabled||string.IsNullOrEmpty(weather.City))return;
         var strip=Stack(true);strip.SetPadding(Dp(12),Dp(10),Dp(12),Dp(10));strip.SetGravity(GravityFlags.CenterVertical);
         strip.Background=Background(palette.Card,16);strip.ContentDescription="Weather settings";
         strip.AddView(new GlyphView(this,"map",palette.Muted),new LinearLayout.LayoutParams(Dp(20),Dp(20)));
@@ -33,14 +33,14 @@ public partial class MainActivity
         strip.AddView(labels,new LinearLayout.LayoutParams(0,-2,1));
         var temperature=Text(Degrees(weather.Temperature),24,true,palette.Accent);temperature.Gravity=GravityFlags.CenterVertical;strip.AddView(temperature);
         if(weather.Temperature.HasValue)strip.AddView(new GlyphView(this,WeatherCondition.Glyph(weather.Code),palette.Accent),new LinearLayout.LayoutParams(Dp(28),Dp(28)));
-        strip.Click+=(_,_)=>Navigate("Weather");strip.LongClick+=(_,_)=>RefreshWeather(true);
+        TouchFeedback(strip,16);strip.Click+=(_,_)=>Navigate("Weather");BindHoldHaptics(strip);strip.LongClick+=(_,_)=>RefreshWeather(true);
         var lp=Match();lp.SetMargins(0,0,0,Dp(16));body.AddView(strip,lp);
     }
     private async void RefreshWeather(bool force=false)
     {
         var w=state.Weather;
         if(!w.Enabled || w.Latitude is null || w.Longitude is null || weatherLoading)return;
-        if(!force && (w.RefreshMinutes==0 || Now-weatherAttemptAt<5*60_000L || w.UpdatedAt>0 && Now-w.UpdatedAt<w.RefreshMinutes*60_000L))return;
+        if(!force && (w.RefreshMinutes==0 || Now-weatherAttemptAt<5*60_000L || w.Hours.Count>0 && w.UpdatedAt>0 && Now-w.UpdatedAt<w.RefreshMinutes*60_000L))return;
         int request=++weatherRequest;double latitude=w.Latitude.Value,longitude=w.Longitude.Value;
         weatherLoading=true;weatherError=null;weatherAttemptAt=Now;
         try
@@ -49,18 +49,19 @@ public partial class MainActivity
             if(IsDestroyed||request!=weatherRequest||state.Weather.Latitude!=latitude||state.Weather.Longitude!=longitude)return;
             state.Weather.Temperature=reading.Temperature;state.Weather.High=reading.High;state.Weather.Low=reading.Low;
             state.Weather.Code=reading.Code;state.Weather.Day=reading.Day;state.Weather.UpdatedAt=Now;Save();
+            state.Weather.Hours=reading.Hours;state.Weather.Days=reading.Days;state.Weather.UtcOffsetSeconds=reading.UtcOffsetSeconds;Save();
         }
-        catch(Exception e) when(e is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException or InvalidOperationException)
+        catch(Exception e) when(e is HttpRequestException or IOException or TaskCanceledException or System.Text.Json.JsonException or InvalidOperationException)
         {if(request==weatherRequest)weatherError="Couldn’t update weather. Your last forecast is kept.";}
         finally
         {
             if(request==weatherRequest)weatherLoading=false;
-            if(!IsDestroyed && resumed && !searching && page is "Tiles" or "Weather")RenderBody();
+            if(!IsDestroyed && resumed && !searching && (page is "Tiles" or "Weather" or "Root")&&WorkspaceEditing.NoteId is null)RefreshBodyInPlace();
         }
     }
     private void RenderWeatherSettings()
     {
-        Title("A glance outside.");
+        Title("Weather");
         ToggleRow(body,"Weather strip on home",state.Weather.Enabled,v=>{state.Weather.Enabled=v;Save();if(v)RefreshWeather();});
         SettingRow(body,"Location",string.IsNullOrEmpty(state.Weather.City)?"Search for a city or town":state.Weather.City,()=>
             Prompt("Weather location","",SearchWeatherCity),"map");
@@ -90,10 +91,11 @@ public partial class MainActivity
             {
                 var p=places[i];state.Weather.City=p.Label;state.Weather.Latitude=p.Latitude;state.Weather.Longitude=p.Longitude;
                 state.Weather.UpdatedAt=0;state.Weather.Temperature=null;state.Weather.High=null;state.Weather.Low=null;
+                state.Weather.Hours.Clear();state.Weather.Days.Clear();state.Weather.UtcOffsetSeconds=0;
                 weatherRequest++;weatherLoading=false;Save();Render();RefreshWeather(true);
             });
         }
-        catch(Exception e) when(e is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+        catch(Exception e) when(e is HttpRequestException or IOException or TaskCanceledException or System.Text.Json.JsonException or InvalidOperationException)
         {Toast("Couldn’t search locations. Check your connection and try again.");}
     }
 }

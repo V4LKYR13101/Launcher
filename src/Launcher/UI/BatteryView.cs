@@ -1,4 +1,4 @@
-using Android.Animation;
+﻿using Android.Animation;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;

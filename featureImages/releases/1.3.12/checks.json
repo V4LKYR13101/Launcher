@@ -1,0 +1,8 @@
+{
+  "version": "1.3.12",
+  "build": 22,
+  "display": "360 x 640 dp",
+  "fontScale": "150%",
+  "singleWordLabelOneLine": true,
+  "fullAccessibleName": "Contacts"
+}

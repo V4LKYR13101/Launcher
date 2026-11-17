@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
 using LauncherApp.Services;
@@ -25,7 +25,7 @@ public partial class MainActivity
                 foreach(var option in options.Where(o=>o.Name.Contains(query,StringComparison.CurrentCultureIgnoreCase)||o.Package.Contains(query,StringComparison.OrdinalIgnoreCase)))
                 {
                     var check=new CheckBox(this){Text=option.Name,Checked=selected.Contains(option.Package),TextSize=15,Typeface=regular,ButtonTintList=AccentTint()};
-                    check.SetTextColor(palette.Text);check.SetMinimumHeight(Dp(50));
+                    BindToggleHaptics(check);check.SetTextColor(palette.Text);check.SetMinimumHeight(Dp(50));
                     check.CheckedChange+=(_,e)=>{if(e.IsChecked)selected.Add(option.Package);else selected.Remove(option.Package);};list.AddView(check,Match());
                 }
             }
@@ -33,7 +33,7 @@ public partial class MainActivity
             controls.AddView(Button("Clear",()=>{selected.Clear();Rebuild();}),new LinearLayout.LayoutParams(0,-2,1));panel.AddView(controls,Match());Gap(panel);
             var search=new EditText(this){Hint="Filter apps",TextSize=15,Typeface=regular,Background=Background(palette.Panel,14)};
             search.SetSingleLine(true);search.SetTextColor(palette.Text);search.SetHintTextColor(palette.Muted);search.SetPadding(Dp(14),Dp(12),Dp(14),Dp(12));
-            search.TextChanged+=(_,_)=>{query=search.Text??"";Rebuild();};panel.AddView(search,Match());Gap(panel,8);panel.AddView(list,Match());Rebuild();
+            StyleEntry(search);search.TextChanged+=(_,_)=>{query=search.Text??"";Rebuild();};panel.AddView(search,Match());Gap(panel,8);panel.AddView(list,Match());Rebuild();
         },(footer,dialog)=>footer.AddView(Button("Apply filters",()=>
         {
             state.ConversationExcludedApps=options.Where(o=>!selected.Contains(o.Package)).Select(o=>o.Package).ToList();

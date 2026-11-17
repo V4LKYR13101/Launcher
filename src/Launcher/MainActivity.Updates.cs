@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.PM;
 using Android.Views;
 using Android.Widget;
@@ -99,11 +99,11 @@ public partial class MainActivity
         var archive=PackageManager.GetPackageArchiveInfo(UpdatePath,flags) ?? throw new IOException("The APK is invalid.");
         var left=OperatingSystem.IsAndroidVersionAtLeast(28)?installed.SigningInfo?.GetApkContentsSigners():installed.Signatures;
         var right=OperatingSystem.IsAndroidVersionAtLeast(28)?archive.SigningInfo?.GetApkContentsSigners():archive.Signatures;
+        var history=OperatingSystem.IsAndroidVersionAtLeast(28)&&archive.SigningInfo?.HasMultipleSigners==false?archive.SigningInfo.GetSigningCertificateHistory():null;
         var build=OperatingSystem.IsAndroidVersionAtLeast(28)?archive.LongVersionCode:archive.VersionCode;
         if(archive.PackageName!=PackageName || build!=release.Build || archive.VersionName!=release.Version ||
             left is not {Count:>0} || right is not {Count:>0} ||
-            !left.Select(s=>Convert.ToHexString(SHA256.HashData(s.ToByteArray()!))).Order()
-                .SequenceEqual(right.Select(s=>Convert.ToHexString(SHA256.HashData(s.ToByteArray()!))).Order()))
+            !SigningTrust.Accepts(left.Select(s=>Convert.ToHexString(SHA256.HashData(s.ToByteArray()!))),right.Select(s=>Convert.ToHexString(SHA256.HashData(s.ToByteArray()!))),history?.Select(s=>Convert.ToHexString(SHA256.HashData(s.ToByteArray()!)))??[]))
             throw new IOException("The update does not match this installation.");
     }
     private void ResumeUpdateInstall()

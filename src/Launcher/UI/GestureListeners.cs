@@ -1,10 +1,10 @@
-using Android.App;
+﻿using Android.App;
 using Android.Views;
 using Android.Views.Animations;
 
 namespace LauncherApp.UI;
 
-public sealed class SheetDragListener(View sheet,Dialog dialog,float threshold) : Java.Lang.Object,View.IOnTouchListener
+public sealed class SheetDragListener(View sheet,Dialog dialog,float threshold,Action<View>? committed=null) : Java.Lang.Object,View.IOnTouchListener
 {
     private float startY;
     private long started;
@@ -23,6 +23,7 @@ public sealed class SheetDragListener(View sheet,Dialog dialog,float threshold) 
                 float velocity=distance/Math.Max(.001f,(System.Environment.TickCount64-started)/1000f);
                 if(distance>threshold || distance>threshold*.3f && velocity>threshold*5)
                 {
+                    committed?.Invoke(view??sheet);
                     sheet.Animate()!.TranslationY(sheet.Height).SetDuration(180).WithEndAction(new Java.Lang.Runnable(dialog.Dismiss)).Start();
                 }
                 else sheet.Animate()!.TranslationY(0).SetDuration(180).SetInterpolator(new DecelerateInterpolator()).Start();
@@ -34,7 +35,7 @@ public sealed class SheetDragListener(View sheet,Dialog dialog,float threshold) 
     }
 }
 
-public sealed class NotificationSwipeListener(float threshold,bool dismissible,Action dismiss,Action persistent) : Java.Lang.Object,View.IOnTouchListener
+public sealed class NotificationSwipeListener(float threshold,bool dismissible,Action dismiss,Action persistent,Action<View,bool>? feedback=null) : Java.Lang.Object,View.IOnTouchListener
 {
     private float startX,startY;
     private bool swiping;
@@ -55,12 +56,15 @@ public sealed class NotificationSwipeListener(float threshold,bool dismissible,A
             case MotionEventActions.Up:
                 if(!swiping)return false;
                 if(Math.Abs(e.RawX-startX)>threshold && dismissible)
+                {
+                    feedback?.Invoke(view,true);
                     view.Animate()!.TranslationX((e.RawX>startX?1:-1)*view.Width).Alpha(0).SetDuration(150)
                         .WithEndAction(new Java.Lang.Runnable(dismiss)).Start();
+                }
                 else
                 {
                     view.Animate()!.TranslationX(0).Alpha(1).SetDuration(160).Start();
-                    if(!dismissible)persistent();
+                    if(!dismissible){feedback?.Invoke(view,false);persistent();}
                 }
                 return true;
             case MotionEventActions.Cancel:view.Animate()!.TranslationX(0).Alpha(1).SetDuration(160).Start();return swiping;

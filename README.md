@@ -1,11 +1,11 @@
-# Launcher
+﻿# Launcher
 
 A native Android home screen written in C# and .NET 11 for Android. The app is
 named **Launcher**, package `com.launcher.home`. No accounts or ads. Network access
 is used for optional Open-Meteo weather and manual update checks/downloads from
 Kevlog. UI uses native Android views.
 
-Current release: **1.0.1 (build 2)**. Settings → App updates checks
+Current Android release: **1.4.1 (build 25)**; Windows companion: **1.2.0**. Settings → App updates checks
 `https://kevlog.co.za/updates/launcher.json`, shows a newer version, downloads with
 progress, verifies size/SHA-256, package/version and signing certificate, then
 opens Android's installer. Installation needs the user's Android approval.
@@ -17,7 +17,7 @@ Article: https://kevlog.co.za/blog/building-launcher-for-android/
 
 ## Run
 
-Open `Launcher.slnx` in Visual Studio with the Android workload, or:
+Open `Launcher.sln` in Visual Studio with the Android workload, or:
 
 ```powershell
 dotnet workload install android
@@ -57,7 +57,7 @@ Android **Settings → Apps → Default apps → Home app**.
 - Swipe right for **Root** and left for **Conversations**, or use the search menu.
 - Hold the search icon or tap the three dots for quick theme and focus controls.
 - Pull down within Tiles when scrolled to the top, or tap the small status row,
-  to open **Launcher’s quick panel**.
+  to open **Launcher's quick panel**.
 - Settings offers Classic/Studio presets, 3–6 columns, tile heights and corners,
   custom accent colors, heading alignment, labels, actual monochrome/grayscale/
   original app icons, system wallpaper and a minimal status row.
@@ -105,7 +105,7 @@ Launcher's own controls, never as substitutes for installed app identities.
 Usage access is optional and enables local event-based foreground usage since
 midnight. These totals depend on Android's retained usage events and may differ
 from the manufacturer's Digital Wellbeing figures. Goals are reminders at launch,
-not app blocking. Focus filters Launcher to Essentials and pinned apps; it does
+not app blocking. Focus gives app tiles an outlined appearance; it does
 not silence Android notifications or enforce a system app restriction.
 
 Notification access is optional. The quick panel shows current notifications;
@@ -133,3 +133,128 @@ Drawer and tile ordering is edited through long-press controls.
 
 Research images are not application assets. Typeface: Outfit, bundled under its
 SIL Open Font License in `src/Launcher/Assets/Outfit-OFL.txt`.
+
+
+## Launcher 1.2.0 and Windows companion
+
+Root now supports titled notes, independent timers, card pinning and arrangement,
+weather charts, RSS, tickets and online search cards. Hold a card header for its
+options. Web and YouTube inline results need the optional provider API keys in
+Settings. Browser search remains available without keys.
+
+Compatible icon packs, individual icon choices, per-app tile palettes and badge
+muting are in the app editor. The app dashboard includes usage history and QR
+sharing. Message history is opt-in, notification-derived and limited to 30 days
+or 5,000 messages. Replies depend on a live notification reply action.
+
+Download `LauncherCompanion.exe` from Kevlog and run it on Windows x64. It includes
+the .NET runtime. Pair from Launcher Settings > Desktop companion on the same
+private Wi-Fi network; compare the certificate fingerprint before entering the
+code. The connection runs while Launcher is visible. Select one folder and
+separately allow uploads if wanted. Transfers are limited to 16 MB and there is
+no desktop file-delete operation. Restarting the desktop process requires a new
+pairing. Windows may ask to allow private-network access. The executable is not
+code signed.
+
+Build the companion with `dotnet publish src/Launcher.Companion/Launcher.Companion.csproj
+-c Release -r win-x64 --self-contained true`. The Android project remains the
+startup project in Visual Studio.
+
+Release 1.2.0 was compiled without running functional or device tests, as requested.
+See [the release notes](docs/RELEASE-1.2.0.md) for scope and platform limits.
+
+
+### Android 1.2.1
+
+Root uses compact action rows and smaller section labels. Weather separates the
+location, temperature and conditions, and the date itself opens the calendar.
+The app dashboard has one title, grouped metadata, chart scales and precise
+short-session durations. Usage tracks the union of an app's resumed activities,
+so an older screen pausing does not end another active screen's session.
+Horizontal swipes on drawer headings return to page navigation. Tile usage text
+sits closer to the app label with eight dp of space below it.
+
+The latest project page has thirteen new labelled mockups plus archived captures:
+https://kevlog.co.za/projects/launcher/
+
+
+### Android 1.2.2
+
+Timer permissions are under Settings > Timer alerts. The Root page footer keeps
+Add card, Arrange and Add widget on one compact row. The Windows companion
+remains 1.2.0.
+
+
+### Android 1.2.4
+
+Shared controls, settings, sheets, notification cards and the app dashboard have
+refined spacing and hierarchy. Add card uses a labelled icon grid. Notification
+taps open the source app while retaining the Launcher biometric gate. Locked
+tiles use fine fingerprint contours, and blank icon masks fall back to usable
+native artwork or app initials.
+
+Settings > News & RSS feeds manages sources. Google News South Africa is enabled
+initially; optional presets include MyBroadband, BBC World, The Verge and Ars
+Technica. Custom RSS/Atom sources can be added, edited, disabled or removed.
+Enabled feeds merge into one Root card, newest first, with undated items last.
+RSS requires no API key. Source requests are bounded and limited to three at a
+time. The card loads on opening or manual refresh, with a 15-minute freshness
+check when it is rebuilt; it does not run a background polling service.
+
+Settings > Drawers > Drag headings to fold is optional and defaults off. Tap-to-
+fold remains available. Appearance also includes wallpaper dimming for readability.
+
+No functional or device tests were run for this release, at the owner's request.
+Release builds and publication metadata were verified. Exact visual parity and
+production acceptance still require the owner's phone review.
+
+
+### Android 1.3.0
+
+Google Material, Phosphor and Bootstrap libraries are bundled offline. Choose a
+global library in Appearance, or hold an app tile and choose App icon for an
+individual selection. Drawer icons offer Browse icon libraries as well as the
+existing geometric symbols. Installed compatible icon packs remain supported.
+Global matching preserves native icons when a recognised match is unavailable.
+
+Settings > Automatic theme optionally follows the ambient-light sensor only.
+It defaults off, with Light at 1000 lux, Dark at 300 lux and a five-second delay.
+Thresholds and delay are configurable. Manual theme choices disable automatic
+switching. The sensor runs only while Launcher is visible; no camera is used.
+
+The Root weather card no longer shows Refresh or City & units. Weather settings
+retain those controls. See docs/ICON-LIBRARIES.json for pinned asset provenance and
+docs/RELEASE-1.3.0.md for implementation and validation scope.
+
+
+### Android 1.3.1
+
+The icon picker pins search and its result count above the grid. It uses compact
+34 dp previews, two-line labels and selected-icon outlines. Common symbols and
+recognised app matches appear first; specialised numbered symbols remain in the
+full searchable catalogue. Bundled fonts and app-tile rendering are unchanged.
+
+
+### Android 1.3.11
+
+Optical icon sizing, consistent card spacing, clearer notification hierarchy, anchored form actions and more stable refreshes. Native emulator checks and screenshots cover themes, larger text, small screens, sheets, playback, notifications and feeds. See [release notes](docs/RELEASE-1.3.11.md) and [UI review](docs/UI-REVIEW-1.3.11.md).
+
+### Android 1.3.12
+
+Single-word app labels shorten cleanly at larger text sizes. Multiword labels can use two lines. See docs/RELEASE-1.3.12.md.
+
+### Android 1.3.13
+
+Choose Off, Subtle or Crisp interaction feedback in Settings. Effects follow Android touch-vibration policy. See docs/RELEASE-1.3.13.md and docs/ANDROID-SYSTEM-UI-A26.md.
+
+
+### 1.4.0: optional system panel
+
+Settings > System panel adds a separate master switch and access setup for a matching notification/quick panel across apps. The status strip is separately optional. Native Android controls remain available. See [setup and boundaries](docs/SYSTEM-PANEL.md).
+
+Controls include notification opening, grouping, inline replies, swipe dismissal, media playback, media volume, permission-gated brightness and native settings links. Appearance supports a light/dark override, opacity, animation, handle placement and control-order presets. The service reads foreground window changes without retrieving screen text. Screen off hides its windows; Disable removes them and stops its listeners. Biometric app controls and grayscale rules remain separate.
+
+
+### 1.4.1: tile icon size
+
+Appearance > Tile icon size provides a 60 to 150 percent slider, live preview, Cancel, Save and Reset to default. Icons fit the available tile space. Tile dimensions and grid spacing stay unchanged. The preference is saved in layout backups.

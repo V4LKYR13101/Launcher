@@ -1,0 +1,1 @@
+Test-only UI inspector. Uses FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES, because the normal uiautomator dump command temporarily unbinds the accessibility overlay being tested. This is not shipped in Launcher.

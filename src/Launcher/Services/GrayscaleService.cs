@@ -1,4 +1,4 @@
-using Android.AccessibilityServices;
+﻿using Android.AccessibilityServices;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -15,20 +15,25 @@ public sealed class GrayscaleService:AccessibilityService
     private const string EnabledKey="accessibility_display_daltonizer_enabled",ModeKey="accessibility_display_daltonizer";
     private static GrayscaleService? current;
     private string foreground="";
-    private bool wantsGrayscale;
+    private bool wantsGrayscale,panelVisible;
+    public static void SetPanelVisible(bool visible){if(current is {} service){service.panelVisible=visible;service.ApplyForeground();}}
     private ISharedPreferences Session=>GetSharedPreferences("grayscale-session",FileCreationMode.Private)!;
     public static bool HasSystemAccess(Context context)=>context.CheckSelfPermission("android.permission.WRITE_SECURE_SETTINGS")==Permission.Granted;
     public static bool IsEnabled(Context context)
     {
         string service=new ComponentName(context,"com.launcher.home.GrayscaleService").FlattenToString();
-        return (Settings.Secure.GetString(context.ContentResolver,Settings.Secure.EnabledAccessibilityServices)??"").Split(':').Contains(service,StringComparer.OrdinalIgnoreCase);
+        return (Settings.Secure.GetString(context.ContentResolver,Settings.Secure.EnabledAccessibilityServices)??"").Split(':')
+            .Any(value=>ComponentName.UnflattenFromString(value)?.FlattenToString().Equals(service,StringComparison.OrdinalIgnoreCase)==true);
     }
     public static bool Ready(Context context)=>HasSystemAccess(context)&&IsEnabled(context);
+    public static bool Global(Context context)=>context.GetSharedPreferences("grayscale-session",FileCreationMode.Private)!.GetBoolean("global",false);
+    public static void SetGlobal(Context context,bool value)
+    {context.GetSharedPreferences("grayscale-session",FileCreationMode.Private)!.Edit()!.PutBoolean("global",value)!.Apply();current?.ApplyForeground();}
     public static void RulesChanged()=>current?.ApplyForeground();
-    public static void StopAndRestore(){current?.Restore();current?.DisableSelf();}
+    public static void StopAndRestore(){if(current is {} service){SetGlobal(service,false);service.Restore();service.DisableSelf();}}
     protected override void OnServiceConnected()
     {
-        base.OnServiceConnected();current=this;Restore();
+        base.OnServiceConnected();current=this;Restore();ApplyForeground();
     }
     public override void OnAccessibilityEvent(AccessibilityEvent? e)
     {
@@ -37,13 +42,14 @@ public sealed class GrayscaleService:AccessibilityService
         // Keyboard windows do not change the policy of the app being edited.
         string keyboard=(Settings.Secure.GetString(ContentResolver,Settings.Secure.DefaultInputMethod)??"").Split('/')[0];
         if(package==keyboard)return;
+        if(package==PackageName&&!(e.ClassName?.ToString()??"").Contains("MainActivity",StringComparison.Ordinal)&&!(e.ClassName?.ToString()??"").Contains("Dialog",StringComparison.Ordinal))return;
         foreground=package;ApplyForeground();
     }
     private void ApplyForeground()
     {
         var state=new StateStore(this).Load();
-        wantsGrayscale=foreground!=PackageName && foreground!="com.android.systemui" &&
-            state.Apps.Any(p=>p.Key.StartsWith(foreground+"/",StringComparison.Ordinal)&&p.Value.OpenInGrayscale);
+        wantsGrayscale=!panelVisible&&(Global(this)||(foreground.Length>0&&foreground!=PackageName && foreground!="com.android.systemui" &&
+            state.Apps.Any(p=>p.Key.StartsWith(foreground+"/",StringComparison.Ordinal)&&p.Value.OpenInGrayscale)));
         if(!wantsGrayscale){Restore();return;}
         if(!HasSystemAccess(this))return;
         var prefs=Session;

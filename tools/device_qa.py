@@ -1,5 +1,5 @@
 """Small adb UI helper. Every operation explicitly targets one device serial."""
-import argparse, subprocess, xml.etree.ElementTree as ET, re, json, sys
+import argparse, subprocess, xml.etree.ElementTree as ET, re, json, sys, time
 from pathlib import Path
 
 ADB = Path('C:/Program Files (x86)/Android/android-sdk/platform-tools/adb.exe')
@@ -14,7 +14,11 @@ def adb(serial, *args, binary=False,include_stderr=False):
 
 def tree(serial):
     adb(serial,'shell','rm','-f','/sdcard/launcher-ui.xml')
-    result=adb(serial, 'shell', 'uiautomator', 'dump', '/sdcard/launcher-ui.xml',include_stderr=True)
+    result=''
+    for attempt in range(4):
+        result=adb(serial, 'shell', 'uiautomator', 'dump', '/sdcard/launcher-ui.xml',include_stderr=True)
+        if 'null root node' not in result:break
+        if attempt<3:time.sleep(attempt+1)
     if 'dumped' not in result:
         raise RuntimeError('Android could not obtain an idle hierarchy; refusing to read a stale snapshot: '+result.strip())
     return ET.fromstring(adb(serial, 'shell', 'cat', '/sdcard/launcher-ui.xml'))

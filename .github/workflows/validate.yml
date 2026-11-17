@@ -1,0 +1,37 @@
+name: Validate Launcher
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install Android build dependencies
+        shell: pwsh
+        run: |
+          $manager = Join-Path $env:ANDROID_HOME 'cmdline-tools\latest\bin\sdkmanager.bat'
+          & $manager 'platforms;android-37' 'build-tools;37.0.0' 'platform-tools'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet workload install android --skip-manifest-update
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Restore locked dependencies
+        run: dotnet restore Launcher.sln --locked-mode
+      - name: Core regression checks
+        run: dotnet run --project tests/Launcher.Core.Tests -c Release --no-restore
+      - name: Compile Android release with warnings treated as errors
+        shell: pwsh
+        run: dotnet build src/Launcher/Launcher.csproj -c Release --no-restore -warnaserror "-p:JavaSdkDirectory=$env:JAVA_HOME"

@@ -1,19 +1,33 @@
-using Android.App;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
 using Launcher.Core;
 using LauncherApp.UI;
+using LauncherApp.Services;
+using Android.Graphics;
 
 namespace LauncherApp;
 
 public partial class MainActivity
 {
+    private View DrawerIconView(Drawer drawer)
+    {
+        if(drawer.IconPackage.Length>0&&IconPacks.Get(this,drawer.IconPackage,drawer.IconResource) is {} drawable)
+        {
+            var image=new ImageView(this);image.SetScaleType(ImageView.ScaleType.FitCenter);
+            if(drawable is FontIconDrawable font)font.SetInk(drawer.Expanded?palette.Accent:palette.Muted);
+            else if(state.IconStyle!="Original"){using var matrix=new ColorMatrix();matrix.SetSaturation(0);image.SetColorFilter(new ColorMatrixColorFilter(matrix));}
+            image.SetImageDrawable(drawable);return image;
+        }
+        return new GlyphView(this,DrawerIcons.All.Contains(drawer.Icon)?drawer.Icon:DrawerIcons.ForDrawer(drawer.Id),drawer.Expanded?palette.Accent:palette.Muted);
+    }
     private void PickDrawerIcon(Drawer drawer)
     {
         string selected=DrawerIcons.All.Contains(drawer.Icon)?drawer.Icon:DrawerIcons.ForDrawer(drawer.Id);
         Sheet(drawer.Name,(panel,dialog)=>
         {
             Paragraph("Choose a symbol for this drawer.",panel);
+            RootActions(panel,("Browse icon libraries",()=>{dialog.Dismiss();PickIconPack(selection:(package,name)=>{drawer.IconPackage=package;drawer.IconResource=name;});}));
             var grid=Stack();panel.AddView(grid,Match());
             void Rebuild()
             {
@@ -33,6 +47,6 @@ public partial class MainActivity
                 }
             }
             Rebuild();
-        },(footer,dialog)=>footer.AddView(Button("Save changes",()=>{drawer.Icon=selected;Save();dialog.Dismiss();Render();},true),Match()));
+        },(footer,dialog)=>footer.AddView(Button("Save changes",()=>{drawer.Icon=selected;drawer.IconPackage="";drawer.IconResource="";Save();dialog.Dismiss();Render();},true),Match()));
     }
 }

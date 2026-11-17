@@ -1,0 +1,61 @@
+{
+  "checks.json": [
+    "Search apps",
+    "Essentials, collapsed",
+    "Camera, hold for app actions",
+    "Conversations",
+    "Search apps",
+    "TODAY",
+    "HOME SCREEN",
+    "CARDS AND CONVERSATIONS",
+    "Appearance",
+    "Search apps",
+    "Create drawer",
+    "Search apps",
+    "Search apps",
+    "Notifications",
+    "Search apps",
+    "Search apps",
+    "Search apps"
+  ],
+  "feed-checks.json": {
+    "cachedStoriesRetainedOnFailure": true,
+    "headlinePositionsStable": true,
+    "showMore": true,
+    "imagesToggle": true
+  },
+  "final-checks.json": {
+    "finalPackageVersion": "1.3.11",
+    "replyFooter": true,
+    "journeySave": true,
+    "singleSettingsTitle": true,
+    "smallDisplay": "360 x 640 dp",
+    "largeText": "150%",
+    "wideSheetMaxWidth": "640 dp"
+  },
+  "media-checks.json": {
+    "pauseResume": true,
+    "mediaBodyOpensSource": true,
+    "buttonsDoNotLaunch": true,
+    "notificationOpensSource": true,
+    "swipeDismiss": true
+  },
+  "publication": {
+    "version": "1.3.11",
+    "publicManifest": true,
+    "apkSize": true,
+    "oldApk404": true,
+    "windowsRetained": true,
+    "interfaceHeroRetained": true,
+    "nativeCapturesPublished": true,
+    "websiteMobileNoHorizontalOverflow": true,
+    "physicalPhoneUsed": false
+  },
+  "build": {
+    "errors": 0,
+    "warnings": 0,
+    "version": "1.3.11",
+    "build": 21
+  },
+  "physicalPhoneUsed": false
+}

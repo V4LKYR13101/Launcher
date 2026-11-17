@@ -1,0 +1,12 @@
+{
+  "version": "1.3.12",
+  "build": 22,
+  "updater": true,
+  "apkSize": true,
+  "oldApk404": true,
+  "windowsRetained": true,
+  "article": true,
+  "gallery": true,
+  "interfaceHeroRetained": true,
+  "mobileNoOverflow": true
+}

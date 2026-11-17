@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using LauncherApp.Services;
 
 namespace LauncherApp;
@@ -8,6 +8,8 @@ public partial class MainActivity
     private void RenderGrayscaleSetup()
     {
         Title("App grayscale");
+        ToggleRow(body,"Grayscale whole display",GrayscaleService.Global(this),value=>
+        {if(!GrayscaleService.Ready(this)){Toast("Complete both setup steps first.");RenderBody();return;}GrayscaleService.SetGlobal(this,value);});
         Paragraph("Choose an app’s display colour by holding its tile. This changes the opened app, independently of its icon.");
         SettingRow(body,"1. Foreground app detection",GrayscaleService.IsEnabled(this)?"Enabled":"Enable Launcher app grayscale in Android accessibility settings",()=>
             Confirm("Foreground app detection","Launcher uses window-change events to identify the app in front. It does not read screen content, record your activity or upload this information.","Open Android settings",()=>OpenIntent(new Intent(Android.Provider.Settings.ActionAccessibilitySettings))),"settings");

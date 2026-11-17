@@ -1,4 +1,4 @@
-namespace Launcher.Core;
+﻿namespace Launcher.Core;
 
 public sealed class WeatherSettings
 {
@@ -14,6 +14,9 @@ public sealed class WeatherSettings
     public int Code { get; set; }
     public bool Day { get; set; } = true;
     public long UpdatedAt { get; set; }
+    public List<ForecastHour> Hours {get;set;}=[];
+    public List<ForecastDay> Days {get;set;}=[];
+    public int UtcOffsetSeconds {get;set;}
 }
 
 public static class DrawerIcons

@@ -1,4 +1,4 @@
-using Android.App;
+﻿using Android.App;
 using Android.App.Usage;
 using Android.Content;
 using Android.Content.PM;
@@ -14,14 +14,36 @@ public static class AppCatalog
         var pm = context.PackageManager!;
         var intent = new Intent(Intent.ActionMain);
         intent.AddCategory(Intent.CategoryLauncher);
-        return (pm.QueryIntentActivities(intent, PackageInfoFlags.MatchAll) ?? [])
+        var entries=(pm.QueryIntentActivities(intent, PackageInfoFlags.MatchAll) ?? [])
             .Where(r => r.ActivityInfo?.PackageName != context.PackageName && r.ActivityInfo?.Enabled == true)
             .Select(r =>
             {
                 var a = r.ActivityInfo!;
                 return new AppEntry(a.PackageName + "/" + a.Name, a.PackageName!, a.Name!,
                     r.LoadLabel(pm) ?? a.PackageName!, OperatingSystem.IsAndroidVersionAtLeast(26) ? (int)a.ApplicationInfo!.Category : -1);
-            }).DistinctBy(a => a.Id).OrderBy(a => a.Label).ToList();
+            }).DistinctBy(a => a.Id).ToList();
+        var launcher=context.GetSystemService(Context.LauncherAppsService) as LauncherApps;
+        foreach(var profile in ProfileCatalog.Profiles(context).Where(p=>!p.User.Equals(Android.OS.Process.MyUserHandle())&&!p.Quiet&&p.Unlocked))
+        {
+            try
+            {
+                foreach(var activity in launcher?.GetActivityList(null,profile.User)??[])
+                {
+                    var component=activity.ComponentName;if(component is null||component.PackageName==context.PackageName)continue;
+                    string label=activity.Label?.ToString()??component.PackageName;if(!profile.Private)label+=" · Work";
+                    entries.Add(new(component.PackageName+"/"+component.ClassName+"@profile:"+profile.Serial,component.PackageName,component.ClassName,label,-1,profile.Serial,profile.Private));
+                }
+            }
+            catch(Java.Lang.SecurityException){}
+        }
+        var installedPackages=entries.Select(a=>a.PackageName).ToHashSet();
+        foreach(var shortcut in new StateStore(context).Load().Shortcuts.Where(s=>installedPackages.Contains(s.Package)))
+        {
+            var profile=ProfileCatalog.Profiles(context).FirstOrDefault(p=>p.Serial==shortcut.ProfileSerial);
+            if(shortcut.ProfileSerial>=0&&(profile is null||profile.Quiet||!profile.Unlocked))continue;
+            entries.Add(new(shortcut.Package+"/shortcut:"+shortcut.ShortcutId+"@"+shortcut.ProfileSerial,shortcut.Package,"",shortcut.Label,-1,shortcut.ProfileSerial,profile?.Private==true,shortcut.ShortcutId));
+        }
+        return entries.OrderBy(a=>a.Label).ToList();
     }
 
     public static bool HasUsageAccess(Context context)
@@ -36,31 +58,6 @@ public static class AppCatalog
         var manager = (UsageStatsManager?)context.GetSystemService(Context.UsageStatsService);
         long start = new DateTimeOffset(DateTime.Today).ToUnixTimeMilliseconds();
         long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        // Aggregate the event timeline within today's exact local boundaries. Daily
-        // query buckets can include time before midnight, so they are not used here.
-        var events = manager?.QueryEvents(start - 86_400_000, now);
-        var totals = new Dictionary<string, long>();
-        var active = new Dictionary<string, long>();
-        if (events is null) return totals;
-        var item = new UsageEvents.Event();
-        while (events.HasNextEvent)
-        {
-            events.GetNextEvent(item);
-            if ((int)item.EventType is 15 or 26) // screen non-interactive / device shutdown
-            {
-                foreach (var (key, beganAt) in active)
-                    totals[key] = totals.GetValueOrDefault(key) + Math.Max(0, item.TimeStamp - beganAt);
-                active.Clear();
-                continue;
-            }
-            string? package = item.PackageName;
-            if (package is null) continue;
-            if ((int)item.EventType == 1) active.TryAdd(package, Math.Max(start, item.TimeStamp));
-            else if ((int)item.EventType == 2 && active.Remove(package, out long began))
-                totals[package] = totals.GetValueOrDefault(package) + Math.Max(0, item.TimeStamp - began);
-        }
-        foreach (var (key, beganAt) in active)
-            totals[key] = totals.GetValueOrDefault(key) + Math.Max(0, now - beganAt);
-        return totals;
+        return UsageTimeline.Read(context,start,now).GroupBy(s=>s.Package).ToDictionary(g=>g.Key,g=>g.Sum(s=>s.End-s.Begin));
     }
 }

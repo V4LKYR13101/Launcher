@@ -1,11 +1,11 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 
 namespace Launcher.Core;
 
 public sealed record AppRelease(string Version, long Build, string Url, string Sha256, long Bytes, string? Notes = null);
-public sealed record AppReleases(AppRelease Android);
+public sealed record AppReleases(AppRelease Android,AppRelease? AndroidProduction=null);
 
 [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(AppReleases))]
@@ -35,7 +35,9 @@ public static class AppUpdates
         var releases = await (client ?? Client).GetFromJsonAsync(
             "https://kevlog.co.za/updates/launcher.json?t=" + DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             UpdateJsonContext.Default.AppReleases, timeout.Token);
-        var release = releases?.Android ?? throw new IOException("Update information is unavailable.");
+        // Older installations keep reading Android (the same-key bridge). The
+        // migration-aware bridge and newer versions can use the rotated release.
+        var release = releases?.AndroidProduction??releases?.Android ?? throw new IOException("Update information is unavailable.");
         Validate(release);
         return release;
     }

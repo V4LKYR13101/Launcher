@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net11.0-android</TargetFramework>
     <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
@@ -6,8 +6,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationId>com.launcher.home</ApplicationId>
-    <ApplicationVersion>3</ApplicationVersion>
-    <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>26</ApplicationVersion>
+    <ApplicationDisplayVersion>1.5.0</ApplicationDisplayVersion>
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
     <!--
       Enables trim analyzers and full trimming during Release mode.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
@@ -18,5 +19,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Launcher.Core/Launcher.Core.csproj" />
+    <PackageReference Include="QRCoder" Version="1.8.1" />
   </ItemGroup>
+  <Target Name="RequireProductionSigning" BeforeTargets="SignAndroidPackage" Condition="'$(LauncherProductionRelease)' == 'true'">
+    <Error Condition="'$(AndroidKeyStore)' != 'true'" Text="A production release requires an explicit dedicated signing key. Use tools/Build-LauncherRelease.ps1 for the legacy-key migration packages." />
+  </Target>
 </Project>

@@ -133,3 +133,18 @@ as already shipped in the published APK.
 - [Today's usage aggregation](E:/Repository/launcher/src/Launcher/Services/AppCatalog.cs:34)
 - [Current media card](E:/Repository/launcher/src/Launcher/MainActivity.PlaybackCard.cs:25)
 - [Current application state](E:/Repository/launcher/src/Launcher.Core/LauncherState.cs:38)
+
+
+## Implemented in 1.2.0
+
+This matrix above records the earlier 1.0.1 review. The follow-up implementation
+is described in [RELEASE-1.2.0.md](RELEASE-1.2.0.md). Icon packs, tile palettes,
+usage charts, badge muting, Root commands/cards, forecast, notes/timers, online
+cards, manual tickets and a Windows companion have now been implemented. Biometric
+locks, per-app grayscale and outlined Focus/Sun styling arrived in 1.1.x.
+
+Full private multi-service chat history, inbox-derived/lock-screen tickets and
+replacing Android's system notification shade remain outside the available
+platform access. The release includes notification-derived local history and
+supported reply actions instead. No device acceptance tests were performed for
+1.2.0 at the owner's request.
