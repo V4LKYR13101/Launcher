@@ -5,3 +5,5 @@
 *.user
 artifacts/*.apk
 artifacts/*.log
+/.codex-attachments
+/artifacts
