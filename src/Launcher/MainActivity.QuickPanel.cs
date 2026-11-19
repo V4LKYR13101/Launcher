@@ -22,17 +22,129 @@ public partial class MainActivity
         return scale>0?level*100/scale:0;
     }
 
+
     private void AddMinimalStatus()
     {
-        var status=Stack(true);status.SetPadding(Dp(18),Dp(4),Dp(18),Dp(4));status.SetGravity(GravityFlags.CenterVertical);
-        statusTime=Text(DateTime.Now.ToString("HH:mm   ·   ddd, d MMM"),10,true,palette.Muted);
-        status.AddView(statusTime,new LinearLayout.LayoutParams(0,-2,1));
-        batteryIcon=new BatteryView(this,palette.Accent,palette.Muted);
-        var iconParams=new LinearLayout.LayoutParams(Dp(26),Dp(15));iconParams.SetMargins(0,0,Dp(6),0);status.AddView(batteryIcon,iconParams);
-        batteryPercentText=Text(BatteryPercent()+"%",10,true,palette.Accent);status.AddView(batteryPercentText);UpdateBatteryUi();
-        status.ContentDescription="Open quick panel";BindTapHaptics(status);status.Click+=(_,_)=>Navigate("Quick panel");
-        shell.AddView(status,Match(Dp(30)));
+        var status = Stack(true);
+
+        status.SetPadding(Dp(18), Dp(4), Dp(18), Dp(4));
+        status.SetGravity(GravityFlags.CenterVertical);
+
+        // Time and date
+        statusTime = Text(
+            DateTime.Now.ToString("HH:mm   ·   ddd, d MMM"),
+            10,
+            true,
+            palette.Muted
+        );
+
+        status.AddView(
+            statusTime,
+            new LinearLayout.LayoutParams(0, -2, 1)
+        );
+
+        // Notification indicator
+        statusNotificationText = Text(
+            "",
+            10,
+            true,
+            palette.Accent
+        );
+
+        statusNotificationText.SetSingleLine(true);
+
+        var notificationParams =
+            new LinearLayout.LayoutParams(-2, -2);
+
+        notificationParams.SetMargins(
+            0, 0, Dp(12), 0
+        );
+
+        status.AddView(
+            statusNotificationText,
+            notificationParams
+        );
+
+        // Battery icon
+        batteryIcon = new BatteryView(
+            this,
+            palette.Accent,
+            palette.Muted
+        );
+
+        var iconParams =
+            new LinearLayout.LayoutParams(
+                Dp(26),
+                Dp(15)
+            );
+
+        iconParams.SetMargins(0, 0, Dp(6), 0);
+
+        status.AddView(batteryIcon, iconParams);
+
+        // Battery percentage
+        batteryPercentText = Text(
+            BatteryPercent() + "%",
+            10,
+            true,
+            palette.Accent
+        );
+
+        status.AddView(batteryPercentText);
+
+        UpdateBatteryUi();
+        UpdateStatusNotifications();
+
+        // Keep existing quick panel navigation
+        status.ContentDescription = "Open quick panel";
+
+        BindTapHaptics(status);
+
+        status.Click += (_, _) =>
+            Navigate("Quick panel");
+
+        shell.AddView(status, Match(Dp(30)));
     }
+
+
+    private void UpdateStatusNotifications()
+    {
+        if (statusNotificationText is null)
+            return;
+
+        // Notification access must be enabled.
+        if (!ConversationService.Enabled(this))
+        {
+            statusNotificationText.Visibility = ViewStates.Gone;
+            return;
+        }
+
+        // Count actionable notifications.
+        // Exclude persistent, non-dismissible notifications.
+        int count = ConversationService
+            .NotificationSnapshot()
+            .Count(n => n.Dismissible);
+
+        if (count == 0)
+        {
+            statusNotificationText.Visibility = ViewStates.Gone;
+            return;
+        }
+
+        // Compact indicator: ● 1, ● 2, ... ● 9+
+        string label = count > 9
+            ? "9+"
+            : count.ToString();
+
+        statusNotificationText.Text = $"● {label}";
+
+        statusNotificationText.ContentDescription =
+            $"{count} active notifications";
+
+        statusNotificationText.Visibility = ViewStates.Visible;
+    }
+
+
 
     private void RenderQuickPanel()
     {
