@@ -37,6 +37,7 @@ public partial class MainActivity : Activity
     private EditText? searchInput;
     private TextView? timerText;
     private TextView? statusTime;
+    private TextView? statusNotificationText;
     private Android.Window.IOnBackInvokedCallback? backCallback;
     private string page = "Tiles", query = "";
     private bool searching, resumed, loading;
@@ -124,8 +125,18 @@ public partial class MainActivity : Activity
     protected override void OnStop() { widgetHost.StopListening(); base.OnStop(); }
     protected override void OnResume()
     {
-        base.OnResume();string previousTheme=state.Theme;SyncSystemTheme();if(previousTheme!=state.Theme)Render(); state.SystemPanelEnabled=store.Load().SystemPanelEnabled;RefreshSystemPanelSettings();SystemPanelService.Refresh(); resumed = true; connections.Start();media.Start();StartBatteryUpdates();RefreshApps();RefreshWeather();
-        SyncDepthMotion();ResumeUpdateInstall();WorkspaceUpdated();if(companionSession)companion.Start();SyncAutomaticTheme();
+        base.OnResume();string previousTheme=state.Theme;
+        SyncSystemTheme();if(previousTheme!=state.Theme)Render();
+        state.SystemPanelEnabled=store.Load().SystemPanelEnabled;
+        RefreshSystemPanelSettings();SystemPanelService.Refresh(); 
+        resumed = true;
+        UpdateStatusNotifications();
+        connections.Start();
+        media.Start();StartBatteryUpdates();
+        RefreshApps();RefreshWeather();
+        SyncDepthMotion();ResumeUpdateInstall();
+        WorkspaceUpdated();if(companionSession)companion.Start();
+        SyncAutomaticTheme();
         tick = () =>
         {
             if (!resumed) return;
@@ -240,11 +251,26 @@ public partial class MainActivity : Activity
     }
     private void ConversationsChanged() => RunOnUiThread(() =>
     {
-        badgeCounts=ConversationService.BadgeCounts();
-        if(!resumed)return;
-        if(page is "Conversations" or "Quick panel" && !searching)RefreshBodyInPlace();
-        else foreach(var (badge,package) in badgeViews)UpdateBadge(badge,package);
+        badgeCounts = ConversationService.BadgeCounts();
+
+        UpdateStatusNotifications();
+
+        if (!resumed)
+            return;
+
+        if (page is "Conversations" or "Quick panel" && !searching)
+        {
+            RefreshBodyInPlace();
+        }
+        else
+        {
+            foreach (var (badge, package) in badgeViews)
+            {
+                UpdateBadge(badge, package);
+            }
+        }
     });
+
     private static long Now => DateTimeOffset.Now.ToUnixTimeMilliseconds();
     private void Save()
     {
@@ -328,10 +354,16 @@ public partial class MainActivity : Activity
     {
         depthAllowed=new DeviceCapabilities(this).AllowDepth;
         CancelBodyRefresh();RememberHomeScroll();depthMotion.Stop();ResetDeviceDepth();StopAppLayer();StopHomePageAnimation();
-        palette = new(state); timerText = null; statusTime=null;batteryIcon=null;batteryPercentText=null; root.RemoveAllViews();
+        palette = new(state);
+        timerText = null;
+        statusTime = null;
+        statusNotificationText = null;
+        batteryIcon = null;
+        batteryPercentText = null;
+        root.RemoveAllViews();
         // Wallpaper is a stable window layer. Scrolling and content refreshes
         // must never reset the surface's opacity or reattach its wallpaper.
-        if(appliedWallpaper!=state.UseWallpaper)
+        if (appliedWallpaper!=state.UseWallpaper)
         {
             if(state.UseWallpaper)Window!.AddFlags(WindowManagerFlags.ShowWallpaper);
             else Window!.ClearFlags(WindowManagerFlags.ShowWallpaper);
