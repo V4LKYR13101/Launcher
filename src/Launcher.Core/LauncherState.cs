@@ -68,6 +68,7 @@ public sealed class LauncherState
     public List<SavedArticle> SavedArticles {get;set;}=[];
     public List<string> ReadArticleUrls {get;set;}=[];
     public bool FeedUnreadOnly {get;set;}
+    public string LeftFeedProvider { get; set; } = "RSS";
     public double LightThemeLux {get;set;}=1000;
     public double DarkThemeLux {get;set;}=300;
     public int LightThemeDelaySeconds {get;set;}=5;

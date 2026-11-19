@@ -149,7 +149,22 @@ public partial class MainActivity
         Paragraph("Focus outlines app tiles. Apps stay available and Android notification settings are unchanged.");
         SectionCaption(body,"Cards and conversations");
         SettingRow(body,"Root","Cards, notes & Android widgets",()=>Navigate("Root settings"),"root");
-        SettingRow(body,"News & feeds",Counted(Sources.Count(s=>s.Enabled),"source")+" · "+Counted(state.FeedArticleCount,"story","stories")+$" · images {(state.FeedImages?"on":"off")}",ManageFeeds,"rss");
+
+        SettingRow(
+            body,
+            "News & feeds",
+            state.LeftFeedProvider == "Google"
+                ? "Google Discover · " +
+                  Counted(Sources.Count(s => s.Enabled), "source") + " · " +
+                  Counted(state.FeedArticleCount, "story", "stories") +
+                  $" · images {(state.FeedImages ? "on" : "off")}"
+                : Counted(Sources.Count(s => s.Enabled), "source") + " · " +
+                  Counted(state.FeedArticleCount, "story", "stories") +
+                  $" · images {(state.FeedImages ? "on" : "off")}",
+            ManageFeeds,
+            "rss"
+        );
+
         SettingRow(body,"Saved stories",Counted(state.SavedArticles.Count,"saved story","saved stories"),ShowSavedArticles,"rss");
         SettingRow(body,"Weather",string.IsNullOrEmpty(state.Weather.City)?"Choose a city and units":state.Weather.City,()=>Navigate("Weather"),"cloud");
         SettingRow(body,"Conversations","Choose notification sources & filters",PickConversationSources,"message");

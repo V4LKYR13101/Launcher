@@ -38,6 +38,63 @@ public partial class MainActivity
         var dialog=Sheet("News & feeds",(panel,sheet)=>
         {
             SectionCaption(panel,"Reading preferences");
+
+
+            SettingRow(
+                panel,
+                "Feed provider",
+                state.LeftFeedProvider switch
+                {
+                    "Google" => "Google Discover · swipe right from Today",
+                    "Off" => "Additional feed disabled",
+                    _ => "RSS reader"
+                },
+                () =>
+                {
+                    sheet.Dismiss();
+
+                    Choose(
+                        "Feed provider",
+                        [
+                            "RSS reader",
+                "Google Discover",
+                "Disabled"
+                        ],
+                        index =>
+                        {
+                            state.LeftFeedProvider = index switch
+                            {
+                                1 => "Google",
+                                2 => "Off",
+                                _ => "RSS"
+                            };
+
+                            Save();
+
+                            // Immediately apply the new provider.
+                            SyncGoogleDiscover();
+
+                            // Reopen settings to show the new selection.
+                            ManageFeeds();
+                        },
+                        state.LeftFeedProvider switch
+                        {
+                            "Google" => 1,
+                            "Off" => 2,
+                            _ => 0
+                        }
+                    );
+                },
+                "rss"
+            );
+
+            Paragraph(
+                "Google Discover opens when you swipe right from " +
+                "Today. Your existing RSS sources remain available.",
+                panel
+            );
+
+
             SettingRow(panel,"Saved stories",Counted(state.SavedArticles.Count,"saved story","saved stories"),()=>{sheet.Dismiss();ShowSavedArticles();},"rss");
             ToggleRow(panel,"Unread stories only",state.FeedUnreadOnly,value=>{state.FeedUnreadOnly=value;Save();feedRows.Clear();});
             SettingRow(panel,"Articles to display",$"{state.FeedArticleCount} initially · show more when you want",()=>
