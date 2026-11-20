@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Service.Notification;
 using Launcher.Core;
+using LauncherApp.Services.Speech;
 
 namespace LauncherApp.Services;
 
@@ -60,11 +61,16 @@ public sealed class ConversationService : NotificationListenerService
 
     public override void OnNotificationPosted(StatusBarNotification? sbn)
     {
-        if (sbn is not null)
-        {
-            Capture(sbn);
-            Changed?.Invoke();
-        }
+        if (sbn is null)
+            return;
+
+        // Existing notification processing.
+        Capture(sbn);
+        Changed?.Invoke();
+
+        // Optional spoken announcement.
+        // Filtering, deduplication and errors are handled internally.
+        NotificationWhispers.Handle(this, sbn);
     }
 
     public override void OnNotificationRemoved(StatusBarNotification? sbn)

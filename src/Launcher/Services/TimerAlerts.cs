@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Launcher.Core;
+using LauncherApp.Services.Speech;
 using System.Security.Cryptography;
 namespace LauncherApp.Services;
 

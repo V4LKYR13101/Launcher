@@ -14,8 +14,8 @@ public static class KokoroModelInstaller
     private const string FolderName = "kokoro-multi-lang-v1_0";
 
     private const string ArchiveUrl =
-    "https://github.com/k2-fsa/sherpa-onnx/releases/download/" +
-    "tts-models/kokoro-multi-lang-v1_0.tar.bz2";
+        "https://github.com/k2-fsa/sherpa-onnx/releases/download/" +
+        "tts-models/kokoro-multi-lang-v1_0.tar.bz2";
 
     private const long ExpectedArchiveSize = 349886476L;
 
@@ -29,8 +29,6 @@ public static class KokoroModelInstaller
         Timeout = Timeout.InfiniteTimeSpan
     };
 
-    // Match the directory already used by
-    // KokoroSpeechService.GetModel().
     public static string GetModelDirectory(Context context)
     {
         return KokoroModelPaths.GetInstallDirectory(context);
@@ -66,8 +64,7 @@ public static class KokoroModelInstaller
                 return;
             }
 
-            string modelDirectory =
-                GetModelDirectory(context);
+            string modelDirectory = GetModelDirectory(context);
 
             string root = Path.GetDirectoryName(modelDirectory)
                 ?? throw new DirectoryNotFoundException();
@@ -81,15 +78,15 @@ public static class KokoroModelInstaller
             Directory.CreateDirectory(stagingRoot);
 
             string archivePath = Path.Combine(
-                stagingRoot, "download.tar.bz2");
+                stagingRoot,
+                "download.tar.bz2");
 
             string extractionRoot = Path.Combine(
-                stagingRoot, "extracted");
+                stagingRoot,
+                "extracted");
 
             Directory.CreateDirectory(extractionRoot);
 
-            // Download to staging, never directly into
-            // the active model directory.
             await DownloadArchiveAsync(
                 archivePath,
                 progress,
@@ -99,7 +96,8 @@ public static class KokoroModelInstaller
                 "Verifying downloaded archive..."));
 
             await VerifyArchiveAsync(
-                archivePath, cancellationToken);
+                archivePath,
+                cancellationToken);
 
             progress?.Report(new(
                 "Extracting model and voice files..."));
@@ -110,7 +108,8 @@ public static class KokoroModelInstaller
                 cancellationToken);
 
             string extractedModel = Path.Combine(
-                extractionRoot, FolderName);
+                extractionRoot,
+                FolderName);
 
             if (!KokoroModelPaths.IsComplete(extractedModel))
             {
@@ -123,8 +122,6 @@ public static class KokoroModelInstaller
             progress?.Report(new(
                 "Installing verified model files..."));
 
-            // Existing incomplete installs are moved out
-            // of the way only after the new model is ready.
             string? backup = null;
 
             if (Directory.Exists(modelDirectory))
@@ -140,12 +137,11 @@ public static class KokoroModelInstaller
             try
             {
                 Directory.Move(
-                    extractedModel, modelDirectory);
+                    extractedModel,
+                    modelDirectory);
             }
             catch
             {
-                // Restore the previous directory if the
-                // new directory cannot be installed.
                 if (!Directory.Exists(modelDirectory) &&
                     backup != null &&
                     Directory.Exists(backup))
@@ -157,25 +153,38 @@ public static class KokoroModelInstaller
             }
 
             if (backup != null && Directory.Exists(backup))
-                Directory.Delete(backup, recursive: true);
+            {
+                try
+                {
+                    Directory.Delete(backup, recursive: true);
+                }
+                catch (IOException)
+                {
+                    // Installation succeeded; cleanup can be retried.
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // Installation succeeded; retain old backup.
+                }
+            }
 
             progress?.Report(new(
                 "Kokoro installation complete.", 100));
         }
         finally
         {
-            // Delete downloaded archive and partial files.
             if (stagingRoot != null &&
                 Directory.Exists(stagingRoot))
             {
                 try
                 {
                     Directory.Delete(
-                        stagingRoot, recursive: true);
+                        stagingRoot,
+                        recursive: true);
                 }
                 catch (IOException)
                 {
-                    // Installation is already committed.
+                    // Do not mask the original installation result.
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -235,8 +244,10 @@ public static class KokoroModelInstaller
             received += count;
 
             if (received > ExpectedArchiveSize)
+            {
                 throw new InvalidDataException(
                     "The downloaded archive is too large.");
+            }
 
             await output.WriteAsync(
                 buffer.AsMemory(0, count), ct);
@@ -273,8 +284,7 @@ public static class KokoroModelInstaller
         byte[] hash = await SHA256.HashDataAsync(
             stream, ct);
 
-        string actual = Convert
-            .ToHexStringLower(hash);
+        string actual = Convert.ToHexStringLower(hash);
 
         if (!actual.Equals(
             ExpectedSha256,
@@ -291,17 +301,16 @@ public static class KokoroModelInstaller
         CancellationToken ct)
     {
         string modelRoot = Path.Combine(
-            destinationRoot, FolderName);
+            destinationRoot,
+            FolderName);
 
         Directory.CreateDirectory(modelRoot);
 
         string safeRoot =
-            Path.GetFullPath(modelRoot)
-            + Path.DirectorySeparatorChar;
+            Path.GetFullPath(modelRoot) +
+            Path.DirectorySeparatorChar;
 
-        // ReaderFactory detects the TAR + BZip2 format.
-        using var reader =
-            ReaderFactory.OpenReader(archivePath);
+        using var reader = ReaderFactory.OpenReader(archivePath);
 
         int entryCount = 0;
         long extractedBytes = 0;
@@ -311,27 +320,56 @@ public static class KokoroModelInstaller
             ct.ThrowIfCancellationRequested();
 
             if (++entryCount > 10000)
+            {
                 throw new InvalidDataException(
                     "Too many archive entries.");
+            }
 
             var entry = reader.Entry;
 
             string key = (entry.Key ?? "")
                 .Replace('\\', '/');
 
-            while (key.StartsWith("./",
-                StringComparison.Ordinal))
+            // Normalise leading ./ prefixes.
+            while (key.StartsWith(
+                "./", StringComparison.Ordinal))
             {
                 key = key[2..];
             }
 
-            if (key == FolderName)
+            // TAR directory entries commonly end with '/'.
+            // The old code treated the final empty segment
+            // as an unsafe path. Normalise it before validation.
+            bool isDirectory =
+                entry.IsDirectory ||
+                key.EndsWith("/", StringComparison.Ordinal);
+
+            if (isDirectory)
+            {
+                key = key.TrimEnd('/');
+            }
+
+            // Permit the harmless archive root itself.
+            if (isDirectory &&
+                (key.Length == 0 ||
+                 key == "." ||
+                 key == FolderName))
+            {
                 continue;
+            }
+
+            // Do not allow archive symlinks or hard links.
+            if (!string.IsNullOrEmpty(entry.LinkTarget))
+            {
+                throw new InvalidDataException(
+                    $"Archive links are not permitted: {key}");
+            }
 
             string prefix = FolderName + "/";
 
             if (!key.StartsWith(
-                prefix, StringComparison.Ordinal))
+                prefix,
+                StringComparison.Ordinal))
             {
                 throw new InvalidDataException(
                     $"Unexpected archive entry: {key}");
@@ -340,40 +378,51 @@ public static class KokoroModelInstaller
             string relative = key[prefix.Length..];
 
             if (relative.Length == 0)
-                continue;
+            {
+                throw new InvalidDataException(
+                    $"Empty archive entry path: {key}");
+            }
 
-            // Reject absolute paths, traversal and links.
+            // Validate every path component.
+            // Empty intermediate components and traversal
+            // segments remain strictly prohibited.
             string[] segments = relative.Split('/');
 
             if (segments.Any(segment =>
-                    segment is "" or "." or ".." ||
+                    segment.Length == 0 ||
+                    segment == "." ||
+                    segment == ".." ||
                     segment.Contains(':')))
             {
                 throw new InvalidDataException(
-                    "Unsafe archive path.");
-            }
-
-            if (!string.IsNullOrEmpty(entry.LinkTarget))
-            {
-                throw new InvalidDataException(
-                    "Archive links are not permitted.");
+                    $"Unsafe archive path: {key}");
             }
 
             string target = Path.GetFullPath(
                 Path.Combine(
                     modelRoot,
                     relative.Replace(
-                        '/', Path.DirectorySeparatorChar)));
+                        '/',
+                        Path.DirectorySeparatorChar)));
 
+            // The extracted path must remain within the
+            // designated model directory.
             if (!target.StartsWith(
-                safeRoot, StringComparison.Ordinal))
+                safeRoot,
+                StringComparison.Ordinal))
             {
                 throw new InvalidDataException(
-                    "Archive path escapes model directory.");
+                    $"Archive path escapes model directory: {key}");
             }
 
-            if (entry.IsDirectory)
+            if (isDirectory)
             {
+                if (entry.Size > 0 && !entry.IsDirectory)
+                {
+                    throw new InvalidDataException(
+                        $"Invalid directory entry: {key}");
+                }
+
                 Directory.CreateDirectory(target);
                 continue;
             }
@@ -382,7 +431,7 @@ public static class KokoroModelInstaller
                 entry.Size > 1_000_000_000L)
             {
                 throw new InvalidDataException(
-                    "Unexpected model file size.");
+                    $"Unexpected model file size: {key}");
             }
 
             extractedBytes += entry.Size;
@@ -396,19 +445,20 @@ public static class KokoroModelInstaller
             Directory.CreateDirectory(
                 Path.GetDirectoryName(target)!);
 
-            using var entryStream =
-                reader.OpenEntryStream();
+            using var entryStream = reader.OpenEntryStream();
 
             await using var output = new FileStream(
                 target,
                 FileMode.CreateNew,
                 FileAccess.Write,
                 FileShare.None,
-                131072,
+                bufferSize: 131072,
                 FileOptions.Asynchronous);
 
             await entryStream.CopyToAsync(
-                output, 131072, ct);
+                output,
+                131072,
+                ct);
         }
     }
 }

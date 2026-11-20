@@ -588,6 +588,10 @@ public partial class MainActivity : Activity
         body = Stack();
         int side = Math.Max(16, (Resources!.Configuration!.ScreenWidthDp - 720) / 2);
         body.SetPadding(Dp(side), Dp(12), Dp(side), Dp(12));
+
+        //screenlock gesture adding
+        AttachScreenLockGesture(body);
+        
         body.HapticFeedbackEnabled = false;
         body.LongClick += (_, _) => { if (page == "Tiles" && !searching) { Haptic(body, HapticCue.Hold); QuickControls(); } };
         scroll = new ScrollView(this) { FillViewport = true, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, VerticalFadingEdgeEnabled = state.LayeredInterface };

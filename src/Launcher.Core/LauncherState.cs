@@ -85,6 +85,10 @@ public sealed class WidgetSlot
 
 public sealed class LauncherState
 {
+    public bool DoubleTapToLock
+    {
+        get; set;
+    }
     public const int MaximumJsonCharacters = 32_000_000;
     public int Version { get; set; } = 1;
     public string Theme { get; set; } = "Dark";

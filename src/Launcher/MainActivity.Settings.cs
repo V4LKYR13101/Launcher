@@ -269,6 +269,10 @@ public partial class MainActivity
             return;
         }
 
+        SectionCaption(body, "Gestures & Interfacing");
+        SettingRow(body, "Gestures", "Enable and disable gestures", ShowGestureSetup, "grid");
+
+        
         SectionCaption(body, "Quick actions");
         SettingRow(body, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
         SettingRow(body, "Setup & feature health", "Check missing permissions and device support", ShowFeatureHealth, "settings");
@@ -371,6 +375,15 @@ public partial class MainActivity
             () => go(MessageHistorySettings), "message");
         SettingRow(parent, "Quick panel", "Launcher controls and current notifications",
             () => go(() => Navigate("Quick panel")), "down");
+        SettingRow(
+    parent,
+    "Notification whispers",
+    NotificationWhisperPreferences.Enabled(this)
+        ? "On · quiet spoken announcements"
+        : "Off · select apps and senders",
+    ShowNotificationWhisperSettings,
+    "message"
+);
         SettingRow(parent, "Timer alerts", "Notifications and exact alarm access",
             () => go(OpenTimerPermissions), "clock");
     }

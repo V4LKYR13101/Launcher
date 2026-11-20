@@ -928,4 +928,29 @@ public sealed class SystemPanelService : AccessibilityService
             return true;
         }
     }
+
+    public static bool TryLockScreen()
+    {
+        if (!OperatingSystem.IsAndroidVersionAtLeast(28))
+            return false;
+
+        var service = current;
+
+        if (service is null || service.dead)
+            return false;
+
+        try
+        {
+            return service.PerformGlobalAction(
+                GlobalAction.LockScreen);
+        }
+        catch (Java.Lang.RuntimeException ex)
+        {
+            Android.Util.Log.Warn(
+                "LauncherScreenLock",
+                ex.ToString());
+
+            return false;
+        }
+    }
 }
