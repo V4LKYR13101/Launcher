@@ -12,10 +12,11 @@ public sealed class Palette(LauncherState state)
     {
         get
         {
-            if(cachedSource!=state.Accent || cachedLight!=Light)
+            if (cachedSource != state.Accent || cachedLight != Light)
             {
-                cachedSource=state.Accent;cachedLight=Light;
-                resolvedAccent=Light?ColorContrast.ForLightSurface(state.Accent):ColorContrast.ForDarkSurface(state.Accent);
+                cachedSource = state.Accent;
+                cachedLight = Light;
+                resolvedAccent = Light ? ColorContrast.ForLightSurface(state.Accent) : ColorContrast.ForDarkSurface(state.Accent);
             }
             return resolvedAccent;
         }
@@ -25,7 +26,7 @@ public sealed class Palette(LauncherState state)
     public Color Card => Color.ParseColor(Light ? "#E1E1DD" : "#191B18");
     public Color Panel => Color.ParseColor(Light ? "#D2D2CD" : "#292C26");
     public Color Sheet => Color.ParseColor(Light ? "#F2F2EE" : "#1D1D1B");
-    public Color Divider => new(Muted.R,Muted.G,Muted.B,(byte)46);
+    public Color Divider => new(Muted.R, Muted.G, Muted.B, (byte)46);
     public Color Action => Accent;
     public Color Text => Color.ParseColor(Light ? "#131313" : "#F5F5F2");
     public Color Muted => Color.ParseColor(Light ? "#5D5D58" : "#A3A39F");

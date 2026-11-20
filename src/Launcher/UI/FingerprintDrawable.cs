@@ -19,24 +19,33 @@ public sealed class FingerprintDrawable(
     protected override void OnBoundsChange(Rect bounds)
     {
         base.OnBoundsChange(bounds);
-        ridges?.Dispose();ridges=null;
-        float w=bounds.Width(),h=bounds.Height();if(w<=0||h<=0)return;
+        ridges?.Dispose();
+        ridges = null;
+        float w = bounds.Width(), h = bounds.Height();
+        if (w <= 0 || h <= 0)
+            return;
         // The earlier full-tile whorl, with gentler shaping and constant radial pitch.
         // One continuous ridge cannot overlap adjacent independently drawn curves.
-        var path=new Path();
-        const double pitch=4.6;
-        const double step=Math.PI/100;
-        double end=2*Math.PI*150/pitch;
-        bool first=true;
-        for(double t=0;t<=end;t+=step)
+        var path = new Path();
+        const double pitch = 4.6;
+        const double step = Math.PI / 100;
+        double end = 2 * Math.PI * 150 / pitch;
+        bool first = true;
+        for (double t = 0; t <= end; t += step)
         {
-            double r=pitch*t/(2*Math.PI);
-            double shape=1+.04*Math.Sin(3*t)+.025*Math.Cos(2*t);
-            float x=w*(float)(.51+r*shape*Math.Cos(t)/100);
-            float y=h*(float)(.43+r*shape*Math.Sin(t)/100);
-            if(first){path.MoveTo(x,y);first=false;}else path.LineTo(x,y);
+            double r = pitch * t / (2 * Math.PI);
+            double shape = 1 + .04 * Math.Sin(3 * t) + .025 * Math.Cos(2 * t);
+            float x = w * (float)(.51 + r * shape * Math.Cos(t) / 100);
+            float y = h * (float)(.43 + r * shape * Math.Sin(t) / 100);
+            if (first)
+            {
+                path.MoveTo(x, y);
+                first = false;
+            }
+            else
+                path.LineTo(x, y);
         }
-        ridges=path;
+        ridges = path;
     }
 
 
@@ -75,10 +84,11 @@ public sealed class FingerprintDrawable(
         paint.Color = accent;
         paint.Alpha = (int)(opacity * 0.62f);
         paint.SetStyle(Paint.Style.Stroke);
-        paint.StrokeWidth = Math.Max(.8f,Math.Min(b.Width(),b.Height())*.007f);
+        paint.StrokeWidth = Math.Max(.8f, Math.Min(b.Width(), b.Height()) * .007f);
         paint.StrokeCap = Paint.Cap.Round;
         paint.StrokeJoin = Paint.Join.Round;
-        if (ridges is not null) canvas.DrawPath(ridges, paint);
+        if (ridges is not null)
+            canvas.DrawPath(ridges, paint);
 
         canvas.Restore();
 
