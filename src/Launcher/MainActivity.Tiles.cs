@@ -91,27 +91,55 @@ public partial class MainActivity
     }
     private void RenderTiles()
     {
-        AddWeatherStrip();
+        RenderHomeWeather();
         AddMediaCard();
-        body.SetGravity(state.Alignment switch
-        {
-            "Bottom" => GravityFlags.Bottom,
-            "Center" => GravityFlags.CenterVertical,
-            _ => GravityFlags.Top
-        });
         if (state.Focus)
         {
             var focus = Button("Ⅱ  Focus is on", () => { state.Focus = false; state.FocusEndsAt = 0; Save(); Render(); });
             body.AddView(focus, Match());
             Gap(body, 12);
         }
+
+        body.AddView(new Space(this), new LinearLayout.LayoutParams(-1, 0, 1));
+        var visible = AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile).ToArray();
+        AddHomeDock(QuickAccessEntries(visible));
+        var open = IconButton("up", "Open app drawer", () => Navigate(lastDrawerPage));
+        BindHoldHaptics(open);
+        open.LongClick += (_, _) => ShowQuickAccess();
+        homeDrawerMarker = open;
+        open.LayoutChange += (_, _) => open.Post(PositionHomeBattery);
+        var dockHandle = new FrameLayout(this);
+        dockHandle.AddView(open, new FrameLayout.LayoutParams(Dp(56), Dp(48), GravityFlags.Center));
+        body.AddView(dockHandle, Match());
+    }
+
+    private void RenderAppDrawer()
+    {
+        if (page == GroupedDrawerPage)
+            body.SetGravity(state.Alignment switch
+            {
+                "Bottom" => GravityFlags.Bottom,
+                "Center" => GravityFlags.CenterVertical,
+                _ => GravityFlags.Top
+            });
+
         if (apps.Count == 0)
         {
-            Title(loading ? "Finding your apps…" : "Your home, simplified.");
-            Paragraph("Installed apps will appear here in drawers. Tap the three dots below to customize Launcher.");
+            Paragraph(loading ? "Finding your apps…" : "Installed apps will appear here.");
             return;
         }
         var visible = AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile).ToArray();
+        if (page == AllAppsDrawerPage)
+            AddTileGrid(body, visible.OrderBy(a => AppOrganization.DisplayName(state, a), StringComparer.CurrentCultureIgnoreCase));
+        else
+            AddGroupedApps(visible);
+        if (visible.Length == 0)
+            Paragraph("No apps are visible. Restore hidden apps in Settings.");
+        RenderPrivateSpace();
+    }
+
+    private void AddGroupedApps(AppEntry[] visible)
+    {
         bool hasUsage = AppCatalog.HasUsageAccess(this);
         foreach (var drawer in state.Drawers)
         {
@@ -195,26 +223,35 @@ public partial class MainActivity
             else
                 drawerContent.Visibility = ViewStates.Gone;
         }
-        if (visible.Length == 0)
-            Paragraph("No apps are visible. Restore hidden apps in Settings.");
-        RenderPrivateSpace();
-        var pinned = visible.Where(a => state.Apps[a.Id].Pinned).Take(5).ToArray();
-        if (pinned.Length > 0)
+    }
+
+    private void AddHomeDock(AppEntry[] entries)
+    {
+        if (entries.Length > 0)
         {
-            Gap(body, 18);
             var dock = Stack(true);
-            dock.SetPadding(Dp(8), Dp(8), Dp(8), Dp(8));
-            dock.Background = Background(palette.Card, 20);
-            foreach (var app in pinned)
+            dock.SetGravity(GravityFlags.Center);
+            var ink = AccentGlowDrawable.Blend(palette.Muted, palette.Accent, .42f);
+            int cellWidth = Math.Clamp((Resources!.Configuration!.ScreenWidthDp - 32) / 5, 40, 54);
+            foreach (var app in entries)
             {
-                var icon = new FrameLayout(this) { ContentDescription = app.Label + ", pinned", Tag = "app-tile:" + app.Id };
-                icon.AddView(AppIcon(app, palette.Text), new FrameLayout.LayoutParams(Dp(30), Dp(30), GravityFlags.Center));
-                AddBadge(icon, app.PackageName);
+                var icon = new FrameLayout(this)
+                {
+                    ContentDescription = AppOrganization.DisplayName(state, app) + (state.Apps[app.Id].Pinned ? ", pinned" : ""),
+                    Tag = "app-tile:" + app.Id
+                };
+                var tile = new FrameLayout(this);
+                var art = AppIcon(app, ink);
+                if (state.IconStyle == "Monochrome" && art is ImageView image)
+                    image.ImageTintList = Android.Content.Res.ColorStateList.ValueOf(ink);
+                tile.AddView(art, new FrameLayout.LayoutParams(Dp(20), Dp(20), GravityFlags.Center));
+                AddBadge(tile, app.PackageName, compact: true);
+                icon.AddView(tile, new FrameLayout.LayoutParams(Dp(36), Dp(36), GravityFlags.Center));
                 TouchFeedback(icon, 12);
                 BindHoldHaptics(icon);
                 icon.Click += (_, _) => Launch(app);
                 icon.LongClick += (_, _) => InspectAppTile(app, icon);
-                dock.AddView(icon, new LinearLayout.LayoutParams(0, Dp(52), 1));
+                dock.AddView(icon, new LinearLayout.LayoutParams(Dp(cellWidth), Dp(48)));
             }
             body.AddView(dock, Match());
         }
@@ -476,15 +513,21 @@ public partial class MainActivity
         AddBadge(frame, app.PackageName);
         return frame;
     }
-    private TextView AddBadge(FrameLayout frame, string package)
+    private TextView AddBadge(FrameLayout frame, string package, bool compact = false)
     {
-        var badge = Text("", 9, true, palette.OnAccent);
+        var badge = Text("", compact ? 8 : 9, true, palette.OnAccent);
         badge.Gravity = GravityFlags.Center;
-        badge.SetPadding(Dp(5), 0, Dp(5), 0);
-        badge.SetMinimumWidth(Dp(19));
+        int sidePadding = Dp(compact ? 3 : 5);
+        badge.SetPadding(sidePadding, 0, sidePadding, 0);
+        badge.SetMinimumWidth(Dp(compact ? 13 : 19));
+        if (compact)
+        {
+            badge.SetIncludeFontPadding(false);
+            badge.SetMinimumHeight(Dp(13));
+        }
         badge.Background = Background(palette.Accent, 20);
-        var lp = new FrameLayout.LayoutParams(-2, Dp(19), GravityFlags.Top | GravityFlags.Right);
-        lp.SetMargins(0, Dp(6), Dp(6), 0);
+        var lp = new FrameLayout.LayoutParams(-2, compact ? -2 : Dp(19), GravityFlags.Top | GravityFlags.Right);
+        lp.SetMargins(0, Dp(compact ? 2 : 6), Dp(compact ? 1 : 6), 0);
         frame.AddView(badge, lp);
         badgeViews.Add((badge, package));
         UpdateBadge(badge, package);
@@ -516,7 +559,8 @@ public partial class MainActivity
 
     private void AppInfo(AppEntry app) => OpenIntent(new Intent(Android.Provider.Settings.ActionApplicationDetailsSettings, Uri.Parse("package:" + app.PackageName)));
 
-    private Dialog Sheet(string title, Action<LinearLayout, Dialog> build, Action<LinearLayout, Dialog>? footer = null, Action<LinearLayout, Dialog>? fixedHeader = null)
+    private Dialog Sheet(string title, Action<LinearLayout, Dialog> build, Action<LinearLayout, Dialog>? footer = null,
+        Action<LinearLayout, Dialog>? fixedHeader = null, AccentGlowDrawable? backgroundGlow = null)
     {
         var dialog = new Dialog(this, Android.Resource.Style.ThemeMaterialNoActionBar);
         var overlay = new FrameLayout(this);
@@ -527,7 +571,8 @@ public partial class MainActivity
         var container = new MaxHeightStack(this, (int)(Resources!.DisplayMetrics!.HeightPixels * .87));
         var shape = (GradientDrawable)Surface(palette.Sheet, 24);
         shape.SetCornerRadii([Dp(24), Dp(24), Dp(24), Dp(24), 0, 0, 0, 0]);
-        container.Background = shape;
+        container.Background = backgroundGlow is null ? shape : new LayerDrawable([shape, backgroundGlow]);
+        container.ClipToOutline = backgroundGlow is not null;
         if (LayerMotionEnabled)
             container.Elevation = Dp(8);
         container.SetPadding(Dp(20), 0, Dp(20), Dp(16));

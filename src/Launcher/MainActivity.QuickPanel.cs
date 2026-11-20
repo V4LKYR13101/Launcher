@@ -14,6 +14,8 @@ namespace LauncherApp;
 
 public partial class MainActivity
 {
+    private View? homeBattery, homeDrawerMarker;
+
     private int BatteryPercent()
     {
         using var battery = RegisterReceiver(null, new IntentFilter(Intent.ActionBatteryChanged));
@@ -23,87 +25,123 @@ public partial class MainActivity
     }
 
 
+    private string StatusClockText(DateTime now) => now.ToString(page == "Tiles" ? "HH:mm" : "HH:mm   ·   ddd, d MMM");
+    private static string HomeStatusDateText(DateTime now) => now.ToString("dddd, dd MMMM");
+
     private void AddMinimalStatus()
     {
         var status = Stack(true);
-
-        status.SetPadding(Dp(18), Dp(4), Dp(18), Dp(4));
-        status.SetGravity(GravityFlags.CenterVertical);
-
-        // Time and date
-        statusTime = Text(
-            DateTime.Now.ToString("HH:mm   ·   ddd, d MMM"),
-            10,
-            true,
-            palette.Muted
-        );
-
-        status.AddView(
-            statusTime,
-            new LinearLayout.LayoutParams(0, -2, 1)
-        );
-
-        // Notification indicator
-        statusNotificationText = Text(
-            "",
-            10,
-            true,
-            palette.Accent
-        );
-
+        launcherStatusRow = status;
+        bool centered = page == "Tiles" && !searching;
+        status.SetGravity(centered ? GravityFlags.Center : GravityFlags.CenterVertical);
+        status.SetPadding(Dp(12), centered ? 0 : Dp(4), Dp(12), centered ? 0 : Dp(4));
+        var clockInk = AccentGlowDrawable.Blend(palette.Text, palette.Accent, palette.Light ? .17f : .3f);
+        statusTime = Text(StatusClockText(DateTime.Now), centered ? (FontScale >= 1.4f ? 40 : 64) : 10,
+            !centered, centered ? clockInk : palette.Muted);
+        statusTime.SetSingleLine(true);
+        statusNotificationText = Text("", 10, true, palette.Accent);
         statusNotificationText.SetSingleLine(true);
 
-        var notificationParams =
-            new LinearLayout.LayoutParams(-2, -2);
+        batteryIcon = new BatteryView(this, centered ? palette.Muted : palette.Accent, palette.Muted);
+        batteryPercentText = Text(BatteryPercent() + "%", 10, true, centered ? palette.Muted : palette.Accent);
+        var battery = Stack(true);
+        battery.SetGravity(GravityFlags.Center);
+        var iconParams = new LinearLayout.LayoutParams(Dp(centered ? 17 : 26), Dp(centered ? 12 : 15));
+        iconParams.RightMargin = Dp(4);
+        battery.AddView(batteryIcon, iconParams);
+        battery.AddView(batteryPercentText);
 
-        notificationParams.SetMargins(
-            0, 0, Dp(12), 0
-        );
-
-        status.AddView(
-            statusNotificationText,
-            notificationParams
-        );
-
-        // Battery icon
-        batteryIcon = new BatteryView(
-            this,
-            palette.Accent,
-            palette.Muted
-        );
-
-        var iconParams =
-            new LinearLayout.LayoutParams(
-                Dp(26),
-                Dp(15)
-            );
-
-        iconParams.SetMargins(0, 0, Dp(6), 0);
-
-        status.AddView(batteryIcon, iconParams);
-
-        // Battery percentage
-        batteryPercentText = Text(
-            BatteryPercent() + "%",
-            10,
-            true,
-            palette.Accent
-        );
-
-        status.AddView(batteryPercentText);
-
+        if (centered)
+        {
+            statusTime.Gravity = GravityFlags.Center;
+            statusTime.SetIncludeFontPadding(false);
+            statusTime.Typeface = OperatingSystem.IsAndroidVersionAtLeast(28)
+                ? Typeface.Create(Typeface.Default, 100, false)
+                : Typeface.Create("sans-serif-thin", TypefaceStyle.Normal);
+            statusTime.TextScaleX = FontScale >= 1.4f ? 1.07f : 1.16f;
+            status.AddView(statusTime, new LinearLayout.LayoutParams(-2, -2));
+        }
+        else
+        {
+            status.AddView(statusTime, new LinearLayout.LayoutParams(0, -2, 1));
+            var notificationParams = new LinearLayout.LayoutParams(-2, -2) { RightMargin = Dp(12) };
+            status.AddView(statusNotificationText, notificationParams);
+            status.AddView(battery, new LinearLayout.LayoutParams(-2, -2));
+        }
         UpdateBatteryUi();
         UpdateStatusNotifications();
-
-        // Keep existing quick panel navigation
         status.ContentDescription = "Open quick panel";
-
         BindTapHaptics(status);
+        status.Click += (_, _) => Navigate("Quick panel");
+        if (centered)
+        {
+            BindHoldHaptics(status);
+            status.LongClick += (_, _) => QuickControls();
+            var cluster = new RelativeLayout(this);
+            status.Id = View.GenerateViewId();
+            var timePosition = new RelativeLayout.LayoutParams(-2, -2);
+            timePosition.AddRule(LayoutRules.CenterInParent);
+            cluster.AddView(status, timePosition);
 
-        status.Click += (_, _) =>
-            Navigate("Quick panel");
+            var details = Stack();
+            details.SetGravity(GravityFlags.Center);
+            statusDate = Text(HomeStatusDateText(DateTime.Now), 11, color: palette.Muted);
+            statusDate.SetSingleLine(true);
+            statusDate.SetIncludeFontPadding(false);
+            statusDate.Gravity = statusNotificationText.Gravity = GravityFlags.Center;
+            MatchHomeDateWidth();
+            details.AddView(statusDate, new LinearLayout.LayoutParams(-2, -2));
+            details.AddView(statusNotificationText, new LinearLayout.LayoutParams(-2, -2));
+            var detailPosition = new RelativeLayout.LayoutParams(-2, -2) { TopMargin = -Dp(4) };
+            detailPosition.AddRule(LayoutRules.Below, status.Id);
+            detailPosition.AddRule(LayoutRules.CenterHorizontal);
+            cluster.AddView(details, detailPosition);
+            details.LayoutChange += (_, _) => PositionHomeBattery();
 
-        shell.AddView(status, Match(Dp(30)));
+            homeWeatherSlot = new FrameLayout(this);
+            var weatherPosition = new RelativeLayout.LayoutParams(-2, -2);
+            weatherPosition.AddRule(LayoutRules.Above, status.Id);
+            weatherPosition.AddRule(LayoutRules.CenterHorizontal);
+            cluster.AddView(homeWeatherSlot, weatherPosition);
+
+            if (state.ShowHomeBattery)
+            {
+                var batteryPosition = new RelativeLayout.LayoutParams(-2, -2);
+                batteryPosition.AddRule(LayoutRules.CenterHorizontal);
+                homeBattery = battery;
+                cluster.AddView(battery, batteryPosition);
+                cluster.LayoutChange += (_, _) => PositionHomeBattery();
+            }
+            scene.AddView(cluster, new FrameLayout.LayoutParams(-1, -1));
+            launcherStatusRow = cluster;
+        }
+        else
+            shell.AddView(status, Match(Dp(30)));
+    }
+
+    private void PositionHomeBattery()
+    {
+        var anchor = statusNotificationText is { Visibility: ViewStates.Visible, Height: > 0 } badge ? badge : statusDate;
+        if (homeBattery is not { Height: > 0 } battery || homeDrawerMarker is not { Height: > 0 } marker
+            || anchor is not { Height: > 0 } || !marker.IsAttachedToWindow)
+            return;
+
+        using var anchorBounds = new Rect(0, 0, anchor.Width, anchor.Height);
+        using var markerBounds = new Rect(0, 0, marker.Width, marker.Height);
+        scene.OffsetDescendantRectToMyCoords(anchor, anchorBounds);
+        scene.OffsetDescendantRectToMyCoords(marker, markerBounds);
+        float middle = (anchorBounds.ExactCenterY() + markerBounds.ExactCenterY()) / 2;
+        battery.TranslationY = middle - battery.Top - battery.Height / 2f;
+    }
+
+    private void MatchHomeDateWidth()
+    {
+        if (statusDate is not { } date || statusTime is not { } clock)
+            return;
+        float dateWidth = date.Paint!.MeasureText(date.Text ?? "");
+        float timeWidth = clock.Paint!.MeasureText(clock.Text ?? "");
+        if (dateWidth > 0 && timeWidth > 0 && Math.Abs(timeWidth - dateWidth) > .5f)
+            date.SetTextSize(Android.Util.ComplexUnitType.Px, date.TextSize * timeWidth / dateWidth);
     }
 
 

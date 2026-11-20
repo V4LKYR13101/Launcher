@@ -10,6 +10,7 @@ public static class BackupRestore
         {
             result.Apps = original.Apps;
             result.Drawers = original.Drawers;
+            result.QuickAccessApps = original.QuickAccessApps;
             result.Shortcuts = original.Shortcuts;
         }
         else
@@ -17,6 +18,7 @@ public static class BackupRestore
             var source = LauncherState.Deserialize(backup.Serialize());
             result.Apps = source.Apps;
             result.Drawers = source.Drawers;
+            result.QuickAccessApps = source.QuickAccessApps;
             result.Shortcuts = source.Shortcuts;
         }
         var content = LauncherState.Deserialize((notes ? backup : current).Serialize());

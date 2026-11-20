@@ -35,12 +35,12 @@ public partial class MainActivity : Activity
     private Palette palette = null!;
     private List<AppEntry> apps = [];
     private Dictionary<string, long> usage = new();
-    private FrameLayout root = null!;
+    private FrameLayout root = null!, scene = null!;
     private LinearLayout shell = null!, body = null!;
     private ScrollView scroll = null!;
     private EditText? searchInput;
     private TextView? timerText;
-    private TextView? statusTime;
+    private TextView? statusTime, statusDate;
     private TextView? statusNotificationText;
     private Android.Window.IOnBackInvokedCallback? backCallback;
     private string page = "Tiles", query = "";
@@ -91,7 +91,9 @@ public partial class MainActivity : Activity
         {
             pendingWidget = savedInstanceState.GetInt("pending-widget", -1);
             page = savedInstanceState.GetString("page") ?? "Tiles";
-            foreach (string home in new[] { "Root", "Tiles", "Conversations" })
+            if (savedInstanceState.GetString("last-drawer-page") is { } drawerPage && IsDrawerPage(drawerPage))
+                lastDrawerPage = drawerPage;
+            foreach (string home in new[] { "Root", "Tiles", "Conversations", GroupedDrawerPage, AllAppsDrawerPage })
                 homeScrollPositions[home] = Math.Max(0, savedInstanceState.GetInt("scroll:" + home, 0));
         }
         try
@@ -139,7 +141,8 @@ public partial class MainActivity : Activity
         foreach (var saved in homeScrollPositions)
             outState.PutInt("scroll:" + saved.Key, saved.Value);
         outState.PutInt("pending-widget", pendingWidget);
-        outState.PutString("page", page);
+        outState.PutString("page", drawerSlide is { } slide && (drawerSwipeActive || slide.ReturnToOrigin) ? slide.Origin : page);
+        outState.PutString("last-drawer-page", lastDrawerPage);
         base.OnSaveInstanceState(outState);
     }
     protected override void OnStart()
@@ -192,9 +195,19 @@ public partial class MainActivity : Activity
             }
             if (timerText is not null && timerText.Text != FocusTime())
                 timerText.Text = FocusTime();
-            string time = DateTime.Now.ToString("HH:mm   ·   ddd, d MMM");
+            var now = DateTime.Now;
+            string time = StatusClockText(now);
             if (statusTime is not null && statusTime.Text != time)
+            {
                 statusTime.Text = time;
+                MatchHomeDateWidth();
+            }
+            string date = HomeStatusDateText(now);
+            if (statusDate is not null && statusDate.Text != date)
+            {
+                statusDate.Text = date;
+                MatchHomeDateWidth();
+            }
             UpdateMediaProgress();
             UpdateWorkspaceTimers();
             UpdateResources();
@@ -215,6 +228,7 @@ public partial class MainActivity : Activity
     }
     protected override void OnPause()
     {
+        EndDrawerSlideForInterruption();
         FlushNoteSaves();
         CancelBodyRefresh();
         depthMotion.Stop();
@@ -238,6 +252,7 @@ public partial class MainActivity : Activity
     protected override void OnDestroy()
     {
         FlushNoteSaves();
+        StopDrawerSlide();
         StopAppLayer();
         StopHomePageAnimation();
         StopDrawerAnimations();
@@ -320,6 +335,8 @@ public partial class MainActivity : Activity
             query = "";
             Render();
         }
+        else if (IsDrawerPage(page))
+            Navigate("Tiles");
         else if (page != "Tiles")
             Navigate(IsHomePage || page is "Settings" or "Quick panel" ? "Tiles" : "Settings");
         else
@@ -329,7 +346,10 @@ public partial class MainActivity : Activity
     {
         // Remove private identities immediately; reload only after profile access is checked.
         if (apps.RemoveAll(a => a.PrivateProfile) > 0 && resumed)
+        {
+            EndDrawerSlideForInterruption();
             RenderBody();
+        }
         catalogDirty = true;
         catalogRevision++;
         if (resumed)
@@ -376,7 +396,7 @@ public partial class MainActivity : Activity
             successful = true;
             if (resumed)
             {
-                if (searching && page == "Tiles")
+                if (searching && IsAppsSurface)
                 {
                     searchOpening = false;
                     if (appSearchAdapter is not null)
@@ -546,6 +566,9 @@ public partial class MainActivity : Activity
     }
     private void Render()
     {
+        if (drawerSlide is { } slide && (drawerSwipeActive || slide.ReturnToOrigin))
+            page = slide.Origin;
+        StopDrawerSlide();
         depthAllowed = new DeviceCapabilities(this).AllowDepth;
         CancelBodyRefresh();
         RememberHomeScroll();
@@ -556,6 +579,11 @@ public partial class MainActivity : Activity
         palette = new(state);
         timerText = null;
         statusTime = null;
+        statusDate = null;
+        launcherStatusRow = null;
+        homeWeatherSlot = null;
+        homeBattery = null;
+        homeDrawerMarker = null;
         statusNotificationText = null;
         batteryIcon = null;
         batteryPercentText = null;
@@ -577,10 +605,25 @@ public partial class MainActivity : Activity
             appliedBackdropColor = backdrop.ToArgb();
         }
         ApplySystemBars();
+        homeAccentGlow = null;
+        if (IsHomePage && !searching)
+        {
+            homeAccentGlow = new AccentGlowDrawable(Color.ParseColor(state.Accent), (byte)(palette.Light ? 23 : 40));
+            var accentLighting = new View(this)
+            {
+                Background = homeAccentGlow,
+                ImportantForAccessibility = ImportantForAccessibility.No
+            };
+            root.AddView(accentLighting, new FrameLayout.LayoutParams(-1, -1));
+        }
+        scene = new FrameLayout(this);
+        root.AddView(scene, new FrameLayout.LayoutParams(-1, -1));
         shell = Stack();
-        root.AddView(shell, new FrameLayout.LayoutParams(-1, -1));
-        if (IsHomePage && state.MinimalStatusBar)
+        scene.AddView(shell, new FrameLayout.LayoutParams(-1, -1));
+        if (IsHomePage && !IsDrawerPage(page) && state.MinimalStatusBar)
             AddMinimalStatus();
+        if (IsDrawerPage(page) && !searching)
+            AddDrawerHeader();
         if (!IsHomePage)
             AddPageHeader(page);
         if (page == "Settings")
@@ -595,10 +638,12 @@ public partial class MainActivity : Activity
         body.HapticFeedbackEnabled = false;
         body.LongClick += (_, _) => { if (page == "Tiles" && !searching) { Haptic(body, HapticCue.Hold); QuickControls(); } };
         scroll = new ScrollView(this) { FillViewport = true, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, VerticalFadingEdgeEnabled = state.LayeredInterface };
+        if (homeBattery is not null)
+            scroll.ScrollChange += (_, _) => PositionHomeBattery();
         scroll.SetBackgroundColor(Color.Transparent);
         scroll.SetClipToPadding(false);
         scroll.SetFadingEdgeLength(Dp(14));
-        if (page == "Quick panel" || searching && page == "Tiles")
+        if (page == "Quick panel" || searching && IsAppsSurface)
             shell.AddView(body, new LinearLayout.LayoutParams(-1, 0, 1));
         else
         {
@@ -606,9 +651,9 @@ public partial class MainActivity : Activity
             shell.AddView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         }
         RenderBody();
-        if (IsHomePage)
+        if (IsHomePage && (page != "Tiles" || searching))
             AddSearchBar();
-        if (IsHomePage)
+        if (IsHomePage && !IsDrawerPage(page))
             AddHomeNavigation();
         if (page == "Quick panel")
         {
@@ -623,7 +668,7 @@ public partial class MainActivity : Activity
         RestoreHomeScroll();
         SyncDepthMotion();
     }
-    private bool IsHomePage => page is "Tiles" or "Root" or "Conversations";
+    private bool IsHomePage => IsAppsSurface || page is "Root" or "Conversations";
     private void AddPageHeader(string title)
     {
         var row = Stack(true);
@@ -690,7 +735,7 @@ public partial class MainActivity : Activity
         body.SetGravity(GravityFlags.Top);
         if (searching)
         {
-            if (page == "Tiles")
+            if (IsAppsSurface)
             {
                 RenderAppSearch();
                 return;
@@ -708,6 +753,10 @@ public partial class MainActivity : Activity
         {
             case "Tiles":
                 RenderTiles();
+                break;
+            case GroupedDrawerPage:
+            case AllAppsDrawerPage:
+                RenderAppDrawer();
                 break;
             case "Root":
                 RenderRoot();
@@ -786,7 +835,7 @@ public partial class MainActivity : Activity
                 query = input.Text ?? "";
                 if (pendingSearch is not null)
                     handler.RemoveCallbacks(pendingSearch);
-                pendingSearch = () => { pendingSearch = null; if (searching) { if (page == "Tiles") RefreshAppSearch(); else RenderBody(); } };
+                pendingSearch = () => { pendingSearch = null; if (searching) { if (IsAppsSurface) RefreshAppSearch(); else RenderBody(); } };
                 handler.PostDelayed(pendingSearch, 40);
             };
             searchInput.EditorAction += (_, e) =>
@@ -842,7 +891,7 @@ public partial class MainActivity : Activity
                 return;
             ((InputMethodManager?)GetSystemService(InputMethodService))?.ShowSoftInput(input, ShowFlags.Implicit);
             searchOpening = false;
-            if (page != "Tiles")
+            if (!IsAppsSurface)
                 handler.Post(() => { if (searching) RenderBody(); });
         });
     }
@@ -862,6 +911,8 @@ public partial class MainActivity : Activity
         }
         if (appLayer is not null)
             return base.DispatchTouchEvent(ev);
+        if (ev is not null && HandleDrawerPageTouch(ev))
+            return true;
         if (drawerTouchActive)
             return base.DispatchTouchEvent(ev);
         if (ev is not null && (IsHomePage || page == "Quick panel") && !searching)
@@ -930,7 +981,7 @@ public partial class MainActivity : Activity
                 cancel.Action = MotionEventActions.Cancel;
                 base.DispatchTouchEvent(cancel);
                 cancel.Recycle();
-                string[] pages = ["Root", "Tiles", "Conversations"];
+                string[] pages = IsDrawerPage(page) ? [GroupedDrawerPage, AllAppsDrawerPage] : ["Root", "Tiles", "Conversations"];
                 int index = Array.IndexOf(pages, page) + (ev.GetX() < touchX ? 1 : -1);
                 if (index >= 0 && index < pages.Length)
                 {

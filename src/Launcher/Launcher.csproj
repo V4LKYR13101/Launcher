@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationId>com.launcher.home</ApplicationId>
-    <ApplicationVersion>32</ApplicationVersion>
-    <ApplicationDisplayVersion>1.5.5</ApplicationDisplayVersion>
+    <ApplicationVersion>33</ApplicationVersion>
+    <ApplicationDisplayVersion>1.5.6</ApplicationDisplayVersion>
     <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
     <!--
       Enables trim analyzers and full trimming during Release mode.

@@ -82,7 +82,7 @@ public partial class MainActivity
                 CancelBodyRefresh();
                 return;
             }
-            if (depthTouchActive || openSheetCount > 0 || homePageAnimation is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0
+            if (depthTouchActive || openSheetCount > 0 || homePageAnimation is not null || drawerSlide is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0
                 || System.Environment.TickCount64 - lastHomeTouch < 220 || target.ScrollY != observed)
             {
                 observed = target.ScrollY;
