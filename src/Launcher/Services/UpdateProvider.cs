@@ -15,11 +15,16 @@ internal sealed class UpdateProvider : ContentProvider
             throw new Java.IO.FileNotFoundException("Unknown update file.");
     }
     public override bool OnCreate() => true;
-    public override string? GetType(Uri uri) { Validate(uri); return "application/vnd.android.package-archive"; }
+    public override string? GetType(Uri uri)
+    {
+        Validate(uri);
+        return "application/vnd.android.package-archive";
+    }
     public override ParcelFileDescriptor? OpenFile(Uri uri, string mode)
     {
         Validate(uri);
-        if (mode != "r") throw new Java.Lang.SecurityException("Read access only.");
+        if (mode != "r")
+            throw new Java.Lang.SecurityException("Read access only.");
         return ParcelFileDescriptor.Open(new Java.IO.File(Context!.CacheDir!, "Launcher-update.apk"), ParcelFileMode.ReadOnly);
     }
     public override ICursor? Query(Uri uri, string[]? projection, string? selection, string[]? selectionArgs, string? sortOrder)
@@ -30,9 +35,12 @@ internal sealed class UpdateProvider : ContentProvider
         var row = cursor.NewRow()!;
         foreach (var column in columns)
         {
-            if (column == "_display_name") row.Add("Launcher-update.apk");
-            else if (column == "_size") row.Add(Java.Lang.Long.ValueOf(new Java.IO.File(Context!.CacheDir!, "Launcher-update.apk").Length()));
-            else row.Add(null);
+            if (column == "_display_name")
+                row.Add("Launcher-update.apk");
+            else if (column == "_size")
+                row.Add(Java.Lang.Long.ValueOf(new Java.IO.File(Context!.CacheDir!, "Launcher-update.apk").Length()));
+            else
+                row.Add(null);
         }
         return cursor;
     }

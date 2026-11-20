@@ -2,8 +2,8 @@
 $ErrorActionPreference = "Stop"
 
 # Launcher release configuration
-$version = "1.5.4"
-$buildNumber = 31
+$version = "1.5.5"
+$buildNumber = 32
 
 $root = "E:\Repository\launcher"
 

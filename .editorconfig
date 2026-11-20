@@ -1,7 +1,22 @@
 root = true
 
-[*.{cs,xml,csproj,props,targets}]
-charset = utf-8-bom
+[*.cs]
 indent_style = space
 indent_size = 4
-insert_final_newline = true
+end_of_line = crlf
+
+# Expand single-line methods, classes, loops, and conditions
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+
+# Put opening braces on separate lines
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# Indentation
+csharp_indent_block_contents = true
+csharp_indent_braces = false
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true

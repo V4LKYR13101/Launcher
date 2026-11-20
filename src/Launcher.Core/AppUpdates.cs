@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Launcher.Core;
 
 public sealed record AppRelease(string Version, long Build, string Url, string Sha256, long Bytes, string? Notes = null);
-public sealed record AppReleases(AppRelease Android,AppRelease? AndroidProduction=null);
+public sealed record AppReleases(AppRelease Android, AppRelease? AndroidProduction = null);
 
 [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(AppReleases))]
@@ -14,7 +14,9 @@ internal partial class UpdateJsonContext : JsonSerializerContext;
 public static class AppUpdates
 {
     private static readonly HttpClient Client = new(new HttpClientHandler { AllowAutoRedirect = false })
-        { Timeout = TimeSpan.FromMinutes(10) };
+    {
+        Timeout = TimeSpan.FromMinutes(10)
+    };
 
     public static Uri Validate(AppRelease release)
     {
@@ -37,7 +39,7 @@ public static class AppUpdates
             UpdateJsonContext.Default.AppReleases, timeout.Token);
         // Older installations keep reading Android (the same-key bridge). The
         // migration-aware bridge and newer versions can use the rotated release.
-        var release = releases?.AndroidProduction??releases?.Android ?? throw new IOException("Update information is unavailable.");
+        var release = releases?.AndroidProduction ?? releases?.Android ?? throw new IOException("Update information is unavailable.");
         Validate(release);
         return release;
     }
@@ -62,11 +64,16 @@ public static class AppUpdates
                 while ((count = await source.ReadAsync(buffer, token)) != 0)
                 {
                     received += count;
-                    if (received > release.Bytes) throw new InvalidDataException("The update is larger than expected.");
+                    if (received > release.Bytes)
+                        throw new InvalidDataException("The update is larger than expected.");
                     digest.AppendData(buffer, 0, count);
                     await file.WriteAsync(buffer.AsMemory(0, count), token);
                     int percent = (int)(received * 100 / release.Bytes);
-                    if (percent != last) { progress(percent); last = percent; }
+                    if (percent != last)
+                    {
+                        progress(percent);
+                        last = percent;
+                    }
                 }
                 if (received != release.Bytes || !CryptographicOperations.FixedTimeEquals(
                     digest.GetHashAndReset(), Convert.FromHexString(release.Sha256)))
