@@ -146,7 +146,12 @@ using (var document = System.Text.Json.JsonDocument.Parse("""{"current":{"temper
     var forecast = WeatherParser.Parse(document.RootElement);
     Check(forecast.Temperature == 21 && forecast.Hours.Count == 1 && forecast.Days.Count == 1, "forecast parsing bounds mismatched provider arrays");
 }
-Check(LauncherState.Deserialize("{}").HideProtectedPreviews && LauncherState.Deserialize("{}").ShowHomeNavigation, "older layouts receive privacy and visible navigation defaults");
+Check(LauncherState.Deserialize("{}").HideProtectedPreviews && !LauncherState.Deserialize("{}").ShowHomeNavigation, "layouts without a page-tab preference default to hidden tabs");
+Check(LauncherState.Deserialize(new LauncherState { ShowHomeNavigation = true }.Serialize()).ShowHomeNavigation, "explicitly enabled page tabs remain enabled after reload");
+Check(LauncherState.Deserialize(new LauncherState { QuickAccessApps = ["b", "a", "b", "", "c", "d", "e", "f"] }.Serialize())
+    .QuickAccessApps!.SequenceEqual(new[] { "b", "a", "c", "d", "e" }), "quick access keeps the first five unique choices in order");
+Check(LauncherState.Deserialize(new LauncherState { QuickAccessApps = [] }.Serialize()).QuickAccessApps?.Count == 0,
+    "an explicitly empty quick access list remains empty");
 Check(SigningTrust.Accepts([SigningTrust.LegacyCertificate], [SigningTrust.LegacyCertificate], []), "bridge update retains current signing identity");
 Check(SigningTrust.Accepts([SigningTrust.LegacyCertificate], [SigningTrust.ProductionCertificate], [SigningTrust.LegacyCertificate, SigningTrust.ProductionCertificate]), "verified production signer rotation is accepted");
 Check(!SigningTrust.Accepts([SigningTrust.LegacyCertificate], [SigningTrust.ProductionCertificate], []), "new signer without verified lineage is rejected");

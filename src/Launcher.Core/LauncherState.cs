@@ -116,8 +116,9 @@ public sealed class LauncherState
     {
         get; set;
     }
-    public bool ShowHomeNavigation { get; set; } = true;
+    public bool ShowHomeNavigation { get; set; }
     public List<string> HomeNavigationPages { get; set; } = ["Root", "Tiles", "Conversations"];
+    public List<string>? QuickAccessApps { get; set; }
     public bool ShowPrivateSpace { get; set; } = true;
     public bool HidePrivateSpaceWhenLocked
     {
@@ -159,6 +160,7 @@ public sealed class LauncherState
     public string Alignment { get; set; } = "Top";
     public string IconStyle { get; set; } = "Monochrome";
     public bool MinimalStatusBar { get; set; } = true;
+    public bool ShowHomeBattery { get; set; } = true;
     public string StatusPlacement { get; set; } = "Top";
     public bool ShowMediaCard { get; set; } = true;
     public bool ConversationMessagesOnly
@@ -286,6 +288,7 @@ public sealed class LauncherState
         DarkThemeLux = double.IsFinite(DarkThemeLux) ? Math.Clamp(DarkThemeLux, 0, LightThemeLux - 1) : Math.Min(300, LightThemeLux - 1);
         LightThemeDelaySeconds = Math.Clamp(LightThemeDelaySeconds, 3, 30);
         HomeNavigationPages = (HomeNavigationPages ?? ["Root", "Tiles", "Conversations"]).Where(value => value is "Root" or "Tiles" or "Conversations").Distinct().ToList();
+        QuickAccessApps = QuickAccessApps?.Where(id => !string.IsNullOrWhiteSpace(id)).Distinct().Take(5).ToList();
         if (Alignment is not ("Top" or "Center" or "Bottom"))
             Alignment = "Top";
         if (StatusPlacement is not ("Top" or "Safe"))

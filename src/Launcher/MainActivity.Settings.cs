@@ -91,7 +91,6 @@ public partial class MainActivity
     private int SelectedChoice(string title) => title switch
     {
         "Theme" => state.FollowSystemTheme ? 3 : Array.IndexOf(new[] { "Dark", "Light", "Sun" }, state.Theme),
-        "Accent" => Math.Min(6, Array.FindIndex(new[] { "#E4FF00", "#F4F4E8", "#9FE7C1", "#9BCBFF", "#CEB8FF", "#FFBB98", state.Accent }, color => color.Equals(state.Accent, StringComparison.OrdinalIgnoreCase))),
         "Columns" => state.Columns - 3,
         "Tile height" => Array.IndexOf(new[] { 88, 100, 112, 132, 152 }, state.TileHeight),
         "Wallpaper dimming" => Array.IndexOf(new[] { 35, 50, 65, 80 }, state.WallpaperDim),
@@ -250,6 +249,8 @@ public partial class MainActivity
             SettingRow(panel, "Light", state.Theme == "Light" ? "On" : "Soft light theme", () => Go(() => { ManualTheme("Light"); }), "sun");
             SettingRow(panel, "Sun", state.Theme == "Sun" ? "On" : "High contrast, outdoors", () => Go(() => { ManualTheme("Sun"); }), "sun");
             SettingRow(panel, "Dark", state.Theme == "Dark" ? "On" : "Quiet, dark surfaces", () => Go(() => { ManualTheme("Dark"); }), "focus");
+            SettingRow(panel, "Accent", state.Accent, () => Go(ShowAccentChoice), "photo");
+            SettingRow(panel, "Quick access", "Choose the apps on your home screen", () => Go(ShowQuickAccess), "pin");
             SettingRow(panel, "Focus", state.Focus ? "On · tap to turn off" : "Quiet outlined tiles", () => Go(() => { state.Focus = !state.Focus; state.FocusEndsAt = 0; Save(); Render(); }), "focus");
             SettingRow(panel, page == "Root" ? "Add widget" : "Add drawer", "", () => Go(() => { if (page == "Root") AddWidget(); else NewDrawer(); }), "plus");
             SettingRow(panel, "All apps", "Search your installed apps", () => Go(() => { page = "Tiles"; StartSearch(); }), "grid");
@@ -501,29 +502,6 @@ public partial class MainActivity
             ManualTheme(new[] { "Dark", "Light", "Sun" }[index]);
     });
 
-    private void ShowAccentChoice() => Choose("Accent",
-        ["Acid yellow", "Warm white", "Mint", "Sky", "Lilac", "Peach", "Custom hex color"], index =>
-    {
-        if (index == 6)
-        {
-            Prompt("Accent · #RRGGBB", state.Accent, value =>
-            {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(value, "^#[0-9a-fA-F]{6}$"))
-                {
-                    Toast("Use a color such as #E4FF00.");
-                    return;
-                }
-                state.Accent = value;
-                Save();
-                Render();
-            });
-            return;
-        }
-        state.Accent = new[] { "#E4FF00", "#F4F4E8", "#9FE7C1", "#9BCBFF", "#CEB8FF", "#FFBB98" }[index];
-        Save();
-        Render();
-    });
-
     private void AddAppearanceThemeSettings(LinearLayout parent, Action<Action> go)
     {
         SettingRow(parent, "Automatic theme", state.AutomaticLightTheme ? "Enabled · light sensor" : "Off · manual or system theme",
@@ -682,6 +660,11 @@ public partial class MainActivity
             Save();
             Render();
         }, "clock battery status");
+        ToggleRow(parent, "Show battery on home", state.ShowHomeBattery, value =>
+        {
+            state.ShowHomeBattery = value;
+            Save();
+        }, "battery percentage indicator");
         SettingRow(parent, "Status row position", state.StatusPlacement == "Top" ? "Top corners" : "Below camera cutout",
             () => go(() => Choose("Status row position", ["Top corners", "Below camera cutout"], index =>
             {

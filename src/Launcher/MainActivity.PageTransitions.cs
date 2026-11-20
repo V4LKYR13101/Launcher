@@ -54,17 +54,27 @@ public partial class MainActivity
     }
     private void Navigate(string target)
     {
+        EndDrawerSlideForInterruption();
         RememberHomeScroll();
         ResetDeviceDepth();
         StopHomePageAnimation();
-        int from = HomePageIndex(page), to = HomePageIndex(target);
+        if (IsDrawerPage(target))
+            lastDrawerPage = target;
+        if (IsDrawerSlide(target) && BeginDrawerSlide(target))
+        {
+            FinishDrawerSlide(true);
+            return;
+        }
+        bool drawerModeSwitch = IsDrawerPage(page) && IsDrawerPage(target);
+        int from = drawerModeSwitch ? (page == GroupedDrawerPage ? 0 : 1) : HomePageIndex(page);
+        int to = drawerModeSwitch ? (target == GroupedDrawerPage ? 0 : 1) : HomePageIndex(target);
         bool animate = LayerMotionEnabled && state.PageTransitions && resumed && !searching && from >= 0 && to >= 0 && from != to && scroll.Width > 0 && scroll.Height > 0
             && Android.Provider.Settings.Global.GetFloat(ContentResolver, Android.Provider.Settings.Global.AnimatorDurationScale, 1f) > 0;
         var previous = animate ? scroll : null;
         var layout = animate ? new FrameLayout.LayoutParams(scroll.Width, scroll.Height)
         {
-            LeftMargin = shell.Left + scroll.Left - root.PaddingLeft,
-            TopMargin = shell.Top + scroll.Top - root.PaddingTop
+            LeftMargin = scene.Left + shell.Left + scroll.Left - root.PaddingLeft,
+            TopMargin = scene.Top + shell.Top + scroll.Top - root.PaddingTop
         } : null;
         if (previous is not null)
             shell.RemoveView(previous);

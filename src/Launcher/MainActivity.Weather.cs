@@ -11,6 +11,7 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private bool weatherLoading;
+    private FrameLayout? homeWeatherSlot;
     private string? weatherError;
     private int weatherRequest;
     private long weatherAttemptAt;
@@ -20,42 +21,39 @@ public partial class MainActivity
             return "—";
         return Math.Round(state.Weather.Fahrenheit ? c.Value * 9 / 5 + 32 : c.Value).ToString("0") + "°";
     }
-    private void AddWeatherStrip()
+    private void RenderHomeWeather()
     {
+        homeWeatherSlot?.RemoveAllViews();
         var weather = state.Weather;
         if (!weather.Enabled || string.IsNullOrEmpty(weather.City))
             return;
-        var strip = Stack(true);
-        strip.SetPadding(Dp(12), Dp(10), Dp(12), Dp(10));
-        strip.SetGravity(GravityFlags.CenterVertical);
-        strip.Background = Background(palette.Card, 16);
-        strip.ContentDescription = "Weather settings";
-        strip.AddView(new GlyphView(this, "map", palette.Muted), new LinearLayout.LayoutParams(Dp(20), Dp(20)));
-        var labels = Stack();
-        labels.SetPadding(Dp(10), 0, Dp(8), 0);
-        var city = Text(string.IsNullOrEmpty(weather.City) ? "Your weather" : weather.City, 13, true);
-        city.SetSingleLine(true);
-        city.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-        labels.AddView(city, Match());
-        string detail = weather.Temperature.HasValue ? WeatherCondition.Label(weather.Code) : weatherLoading ? "Updating…" : "Choose a city in Settings";
-        if (weather.UpdatedAt > 0 && Now - weather.UpdatedAt > 3 * 60 * 60_000L)
-            detail += " · cached";
-        var condition = Text(detail, 11, color: palette.Accent);
-        condition.SetPadding(0, Dp(4), 0, 0);
-        labels.AddView(condition, Match());
-        strip.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
-        var temperature = Text(Degrees(weather.Temperature), 24, true, palette.Accent);
-        temperature.Gravity = GravityFlags.CenterVertical;
-        strip.AddView(temperature);
-        if (weather.Temperature.HasValue)
-            strip.AddView(new GlyphView(this, WeatherCondition.Glyph(weather.Code), palette.Accent), new LinearLayout.LayoutParams(Dp(28), Dp(28)));
-        TouchFeedback(strip, 16);
-        strip.Click += (_, _) => Navigate("Weather");
-        BindHoldHaptics(strip);
-        strip.LongClick += (_, _) => RefreshWeather(true);
-        var lp = Match();
-        lp.SetMargins(0, 0, 0, Dp(16));
-        body.AddView(strip, lp);
+
+        bool hasReading = weather.Temperature.HasValue;
+        string temperature = hasReading ? Degrees(weather.Temperature) + (weather.Fahrenheit ? "F" : "C") : "";
+        string condition = hasReading ? WeatherCondition.Label(weather.Code) : weatherLoading ? "Updating…" : "Weather unavailable";
+        string freshness = weather.UpdatedAt > 0 && Now - weather.UpdatedAt > 3 * 60 * 60_000L ? ", cached" : "";
+        var indicator = Stack();
+        indicator.SetGravity(GravityFlags.Center);
+        indicator.SetPadding(Dp(14), Dp(4), Dp(14), Dp(5));
+        indicator.ContentDescription = $"Weather settings, {weather.City}, {temperature} {condition}{freshness}";
+        var icon = new GlyphView(this, hasReading ? WeatherCondition.Glyph(weather.Code) : "cloud", palette.Accent);
+        indicator.AddView(icon, new LinearLayout.LayoutParams(Dp(27), Dp(27)));
+        if (hasReading)
+            indicator.AddView(Text(temperature, 21), new LinearLayout.LayoutParams(-2, -2));
+        indicator.AddView(Text(condition, 11, color: palette.Muted), new LinearLayout.LayoutParams(-2, -2));
+        TouchFeedback(indicator, 14);
+        indicator.Click += (_, _) => Navigate("Weather");
+        BindHoldHaptics(indicator);
+        indicator.LongClick += (_, _) => RefreshWeather(true);
+        var position = new FrameLayout.LayoutParams(-2, -2, GravityFlags.CenterHorizontal);
+        if (homeWeatherSlot is { } slot)
+            slot.AddView(indicator, position);
+        else
+        {
+            var row = new FrameLayout(this);
+            row.AddView(indicator, position);
+            body.AddView(row, Match());
+        }
     }
     private async void RefreshWeather(bool force = false)
     {

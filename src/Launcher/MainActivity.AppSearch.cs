@@ -39,7 +39,7 @@ public partial class MainActivity
     }
     private void RefreshAppSearch()
     {
-        if (!searching || page != "Tiles" || appSearchAdapter is null)
+        if (!searching || !IsAppsSurface || appSearchAdapter is null)
             return;
         var matches = AppSearchMatches().Select(a => new SearchHit(a, null)).Concat(LocalSearch.Find(state, query).Select(hit => new SearchHit(null, hit))).ToArray();
         if (query.Trim().Equals("private space", StringComparison.OrdinalIgnoreCase) && OperatingSystem.IsAndroidVersionAtLeast(35) && ProfileCatalog.Profiles(this).Any(p => p.Private))

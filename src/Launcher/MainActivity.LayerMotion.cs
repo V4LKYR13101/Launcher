@@ -41,7 +41,7 @@ public partial class MainActivity
     }
     private void ApplyDeviceDepth(float x, float y)
     {
-        if (depthTouchActive || homePageAnimation is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0)
+        if (depthTouchActive || homePageAnimation is not null || drawerSlide is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0)
             return;
         if (!resumed || !IsHomePage || searching || openSheetCount > 0 || !LayerMotionEnabled || !state.TiltDepth)
         {
