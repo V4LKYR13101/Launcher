@@ -3,6 +3,7 @@ using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
+using LauncherApp.UI;
 namespace LauncherApp;
 
 public partial class MainActivity
@@ -40,7 +41,52 @@ public partial class MainActivity
         if (OperatingSystem.IsAndroidVersionAtLeast(29))
             input.TextCursorDrawable?.Mutate()?.SetTint(palette.Action);
     }
-    private EditText FormField(LinearLayout panel, string label, string value, string hint = "", bool multiline = false)
+    private void StyleSearchEntry(EditText input, int cornerDp, bool inSheet = false)
+    {
+        StyleEntry(input);
+        if (!OperatingSystem.IsAndroidVersionAtLeast(33) || !state.LiquidGlassCards)
+            return;
+        if (!inSheet)
+        {
+            if (ApplyGlassCard(input, cornerDp, persistent: true))
+                MakeSearchFieldTransparent(input, cornerDp);
+            return;
+        }
+
+        input.ViewAttachedToWindow += Attach;
+        void Attach(object? sender, View.ViewAttachedToWindowEventArgs e)
+        {
+            input.ViewAttachedToWindow -= Attach;
+            if (!OperatingSystem.IsAndroidVersionAtLeast(33) || !state.LiquidGlassCards)
+                return;
+            for (var parent = input.Parent as View; parent is not null; parent = parent.Parent as View)
+            {
+                if (parent is not MaxHeightStack sheet)
+                    continue;
+                if (sheet.SearchGlass is null)
+                {
+                    var glass = new LiquidGlass(sheet, palette, sheet.Background);
+                    int start = sheet.PaddingStart, top = sheet.PaddingTop, end = sheet.PaddingEnd, bottom = sheet.PaddingBottom;
+                    sheet.Background = new LayerDrawable([sheet.Background!, glass]);
+                    sheet.SetPaddingRelative(start, top, end, bottom);
+                    sheet.SearchGlass = glass;
+                }
+                sheet.SearchGlass.AddPanel(input, cornerDp);
+                MakeSearchFieldTransparent(input, cornerDp);
+                return;
+            }
+        }
+    }
+
+    private void MakeSearchFieldTransparent(EditText input, int cornerDp)
+    {
+        int start = input.PaddingStart, end = input.PaddingEnd, top = input.PaddingTop, bottom = input.PaddingBottom;
+        input.BackgroundTintList = null;
+        input.Background = Background(Color.Transparent, cornerDp);
+        input.SetPaddingRelative(start, top, end, bottom);
+    }
+
+    private EditText FormField(LinearLayout panel, string label, string value, string hint = "", bool multiline = false, bool search = false)
     {
         var caption = Text(label.ToUpperInvariant(), 10, true, palette.Muted);
         caption.LetterSpacing = .08f;
@@ -56,7 +102,10 @@ public partial class MainActivity
         }
         input.Background = Background(palette.Card, 12, palette.Divider);
         input.SetPadding(Dp(14), Dp(12), Dp(14), Dp(12));
-        StyleEntry(input);
+        if (search)
+            StyleSearchEntry(input, 12, inSheet: true);
+        else
+            StyleEntry(input);
         panel.AddView(input, Match(multiline ? -2 : Math.Max(Dp(52), Dp(16 * FontScale * 1.3f + 24))));
         return input;
     }
@@ -82,7 +131,7 @@ public partial class MainActivity
                 CancelBodyRefresh();
                 return;
             }
-            if (depthTouchActive || openSheetCount > 0 || homePageAnimation is not null || drawerSlide is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0
+            if (depthTouchActive || openSheetCount > 0 || pageSlide is not null || drawerAnimations.Count > 0 || rootFoldAnimations.Count > 0
                 || System.Environment.TickCount64 - lastHomeTouch < 220 || target.ScrollY != observed)
             {
                 observed = target.ScrollY;

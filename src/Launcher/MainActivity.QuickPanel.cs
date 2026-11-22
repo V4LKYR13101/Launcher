@@ -246,30 +246,21 @@ public partial class MainActivity
         var heading = Text("Notifications", 20, true);
         heading.SetPadding(0, Dp(8), 0, Dp(14));
         body.AddView(heading, Match());
-        scroll = new ScrollView(this) { VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never };
-        var feed = Stack();
-        scroll.AddView(feed, new ScrollView.LayoutParams(-1, -2));
-        body.AddView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         if (!ConversationService.Enabled(this))
         {
-            Paragraph("Connect notification access to show your current notifications here.", feed);
-            feed.AddView(Button("Notification access", () => Navigate("Permissions")), Match());
+            Paragraph("Connect notification access to show your current notifications here.");
+            body.AddView(Button("Notification access", () => Navigate("Permissions")), Match());
             return;
         }
         if (((KeyguardManager?)GetSystemService(KeyguardService))?.IsDeviceLocked == true)
         {
-            Paragraph("Unlock your phone to see notifications.", feed);
+            Paragraph("Unlock your phone to see notifications.");
             return;
         }
         var notifications = ConversationService.NotificationSnapshot();
         if (notifications.Count == 0)
-            Paragraph("No current notifications.", feed);
-        foreach (var notification in notifications)
-        {
-            var lp = Match();
-            lp.SetMargins(0, 0, 0, Dp(10));
-            feed.AddView(NotificationCard(notification, swipe: true), lp);
-        }
+            Paragraph("No current notifications.");
+        AddNotificationGroups(body, notifications, swipe: true);
     }
 
     private void RequestConnectionDetails() => Confirm("Connection details", "Allow nearby-device access to display connected Bluetooth devices, and precise location access to display your Wi-Fi network name. Launcher does not scan for your location or upload these details.", "Continue", () =>
@@ -289,6 +280,8 @@ public partial class MainActivity
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
     {
         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FileSearchStoragePermission)
+            UpdateFileSearchAccess();
         if (requestCode == 901)
         {
             connections.Start();

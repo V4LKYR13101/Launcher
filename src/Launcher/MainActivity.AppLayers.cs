@@ -133,7 +133,7 @@ public partial class MainActivity
     {
         depthMotion.Stop();
         ResetDeviceDepth();
-        StopHomePageAnimation();
+        EndPageSlideForInterruption();
         StopAppLayer();
         HideKeyboard();
         int[] location = new int[2], rootLocation = new int[2];

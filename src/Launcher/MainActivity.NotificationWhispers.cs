@@ -71,7 +71,7 @@ public partial class MainActivity
             search.SetPadding(
                 Dp(14), Dp(12), Dp(14), Dp(12));
 
-            StyleEntry(search);
+            StyleSearchEntry(search, 14, inSheet: true);
 
             panel.AddView(search, Match());
 

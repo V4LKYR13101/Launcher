@@ -32,10 +32,12 @@ public sealed class SystemPanelService : AccessibilityService
     private readonly HashSet<View> ownedWindows = [];
     private View? strip, handle;
     private LinearLayout? panel, feed, mediaHost, controlHost;
+    private LiquidGlass? liquidGlass;
     private TextView? panelClock, panelDate;
     private bool replying;
     private readonly HashSet<string> expanded = [];
-    private int notificationLimit = 20;
+    private readonly HashSet<string> expandedNotificationApps = [];
+    private int notificationAppLimit = 20;
     private FrameLayout? shade;
     private TextView? clock, batteryLabel;
     private LinearLayout? indicators;
@@ -373,7 +375,14 @@ public sealed class SystemPanelService : AccessibilityService
         panel.SetPadding(D(18), D(8), D(18), D(12) + NavigationBottom);
         var surface = palette.Base;
         surface.A = (byte)(255 * state.SystemPanelOpacity / 100);
-        panel.Background = Bg(surface, 0);
+        var panelBackground = Bg(surface, 0);
+        if (OperatingSystem.IsAndroidVersionAtLeast(33) && state.LiquidGlassCards)
+        {
+            liquidGlass = new LiquidGlass(panel, palette, panelBackground);
+            panel.Background = new LayerDrawable([panelBackground, liquidGlass]);
+        }
+        else
+            panel.Background = panelBackground;
         shade.AddView(panel, new FrameLayout.LayoutParams(-1, -1));
         var head = Row();
         var title = Text(DateTime.Now.ToString("HH:mm"), 32, true);
@@ -416,6 +425,8 @@ public sealed class SystemPanelService : AccessibilityService
         panel.AddView(footer);
         shade.KeyPress += (_, e) => { if (e.KeyCode == Keycode.Back) { if (e.Event?.Action == KeyEventActions.Up) Close(); e.Handled = true; } };
         var window = WindowParams(-1, Math.Max(D(120), Resources!.DisplayMetrics!.HeightPixels - NativeTop), true, true);
+        if (liquidGlass is not null)
+            window.Flags |= WindowManagerFlags.HardwareAccelerated;
         window.Y = NativeTop;
         Add(shade, window);
         shade.RequestFocus();
@@ -458,14 +469,16 @@ public sealed class SystemPanelService : AccessibilityService
             Remove(ref remove);
         }
         panel = null;
+        liquidGlass = null;
         feed = null;
         mediaHost = null;
         controlHost = null;
         panelClock = null;
         panelDate = null;
         replying = false;
-        notificationLimit = 20;
+        notificationAppLimit = 20;
         expanded.Clear();
+        expandedNotificationApps.Clear();
         open = false;
         media?.Stop();
         if (!state.SystemPanelStatus)
@@ -552,6 +565,8 @@ public sealed class SystemPanelService : AccessibilityService
         if (feed is null || !Allowed || replying)
             return;
         feed.RemoveAllViews();
+        if (OperatingSystem.IsAndroidVersionAtLeast(33))
+            liquidGlass?.ClearPanels();
         if (!ConversationService.Enabled(this))
         {
             feed.AddView(Text("Enable notification access in Launcher Settings to show notifications here.", 14, false, palette.Muted));
@@ -563,56 +578,92 @@ public sealed class SystemPanelService : AccessibilityService
             feed.AddView(Text("All caught up", 16, true));
             return;
         }
-        foreach (var group in notifications.Take(notificationLimit).GroupBy(n => n.Package))
+        var groups = notifications.GroupBy(n => n.Package).ToArray();
+        foreach (var group in groups.Take(notificationAppLimit))
         {
+            var items = group.ToArray();
+            var section = Column();
+            bool glass = liquidGlass is not null;
+            if (glass)
+                section.SetPaddingRelative(D(11), D(4), D(11), D(6));
+            string label = AppName(group.Key);
             var app = Row();
-            app.SetPadding(0, D(10), 0, D(6));
+            app.SetMinimumHeight(D(48));
+            app.SetPaddingRelative(D(4), D(6), D(4), D(6));
+            var icon = new ImageView(this) { ImportantForAccessibility = ImportantForAccessibility.No };
             try
             {
-                var icon = new ImageView(this);
                 icon.SetImageDrawable(PackageManager!.GetApplicationIcon(group.Key));
                 using var matrix = new ColorMatrix();
                 matrix.SetSaturation(0);
                 icon.SetColorFilter(new ColorMatrixColorFilter(matrix));
-                app.AddView(icon, new LinearLayout.LayoutParams(D(18), D(18)));
             }
             catch (Android.Content.PM.PackageManager.NameNotFoundException) { }
-            var appName = Text(AppName(group.Key), 12, true, palette.Accent);
-            appName.SetPadding(D(8), 0, 0, 0);
-            app.AddView(appName);
-            feed.AddView(app);
-            foreach (var item in group.Take(30))
+            app.AddView(icon, new LinearLayout.LayoutParams(D(24), D(24)));
+            var appName = Text(label, 14, true, palette.Accent);
+            appName.SetPaddingRelative(D(10), 0, D(8), 0);
+            appName.SetMaxLines(2);
+            appName.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+            app.AddView(appName, new LinearLayout.LayoutParams(0, -2, 1));
+            int count = items.Length;
+            View? chevron = null;
+            if (count > 1)
             {
-                bool concealed = state.HideProtectedPreviews && PackageLocked(item.Package);
-                var card = Column();
-                card.SetPadding(D(12), D(10), D(12), D(10));
-                card.Background = Ripple(palette.Card, 12);
-                var title = Row();
-                title.AddView(Text(concealed ? "Protected notification" : item.Title, 15, true), new LinearLayout.LayoutParams(0, -2, 1));
-                title.AddView(Text(DateTimeOffset.FromUnixTimeMilliseconds(item.Time).ToLocalTime().ToString("HH:mm"), 10, false, palette.Muted));
-                card.AddView(title);
-                var text = Text(concealed ? "Unlock in Launcher to open." : item.Text, 13, false, palette.Muted);
-                text.SetMaxLines(expanded.Contains(item.Key) ? 30 : 3);
-                text.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-                text.SetPadding(0, D(5), 0, D(4));
-                card.AddView(text);
-                card.Click += (_, _) => OpenNotification(item);
-                var actions = Row();
-                if (!concealed && (item.Text.Length > 140 || item.Text.Contains('\n')))
-                    actions.AddView(Action("Expand", () => { expanded.Add(item.Key); text.SetMaxLines(30); }, false));
-                if (ConversationService.CanReply(item.Key))
-                    actions.AddView(Action("Reply", () => Reply(card, item), false));
-                if (item.Dismissible)
-                    actions.AddView(Action("Dismiss", () => ConversationService.Dismiss(item.Key), false));
-                card.AddView(actions);
-                card.SetOnTouchListener(new NotificationSwipeListener(D(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Notice("This notification stays until its app clears it"), (v, _) => Pulse(v)));
-                var lp = new LinearLayout.LayoutParams(-1, -2);
-                lp.SetMargins(0, 0, 0, D(8));
-                feed.AddView(card, lp);
+                chevron = new GlyphView(this, "down", palette.Accent) { ImportantForAccessibility = ImportantForAccessibility.No };
+                app.AddView(chevron, new LinearLayout.LayoutParams(D(18), D(18)) { MarginEnd = D(8) });
+                var total = Text(count.ToString(), 12, true, palette.Accent);
+                total.ImportantForAccessibility = ImportantForAccessibility.No;
+                app.AddView(total, new LinearLayout.LayoutParams(-2, -2));
+                app.Foreground = Ripple(Color.Transparent, 12);
+                app.Focusable = true;
+                app.Click += (_, _) => { if (!replying) Pulse(app); };
             }
+            section.AddView(app);
+            bool concealed = state.HideProtectedPreviews && PackageLocked(group.Key);
+            var stack = NotificationGroup.AddRows(section, app, chevron, label, items, expandedNotificationApps,
+                item => NotificationRow(item, concealed), palette.Muted, glass, () => state.SystemPanelAnimations, () => !replying);
+            if (OperatingSystem.IsAndroidVersionAtLeast(33))
+                liquidGlass?.AddPanel(section, stack: stack);
+            feed.AddView(section, new LinearLayout.LayoutParams(-1, -2) { BottomMargin = D(12) });
         }
-        if (notifications.Count > notificationLimit)
-            feed.AddView(Action("Show more", () => { notificationLimit = Math.Min(100, notificationLimit + 20); RenderNotifications(); }, false));
+        if (groups.Length > notificationAppLimit)
+            feed.AddView(Action("Show more", () => { notificationAppLimit += 20; RenderNotifications(); }, false));
+    }
+    private View NotificationRow(Conversation item, bool concealed)
+    {
+        var card = Column();
+        card.SetMinimumHeight(D(48));
+        card.SetPaddingRelative(D(38), D(4), D(4), D(7));
+        card.Foreground = Ripple(Color.Transparent, 12);
+        var title = Row();
+        var subject = Text(concealed ? "Protected notification" : item.Title, 15, true);
+        subject.SetMaxLines(2);
+        subject.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+        title.AddView(subject, new LinearLayout.LayoutParams(0, -2, 1));
+        var posted = DateTimeOffset.FromUnixTimeMilliseconds(item.Time).ToLocalTime();
+        var time = Text(posted.ToString(posted.Date == DateTime.Today ? "HH:mm" : "d MMM"), 11, false, palette.Muted);
+        time.SetPaddingRelative(D(8), 0, 0, 0);
+        time.ContentDescription = posted.ToString("f");
+        title.AddView(time);
+        card.AddView(title);
+        var text = Text(concealed ? "Unlock in Launcher to open." : item.Text, 13, false, palette.Muted);
+        text.SetMaxLines(expanded.Contains(item.Key) ? 30 : 3);
+        text.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+        text.SetPadding(0, D(3), 0, D(3));
+        if (concealed || item.Text.Length > 0)
+            card.AddView(text);
+        card.Click += (_, _) => OpenNotification(item);
+        var actions = Row();
+        if (!concealed && (item.Text.Length > 140 || item.Text.Contains('\n')))
+            actions.AddView(Action("Expand text", () => { expanded.Add(item.Key); text.SetMaxLines(30); }, false));
+        if (ConversationService.CanReply(item.Key))
+            actions.AddView(Action("Reply", () => Reply(card, item), false));
+        if (item.Dismissible)
+            actions.AddView(Action("Dismiss", () => ConversationService.Dismiss(item.Key), false));
+        if (actions.ChildCount > 0)
+            card.AddView(actions);
+        card.SetOnTouchListener(new NotificationSwipeListener(D(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Notice("This notification stays until its app clears it"), (v, _) => Pulse(v)));
+        return card;
     }
     private bool PackageLocked(string package) => new StateStore(this).Load().Apps.Any(p => p.Key.StartsWith(package + "/", StringComparison.Ordinal) && p.Value.BiometricLocked);
     private void Reply(LinearLayout card, Conversation item)
@@ -642,25 +693,16 @@ public sealed class SystemPanelService : AccessibilityService
     {
         if (Locked)
             return;
-        Close();
         if (PackageLocked(item.Package))
         {
+            Close();
             Launch(new Intent(this, typeof(MainActivity)).PutExtra("system_panel_notification", item.Key));
             return;
         }
-        try
-        {
-            if (item.Open is not null)
-            {
-                var options = ActivityOptions.MakeBasic()!;
-                if (OperatingSystem.IsAndroidVersionAtLeast(34))
-                    options.SetPendingIntentBackgroundActivityStartMode(BackgroundActivityStartMode.Allowed);
-                item.Open.Send(this, 0, null, null, null, null, options.ToBundle());
-                return;
-            }
-        }
-        catch (PendingIntent.CanceledException) { }
-        catch (Java.Lang.SecurityException) { }
+        bool opened = ConversationService.TryOpenActivity(this, item);
+        Close();
+        if (opened)
+            return;
         var intent = PackageManager?.GetLaunchIntentForPackage(item.Package);
         if (intent is not null)
             Launch(intent);

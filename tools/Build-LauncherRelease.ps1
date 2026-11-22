@@ -1,13 +1,11 @@
 
 $ErrorActionPreference = "Stop"
 
-# Launcher release configuration
-$version = "1.5.6"
-$buildNumber = 33
-
-$root = "E:\Repository\launcher"
-
+$root = Split-Path -Parent $PSScriptRoot
 $project = Join-Path $root "src\Launcher\Launcher.csproj"
+[xml]$projectSettings = Get-Content -LiteralPath $project -Raw
+$version = $projectSettings.Project.PropertyGroup.ApplicationDisplayVersion
+$buildNumber = $projectSettings.Project.PropertyGroup.ApplicationVersion
 
 $keyDirectory = Join-Path $env:USERPROFILE ".android\launcher-release"
 
@@ -15,7 +13,7 @@ $javaDirectory = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot"
 
 $buildTools = "C:\Program Files (x86)\Android\android-sdk\build-tools\37.0.0"
 
-$outputDirectory = Join-Path $root "artifacts\release-$version"
+$outputDirectory = Join-Path $root "artifacts\release-$version-build-$buildNumber"
 
 $unsignedApk = Join-Path $root "src\Launcher\bin\Release\net11.0-android\com.launcher.home.apk"
 
@@ -80,7 +78,11 @@ try {
 
     Write-Host "Building Launcher $version..." -ForegroundColor Cyan
 
-    & dotnet build $project `
+    $launcherRtk = (Get-Command rtk -ErrorAction SilentlyContinue).Source
+    if (-not $launcherRtk) {
+        $launcherRtk = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\rtk.exe'
+    }
+    & $launcherRtk dotnet build $project `
         -c Release `
         "-p:JavaSdkDirectory=$javaDirectory" `
         "-p:ApplicationDisplayVersion=$version" `

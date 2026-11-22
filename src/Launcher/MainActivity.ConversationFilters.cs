@@ -43,7 +43,7 @@ public partial class MainActivity
             search.SetTextColor(palette.Text);
             search.SetHintTextColor(palette.Muted);
             search.SetPadding(Dp(14), Dp(12), Dp(14), Dp(12));
-            StyleEntry(search);
+            StyleSearchEntry(search, 14, inSheet: true);
             search.TextChanged += (_, _) => { query = search.Text ?? ""; Rebuild(); };
             panel.AddView(search, Match());
             Gap(panel, 8);

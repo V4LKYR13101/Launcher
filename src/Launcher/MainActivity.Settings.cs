@@ -17,10 +17,10 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private int matchingSettings;
-    private void SettingRow(LinearLayout parent, string title, string detail, Action action, string glyph = "more")
+    private void SettingRow(LinearLayout parent, string title, string detail, Action action, string glyph = "more", string searchTerms = "")
     {
         if (ReferenceEquals(parent, body) &&
-            !SettingMatches(title + " " + detail))
+            !SettingMatches(title + " " + detail + " " + searchTerms))
             return;
 
         if (ReferenceEquals(parent, body))
@@ -156,7 +156,10 @@ public partial class MainActivity
             input.SetHintTextColor(palette.Muted);
             input.Background = Background(palette.Card, 12, palette.Divider);
             input.SetPadding(Dp(14), Dp(12), Dp(14), Dp(12));
-            StyleEntry(input);
+            if (weather)
+                StyleSearchEntry(input, 12, inSheet: true);
+            else
+                StyleEntry(input);
             input.SetSelection(initial.Length);
             panel.AddView(input, Match(Math.Max(Dp(56), Dp(18 * FontScale * 1.3f + 24))));
             Gap(panel, 6);
@@ -272,6 +275,7 @@ public partial class MainActivity
 
         SectionCaption(body, "Gestures & Interfacing");
         SettingRow(body, "Gestures", "Enable and disable gestures", ShowGestureSetup, "grid");
+        AddHomeSwipeSetting(body, action => action());
 
         
         SectionCaption(body, "Quick actions");
@@ -368,6 +372,7 @@ public partial class MainActivity
 
     private void AddNotificationSettings(LinearLayout parent, Action<Action> go)
     {
+        AddGlassSetting(parent);
         SettingRow(parent, "Conversations", "Choose notification sources and filters",
             () => go(PickConversationSources), "message");
         SettingRow(parent, "Message history", state.KeepMessageHistory
@@ -476,6 +481,7 @@ public partial class MainActivity
         SectionCaption(body, "Quick appearance");
         SettingRow(body, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme, ShowThemeChoice, "sun");
         SettingRow(body, "Accent", state.Accent, ShowAccentChoice, "photo");
+        AddGlassSetting(body);
 
         SectionCaption(body, "More customisation");
         SettingRow(body, "Theme & wallpaper", "Automatic theme, contrast, dimming and wallpaper",
@@ -502,6 +508,19 @@ public partial class MainActivity
             ManualTheme(new[] { "Dark", "Light", "Sun" }[index]);
     });
 
+    private void AddGlassSetting(LinearLayout parent)
+    {
+        if (OperatingSystem.IsAndroidVersionAtLeast(33))
+            ToggleRow(parent, "Liquid glass cards", state.LiquidGlassCards,
+                value =>
+                {
+                    state.LiquidGlassCards = value;
+                    Save();
+                    if (page == "Settings")
+                        Render();
+                }, "notifications today root app tiles search translucent refraction wallpaper");
+    }
+
     private void AddAppearanceThemeSettings(LinearLayout parent, Action<Action> go)
     {
         SettingRow(parent, "Automatic theme", state.AutomaticLightTheme ? "Enabled · light sensor" : "Off · manual or system theme",
@@ -509,7 +528,7 @@ public partial class MainActivity
         SettingRow(parent, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme,
             () => go(ShowThemeChoice), "sun");
         SettingRow(parent, "Accent", state.Accent, () => go(ShowAccentChoice), "photo");
-        SettingRow(parent, "Wallpaper dimming", state.WallpaperDim + "% · improves contrast",
+        SettingRow(parent, "Wallpaper dimming", state.WallpaperDim + "% · other screens",
             () => go(() => Choose("Wallpaper dimming", ["Subtle · 35%", "Balanced · 50%", "Deep · 65%", "Strong · 80%"], index =>
             {
                 state.WallpaperDim = new[] { 35, 50, 65, 80 }[index];
@@ -521,7 +540,13 @@ public partial class MainActivity
             state.UseWallpaper = value;
             Save();
             Render();
-        }, "home background");
+        }, "other screens");
+        ToggleRow(parent, "Home accent glow", state.HomeAccentGlow, value =>
+        {
+            state.HomeAccentGlow = value;
+            Save();
+            Render();
+        });
     }
 
     private void AddAppearanceTileSettings(LinearLayout parent, Action<Action> go)
@@ -584,7 +609,7 @@ public partial class MainActivity
             if (!value)
             {
                 StopAppLayer();
-                StopHomePageAnimation();
+                EndPageSlideForInterruption();
                 StopRootFolds();
                 StopDrawerAnimations();
                 depthMotion.Stop();
@@ -595,7 +620,7 @@ public partial class MainActivity
             if (transitionsSwitch is not null) transitionsSwitch.Enabled = value;
             if (ReferenceEquals(parent, body)) RenderBody();
         }, "3d perspective card reveal parallax animations");
-        SettingsExplanation(parent, "Master switch for app expansion, page perspective, drawer reveals, scrolling effects and device tilt.");
+        SettingsExplanation(parent, "Master switch for app expansion, page and drawer transitions, scrolling effects and device tilt.");
 
         int before = parent.ChildCount;
         ToggleRow(parent, "Tilt depth", state.TiltDepth, value =>
@@ -622,7 +647,7 @@ public partial class MainActivity
         ToggleRow(parent, "Page transitions", state.PageTransitions, value =>
         {
             state.PageTransitions = value;
-            if (!value) StopHomePageAnimation();
+            if (!value) EndPageSlideForInterruption();
             Save();
         }, "animation switching pages");
         if (parent.ChildCount > before)
@@ -634,6 +659,7 @@ public partial class MainActivity
 
     private void AddAppearanceNavigationSettings(LinearLayout parent, Action<Action> go)
     {
+        AddHomeSwipeSetting(parent, go);
         SettingRow(parent, "Drawer alignment", state.Alignment,
             () => go(() => Choose("Drawer alignment", ["Top", "Center", "Bottom"], index =>
             {
@@ -673,6 +699,16 @@ public partial class MainActivity
                 Render();
             })));
     }
+
+    private void AddHomeSwipeSetting(LinearLayout parent, Action<Action> go) =>
+        SettingRow(parent, "Swipe right on Home", state.SwipeRightOpensDiscover ? GoogleDiscover : "Today",
+            () => go(() => Choose("Swipe right on Home", ["Today", GoogleDiscover], index =>
+            {
+                state.SwipeRightOpensDiscover = index == 1;
+                Save();
+                if (page == "Settings")
+                    RenderBody();
+            }, state.SwipeRightOpensDiscover ? 1 : 0)), "back", "Google Discover feed Today root");
 
     private void ShowPageTabChoices() => Sheet("Page tab buttons", (panel, dialog) =>
     {

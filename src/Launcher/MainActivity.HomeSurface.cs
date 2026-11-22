@@ -76,9 +76,9 @@ public partial class MainActivity
         row.SetPadding(Dp(16), Dp(4), Dp(16), Dp(8));
         var input = new EditText(this) { Text = settingsQuery, Hint = "Search settings", TextSize = 15, ContentDescription = "Search settings" };
         input.SetSingleLine(true);
-        StyleEntry(input);
         input.Background = Surface(palette.Card, 16);
         input.SetPadding(Dp(16), Dp(10), Dp(16), Dp(10));
+        StyleSearchEntry(input, 16);
         row.AddView(input, new LinearLayout.LayoutParams(0, -2, 1));
         input.TextChanged += (_, _) => { settingsQuery = input.Text ?? ""; RenderBody(); };
         shell.AddView(row, Match());

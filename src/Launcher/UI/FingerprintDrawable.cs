@@ -60,7 +60,7 @@ public sealed class FingerprintDrawable(
 
         // Background
         paint.Color = background;
-        paint.Alpha = opacity;
+        paint.Alpha = background.A * opacity / 255;
         paint.SetStyle(Paint.Style.Fill);
 
         canvas.DrawRoundRect(
@@ -82,9 +82,10 @@ public sealed class FingerprintDrawable(
 
         canvas.Translate(b.Left, b.Top);
         paint.Color = accent;
-        paint.Alpha = (int)(opacity * 0.62f);
+        bool inGlass = background.A == 0;
+        paint.Alpha = (int)(opacity * (inGlass ? .76f : .62f));
         paint.SetStyle(Paint.Style.Stroke);
-        paint.StrokeWidth = Math.Max(.8f, Math.Min(b.Width(), b.Height()) * .007f);
+        paint.StrokeWidth = Math.Max(inGlass ? 1f : .8f, Math.Min(b.Width(), b.Height()) * (inGlass ? .009f : .007f));
         paint.StrokeCap = Paint.Cap.Round;
         paint.StrokeJoin = Paint.Join.Round;
         if (ridges is not null)

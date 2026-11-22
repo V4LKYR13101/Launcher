@@ -9,6 +9,7 @@ public sealed class AccentGlowDrawable(Color accent, byte intensity) : Drawable
     private readonly Paint paint = new(PaintFlags.AntiAlias | PaintFlags.Dither);
     private RadialGradient? gradient;
     private int alpha = 255;
+    internal int GlowAlpha => alpha;
 
     public Color Accent
     {

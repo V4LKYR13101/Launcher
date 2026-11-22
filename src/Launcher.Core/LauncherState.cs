@@ -118,6 +118,7 @@ public sealed class LauncherState
     }
     public bool ShowHomeNavigation { get; set; }
     public List<string> HomeNavigationPages { get; set; } = ["Root", "Tiles", "Conversations"];
+    public bool SwipeRightOpensDiscover { get; set; }
     public List<string>? QuickAccessApps { get; set; }
     public bool ShowPrivateSpace { get; set; } = true;
     public bool HidePrivateSpaceWhenLocked
@@ -156,6 +157,9 @@ public sealed class LauncherState
     {
         get; set;
     }
+    public bool HomeAccentGlow { get; set; }
+    [JsonPropertyName("LiquidGlassNotifications")]
+    public bool LiquidGlassCards { get; set; } = true;
     public int WallpaperDim { get; set; } = 65;
     public string Alignment { get; set; } = "Top";
     public string IconStyle { get; set; } = "Monochrome";

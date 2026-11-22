@@ -241,6 +241,8 @@ public partial class MainActivity
                     Tag = "app-tile:" + app.Id
                 };
                 var tile = new FrameLayout(this);
+                if (ApplyGlassCard(tile, 12) && PackageLocked(app.PackageName))
+                    tile.Background = new FingerprintDrawable(Color.Transparent, palette.Accent, Dp(12));
                 var art = AppIcon(app, ink);
                 if (state.IconStyle == "Monochrome" && art is ImageView image)
                     image.ImageTintList = Android.Content.Res.ColorStateList.ValueOf(ink);
@@ -393,13 +395,15 @@ public partial class MainActivity
         var tile = Stack();
         var surface = colours.Surface;
         var border = outlined && !rule.Highlight ? palette.Muted : (Color?)null;
+        bool customTint = rule.TileStyle is "Light" or "Dark" or "Accent" || rule.TileStyle == "Default" && rule.Highlight;
+        bool glass = ApplyGlassCard(tile, state.CornerRadius, customTint && !locked ? surface : null);
+        if (glass && (!customTint || locked))
+            foreground = palette.Text;
         tile.Background = locked
-    ? new FingerprintDrawable(
-        surface,
-        rule.Highlight ? palette.OnAccent : palette.Accent,
-        Dp(state.CornerRadius),
-        border)
-    : outlined ? Background(surface, state.CornerRadius, border) : Surface(surface, state.CornerRadius, rule.Highlight);
+            ? new FingerprintDrawable(glass ? Color.Transparent : surface,
+                glass || !rule.Highlight ? palette.Accent : palette.OnAccent, Dp(state.CornerRadius), border)
+            : outlined ? Background(glass ? Color.Transparent : surface, state.CornerRadius, border)
+            : glass ? null : Surface(surface, state.CornerRadius, rule.Highlight);
 
         tile.SetPadding(Dp(6), Dp(6), Dp(6), Dp(10));
 
@@ -647,6 +651,8 @@ public partial class MainActivity
 
     private sealed class MaxHeightStack(Android.Content.Context context, int maxHeight) : LinearLayout(context)
     {
+        public LiquidGlass? SearchGlass { get; set; }
+
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             Orientation = Orientation.Vertical;

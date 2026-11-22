@@ -1,11 +1,14 @@
 ﻿# Launcher
 
 A native Android home screen written in C# and .NET 11 for Android. The app is
-named **Launcher**, package `com.launcher.home`. No accounts or ads. Network access
-is used for optional Open-Meteo weather and manual update checks/downloads from
-Kevlog. UI uses native Android views.
+named **Launcher**, package `com.launcher.home`. It uses native Android views
+and requires no Launcher account. Optional features use the network for weather,
+feeds, speech-model downloads and app updates.
 
-Current Android release: **1.4.1 (build 25)**; Windows companion: **1.2.0**. Settings → App updates checks
+Android version in this source tree is **1.5.14 (build 42)**. The Windows
+companion is **1.2.0**. Published APKs are listed in
+[GitHub Releases](https://github.com/V4LKYR13101/Launcher/releases).
+**Settings → App updates** checks
 `https://kevlog.co.za/updates/launcher.json`, shows a newer version, downloads with
 progress, verifies size/SHA-256, package/version and signing certificate, then
 opens Android's installer. Installation needs the user's Android approval.
@@ -31,14 +34,17 @@ This workspace pins SDK `11.0.100`. Builds need Android SDK platform 37 and JDK
 `-p:JavaSdkDirectory="C:\path\to\jdk-21"`. The current machine uses
 `C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot`.
 
-An installable signed APK is produced under
+A local Release build produces the development-signed APK at
 `src/Launcher/bin/Release/net11.0-android/com.launcher.home-Signed.apk`.
-The delivered copy is `artifacts/Launcher.apk`. This build uses the development
-signing key; use a dedicated signing key for distribution.
+To build an update for an existing production installation, run
+`tools/Build-LauncherRelease.ps1` on the signing workstation. It uses the
+project version and the production signing lineage, verifies the APK signature
+and alignment, and writes the APK and SHA-256 metadata to
+`artifacts/release-<version>-build-<number>/`.
 
 ```powershell
 adb devices -l
-adb -s YOUR_SERIAL install -r artifacts/Launcher.apk
+adb -s YOUR_SERIAL install -r artifacts/release-1.5.14-build-42/Launcher-1.5.14.apk
 adb -s YOUR_SERIAL shell am start -n com.launcher.home/com.launcher.home.MainActivity
 ```
 
@@ -53,26 +59,39 @@ Android **Settings → Apps → Default apps → Home app**.
 - Tap a tile to launch its real Android activity. Hold to rename, move, highlight,
   pin, expand, hide, reorder or set a daily usage goal.
 - The bottom search pill searches installed apps, original names and custom
-  labels. Hidden apps and apps excluded by focus do not appear in search.
-- Swipe right for **Root** and left for **Conversations**, or use the search menu.
+  labels. Use its files toggle to search shared storage on the device after
+  granting Android file access. Hidden apps remain excluded from app search.
+- Swipe up from Home to open the app drawer, swipe left to open **Notifications**,
+  or swipe right to open **Today** (the Root page). **Settings → Swipe right on
+  Home** can open Google Discover through the installed Google app. Today remains
+  available in the Launcher menu.
 - Hold the search icon or tap the three dots for quick theme and focus controls.
 - Pull down within Tiles when scrolled to the top, or tap the small status row,
-  to open **Launcher's quick panel**.
+  to open **Launcher's quick panel**. Controls and notifications scroll together.
 - Settings offers Classic/Studio presets, 3–6 columns, tile heights and corners,
   custom accent colors, heading alignment, labels, actual monochrome/grayscale/
   original app icons, system wallpaper and a minimal status row.
+- **Settings → Appearance → Liquid glass cards** controls the glass appearance
+  of Today cards, notification groups, app tiles, dock icons and search bars on
+  Android 13 and later. It defaults to on when no preference has been saved.
+- Notifications are grouped by app and ordered by the newest item in each group.
+  Groups with multiple items show a count and stack beneath the newest preview.
+  Tap the app header to expand or collapse the stack, or tap a notification to
+  open it. Hold a notification on the Notifications page for speech and other
+  available actions.
 - Root includes a calendar, local notes, arithmetic calculator, focus timer and
   native Android widget hosting. Hold widget headers for resizing and order.
 - Each built-in Root card, including Focus, can be hidden in Root settings.
 - Drawer headings have customizable geometric icons. Hold a heading and choose
   **Drawer icon** for the symbol grid.
-- **Settings → Weather** configures the city, °C/°F and refresh interval, including
+- **Settings → Cards, feeds & weather** opens weather configuration for the city,
+  °C/°F and refresh interval, including
   Manual only. Cached weather refreshes while Launcher is visible, with no
   background polling service. A matching strip appears above drawers.
 - An active media session appears below weather with artwork, metadata, seek/time
   display and playback controls. Repeat depends on the player's exposed actions;
   unavailable actions are disabled.
-- **Settings → Appearance** selects the status row's top-corner or below-cutout
+- **Settings → Appearance → Navigation & status** selects the status row's top-corner or below-cutout
   position. The accent battery icon follows the actual level and pulses while charging.
 - App tiles and pinned apps show accent-colored notification counts when optional
   notification access is enabled. Counts reflect active clearable notifications,
@@ -90,8 +109,9 @@ it and opens Android's connection, sound and display controls. It does not theme
 or replace the OS shade. Active quick controls use your selected accent, with
 black or white foregrounds selected by relative-luminance contrast. Wi-Fi and
 Bluetooth names require optional precise-location and nearby-device permissions;
-no location coordinates are requested. The quick panel follows upward drags to
-close from the header or bottom handle. The notification feed scrolls separately.
+no location coordinates are requested. Close the quick panel with its Back
+button or an upward swipe starting on the header. The content scrolls down to
+the Android navigation area.
 Notification cards swipe left or right to dismiss when Android permits it.
 
 In-app editors and pickers use bottom-anchored sheets that follow downward handle
@@ -108,17 +128,18 @@ from the manufacturer's Digital Wellbeing figures. Goals are reminders at launch
 not app blocking. Focus gives app tiles an outlined appearance; it does
 not silence Android notifications or enforce a system app restriction.
 
-Notification access is optional. The quick panel shows current notifications;
-Conversations supports a persistent app-source allowlist, all notifications or
-messages only, and opening or dismissing current notifications. No historical
-chats, contact merging or inline replies. Notification data is
-held in memory, never uploaded. Android widgets are supplied by installed apps;
+Notification access is optional. The Notifications page supports app-source
+filters, a messages-only view and opening or dismissing active notifications.
+Replies require an active notification with an Android reply action. Optional
+message history stores notification-derived messages locally. Android widgets
+are supplied by installed apps;
 their internal appearance remains under their provider's control. Existing weather
 widgets can be hosted instead of the custom network-backed weather strip.
 
-This version targets the current Android user. Work profiles, private space,
-third-party icon packs, app locking and drag-and-drop placement are not included.
-Drawer and tile ordering is edited through long-press controls.
+Work profiles and Private Space depend on Android's profile visibility and
+launcher access. Compatible icon packs and biometric app locks are configured
+through the app editor. Use **Edit home layout** or the long-press controls to
+arrange drawers, tiles and cards.
 
 ## Source and validation
 

@@ -203,7 +203,7 @@ public partial class MainActivity
             search.Background = Background(palette.Card, 12, palette.Divider);
             search.SetPadding(Dp(12), Dp(10), Dp(12), Dp(10));
             search.SetSingleLine(true);
-            StyleEntry(search);
+            StyleSearchEntry(search, 12, inSheet: true);
             header.AddView(search, Match(Math.Max(Dp(48), Dp(15 * FontScale * 1.3f + 20))));
             count = Text(names.Length + " icons · common choices first", 11, color: palette.Muted);
             count.SetPadding(Dp(2), Dp(10), Dp(2), 0);

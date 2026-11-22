@@ -82,7 +82,7 @@ public partial class MainActivity
         {
             search = new EditText(this) { Hint = "Find an app", TextSize = 15, ContentDescription = "Find an app" };
             search.SetSingleLine(true);
-            StyleEntry(search);
+            StyleSearchEntry(search, 14, inSheet: true);
             search.SetMinimumHeight(Dp(48));
             header.AddView(search, Match());
             count = Text($"{selected.Count} of 5 selected", 12, color: palette.Muted);

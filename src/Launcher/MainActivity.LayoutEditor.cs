@@ -143,7 +143,7 @@ public partial class MainActivity
         string filter = "";
         Sheet("Move apps together", (panel, dialog) =>
         {
-            var search = FormField(panel, "Find apps", "", "App name or package");
+            var search = FormField(panel, "Find apps", "", "App name or package", search: true);
             var rows = Stack();
             panel.AddView(rows, Match());
             void Rebuild()

@@ -42,6 +42,31 @@ public sealed class ConversationService : NotificationListenerService
         (Android.Provider.Settings.Secure.GetString(context.ContentResolver, "enabled_notification_listeners") ?? "")
         .Split(':').Any(c => c.StartsWith(context.PackageName + "/", StringComparison.Ordinal));
 
+    public static bool TryOpenActivity(Context context, Conversation notification)
+    {
+        if (notification.Open is not { } pending || OperatingSystem.IsAndroidVersionAtLeast(31) && !pending.IsActivity)
+            return false;
+        try
+        {
+            using var options = ActivityOptions.MakeBasic()!;
+            if (OperatingSystem.IsAndroidVersionAtLeast(36))
+                options.SetPendingIntentBackgroundActivityStartMode(BackgroundActivityStartMode.AllowIfVisible);
+            else if (OperatingSystem.IsAndroidVersionAtLeast(34))
+            {
+#pragma warning disable CA1422
+                options.SetPendingIntentBackgroundActivityStartMode(BackgroundActivityStartMode.Allowed);
+#pragma warning restore CA1422
+            }
+            using var bundle = options.ToBundle();
+            pending.Send(context, 0, null, null, null, null, bundle);
+            return true;
+        }
+        catch (Exception e) when (e is PendingIntent.CanceledException or ActivityNotFoundException or Java.Lang.SecurityException)
+        {
+            return false;
+        }
+    }
+
     public override void OnListenerConnected()
     {
         base.OnListenerConnected();

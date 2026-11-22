@@ -17,6 +17,11 @@ Check(panelState.SystemPanelOpacity == 90 && panelState.SystemPanelOffset == 16 
 Check(panelState.SystemPanelControls.Count == 6 && panelState.SystemPanelControls[0] == "Sound", "panel controls retain order while repairing duplicates and missing controls");
 Check(LauncherState.Deserialize(panelState.Serialize()).SystemPanelEnabled, "panel preference survives backup");
 Check(LauncherState.Deserialize("{}").TileIconScale == 100, "existing layouts keep their default icon size");
+var homeDefaults = LauncherState.Deserialize("{}");
+Check(homeDefaults.LiquidGlassCards && !homeDefaults.SwipeRightOpensDiscover, "glass defaults on and Today remains the default Home swipe");
+var homePreferences = LauncherState.Deserialize("{\"LiquidGlassNotifications\":false,\"SwipeRightOpensDiscover\":true}");
+var restoredHomePreferences = LauncherState.Deserialize(homePreferences.Serialize());
+Check(!restoredHomePreferences.LiquidGlassCards && restoredHomePreferences.SwipeRightOpensDiscover, "restore preserves glass opt-out and Discover selection");
 var iconState = new LauncherState { TileIconScale = 135 };
 Check(LauncherState.Deserialize(iconState.Serialize()).TileIconScale == 135, "icon size survives layout backup");
 Check(LauncherState.Deserialize("{\"TileIconScale\":900}").TileIconScale == 150 && LauncherState.Deserialize("{\"TileIconScale\":1}").TileIconScale == 60, "imported icon size is bounded");

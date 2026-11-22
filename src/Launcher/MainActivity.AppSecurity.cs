@@ -124,15 +124,8 @@ public partial class MainActivity
     private void OpenNotification(Services.Conversation notification) => WithAppUnlock(notification.Package, () =>
     {
         HideKeyboard();
-        try
-        {
-            if (notification.Open is { } pending)
-            {
-                StartIntentSender(pending.IntentSender, null, 0, 0, 0);
-                return;
-            }
-        }
-        catch (Exception e) when (e is IntentSender.SendIntentException or Java.Lang.SecurityException) { }
+        if (Services.ConversationService.TryOpenActivity(this, notification))
+            return;
         // A notification may have no content intent, or its token may have expired.
         // Launch the source app directly, as with the now-playing card.
         try

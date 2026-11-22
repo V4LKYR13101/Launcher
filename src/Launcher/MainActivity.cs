@@ -47,12 +47,8 @@ public partial class MainActivity : Activity
     private bool searching, resumed, loading;
     private bool? appliedWallpaper;
     private int? appliedBackdropColor;
-    private float touchX, touchY;
-    private bool panelDragging;
     private int openSheetCount;
-    private long panelTouchStarted;
     private long nextWeatherCheck;
-    private bool panelTouchInNotifications;
     private readonly Handler handler = new(Looper.MainLooper!);
     private readonly List<(TextView View, string Package)> badgeViews = [];
     private Dictionary<string, int> badgeCounts = new();
@@ -106,11 +102,14 @@ public partial class MainActivity : Activity
         connections = new ConnectionMonitor(this, () => RunOnUiThread(() => { if (resumed && page == "Quick panel") RenderBody(); }));
         media = new MediaMonitor(this, MediaChanged);
         root = new FrameLayout(this);
-        root.SetOnApplyWindowInsetsListener(new InsetListener(() => state.MinimalStatusBar && IsHomePage && state.StatusPlacement == "Top"));
+        root.SetOnApplyWindowInsetsListener(new InsetListener(
+            () => state.MinimalStatusBar && IsHomePage && state.StatusPlacement == "Top", ApplyQuickPanelBottomInset));
         // Android 15+ enforces edge-to-edge; older versions opt in here.
         if (OperatingSystem.IsAndroidVersionAtLeast(30) && !OperatingSystem.IsAndroidVersionAtLeast(35))
             Window!.SetDecorFitsSystemWindows(false);
         SetContentView(root);
+        // The root supplies the app background. A transparent window lets Android draw behind it.
+        Window!.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
         catalogWatcher = new(this, CatalogChanged);
         catalogWatcher.Start();
         ConversationService.Changed += ConversationsChanged;
@@ -141,7 +140,7 @@ public partial class MainActivity : Activity
         foreach (var saved in homeScrollPositions)
             outState.PutInt("scroll:" + saved.Key, saved.Value);
         outState.PutInt("pending-widget", pendingWidget);
-        outState.PutString("page", drawerSlide is { } slide && (drawerSwipeActive || slide.ReturnToOrigin) ? slide.Origin : page);
+        outState.PutString("page", pageSlide is { } slide && (pageSwipeActive || slide.ReturnToOrigin) ? slide.Origin : page);
         outState.PutString("last-drawer-page", lastDrawerPage);
         base.OnSaveInstanceState(outState);
     }
@@ -170,6 +169,7 @@ public partial class MainActivity : Activity
         RefreshSystemPanelSettings();
         SystemPanelService.Refresh();
         resumed = true;
+        RefreshLiquidGlassWallpaper();
         UpdateStatusNotifications();
         connections.Start();
         media.Start();
@@ -178,6 +178,7 @@ public partial class MainActivity : Activity
         RefreshWeather();
         SyncDepthMotion();
         ResumeUpdateInstall();
+        UpdateFileSearchAccess();
         WorkspaceUpdated();
         if (companionSession)
             companion.Start();
@@ -228,7 +229,7 @@ public partial class MainActivity : Activity
     }
     protected override void OnPause()
     {
-        EndDrawerSlideForInterruption();
+        EndPageSlideForInterruption();
         FlushNoteSaves();
         CancelBodyRefresh();
         depthMotion.Stop();
@@ -236,7 +237,6 @@ public partial class MainActivity : Activity
         ResetDeviceDepth();
         StopRootFolds();
         StopAppLayer();
-        StopHomePageAnimation();
         resumed = false;
         ambient.Stop();
         lightCandidate = null;
@@ -252,9 +252,9 @@ public partial class MainActivity : Activity
     protected override void OnDestroy()
     {
         FlushNoteSaves();
-        StopDrawerSlide();
+        ResetFileSearch();
+        StopPageSlide();
         StopAppLayer();
-        StopHomePageAnimation();
         StopDrawerAnimations();
         feedLifetime?.Cancel();
         feedLifetime?.Dispose();
@@ -347,7 +347,7 @@ public partial class MainActivity : Activity
         // Remove private identities immediately; reload only after profile access is checked.
         if (apps.RemoveAll(a => a.PrivateProfile) > 0 && resumed)
         {
-            EndDrawerSlideForInterruption();
+            EndPageSlideForInterruption();
             RenderBody();
         }
         catalogDirty = true;
@@ -540,7 +540,7 @@ public partial class MainActivity : Activity
     private void Toast(string message) => Android.Widget.Toast.MakeText(this, message, ToastLength.Short)!.Show();
     private void ApplySystemBars()
     {
-        bool light = palette.Light && !state.UseWallpaper;
+        bool light = palette.Light && !state.UseWallpaper && !IsWallpaperHome;
         if (OperatingSystem.IsAndroidVersionAtLeast(30))
         {
             const int lightStatus = 8, lightNavigation = 16;
@@ -564,18 +564,20 @@ public partial class MainActivity : Activity
 #pragma warning restore CA1422
         }
     }
-    private void Render()
+    private void Render() => Render(pageTransition: false);
+
+    private void Render(bool pageTransition)
     {
-        if (drawerSlide is { } slide && (drawerSwipeActive || slide.ReturnToOrigin))
+        if (pageSlide is { } slide && (pageSwipeActive || slide.ReturnToOrigin))
             page = slide.Origin;
-        StopDrawerSlide();
-        depthAllowed = new DeviceCapabilities(this).AllowDepth;
+        if (!SearchingFiles)
+            ResetFileSearch();
+        StopPageSlide();
         CancelBodyRefresh();
         RememberHomeScroll();
         depthMotion.Stop();
         ResetDeviceDepth();
         StopAppLayer();
-        StopHomePageAnimation();
         palette = new(state);
         timerText = null;
         statusTime = null;
@@ -588,25 +590,11 @@ public partial class MainActivity : Activity
         batteryIcon = null;
         batteryPercentText = null;
         root.RemoveAllViews();
-        // Wallpaper is a stable window layer. Scrolling and content refreshes
-        // must never reset the surface's opacity or reattach its wallpaper.
-        if (appliedWallpaper != state.UseWallpaper)
-        {
-            if (state.UseWallpaper)
-                Window!.AddFlags(WindowManagerFlags.ShowWallpaper);
-            else
-                Window!.ClearFlags(WindowManagerFlags.ShowWallpaper);
-            appliedWallpaper = state.UseWallpaper;
-        }
-        var backdrop = state.UseWallpaper ? new Color(palette.Base.R, palette.Base.G, palette.Base.B, (byte)(state.WallpaperDim * 255 / 100)) : palette.Base;
-        if (appliedBackdropColor != backdrop.ToArgb())
-        {
-            root.SetBackgroundColor(backdrop);
-            appliedBackdropColor = backdrop.ToArgb();
-        }
+        ApplyWallpaperVisibility(pageTransition);
+        ApplyBackdrop(IsWallpaperHome ? 0 : 1);
         ApplySystemBars();
         homeAccentGlow = null;
-        if (IsHomePage && !searching)
+        if (IsHomePage && !searching && (!IsWallpaperHome || state.HomeAccentGlow || pageTransition))
         {
             homeAccentGlow = new AccentGlowDrawable(Color.ParseColor(state.Accent), (byte)(palette.Light ? 23 : 40));
             var accentLighting = new View(this)
@@ -617,6 +605,7 @@ public partial class MainActivity : Activity
             root.AddView(accentLighting, new FrameLayout.LayoutParams(-1, -1));
         }
         scene = new FrameLayout(this);
+        ConfigureLiquidGlass();
         root.AddView(scene, new FrameLayout.LayoutParams(-1, -1));
         shell = Stack();
         scene.AddView(shell, new FrameLayout.LayoutParams(-1, -1));
@@ -630,7 +619,7 @@ public partial class MainActivity : Activity
             AddSettingsSearch();
         body = Stack();
         int side = Math.Max(16, (Resources!.Configuration!.ScreenWidthDp - 720) / 2);
-        body.SetPadding(Dp(side), Dp(12), Dp(side), Dp(12));
+        body.SetPadding(Dp(side), Dp(12), Dp(side), page == "Quick panel" ? 0 : Dp(12));
 
         //screenlock gesture adding
         AttachScreenLockGesture(body);
@@ -643,7 +632,7 @@ public partial class MainActivity : Activity
         scroll.SetBackgroundColor(Color.Transparent);
         scroll.SetClipToPadding(false);
         scroll.SetFadingEdgeLength(Dp(14));
-        if (page == "Quick panel" || searching && IsAppsSurface)
+        if (searching && IsAppsSurface)
             shell.AddView(body, new LinearLayout.LayoutParams(-1, 0, 1));
         else
         {
@@ -655,20 +644,35 @@ public partial class MainActivity : Activity
             AddSearchBar();
         if (IsHomePage && !IsDrawerPage(page))
             AddHomeNavigation();
-        if (page == "Quick panel")
-        {
-            var close = new FrameLayout(this) { ContentDescription = "Close quick panel" };
-            var handle = new View(this) { Background = Background(palette.Muted, 4) };
-            close.AddView(handle, new FrameLayout.LayoutParams(Dp(38), Dp(4), GravityFlags.Center));
-            BindTapHaptics(close);
-            close.Click += (_, _) => Navigate("Tiles");
-            shell.AddView(close, Match(Dp(30)));
-        }
         root.RequestApplyInsets();
         RestoreHomeScroll();
         SyncDepthMotion();
     }
     private bool IsHomePage => IsAppsSurface || page is "Root" or "Conversations";
+    private bool IsWallpaperHome => page == "Tiles" && !searching;
+
+    private void ApplyWallpaperVisibility(bool pageTransition = false)
+    {
+        bool visible = IsWallpaperHome || state.UseWallpaper || pageTransition;
+        if (appliedWallpaper == visible)
+            return;
+        if (visible)
+            Window!.AddFlags(WindowManagerFlags.ShowWallpaper);
+        else
+            Window!.ClearFlags(WindowManagerFlags.ShowWallpaper);
+        appliedWallpaper = visible;
+    }
+
+    private void ApplyBackdrop(float dimmingFraction)
+    {
+        var color = palette.Base;
+        int dimming = state.UseWallpaper ? state.WallpaperDim : 100;
+        color = new Color(color.R, color.G, color.B, (byte)(dimming * 255 * dimmingFraction / 100));
+        if (appliedBackdropColor == color.ToArgb())
+            return;
+        root.SetBackgroundColor(color);
+        appliedBackdropColor = color.ToArgb();
+    }
     private void AddPageHeader(string title)
     {
         var row = Stack(true);
@@ -702,6 +706,9 @@ public partial class MainActivity : Activity
             return;
         }
         ResetDeviceDepth();
+        if (OperatingSystem.IsAndroidVersionAtLeast(33))
+            liquidGlass?.ClearPanels(keepPersistent: true);
+        conversationFilterScroll = null;
         depthHeadings.Clear();
         StopRootFolds();
         scroll.VerticalFadingEdgeEnabled = state.LayeredInterface;
@@ -721,7 +728,6 @@ public partial class MainActivity : Activity
         feedRefreshGlyph = null;
         feedRefreshProgress = null;
         StopDrawerAnimations();
-        int previousFeedY = page == "Quick panel" ? scroll.ScrollY : 0;
         appSearchAdapter = null;
         appSearchList = null;
         appSearchTitle = null;
@@ -804,11 +810,6 @@ public partial class MainActivity : Activity
                 RenderWeatherSettings();
                 break;
         }
-        if (page == "Quick panel" && previousFeedY > 0)
-        {
-            var feed = scroll;
-            feed.Post(() => feed.ScrollTo(0, previousFeedY));
-        }
     }
     private void AddSearchBar()
     {
@@ -817,11 +818,16 @@ public partial class MainActivity : Activity
         bottom.SetPadding(Dp(16), Dp(4), Dp(16), 0);
         var pill = Stack(true);
         pill.SetGravity(GravityFlags.CenterVertical);
-        pill.Background = Background(palette.Card, 30);
+        if (!ApplyGlassCard(pill, 30, persistent: true))
+            pill.Background = Background(palette.Card, 30);
+        if (IsAppsSurface)
+            AddFileSearchToggle(pill);
         if (searching)
         {
-            pill.AddView(IconButton("back", "Close search", () => { HideKeyboard(); searching = false; query = ""; Render(); }), new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
-            var input = new EditText(this) { Text = query, Hint = page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", TextSize = 15, Typeface = regular };
+            var close = IconButton(IsAppsSurface ? "close" : "back", "Close search", HandleBack);
+            if (!IsAppsSurface)
+                pill.AddView(close, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
+            var input = new EditText(this) { Text = query, Hint = SearchingFiles ? "Search files" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", TextSize = 15, Typeface = regular };
             searchInput = input;
             searchInput.SetSingleLine(true);
             searchInput.SetTextColor(palette.Text);
@@ -849,13 +855,18 @@ public partial class MainActivity : Activity
                 e.Handled = true;
             };
             pill.AddView(searchInput, new LinearLayout.LayoutParams(0, Dp(barHeight), 1));
+            if (IsAppsSurface)
+                pill.AddView(close, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
         }
         else
         {
-            var control = IconButton("search", "Search; hold for launcher controls", StartSearch);
-            BindHoldHaptics(control);
-            control.LongClick += (_, _) => QuickControls();
-            pill.AddView(control, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
+            if (!IsAppsSurface)
+            {
+                var control = IconButton("search", "Search; hold for launcher controls", StartSearch);
+                BindHoldHaptics(control);
+                control.LongClick += (_, _) => QuickControls();
+                pill.AddView(control, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
+            }
             var prompt = Text(FontScale >= 1.4f ? "Search" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", 15, color: palette.Muted);
             prompt.SetSingleLine(true);
             prompt.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
@@ -872,7 +883,9 @@ public partial class MainActivity : Activity
         bottom.AddView(pill, Match(Dp(barHeight)));
         shell.AddView(bottom, Match());
     }
-    private void StartSearch()
+    private void StartSearch() => BeginSearch(files: false, keepQuery: false);
+
+    private void BeginSearch(bool files, bool keepQuery)
     {
         if (pendingSearch is not null)
         {
@@ -880,9 +893,25 @@ public partial class MainActivity : Activity
             pendingSearch = null;
         }
         searching = true;
+        fileSearchMode = files;
+        fileSearchAccess = files && SharedStorage.CanRead(this);
         searchOpening = true;
-        query = "";
+        if (!keepQuery)
+            query = "";
+        if (files && !fileSearchAccess)
+            HideKeyboard();
         Render();
+        if (files)
+        {
+            if (!fileSearchAccess)
+                return;
+            _ = LoadSearchFilesAsync();
+        }
+        FocusSearchInput();
+    }
+
+    private void FocusSearchInput()
+    {
         var input = searchInput;
         input?.RequestFocus();
         input?.Post(() =>
@@ -905,92 +934,9 @@ public partial class MainActivity : Activity
         else if (ev?.ActionMasked is MotionEventActions.Up or MotionEventActions.Cancel)
             depthTouchActive = false;
         if (ev?.ActionMasked == MotionEventActions.Down)
-        {
-            StopHomePageAnimation();
             drawerTouchActive = false;
-        }
-        if (appLayer is not null)
-            return base.DispatchTouchEvent(ev);
-        if (ev is not null && HandleDrawerPageTouch(ev))
+        if (appLayer is null && ev is not null && HandlePageSwipe(ev))
             return true;
-        if (drawerTouchActive)
-            return base.DispatchTouchEvent(ev);
-        if (ev is not null && (IsHomePage || page == "Quick panel") && !searching)
-        {
-            if (ev.Action == MotionEventActions.Down)
-            {
-                touchX = ev.GetX();
-                touchY = ev.GetY();
-                panelDragging = false;
-                panelTouchStarted = System.Environment.TickCount64;
-                using var notificationBounds = new Rect();
-                panelTouchInNotifications = page == "Quick panel" && scroll.GetGlobalVisibleRect(notificationBounds)
-                    && notificationBounds.Contains((int)ev.RawX, (int)ev.RawY);
-            }
-            if (ev.ActionMasked == MotionEventActions.Move && (Math.Abs(ev.GetX() - touchX) > ViewConfiguration.Get(this)!.ScaledTouchSlop || Math.Abs(ev.GetY() - touchY) > ViewConfiguration.Get(this)!.ScaledTouchSlop))
-                body.CancelLongPress();
-            if (page == "Quick panel" && !panelTouchInNotifications)
-            {
-                float dx = ev.GetX() - touchX, dy = ev.GetY() - touchY;
-                if (ev.Action == MotionEventActions.Move && (panelDragging || dy < -Dp(8) && Math.Abs(dy) > Math.Abs(dx) * 1.2f))
-                {
-                    if (!panelDragging)
-                    {
-                        var canceled = MotionEvent.Obtain(ev)!;
-                        canceled.Action = MotionEventActions.Cancel;
-                        base.DispatchTouchEvent(canceled);
-                        canceled.Recycle();
-                        panelDragging = true;
-                        shell.Animate()?.Cancel();
-                    }
-                    shell.TranslationY = Math.Min(0, dy);
-                    return true;
-                }
-                if (ev.Action == MotionEventActions.Up && panelDragging)
-                {
-                    float distance = Math.Max(0, -dy);
-                    float speed = distance / Math.Max(.001f, (System.Environment.TickCount64 - panelTouchStarted) / 1000f);
-                    panelDragging = false;
-                    if (distance > Dp(45) || distance > Dp(15) && speed > Dp(450))
-                        shell.Animate()!.TranslationY(-root.Height).SetDuration(LayerMotionEnabled ? 140 : 0).WithEndAction(new Java.Lang.Runnable(() => { Haptic(root, HapticCue.Commit); Navigate("Tiles"); })).Start();
-                    else
-                        shell.Animate()!.TranslationY(0).SetDuration(LayerMotionEnabled ? 130 : 0).Start();
-                    return true;
-                }
-                if (ev.Action == MotionEventActions.Cancel && panelDragging)
-                {
-                    panelDragging = false;
-                    shell.Animate()!.TranslationY(0).SetDuration(LayerMotionEnabled ? 130 : 0).Start();
-                    return true;
-                }
-            }
-            if (ev.Action == MotionEventActions.Up && page == "Tiles" && scroll.ScrollY == 0 && ev.GetY() - touchY > Dp(130)
-                && Math.Abs(ev.GetX() - touchX) < Dp(65))
-            {
-                var canceled = MotionEvent.Obtain(ev)!;
-                canceled.Action = MotionEventActions.Cancel;
-                base.DispatchTouchEvent(canceled);
-                canceled.Recycle();
-                Haptic(root, HapticCue.Commit);
-                Navigate("Quick panel");
-                return true;
-            }
-            if (ev.Action == MotionEventActions.Up && IsHomePage && Math.Abs(ev.GetX() - touchX) > Dp(60) && Math.Abs(ev.GetX() - touchX) > Math.Abs(ev.GetY() - touchY) * 1.8f)
-            {
-                var cancel = MotionEvent.Obtain(ev)!;
-                cancel.Action = MotionEventActions.Cancel;
-                base.DispatchTouchEvent(cancel);
-                cancel.Recycle();
-                string[] pages = IsDrawerPage(page) ? [GroupedDrawerPage, AllAppsDrawerPage] : ["Root", "Tiles", "Conversations"];
-                int index = Array.IndexOf(pages, page) + (ev.GetX() < touchX ? 1 : -1);
-                if (index >= 0 && index < pages.Length)
-                {
-                    Haptic(root, HapticCue.Commit);
-                    Navigate(pages[index]);
-                }
-                return true;
-            }
-        }
         return base.DispatchTouchEvent(ev);
     }
     private void Launch(AppEntry app)
@@ -1037,7 +983,16 @@ public partial class MainActivity : Activity
         catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast("No app is available for this action."); }
     }
     private void OpenUrl(string url) => OpenIntent(new Intent(Intent.ActionView, Uri.Parse(url)));
-    private sealed class InsetListener(Func<bool>? drawAtTop = null) : Java.Lang.Object, View.IOnApplyWindowInsetsListener
+    private bool ApplyQuickPanelBottomInset(int inset)
+    {
+        if (page != "Quick panel" || scroll is null)
+            return false;
+        if (scroll.PaddingBottom != inset)
+            scroll.SetPadding(0, 0, 0, inset);
+        return true;
+    }
+
+    private sealed class InsetListener(Func<bool>? drawAtTop = null, Func<int, bool>? drawAtBottom = null) : Java.Lang.Object, View.IOnApplyWindowInsetsListener
     {
         public WindowInsets OnApplyWindowInsets(View? v, WindowInsets? insets)
         {
@@ -1047,7 +1002,8 @@ public partial class MainActivity : Activity
             {
                 var i = insets.GetInsets(WindowInsets.Type.SystemBars() | WindowInsets.Type.Ime() | WindowInsets.Type.DisplayCutout());
                 int top = drawAtTop?.Invoke() == true ? insets.GetInsets(WindowInsets.Type.SystemBars() | WindowInsets.Type.Ime()).Top : i.Top;
-                v?.SetPadding(i.Left, top, i.Right, i.Bottom);
+                int bottom = drawAtBottom?.Invoke(i.Bottom) == true ? 0 : i.Bottom;
+                v?.SetPadding(i.Left, top, i.Right, bottom);
             }
             else
             {

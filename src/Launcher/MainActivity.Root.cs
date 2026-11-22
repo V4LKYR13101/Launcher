@@ -15,7 +15,9 @@ namespace LauncherApp;
 
 public partial class MainActivity
 {
+    private const int HomeCardSpacingDp = 12;
     private string conversationFilter = "All";
+    private HorizontalScrollView? conversationFilterScroll;
 
     private void RootCard(string id, string title, string glyph, Action<LinearLayout> build, string? summary = null)
     {
@@ -23,9 +25,12 @@ public partial class MainActivity
         var card = Stack();
         card.Tag = "root-card:" + id;
         card.SetPadding(Dp(16), Dp(8), Dp(16), Dp(8));
-        card.Background = Surface(palette.Card, 22, id == "overview");
-        if (LayerMotionEnabled)
-            card.Elevation = Dp(2);
+        if (!ApplyGlassCard(card))
+        {
+            card.Background = Surface(palette.Card, 22, id == "overview");
+            if (LayerMotionEnabled)
+                card.Elevation = Dp(2);
+        }
         var header = Stack(true);
         header.SetGravity(GravityFlags.CenterVertical);
         header.ContentDescription = title + (collapsed ? ", collapsed" : ", expanded");
@@ -118,7 +123,7 @@ public partial class MainActivity
             SwapRootPane(id, viewport, Contents(folded));
         };
         var lp = Match();
-        lp.SetMargins(0, 0, 0, Dp(12));
+        lp.BottomMargin = Dp(HomeCardSpacingDp);
         body.AddView(card, lp);
     }
 
@@ -172,7 +177,9 @@ public partial class MainActivity
             return;
         var card = Stack();
         card.Tag = "root-widget:" + slot.Id;
-        card.SetPadding(0, 0, 0, Dp(slot.Collapsed ? 0 : 8));
+        bool glass = ApplyGlassCard(card);
+        int inset = glass ? Dp(12) : 0;
+        card.SetPadding(inset, glass ? Dp(4) : 0, inset, Dp(slot.Collapsed ? glass ? 4 : 0 : 8));
         var header = Stack(true);
         header.SetGravity(GravityFlags.CenterVertical);
         header.ContentDescription = WidgetLabel(slot.Id) + (slot.Collapsed ? ", collapsed" : ", expanded");
@@ -247,6 +254,8 @@ public partial class MainActivity
         conversationHeader.SetGravity(GravityFlags.CenterVertical);
         var heading = Text("Notifications", 27, true);
         heading.Gravity = GravityFlags.CenterVertical;
+        if (OperatingSystem.IsAndroidVersionAtLeast(28))
+            heading.AccessibilityHeading = true;
         conversationHeader.AddView(heading, new LinearLayout.LayoutParams(0, Math.Max(Dp(52), Dp(27 * FontScale * 1.25f + 12)), 1));
         conversationHeader.AddView(IconButton("filter", "Filter notification apps", PickConversationSources), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         body.AddView(conversationHeader, Match());
@@ -266,11 +275,12 @@ public partial class MainActivity
         }
         var messages = (state.ConversationMessagesOnly ? ConversationService.Snapshot() : ConversationService.NotificationSnapshot())
             .Where(m => !state.ConversationExcludedApps.Contains(m.Package)).ToArray();
-        Paragraph(state.ConversationMessagesOnly ? "Messages only" : "All notification types · choose sources with the filter icon");
+        if (state.ConversationMessagesOnly)
+            Paragraph("Messages only");
         if (conversationFilter != "All" && !messages.Any(m => m.Package == conversationFilter))
             conversationFilter = "All";
         var filters = Stack(true);
-        var filterScroll = new HorizontalScrollView(this) { HorizontalScrollBarEnabled = false };
+        var filterScroll = conversationFilterScroll = new HorizontalScrollView(this) { HorizontalScrollBarEnabled = false };
         filterScroll.AddView(filters);
         foreach (var package in new[] { "All" }.Concat(messages.Select(m => m.Package).Distinct()))
         {
@@ -284,31 +294,11 @@ public partial class MainActivity
         }
         body.AddView(filterScroll, Match());
         Gap(body, 16);
-        if (conversationFilter != "All" && !messages.Any(m => m.Package == conversationFilter))
-            conversationFilter = "All";
         var visible = messages.Where(m => (conversationFilter == "All" || m.Package == conversationFilter)
             && (ConcealPreview(m.Package) ? PackageLabel(m.Package).Contains(query, StringComparison.CurrentCultureIgnoreCase) : m.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase) || m.Text.Contains(query, StringComparison.CurrentCultureIgnoreCase))).ToArray();
         if (visible.Length == 0)
             Paragraph(query.Trim().Length > 0 ? "No notifications match your search." : "No notifications from the selected apps. Use the filter icon to choose which apps appear here.");
-        string? previousPackage = null;
-        DateTime? previousDate = null;
-        foreach (var message in visible)
-        {
-            var date = DateTimeOffset.FromUnixTimeMilliseconds(message.Time).LocalDateTime.Date;
-            bool newDay = previousDate != date;
-            if (newDay)
-            {
-                string label = date == DateTime.Today ? "Today" : date == DateTime.Today.AddDays(-1) ? "Yesterday" : date.ToString("ddd, d MMM");
-                SectionCaption(body, label);
-                previousPackage = null;
-            }
-            bool compact = previousPackage == message.Package && !newDay;
-            var lp = Match();
-            lp.SetMargins(0, Dp(compact ? 4 : 10), 0, 0);
-            body.AddView(NotificationCard(message, actions: true, compact: compact), lp);
-            previousPackage = message.Package;
-            previousDate = date;
-        }
+        AddNotificationGroups(body, visible, actions: true);
     }
 
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)

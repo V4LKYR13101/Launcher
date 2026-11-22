@@ -30,6 +30,8 @@ public partial class MainActivity
         appSearchCount = Text("", 12, color: palette.Muted);
         appSearchCount.SetPadding(0, 0, 0, Dp(12));
         body.AddView(appSearchCount, Match());
+        if (SearchingFiles && !fileSearchAccess)
+            body.AddView(Button("Allow file access", RequestFileSearchAccess), Match());
         appSearchList = new ListView(this) { Divider = null, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, CacheColorHint = Color.Transparent };
         appSearchList.Selector = new Android.Graphics.Drawables.ColorDrawable(Color.Transparent);
         appSearchAdapter = new AppSearchAdapter(this);
@@ -41,6 +43,11 @@ public partial class MainActivity
     {
         if (!searching || !IsAppsSurface || appSearchAdapter is null)
             return;
+        if (SearchingFiles)
+        {
+            RefreshFileSearch();
+            return;
+        }
         var matches = AppSearchMatches().Select(a => new SearchHit(a, null)).Concat(LocalSearch.Find(state, query).Select(hit => new SearchHit(null, hit))).ToArray();
         if (query.Trim().Equals("private space", StringComparison.OrdinalIgnoreCase) && OperatingSystem.IsAndroidVersionAtLeast(35) && ProfileCatalog.Profiles(this).Any(p => p.Private))
             matches = matches.Append(new SearchHit(null, new("Private space", "private-space", "Private space", "Manage or unlock your private apps"))).ToArray();
@@ -52,9 +59,14 @@ public partial class MainActivity
             appSearchCount.Text = matches.Length > 0 ? $"{matches.Length} {(query.Trim().Length == 0 ? "apps" : "results")} · apps and saved content"
             : !catalogLoaded && loading ? "Finding your apps…" : "No matches. Hidden apps can be restored in Settings.";
     }
-    private sealed record SearchHit(AppEntry? App, LocalSearchResult? Local);
+    private sealed record SearchHit(AppEntry? App, LocalSearchResult? Local, SearchFile? File = null);
     private void OpenSearchHit(SearchHit hit)
     {
+        if (hit.File is { } file)
+        {
+            OpenSearchFile(file);
+            return;
+        }
         if (hit.App is { } app)
         {
             Launch(app);
@@ -99,6 +111,12 @@ public partial class MainActivity
     }
     private void OpenFirstSearchResult()
     {
+        if (SearchingFiles)
+        {
+            if (FileSearchMatches().FirstOrDefault() is { } file)
+                OpenSearchFile(file);
+            return;
+        }
         var app = AppSearchMatches().FirstOrDefault();
         if (app is not null)
             Launch(app);
@@ -153,11 +171,13 @@ public partial class MainActivity
                 row.LongClick += (_, _) => { if (holder.Hit.App is { } selected) host.EditApp(selected); else host.OpenSearchHit(holder.Hit); };
             }
             holder.Hit = hit;
-            holder.Label.Text = app is not null ? AppOrganization.DisplayName(host.state, app) : hit.Local!.Title + "\n" + hit.Local.Kind;
+            holder.Label.Text = hit.File is { } file ? file.Name + "\n" + file.Folder
+                : app is not null ? AppOrganization.DisplayName(host.state, app) : hit.Local!.Title + "\n" + hit.Local.Kind;
             holder.Label.SetMaxLines(2);
             row.ContentDescription = holder.Label.Text;
             holder.Art.RemoveAllViews();
-            holder.Art.AddView(app is not null ? host.AppIcon(app, host.palette.Text) : new GlyphView(host, hit.Local?.Kind == "Journey" ? "file" : hit.Local?.Kind == "Saved story" ? "rss" : "note", host.palette.Accent), new FrameLayout.LayoutParams(host.Dp(28), host.Dp(28), GravityFlags.Center));
+            string glyph = hit.File is not null || hit.Local?.Kind == "Journey" ? "file" : hit.Local?.Kind == "Saved story" ? "rss" : "note";
+            holder.Art.AddView(app is not null ? host.AppIcon(app, host.palette.Text) : new GlyphView(host, glyph, host.palette.Accent), new FrameLayout.LayoutParams(host.Dp(28), host.Dp(28), GravityFlags.Center));
             holder.Pin.Visibility = app is not null && host.state.Apps[app.Id].Pinned ? ViewStates.Visible : ViewStates.Gone;
             host.badgeViews.RemoveAll(item => ReferenceEquals(item.View, holder.Badge));
             if (app is not null)
