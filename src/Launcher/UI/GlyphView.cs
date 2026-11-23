@@ -1,12 +1,32 @@
 ﻿using Android.Content;
 using Android.Graphics;
 using Android.Views;
+using LauncherApp.Services;
 
 namespace LauncherApp.UI;
 
 // Launcher control glyphs share a 24-unit grid; app icons come from Android.
 public sealed class GlyphView(Context context, string glyph, Color color) : View(context)
 {
+    private readonly FontIconDrawable? outline = LoadOutline(context, glyph, color);
+
+    private static FontIconDrawable? LoadOutline(Context context, string glyph, Color color)
+    {
+        string? name = glyph switch
+        {
+            "settings" => "gear-six",
+            "filter" => "funnel-simple",
+            "search" => "magnifying-glass",
+            "close" => "x",
+            _ => null
+        };
+        if (name is null || BuiltinIcons.Get(context, "builtin:phosphor-light", name) is not { } icon)
+            return null;
+        icon.SetInk(color);
+        icon.SetBounds(1, 1, 23, 23);
+        return icon;
+    }
+
     protected override void OnDraw(Canvas canvas)
     {
         base.OnDraw(canvas);
@@ -14,6 +34,12 @@ public sealed class GlyphView(Context context, string glyph, Color color) : View
         canvas.Save();
         canvas.Translate((Width - size) / 2, (Height - size) / 2);
         canvas.Scale(size / 24, size / 24);
+        if (outline is not null)
+        {
+            outline.Draw(canvas);
+            canvas.Restore();
+            return;
+        }
         using var p = new Paint(PaintFlags.AntiAlias) { Color = color, StrokeWidth = 1.15f };
         p.SetStyle(Paint.Style.Stroke);
         p.StrokeCap = Paint.Cap.Round;
@@ -338,10 +364,24 @@ public sealed class GlyphView(Context context, string glyph, Color color) : View
             case "up":
                 Path(5, 15, 12, 8, 19, 15);
                 break;
+            case "chevron":
+                if (LayoutDirection == Android.Views.LayoutDirection.Rtl)
+                    Path(15, 5, 8, 12, 15, 19);
+                else
+                    Path(9, 5, 16, 12, 9, 19);
+                break;
             case "more":
                 C(5, 12, 1);
                 C(12, 12, 1);
                 C(19, 12, 1);
+                break;
+            case "grip":
+                p.SetStyle(Paint.Style.Fill);
+                for (int y = 6; y <= 18; y += 6)
+                {
+                    C(9, y, 1.5f);
+                    C(15, y, 1.5f);
+                }
                 break;
             case "pin":
                 Path(8, 2, 16, 2, 15, 10, 19, 14, 5, 14, 9, 10, 8, 2);

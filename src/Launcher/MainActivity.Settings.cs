@@ -29,6 +29,12 @@ public partial class MainActivity
         var row = Stack(true);
         row.SetGravity(GravityFlags.CenterVertical);
         row.SetMinimumHeight(Dp(64));
+        bool showChevron = parent is SettingsCard || ReferenceEquals(parent, body) && FilteringSettings;
+        if (showChevron)
+        {
+            var leadingIcon = new GlyphView(this, glyph, palette.Muted) { ImportantForAccessibility = ImportantForAccessibility.No };
+            row.AddView(leadingIcon, new LinearLayout.LayoutParams(Dp(22), Dp(22)) { MarginEnd = Dp(12) });
+        }
 
         var labels = Stack();
         labels.SetPadding(0, Dp(10), Dp(10), Dp(10));
@@ -60,7 +66,7 @@ public partial class MainActivity
         );
 
         row.AddView(
-            new GlyphView(this, glyph, palette.Muted),
+            new GlyphView(this, showChevron ? "chevron" : glyph, palette.Muted) { ImportantForAccessibility = ImportantForAccessibility.No },
             new LinearLayout.LayoutParams(Dp(18), Dp(18))
         );
 
@@ -261,8 +267,20 @@ public partial class MainActivity
         });
     }
 
-    // Settings uses a small number of destinations rather than a single sprawling list.
-    // The same row builders are used in search, so child settings can be found directly.
+    private sealed class SettingsCard(Context context) : LinearLayout(context) { }
+
+    private LinearLayout AddSettingsCard(string? title = null)
+    {
+        if (title is not null)
+            SectionCaption(body, title);
+        var card = new SettingsCard(this) { Orientation = Orientation.Vertical };
+        card.SetPaddingRelative(Dp(14), Dp(4), Dp(14), Dp(4));
+        if (!ApplyGlassCard(card))
+            card.Background = Surface(palette.Card, 22);
+        body.AddView(card, new LinearLayout.LayoutParams(-1, -2) { BottomMargin = Dp(6) });
+        return card;
+    }
+
     private void RenderSettings()
     {
         matchingSettings = 0;
@@ -273,41 +291,40 @@ public partial class MainActivity
             return;
         }
 
-        SectionCaption(body, "Gestures & Interfacing");
-        SettingRow(body, "Gestures", "Enable and disable gestures", ShowGestureSetup, "grid");
-        AddHomeSwipeSetting(body, action => action());
+        var personal = AddSettingsCard("Make it yours");
+        SettingRow(personal, "Appearance", (state.FollowSystemTheme ? "Follow Android" : state.Theme) +
+            $" · {state.Columns} columns", () => Navigate("Appearance"), "sun");
+        SettingRow(personal, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
+        SettingRow(personal, "Apps & drawers", $"{Counted(state.Drawers.Count, "drawer")} · {HiddenAppCount} hidden",
+            () => Navigate("Apps & drawers"), "grid");
+        AddGestureSetting(personal);
 
-        
-        SectionCaption(body, "Quick actions");
-        SettingRow(body, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
-        SettingRow(body, "Setup & feature health", "Check missing permissions and device support", ShowFeatureHealth, "settings");
-
-        SectionCaption(body, "Personalisation");
-        SettingRow(body, "Appearance", (state.FollowSystemTheme ? "System theme" : state.Theme) +
-            $" · {state.Columns} columns · icons and motion", () => Navigate("Appearance"), "sun");
-        SettingRow(body, "Apps & drawers", $"{state.Drawers.Count} drawers · {apps.Count(a => state.Apps[a.Id].Hidden)} hidden · focus {(state.Focus ? "on" : "off")}",
-            () => ShowSettingsCategory("Apps & drawers", AddAppsAndDrawersSettings), "grid");
-
-        SectionCaption(body, "Content & communication");
-        SettingRow(body, "Cards, feeds & weather", $"{Sources.Count(s => s.Enabled)} news sources · widgets and weather",
+        var features = AddSettingsCard("Launcher features");
+        SettingRow(features, "Cards, feeds & weather", $"{Sources.Count(s => s.Enabled)} news sources · Today cards and widgets",
             () => ShowSettingsCategory("Cards, feeds & weather", AddContentSettings), "rss");
-        SettingRow(body, "Speech & audio", KokoroModelInstaller.IsInstalled(this)
+        SettingRow(features, "Notifications & panels", ConversationService.Enabled(this) ? "Notification access on" : "Notification access off",
+            () => Navigate("Notifications & panels"), "message");
+        SettingRow(features, "Speech & audio", KokoroModelInstaller.IsInstalled(this)
                 ? "Offline voice ready · playback and news"
                 : "Voice model not installed · download and playback",
             () => ShowSettingsCategory("Speech & audio", AddSpeechSettings), "play");
-        SettingRow(body, "Notifications & panels", "Conversations, history, alerts and quick panel",
-            () => ShowSettingsCategory("Notifications & panels", AddNotificationSettings), "message");
 
-        SectionCaption(body, "System & maintenance");
-        SettingRow(body, "Device & permissions", "Access, haptics, grayscale and system panel",
-            () => ShowSettingsCategory("Device & permissions", AddDeviceSettings), "phone");
-        SettingRow(body, "Privacy, backup & updates", "Protected content, export, restore and app updates",
-            () => ShowSettingsCategory("Privacy, backup & updates", AddMaintenanceSettings), "lock");
+        var device = AddSettingsCard("Device & data");
+        SettingRow(device, "Setup & permissions", IsDefaultHome() ? "Default Home set · device access" : "Set default Home · device access",
+            () => ShowSettingsCategory("Setup & permissions", AddDeviceSettings), "phone");
+        SettingRow(device, "Privacy", "Protected previews and message history", ShowPrivacyRecovery, "lock");
+        SettingRow(device, "Backup & restore", "Export or restore your layout", () => ShowSettingsCategory("Backup & restore", AddBackupSettings), "file");
+        SettingRow(device, "App updates", "Check for a new Launcher version", () => Navigate("Updates"), "down");
 
-        SettingRow(body, "How to use Launcher", "Gestures, drawers and customisation", ShowGuide, "note");
+        var support = AddSettingsCard("Help");
+        SettingRow(support, "How to use Launcher", "Gestures, drawers and customisation", ShowGuide, "note");
         Gap(body);
         Paragraph("Launcher · " + InstalledPackage().VersionName + "\nBuilt by *Kevin*.", null, TextAlignment.Center);
     }
+
+    private void AddGestureSetting(LinearLayout parent) =>
+        SettingRow(parent, "Gestures", "Double-tap to lock " + (state.DoubleTapToLock ? "on" : "off"),
+            ShowGestureSetup, "phone", "screen lock tap double tap accessibility");
 
     // Dismiss category sheets before opening a second screen or dialog.
     // Switches remain in place so several related choices can be changed together.
@@ -328,19 +345,33 @@ public partial class MainActivity
             Paragraph(description, parent);
     }
 
-    private void AddAppsAndDrawersSettings(LinearLayout parent, Action<Action> go)
+    private int HiddenAppCount => apps.Count(app => !app.PrivateProfile && state.Apps[app.Id].Hidden);
+
+    private void RenderAppsAndDrawersSettings()
     {
-        SettingRow(parent, "Edit layout", "Arrange apps and cards · undo changes", () => go(ShowLayoutEditor), "grid");
-        SettingRow(parent, "Drawers", "Create, rename, reorder and organise", () => go(() => Navigate("Drawers")), "grid");
-        SettingRow(parent, "Hidden apps", $"{apps.Count(a => state.Apps[a.Id].Hidden)} hidden · tap to restore",
-            () => go(() => Navigate("Hidden")), "app");
+        AddAppOrganisationSettings(AddSettingsCard("Organise apps"));
+        AddFocusSetting(AddSettingsCard("Focus"));
+    }
+
+    private void AddAppOrganisationSettings(LinearLayout parent)
+    {
+        SettingRow(parent, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
+        SettingRow(parent, "Manage drawers", Counted(state.Drawers.Count, "drawer") + " · create, rename or reorder",
+            () => Navigate("Drawers"), "grid");
+        SettingRow(parent, "Hidden apps", Counted(HiddenAppCount, "app") + " hidden · restore visibility",
+            () => Navigate("Hidden"), "app");
+        SettingRow(parent, "Quick access", "Choose up to five apps for the Home dock", ShowQuickAccess, "pin", "favorites favourites pinned apps");
+    }
+
+    private void AddFocusSetting(LinearLayout parent)
+    {
         ToggleRow(parent, "Focus mode", state.Focus, enabled =>
         {
             state.Focus = enabled;
             if (!enabled) state.FocusEndsAt = 0;
             Save();
         }, "quiet outlined tiles distraction");
-        SettingsExplanation(parent, "Focus changes tile appearance only. All apps remain available and Android notifications are unaffected.");
+        SettingsExplanation(parent, "Focus gives your app tiles a quieter outlined look.");
     }
 
     private void AddContentSettings(LinearLayout parent, Action<Action> go)
@@ -370,28 +401,52 @@ public partial class MainActivity
             () => go(ReadLatestFeedsWithKokoro), "rss");
     }
 
-    private void AddNotificationSettings(LinearLayout parent, Action<Action> go)
+    private void RenderNotificationSettings(LinearLayout? searchResults = null)
     {
-        AddGlassSetting(parent);
-        SettingRow(parent, "Conversations", "Choose notification sources and filters",
-            () => go(PickConversationSources), "message");
-        SettingRow(parent, "Message history", state.KeepMessageHistory
-                ? "Saving new message notifications"
-                : "Optional · messages and inline replies",
-            () => go(MessageHistorySettings), "message");
-        SettingRow(parent, "Quick panel", "Launcher controls and current notifications",
-            () => go(() => Navigate("Quick panel")), "down");
-        SettingRow(
-    parent,
-    "Notification whispers",
-    NotificationWhisperPreferences.Enabled(this)
-        ? "On · quiet spoken announcements"
-        : "Off · select apps and senders",
-    ShowNotificationWhisperSettings,
-    "message"
-);
-        SettingRow(parent, "Timer alerts", "Notifications and exact alarm access",
-            () => go(OpenTimerPermissions), "clock");
+        LinearLayout Group(string title) => searchResults ?? AddSettingsCard(title);
+
+        AddNotificationAccessSetting(Group("Permissions"));
+
+        var sources = Group("Sources & panels");
+        SettingRow(sources, "Notification sources", state.ConversationMessagesOnly ? "Messages only · choose apps" : "All notification types · choose apps",
+            PickConversationSources, "filter", "conversations messages filters");
+        SettingRow(sources, "Quick panel", "Open Launcher controls and current notifications",
+            () => Navigate("Quick panel"), "down");
+
+        SettingRow(Group("History"), "Message history", state.KeepMessageHistory ? "On · saving new messages" : "Off · optional local history",
+            MessageHistorySettings, "message");
+
+        var alerts = Group("Alerts");
+        SettingRow(alerts, "Notification whispers", NotificationWhisperPreferences.Enabled(this)
+                ? "On · quiet spoken announcements" : "Off · choose apps and senders",
+            ShowNotificationWhisperSettings, "message", "speech voice spoken alerts");
+        SettingRow(alerts, "Timer alerts", "Android notifications and exact alarm access", OpenTimerPermissions, "clock");
+    }
+
+    private bool? notificationAccessBeforeSettings;
+
+    private void AddNotificationAccessSetting(LinearLayout parent)
+    {
+        bool enabled = ConversationService.Enabled(this);
+        SettingRow(parent, "Notification access", enabled ? "On · manage in Android settings" : "Off · enable to show notifications in Launcher",
+            OpenNotificationAccessSettings, "lock", "permissions notification listener quick panel conversations");
+    }
+
+    private void OpenNotificationAccessSettings()
+    {
+        HideKeyboard();
+        bool enabled = ConversationService.Enabled(this);
+        void OpenAndroidSettings()
+        {
+            notificationAccessBeforeSettings = enabled;
+            OpenIntent(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+        }
+
+        if (enabled)
+            OpenAndroidSettings();
+        else
+            Confirm("Notification access", "Allow Launcher to show current notifications and message previews. Message history is optional and stored on this phone.",
+                "Open Android settings", OpenAndroidSettings);
     }
 
     private void AddDeviceSettings(LinearLayout parent, Action<Action> go)
@@ -419,29 +474,34 @@ public partial class MainActivity
             () => go(ShowPrivacyRecovery), "lock");
         SettingRow(parent, "App updates", "Check, download and install from Kevlog",
             () => go(() => Navigate("Updates")), "down");
-        SettingRow(parent, "Back up layout", "Export settings as a JSON file",
-            () => go(ExportBackup), "file");
-        SettingRow(parent, "Restore layout", "Import a previously saved layout",
-            () => go(ImportBackup), "file");
+        AddBackupSettings(parent, go);
         SettingRow(parent, "How to use Launcher", "Gestures, drawers, tiles and privacy",
             () => go(ShowGuide), "note");
     }
 
+    private void AddBackupSettings(LinearLayout parent, Action<Action> go)
+    {
+        SettingRow(parent, "Back up layout", "Export settings as a JSON file", () => go(ExportBackup), "file", "backup");
+        SettingRow(parent, "Restore layout", "Import a previously saved layout", () => go(ImportBackup), "file");
+    }
+
     private void RenderSettingsSearchResults()
     {
-        // Search covers actual controls across category sheets and Appearance.
-        // There is no nested-page blind spot and no non-matching section headers.
         Action<Action> open = action => action();
+        AddGestureSetting(body);
         SettingRow(body, "Appearance presets", "Classic and Studio · theme and layout",
             () => Navigate("Appearance"), "sun");
+        AddGlassSetting(body);
+        AddTouchGlowSetting(body);
         AddAppearanceThemeSettings(body, open);
         AddAppearanceTileSettings(body, open);
         AddAppearanceMotionSettings(body, open);
         AddAppearanceNavigationSettings(body, open);
-        AddAppsAndDrawersSettings(body, open);
+        AddAppOrganisationSettings(body);
+        AddFocusSetting(body);
         AddContentSettings(body, open);
         AddSpeechSettings(body, open);
-        AddNotificationSettings(body, open);
+        RenderNotificationSettings(body);
         AddDeviceSettings(body, open);
         AddMaintenanceSettings(body, open);
 
@@ -456,9 +516,25 @@ public partial class MainActivity
 
     private void RenderAppearance()
     {
-        Title("Appearance");
-        Paragraph("Start with a preset or customise the parts that matter to you.");
+        var appearance = AddSettingsCard("Theme & effects");
+        SettingRow(appearance, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme, ShowThemeChoice, "sun");
+        SettingRow(appearance, "Accent", state.Accent, ShowAccentChoice, "photo");
+        AddGlassSetting(appearance);
+        AddTouchGlowSetting(appearance);
+
+        var customisation = AddSettingsCard("Customise");
+        SettingRow(customisation, "Theme & wallpaper", state.UseWallpaper ? $"Wallpaper on · {state.WallpaperDim}% dimming" : "Wallpaper off · automatic theme and dimming",
+            () => Navigate("Theme & wallpaper"), "photo");
+        SettingRow(customisation, "Tiles & icons", $"{state.Columns} columns · {state.IconStyle}",
+            () => Navigate("Tiles & icons"), "grid");
+        SettingRow(customisation, "Motion & depth", state.LayeredInterface ? "Layered interface on" : "Layered interface off",
+            () => Navigate("Motion & depth"), "focus");
+        SettingRow(customisation, "Navigation & status", state.ShowHomeNavigation ? "Page tabs on" : "Page tabs off",
+            () => Navigate("Navigation & status"), "settings");
+
+        var presetCard = AddSettingsCard("Presets");
         var presets = Stack(true);
+        presets.SetPadding(0, Dp(6), 0, Dp(6));
         foreach (string preset in new[] { "Classic", "Studio" })
         {
             var choice = preset;
@@ -470,29 +546,22 @@ public partial class MainActivity
                     Save();
                     Render();
                 }));
-            var lp = new LinearLayout.LayoutParams(0, -2, 1);
-            lp.SetMargins(0, 0, Dp(8), 0);
+            var lp = new LinearLayout.LayoutParams(0, -2, 1) { MarginEnd = preset == "Classic" ? Dp(8) : 0 };
             presets.AddView(button, lp);
         }
-        body.AddView(presets, Match());
-        Gap(body);
-
-        // Common changes are deliberately one tap away.
-        SectionCaption(body, "Quick appearance");
-        SettingRow(body, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme, ShowThemeChoice, "sun");
-        SettingRow(body, "Accent", state.Accent, ShowAccentChoice, "photo");
-        AddGlassSetting(body);
-
-        SectionCaption(body, "More customisation");
-        SettingRow(body, "Theme & wallpaper", "Automatic theme, contrast, dimming and wallpaper",
-            () => ShowSettingsCategory("Theme & wallpaper", AddAppearanceThemeSettings), "sun");
-        SettingRow(body, "Tiles & icons", "Grid, size, labels, badges and icon packs",
-            () => ShowSettingsCategory("Tiles & icons", AddAppearanceTileSettings), "grid");
-        SettingRow(body, "Motion & depth", "Layered interface, phone tilt and transitions",
-            () => ShowSettingsCategory("Motion & depth", AddAppearanceMotionSettings), "focus");
-        SettingRow(body, "Navigation & status", "Page tabs, drawer placement and status row",
-            () => ShowSettingsCategory("Navigation & status", AddAppearanceNavigationSettings), "settings");
+        presetCard.AddView(presets, Match());
     }
+
+    private void RenderAppearanceSection(Action<LinearLayout, Action<Action>> addRows) =>
+        addRows(AddSettingsCard(), action => action());
+
+    private void AddTouchGlowSetting(LinearLayout parent) => ToggleRow(parent, "Touch glow", state.TouchGlow, enabled =>
+    {
+        state.TouchGlow = enabled;
+        if (!enabled)
+            touchGlow?.Clear();
+        Save();
+    }, "accent color colour finger tap ripple");
 
     private void ShowThemeChoice() => Choose("Theme", ["Dark", "Light", "Sun", "Follow Android"], index =>
     {
@@ -516,7 +585,7 @@ public partial class MainActivity
                 {
                     state.LiquidGlassCards = value;
                     Save();
-                    if (page == "Settings")
+                    if (IsStyledSettingsPage(page))
                         Render();
                 }, "notifications today root app tiles search translucent refraction wallpaper");
     }
@@ -706,9 +775,9 @@ public partial class MainActivity
             {
                 state.SwipeRightOpensDiscover = index == 1;
                 Save();
-                if (page == "Settings")
+                if (page is "Settings" or "Navigation & status")
                     RenderBody();
-            }, state.SwipeRightOpensDiscover ? 1 : 0)), "back", "Google Discover feed Today root");
+            }, state.SwipeRightOpensDiscover ? 1 : 0)), "grid", "Google Discover feed Today root gestures");
 
     private void ShowPageTabChoices() => Sheet("Page tab buttons", (panel, dialog) =>
     {
@@ -832,8 +901,7 @@ public partial class MainActivity
         Paragraph("Launcher works without optional permissions. Enable only the features you want.");
         SettingRow(body, "Default home app", IsDefaultHome() ? "Launcher is your home" : "Choose Launcher in Android’s chooser", RequestHome, "grid");
         SettingRow(body, "Usage access", AppCatalog.HasUsageAccess(this) ? "Enabled" : "Optional · real app usage and daily goals", () => OpenIntent(new Intent(Android.Provider.Settings.ActionUsageAccessSettings, Uri.Parse("package:" + PackageName))), "clock");
-        SettingRow(body, "Notification access", ConversationService.Enabled(this) ? "Enabled · quick panel and conversations" : "Optional · current notifications and messages", () =>
-            Confirm("Notification access", "Launcher shows current notifications in its quick panel and message previews in Conversations. These stay in memory on your device. You can revoke access in Android settings.", "Open settings", () => OpenIntent(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))), "message");
+        AddNotificationAccessSetting(body);
         SettingRow(body, "Connection names", connections.CanReadBluetooth && connections.CanReadWifiName ? "Enabled" : "Optional · Wi-Fi and connected Bluetooth names", RequestConnectionDetails, "wifi");
         Paragraph("Access is optional and used by the features you enable. App grayscale uses an accessibility service and a one-time display permission. File sharing uses a folder you select. Connection names may require nearby-device and location access; weather uses the city you enter. Work profiles and Android 15+ Private Space require Launcher as the default home. Android controls which profiles are accessible.");
     }

@@ -566,7 +566,7 @@ public partial class MainActivity
     private Dialog Sheet(string title, Action<LinearLayout, Dialog> build, Action<LinearLayout, Dialog>? footer = null,
         Action<LinearLayout, Dialog>? fixedHeader = null, AccentGlowDrawable? backgroundGlow = null)
     {
-        var dialog = new Dialog(this, Android.Resource.Style.ThemeMaterialNoActionBar);
+        var dialog = new TouchGlowDialog(this);
         var overlay = new FrameLayout(this);
         overlay.SetOnApplyWindowInsetsListener(new InsetListener());
         var outside = new View(this);

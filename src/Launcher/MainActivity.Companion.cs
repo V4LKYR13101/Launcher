@@ -64,7 +64,7 @@ public partial class MainActivity
         state.RootOrder = latest.RootOrder;
         state.Timers = latest.Timers;
         state.Reminders = latest.Reminders;
-        if (resumed && page == "Root" && WorkspaceEditing.NoteId is null && !searching)
+        if (resumed && page == "Root" && todayLayoutEditor is null && WorkspaceEditing.NoteId is null && !searching)
             RenderBody();
     });
 }

@@ -39,8 +39,11 @@ public partial class MainActivity
                 "Enable notification whispers",
                 NotificationWhisperPreferences.Enabled(this),
                 value =>
-                    NotificationWhisperPreferences.SetEnabled(
-                        this, value));
+                {
+                    NotificationWhisperPreferences.SetEnabled(this, value);
+                    if (page == "Notifications & panels" || FilteringSettings)
+                        RefreshBodyInPlace();
+                });
 
             ToggleRow(
                 panel,

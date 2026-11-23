@@ -89,8 +89,14 @@ public partial class MainActivity : Activity
             page = savedInstanceState.GetString("page") ?? "Tiles";
             if (savedInstanceState.GetString("last-drawer-page") is { } drawerPage && IsDrawerPage(drawerPage))
                 lastDrawerPage = drawerPage;
-            foreach (string home in new[] { "Root", "Tiles", "Conversations", GroupedDrawerPage, AllAppsDrawerPage })
-                homeScrollPositions[home] = Math.Max(0, savedInstanceState.GetInt("scroll:" + home, 0));
+            var scrollPages = savedInstanceState.GetStringArray("scroll-pages") ?? ["Root", "Tiles", "Conversations", GroupedDrawerPage, AllAppsDrawerPage];
+            foreach (string name in scrollPages)
+                homeScrollPositions[name] = Math.Max(0, savedInstanceState.GetInt("scroll:" + name, 0));
+            settingsQuery = savedInstanceState.GetString("settings-query") ?? "";
+            foreach (var name in (savedInstanceState.GetStringArray("settings-back") ?? []).Reverse())
+                settingsBackPages.Push(name);
+            if (page == "Root" && savedInstanceState.GetStringArray("today-edit-order") is { } draft)
+                todayLayoutEditor = new TodayLayoutEditor(this, draft);
         }
         try
         {
@@ -139,6 +145,11 @@ public partial class MainActivity : Activity
         RememberHomeScroll();
         foreach (var saved in homeScrollPositions)
             outState.PutInt("scroll:" + saved.Key, saved.Value);
+        outState.PutStringArray("scroll-pages", homeScrollPositions.Keys.ToArray());
+        outState.PutString("settings-query", settingsQuery);
+        outState.PutStringArray("settings-back", settingsBackPages.ToArray());
+        if (todayLayoutEditor is { } editor)
+            outState.PutStringArray("today-edit-order", editor.Order);
         outState.PutInt("pending-widget", pendingWidget);
         outState.PutString("page", pageSlide is { } slide && (pageSwipeActive || slide.ReturnToOrigin) ? slide.Origin : page);
         outState.PutString("last-drawer-page", lastDrawerPage);
@@ -169,6 +180,12 @@ public partial class MainActivity : Activity
         RefreshSystemPanelSettings();
         SystemPanelService.Refresh();
         resumed = true;
+        if (notificationAccessBeforeSettings is { } previousAccess)
+        {
+            notificationAccessBeforeSettings = null;
+            if (previousAccess != ConversationService.Enabled(this))
+                RefreshBodyInPlace();
+        }
         RefreshLiquidGlassWallpaper();
         UpdateStatusNotifications();
         connections.Start();
@@ -229,6 +246,7 @@ public partial class MainActivity : Activity
     }
     protected override void OnPause()
     {
+        touchGlow?.Clear();
         EndPageSlideForInterruption();
         FlushNoteSaves();
         CancelBodyRefresh();
@@ -323,6 +341,11 @@ public partial class MainActivity : Activity
     public override void OnBackPressed() => HandleBack();
     private void HandleBack()
     {
+        if (todayLayoutEditor is not null)
+        {
+            FinishTodayLayout(false);
+            return;
+        }
         if (appLayer is not null)
         {
             AnimateAppLayer(false);
@@ -334,11 +357,14 @@ public partial class MainActivity : Activity
             searching = false;
             query = "";
             Render();
+            return;
         }
-        else if (IsDrawerPage(page))
+        if (ReturnFromSettings())
+            return;
+        if (IsDrawerPage(page))
             Navigate("Tiles");
         else if (page != "Tiles")
-            Navigate(IsHomePage || page is "Settings" or "Quick panel" ? "Tiles" : "Settings");
+            Navigate(IsHomePage || page is "Settings" or "Quick panel" ? "Tiles" : "Settings", returningFromSettings: true);
         else
             scroll.SmoothScrollTo(0, 0);
     }
@@ -501,12 +527,12 @@ public partial class MainActivity : Activity
         view.Click += (_, _) => action();
         return view;
     }
-    private View IconButton(string glyph, string description, Action action)
+    private View IconButton(string glyph, string description, Action action, Color? color = null)
     {
         var frame = new FrameLayout(this) { ContentDescription = description };
         frame.SetMinimumWidth(Dp(48));
         frame.SetMinimumHeight(Dp(48));
-        frame.AddView(new GlyphView(this, glyph, palette.Text), new FrameLayout.LayoutParams(Dp(22), Dp(22), GravityFlags.Center));
+        frame.AddView(new GlyphView(this, glyph, color ?? palette.Text), new FrameLayout.LayoutParams(Dp(22), Dp(22), GravityFlags.Center));
         TouchFeedback(frame, 24);
         frame.Click += (_, _) => action();
         return frame;
@@ -617,6 +643,8 @@ public partial class MainActivity : Activity
             AddPageHeader(page);
         if (page == "Settings")
             AddSettingsSearch();
+        if (page == "Root")
+            AddTodayLayoutControls();
         body = Stack();
         int side = Math.Max(16, (Resources!.Configuration!.ScreenWidthDp - 720) / 2);
         body.SetPadding(Dp(side), Dp(12), Dp(side), page == "Quick panel" ? 0 : Dp(12));
@@ -640,9 +668,9 @@ public partial class MainActivity : Activity
             shell.AddView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         }
         RenderBody();
-        if (IsHomePage && (page != "Tiles" || searching))
+        if (todayLayoutEditor is null && IsHomePage && (page != "Tiles" || searching))
             AddSearchBar();
-        if (IsHomePage && !IsDrawerPage(page))
+        if (todayLayoutEditor is null && IsHomePage && !IsDrawerPage(page))
             AddHomeNavigation();
         root.RequestApplyInsets();
         RestoreHomeScroll();
@@ -677,7 +705,7 @@ public partial class MainActivity : Activity
     {
         var row = Stack(true);
         row.SetGravity(GravityFlags.CenterVertical);
-        row.AddView(IconButton("back", "Back", () => Navigate(page is "Settings" or "Quick panel" ? "Tiles" : "Settings")), new LinearLayout.LayoutParams(Dp(52), Dp(52)));
+        row.AddView(IconButton("back", "Back", HandleBack), new LinearLayout.LayoutParams(Dp(52), Dp(52)));
         string label = title switch
         {
             "Updates" => "App updates",
@@ -788,6 +816,24 @@ public partial class MainActivity : Activity
             case "Appearance":
                 RenderAppearance();
                 break;
+            case "Apps & drawers":
+                RenderAppsAndDrawersSettings();
+                break;
+            case "Notifications & panels":
+                RenderNotificationSettings();
+                break;
+            case "Theme & wallpaper":
+                RenderAppearanceSection(AddAppearanceThemeSettings);
+                break;
+            case "Tiles & icons":
+                RenderAppearanceSection(AddAppearanceTileSettings);
+                break;
+            case "Motion & depth":
+                RenderAppearanceSection(AddAppearanceMotionSettings);
+                break;
+            case "Navigation & status":
+                RenderAppearanceSection(AddAppearanceNavigationSettings);
+                break;
             case "Automatic theme":
                 RenderAutomaticTheme();
                 break;
@@ -834,7 +880,7 @@ public partial class MainActivity : Activity
             searchInput.SetHintTextColor(palette.Muted);
             searchInput.Background = null;
             StyleEntry(input);
-            searchInput.SetPadding(Dp(4), 0, 0, 0);
+            searchInput.SetPadding(Dp(4), 0, IsAppsSurface ? 0 : Dp(12), 0);
             searchInput.ImeOptions = ImeAction.Search;
             searchInput.TextChanged += (_, _) =>
             {
@@ -871,7 +917,7 @@ public partial class MainActivity : Activity
             prompt.SetSingleLine(true);
             prompt.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
             prompt.ContentDescription = page == "Root" ? "Search Today or enter a command" : page == "Conversations" ? "Search notifications" : "Search apps";
-            prompt.SetPadding(Dp(4), 0, 0, 0);
+            prompt.SetPadding(Dp(4), 0, Dp(12), 0);
             prompt.Gravity = GravityFlags.CenterVertical;
             BindTapHaptics(prompt);
             prompt.Click += (_, _) => StartSearch();
@@ -879,7 +925,6 @@ public partial class MainActivity : Activity
             BindHoldHaptics(pill);
             pill.LongClick += (_, _) => QuickControls();
         }
-        pill.AddView(IconButton("more", "Launcher settings", () => { HideKeyboard(); QuickControls(); }), new LinearLayout.LayoutParams(Dp(48), Dp(barHeight)));
         bottom.AddView(pill, Match(Dp(barHeight)));
         shell.AddView(bottom, Match());
     }
@@ -928,7 +973,10 @@ public partial class MainActivity : Activity
     public override bool DispatchTouchEvent(MotionEvent? ev)
     {
         if (ev is not null)
+        {
             lastHomeTouch = System.Environment.TickCount64;
+            TrackTouchGlow(ev, Window?.DecorView, ref touchGlow);
+        }
         if (ev?.ActionMasked == MotionEventActions.Down)
             depthTouchActive = true;
         else if (ev?.ActionMasked is MotionEventActions.Up or MotionEventActions.Cancel)

@@ -42,19 +42,20 @@ public partial class MainActivity
 
     private void RestoreHomeScroll()
     {
-        if ((!IsHomePage && page != "Quick panel") || searching)
+        if ((!IsHomePage && page != "Quick panel" && !IsSettingsPage(page)) || searching)
         {
             renderedHomeScroll = null;
             renderedHomePage = null;
             return;
         }
         renderedHomeScroll = scroll;
-        renderedHomePage = page;
+        renderedHomePage = todayLayoutEditor is not null ? TodayEditScrollKey : FilteringSettings ? SettingsSearchScrollKey : page;
         var target = scroll;
         string name = page;
-        int position = homeScrollPositions.GetValueOrDefault(name);
-        if (position > 0)
-            target.Post(() => { if (ReferenceEquals(scroll, target) && page == name && !searching) target.ScrollTo(0, position); });
+        string key = renderedHomePage;
+        int position = homeScrollPositions.GetValueOrDefault(key);
+        if (position > 0 || IsSettingsPage(name))
+            target.Post(() => { if (ReferenceEquals(scroll, target) && page == name && renderedHomePage == key && !searching) target.ScrollTo(0, position); });
     }
 
     private static int HomePageIndex(string value) => value switch { "Root" => 0, "Tiles" => 1, "Conversations" => 2, _ => -1 };
@@ -71,10 +72,17 @@ public partial class MainActivity
         return from >= 0 && to >= 0 && from != to ? new(target, true, Math.Sign(to - from)) : null;
     }
 
-    private void Navigate(string target)
+    private void Navigate(string target, bool returningFromSettings = false)
     {
         EndPageSlideForInterruption();
         RememberHomeScroll();
+        if (target != "Root" && todayLayoutEditor is { } editor)
+        {
+            editor.StopDrag();
+            todayLayoutEditor = null;
+        }
+        if (!returningFromSettings)
+            TrackSettingsNavigation(target);
         if (IsDrawerPage(target))
             lastDrawerPage = target;
         if (RouteTo(target) is { } route && BeginPageSlide(route))
@@ -259,7 +267,7 @@ public partial class MainActivity
         if (ev.ActionMasked == MotionEventActions.Down)
         {
             EndPageSlideForInterruption();
-            swipePending = !searching && openSheetCount == 0 && (IsHomePage || page == "Quick panel");
+            swipePending = todayLayoutEditor is null && !searching && openSheetCount == 0 && (IsHomePage || page == "Quick panel");
             if (swipePending)
             {
                 swipeX = ev.RawX;

@@ -119,7 +119,7 @@ public partial class MainActivity
     }
     private void RefreshBodyInPlace()
     {
-        if (pendingBodyRefresh is not null)
+        if (todayLayoutEditor is not null || pendingBodyRefresh is not null)
             return;
         string requestedPage = page;
         var target = scroll;

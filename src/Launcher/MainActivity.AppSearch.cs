@@ -30,11 +30,17 @@ public partial class MainActivity
         appSearchCount = Text("", 12, color: palette.Muted);
         appSearchCount.SetPadding(0, 0, 0, Dp(12));
         body.AddView(appSearchCount, Match());
-        if (SearchingFiles && !fileSearchAccess)
+        bool fileResults = SearchingFiles;
+        if (fileResults && !fileSearchAccess)
             body.AddView(Button("Allow file access", RequestFileSearchAccess), Match());
         appSearchList = new ListView(this) { Divider = null, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, CacheColorHint = Color.Transparent };
         appSearchList.Selector = new Android.Graphics.Drawables.ColorDrawable(Color.Transparent);
-        appSearchAdapter = new AppSearchAdapter(this);
+        if (fileResults)
+        {
+            appSearchList.Divider = new Android.Graphics.Drawables.ColorDrawable(Color.Transparent);
+            appSearchList.DividerHeight = Dp(HomeCardSpacingDp);
+        }
+        appSearchAdapter = new AppSearchAdapter(this, fileResults);
         appSearchList.Adapter = appSearchAdapter;
         body.AddView(appSearchList, new LinearLayout.LayoutParams(-1, 0, 1));
         RefreshAppSearch();
@@ -123,8 +129,9 @@ public partial class MainActivity
         else if (LocalSearch.Find(state, query).FirstOrDefault() is { } local)
             OpenSearchHit(new(null, local));
     }
-    private sealed class AppSearchAdapter(MainActivity host) : BaseAdapter<SearchHit>
+    private sealed class AppSearchAdapter(MainActivity host, bool fileResults) : BaseAdapter<SearchHit>
     {
+        private const int FileCardRadius = 22;
         private SearchHit[] entries = [];
         public override int Count => entries.Length;
         public override SearchHit this[int position] => entries[position];
@@ -149,32 +156,68 @@ public partial class MainActivity
             {
                 row = host.Stack(true);
                 row.SetGravity(GravityFlags.CenterVertical);
-                row.SetPadding(host.Dp(10), host.Dp(8), host.Dp(10), host.Dp(8));
+                if (fileResults)
+                {
+                    if (OperatingSystem.IsAndroidVersionAtLeast(33) && host.liquidGlass is { } glass)
+                        glass.AddRecycledPanel(row, FileCardRadius);
+                    else
+                        row.Background = host.Surface(host.palette.Card, FileCardRadius);
+                }
+                int horizontalPadding = host.Dp(fileResults ? 16 : 10);
+                row.SetPadding(horizontalPadding, host.Dp(8), horizontalPadding, host.Dp(8));
                 row.SetMinimumHeight(host.Dp(62));
-                host.TouchFeedback(row);
+                host.TouchFeedback(row, fileResults ? FileCardRadius : 12);
                 var iconFrame = new FrameLayout(host);
                 var art = new FrameLayout(host);
                 iconFrame.AddView(art, new FrameLayout.LayoutParams(-1, -1));
                 var badge = host.AddBadge(iconFrame, app?.PackageName ?? "");
                 row.AddView(iconFrame, new LinearLayout.LayoutParams(host.Dp(44), host.Dp(44)));
-                var label = host.Text("", 16);
-                label.SetPadding(host.Dp(12), 0, host.Dp(8), 0);
-                label.SetMaxLines(2);
-                label.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-                row.AddView(label, new LinearLayout.LayoutParams(0, -2, 1));
+                var label = host.Text("", 16, strong: fileResults);
+                TextView? folder = null;
+                if (fileResults)
+                {
+                    var labels = host.Stack();
+                    labels.SetPaddingRelative(host.Dp(12), 0, host.Dp(8), 0);
+                    label.SetSingleLine(true);
+                    label.Ellipsize = Android.Text.TextUtils.TruncateAt.Middle;
+                    label.ImportantForAccessibility = ImportantForAccessibility.No;
+                    labels.AddView(label, new LinearLayout.LayoutParams(-1, -2));
+
+                    folder = host.Text("", 12, color: host.palette.Muted);
+                    folder.SetPadding(0, host.Dp(4), 0, 0);
+                    folder.SetSingleLine(true);
+                    folder.Ellipsize = Android.Text.TextUtils.TruncateAt.Start;
+                    folder.ImportantForAccessibility = ImportantForAccessibility.No;
+                    labels.AddView(folder, new LinearLayout.LayoutParams(-1, -2));
+                    row.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
+                }
+                else
+                {
+                    label.SetPadding(host.Dp(12), 0, host.Dp(8), 0);
+                    label.SetMaxLines(2);
+                    label.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+                    row.AddView(label, new LinearLayout.LayoutParams(0, -2, 1));
+                }
                 var pin = new GlyphView(host, "pin", host.palette.Muted);
                 row.AddView(pin, new LinearLayout.LayoutParams(host.Dp(18), host.Dp(18)));
-                holder = new AppSearchRow(art, label, badge, pin, hit);
+                holder = new AppSearchRow(art, label, folder, badge, pin, hit);
                 row.Tag = holder;
                 host.BindHoldHaptics(row);
                 row.Click += (_, _) => host.OpenSearchHit(holder.Hit);
                 row.LongClick += (_, _) => { if (holder.Hit.App is { } selected) host.EditApp(selected); else host.OpenSearchHit(holder.Hit); };
             }
             holder.Hit = hit;
-            holder.Label.Text = hit.File is { } file ? file.Name + "\n" + file.Folder
-                : app is not null ? AppOrganization.DisplayName(host.state, app) : hit.Local!.Title + "\n" + hit.Local.Kind;
-            holder.Label.SetMaxLines(2);
-            row.ContentDescription = holder.Label.Text;
+            if (hit.File is { } file)
+            {
+                holder.Label.Text = file.Name;
+                holder.Folder!.Text = file.Folder;
+                row.ContentDescription = file.Name + "\n" + file.Folder;
+            }
+            else
+            {
+                holder.Label.Text = app is not null ? AppOrganization.DisplayName(host.state, app) : hit.Local!.Title + "\n" + hit.Local.Kind;
+                row.ContentDescription = holder.Label.Text;
+            }
             holder.Art.RemoveAllViews();
             string glyph = hit.File is not null || hit.Local?.Kind == "Journey" ? "file" : hit.Local?.Kind == "Saved story" ? "rss" : "note";
             holder.Art.AddView(app is not null ? host.AppIcon(app, host.palette.Text) : new GlyphView(host, glyph, host.palette.Accent), new FrameLayout.LayoutParams(host.Dp(28), host.Dp(28), GravityFlags.Center));
@@ -190,10 +233,11 @@ public partial class MainActivity
             return row;
         }
     }
-    private sealed class AppSearchRow(FrameLayout art, TextView label, TextView badge, View pin, SearchHit hit) : Java.Lang.Object
+    private sealed class AppSearchRow(FrameLayout art, TextView label, TextView? folder, TextView badge, View pin, SearchHit hit) : Java.Lang.Object
     {
         public FrameLayout Art { get; } = art;
         public TextView Label { get; } = label;
+        public TextView? Folder { get; } = folder;
         public TextView Badge { get; } = badge;
         public View Pin { get; } = pin;
         public SearchHit Hit { get; set; } = hit;

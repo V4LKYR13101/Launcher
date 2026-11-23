@@ -11,12 +11,13 @@ internal static class NotificationGroup
 {
     public static StackDepth? AddRows(LinearLayout section, LinearLayout header, View? chevron, string appName,
         IReadOnlyList<Conversation> items, HashSet<string> expandedApps, Func<Conversation, View> row,
-        Color edgeColor, bool glass, Func<bool> animate, Func<bool>? canToggle = null)
+        Color edgeColor, bool glass, Func<bool> animate, Func<bool>? canToggle = null,
+        (View Row, Action<bool> SetCollapsed)? front = null)
     {
         if (OperatingSystem.IsAndroidVersionAtLeast(28))
             header.AccessibilityHeading = true;
         var newest = items[0];
-        section.AddView(row(newest), new LinearLayout.LayoutParams(-1, -2));
+        section.AddView(front?.Row ?? row(newest), new LinearLayout.LayoutParams(-1, -2));
         if (chevron is null)
             return null;
 
@@ -50,6 +51,7 @@ internal static class NotificationGroup
         void UpdateHeader()
         {
             header.ContentDescription = $"{appName}, {items.Count} notifications, {(expanded ? "expanded" : "collapsed")}";
+            front?.SetCollapsed(!expanded);
             older.ImportantForAccessibility = expanded
                 ? ImportantForAccessibility.Auto : ImportantForAccessibility.NoHideDescendants;
         }

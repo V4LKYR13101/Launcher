@@ -19,6 +19,7 @@ public partial class MainActivity
         if (agendaLoading || !force && Now - agendaUpdated < 300000)
             return;
         agendaLoading = true;
+        agendaUpdated = Now;
         try
         {
             var selected = state.CalendarIds.ToArray();
@@ -26,7 +27,6 @@ public partial class MainActivity
             if (IsDestroyed)
                 return;
             agendaEvents = events;
-            agendaUpdated = Now;
             agendaError = null;
         }
         catch (Java.Lang.RuntimeException) { agendaError = "Calendar is unavailable. Check calendar access and try again."; agendaEvents = []; }
@@ -48,12 +48,25 @@ public partial class MainActivity
         foreach (var entry in agendaEvents)
         {
             var item = entry;
-            var date = DateTimeOffset.FromUnixTimeMilliseconds(item.Begins).ToLocalTime();
-            string when = item.AllDay ? DateTimeOffset.FromUnixTimeMilliseconds(item.Begins).UtcDateTime.ToString("ddd, d MMM") + " · all day" : item.Begins <= Now ? "Now" : date.ToString(date.Date == DateTime.Today ? "HH:mm" : "ddd, d MMM · HH:mm");
-            SettingRow(panel, item.Title, when + (item.Location.Length > 0 ? " · " + item.Location : ""), () => OpenIntent(new Intent(Intent.ActionView, Android.Net.Uri.Parse("content://com.android.calendar/events/" + item.Id))), "calendar");
+            SettingRow(panel, item.Title, AgendaTime(item) + (item.Location.Length > 0 ? " · " + item.Location : ""), () => OpenAgendaEvent(item), "calendar");
         }
         RootActions(panel, ("Calendars", ShowCalendarChoices), ("Refresh", () => RefreshAgenda(true)));
     }
+
+    private string AgendaTime(AgendaEvent item)
+    {
+        var begins = DateTimeOffset.FromUnixTimeMilliseconds(item.Begins);
+        if (item.AllDay)
+            return begins.UtcDateTime.ToString("ddd, d MMM") + " · all day";
+        if (item.Begins <= Now)
+            return "Now";
+        var local = begins.ToLocalTime();
+        return local.ToString(local.Date == DateTime.Today ? "HH:mm" : "ddd, d MMM · HH:mm");
+    }
+
+    private void OpenAgendaEvent(AgendaEvent item) =>
+        OpenIntent(new Intent(Intent.ActionView, Android.Net.Uri.Parse("content://com.android.calendar/events/" + item.Id)));
+
     private void ShowCalendarChoices()
     {
         if (!AgendaReader.Allowed(this))

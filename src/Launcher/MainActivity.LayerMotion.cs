@@ -27,7 +27,7 @@ public partial class MainActivity
     {
         if (depthMotion is null)
             return;
-        if (resumed && IsHomePage && !searching && openSheetCount == 0 && state.TiltDepth && LayerMotionEnabled)
+        if (resumed && todayLayoutEditor is null && IsHomePage && !searching && openSheetCount == 0 && state.TiltDepth && LayerMotionEnabled)
         {
             if (!depthMotion.Running)
                 depthRotation = null;

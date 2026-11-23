@@ -158,6 +158,7 @@ public sealed class LauncherState
         get; set;
     }
     public bool HomeAccentGlow { get; set; }
+    public bool TouchGlow { get; set; }
     [JsonPropertyName("LiquidGlassNotifications")]
     public bool LiquidGlassCards { get; set; } = true;
     public int WallpaperDim { get; set; } = 65;
