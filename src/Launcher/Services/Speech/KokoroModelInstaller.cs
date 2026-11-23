@@ -39,6 +39,19 @@ public static class KokoroModelInstaller
         return KokoroModelPaths.FindInstalled(context) != null;
     }
 
+    internal static async Task RemoveAsync(Context context)
+    {
+        await InstallLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            LauncherSpeech.Instance.Stop();
+            foreach (string path in KokoroModelPaths.InstallLocations(context).Distinct(StringComparer.Ordinal))
+                if (Directory.Exists(path))
+                    Directory.Delete(path, recursive: true);
+        }
+        finally { InstallLock.Release(); }
+    }
+
     public static async Task InstallAsync(
         Context context,
         IProgress<ModelInstallProgress>? progress,
@@ -201,6 +214,7 @@ public static class KokoroModelInstaller
         IProgress<ModelInstallProgress>? progress,
         CancellationToken ct)
     {
+        using var transfer = ActiveDownloads.Start("Kokoro voice model", ExpectedArchiveSize);
         progress?.Report(new(
             "Connecting to the Kokoro model release...", 0));
 
@@ -251,6 +265,7 @@ public static class KokoroModelInstaller
 
             await output.WriteAsync(
                 buffer.AsMemory(0, count), ct);
+            transfer.Report(received, ExpectedArchiveSize);
 
             int percentage = (int)(
                 received * 100.0 / ExpectedArchiveSize);

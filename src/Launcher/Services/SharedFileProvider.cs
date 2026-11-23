@@ -31,7 +31,8 @@ internal sealed class SharedFileProvider : ContentProvider
     {
         string path = ReadPath(uri);
         var context = Context!;
-        if (!SharedStorage.CanRead(context) || !SharedStorage.MountedVolumes(context).Any(volume => SharedStorage.Contains(volume.Root, path)))
+        if (!DownloadHistory.IsSavedLegacyFile(context, path) &&
+            (!SharedStorage.CanRead(context) || !SharedStorage.MountedVolumes(context).Any(volume => SharedStorage.Contains(volume.Root, path))))
             throw new Java.IO.FileNotFoundException("File is outside accessible storage.");
 
         using var file = new Java.IO.File(path);

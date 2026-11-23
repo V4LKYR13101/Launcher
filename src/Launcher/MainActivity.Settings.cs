@@ -300,14 +300,13 @@ public partial class MainActivity
         AddGestureSetting(personal);
 
         var features = AddSettingsCard("Launcher features");
+        AddSearchSettingsLink(features);
+        AddDownloadsSettingsLink(features);
         SettingRow(features, "Cards, feeds & weather", $"{Sources.Count(s => s.Enabled)} news sources · Today cards and widgets",
             () => ShowSettingsCategory("Cards, feeds & weather", AddContentSettings), "rss");
         SettingRow(features, "Notifications & panels", ConversationService.Enabled(this) ? "Notification access on" : "Notification access off",
             () => Navigate("Notifications & panels"), "message");
-        SettingRow(features, "Speech & audio", KokoroModelInstaller.IsInstalled(this)
-                ? "Offline voice ready · playback and news"
-                : "Voice model not installed · download and playback",
-            () => ShowSettingsCategory("Speech & audio", AddSpeechSettings), "play");
+        AddSpeechSettingsLink(features);
 
         var device = AddSettingsCard("Device & data");
         SettingRow(device, "Setup & permissions", IsDefaultHome() ? "Default Home set · device access" : "Set default Home · device access",
@@ -389,16 +388,18 @@ public partial class MainActivity
             () => go(() => Navigate("Integrations")), "link");
     }
 
-    private void AddSpeechSettings(LinearLayout parent, Action<Action> go)
+    private void AddSpeechSettingsLink(LinearLayout parent) =>
+        SettingRow(parent, SpeechSettingsPage, KokoroModelInstaller.IsInstalled(this)
+                ? "Offline voice ready · playback and news"
+                : "Voice model not installed · download and playback",
+            () => OpenSpeechSettings(), "play", "Kokoro model files voice speech download storage");
+
+    private void AddSpeechActions(LinearLayout parent)
     {
         SettingRow(parent, "Kokoro speech", "Voice selection, speed and offline playback",
-            () => go(() => KokoroReaderDialog.Show(this)), "play");
-        SettingRow(parent, "Kokoro model files", KokoroModelInstaller.IsInstalled(this)
-                ? "Installed · ready for offline speech"
-                : "Not installed · download approximately 350 MB",
-            () => go(() => KokoroModelInstallerUi.Show(this, () => RenderBody())), "down");
+            () => KokoroReaderDialog.Show(this), "play");
         SettingRow(parent, "Listen to latest news", "Read RSS headlines and summaries aloud",
-            () => go(ReadLatestFeedsWithKokoro), "rss");
+            ReadLatestFeedsWithKokoro, "rss");
     }
 
     private void RenderNotificationSettings(LinearLayout? searchResults = null)
@@ -500,7 +501,11 @@ public partial class MainActivity
         AddAppOrganisationSettings(body);
         AddFocusSetting(body);
         AddContentSettings(body, open);
-        AddSpeechSettings(body, open);
+        AddSpeechSettingsLink(body);
+        AddSpeechActions(body);
+        AddImageSearchSetting(body);
+        AddDocumentSearchSetting(body);
+        AddDownloadsSettingsLink(body);
         RenderNotificationSettings(body);
         AddDeviceSettings(body, open);
         AddMaintenanceSettings(body, open);

@@ -22,6 +22,36 @@ internal static class SharedStorage
         }
     }
 
+    public static IEnumerable<(string Path, string Name, string Folder)> Files(Context context, CancellationToken token) =>
+        Files(MountedVolumes(context), token);
+
+    public static IEnumerable<(string Path, string Name, string Folder)> Files(IEnumerable<(string Root, string Label)> volumes, CancellationToken token)
+    {
+        var options = new EnumerationOptions { AttributesToSkip = FileAttributes.ReparsePoint, IgnoreInaccessible = true };
+        foreach (var (root, label) in volumes)
+        {
+            var directories = new Stack<DirectoryInfo>();
+            directories.Push(new DirectoryInfo(root));
+            while (directories.TryPop(out var directory))
+            {
+                token.ThrowIfCancellationRequested();
+                string folder = label + directory.FullName[root.Length..];
+                FileSystemInfo[] entries;
+                try { entries = directory.GetFileSystemInfos("*", options); }
+                catch (Exception error) when (error is IOException or UnauthorizedAccessException) { continue; }
+
+                foreach (var entry in entries)
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (entry is not DirectoryInfo child)
+                        yield return (entry.FullName, entry.Name, folder);
+                    else if (Contains(root, child.FullName))
+                        directories.Push(child);
+                }
+            }
+        }
+    }
+
     private static IEnumerable<(string Root, string Label)> StorageRoots(Context context)
     {
         if (OperatingSystem.IsAndroidVersionAtLeast(30) && context.GetSystemService(Context.StorageService) is StorageManager manager)

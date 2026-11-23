@@ -312,6 +312,11 @@ public sealed class GlyphView(Context context, string glyph, Color color) : View
                 L(8, 13, 17, 13);
                 L(8, 17, 15, 17);
                 break;
+            case "download":
+                L(12, 3, 12, 16);
+                Path(7, 11, 12, 16, 17, 11);
+                Path(4, 17, 4, 21, 20, 21, 20, 17);
+                break;
             case "calculator":
                 R(4, 2, 16, 20);
                 R(7, 5, 10, 4, 1);
