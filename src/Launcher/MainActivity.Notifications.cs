@@ -17,7 +17,7 @@ public partial class MainActivity
     {
         liquidGlass = null;
         if (!OperatingSystem.IsAndroidVersionAtLeast(33) || !state.LiquidGlassCards
-            || (!IsHomePage && page is not ("Quick panel" or "Settings")))
+            || (!IsHomePage && page != "Quick panel" && !IsStyledSettingsPage(page)))
             return;
         liquidGlass = new LiquidGlass(scene, palette, homeAccentGlow);
         scene.Background = liquidGlass;
@@ -110,7 +110,7 @@ public partial class MainActivity
             var icon = NotificationIcon(group.Key);
             icon.ImportantForAccessibility = ImportantForAccessibility.No;
             header.AddView(icon, new LinearLayout.LayoutParams(Dp(24), Dp(24)));
-            var name = Text(label, 14, true, palette.Accent);
+            var name = Text(label, 14, true, actions ? palette.Text : palette.Accent);
             name.SetPaddingRelative(Dp(10), 0, Dp(8), 0);
             name.SetMaxLines(2);
             name.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
@@ -119,17 +119,31 @@ public partial class MainActivity
             View? chevron = null;
             if (total > 1)
             {
-                chevron = new GlyphView(this, "down", palette.Accent) { ImportantForAccessibility = ImportantForAccessibility.No };
-                header.AddView(chevron, new LinearLayout.LayoutParams(Dp(18), Dp(18)) { MarginEnd = Dp(8) });
+                chevron = new GlyphView(this, "down", actions ? palette.Muted : palette.Accent) { ImportantForAccessibility = ImportantForAccessibility.No };
                 var count = Text(total.ToString(), 12, true, palette.Accent);
                 count.ImportantForAccessibility = ImportantForAccessibility.No;
-                header.AddView(count, new LinearLayout.LayoutParams(-2, -2));
+                if (actions)
+                {
+                    count.Gravity = GravityFlags.Center;
+                    count.SetMinimumWidth(Dp(26));
+                    count.SetPadding(Dp(7), Dp(3), Dp(7), Dp(3));
+                    count.Background = Background(palette.Panel, 10, palette.Divider);
+                    header.AddView(count, new LinearLayout.LayoutParams(-2, -2) { MarginEnd = Dp(6) });
+                    header.AddView(chevron, new LinearLayout.LayoutParams(Dp(18), Dp(18)));
+                }
+                else
+                {
+                    header.AddView(chevron, new LinearLayout.LayoutParams(Dp(18), Dp(18)) { MarginEnd = Dp(8) });
+                    header.AddView(count, new LinearLayout.LayoutParams(-2, -2));
+                }
                 TouchFeedback(header);
             }
             section.AddView(header, Match());
+            (View Row, Action<bool> SetCollapsed)? front = actions && total > 1
+                ? NotificationCard(items[0], label, actions, swipe) : null;
             var stack = NotificationGroup.AddRows(section, header, chevron, label, items, expandedNotificationApps,
-                item => NotificationCard(item, label, actions, swipe), palette.Muted, glass,
-                () => LayerMotionEnabled && state.PageTransitions);
+                item => NotificationCard(item, label, actions, swipe).Row, palette.Muted, glass,
+                () => LayerMotionEnabled && state.PageTransitions, front: front);
             ApplyGlassCard(section, stack: stack);
             var layout = Match();
             layout.BottomMargin = Dp(HomeCardSpacingDp);
@@ -137,7 +151,7 @@ public partial class MainActivity
         }
     }
 
-    private View NotificationCard(Conversation item, string app, bool actions, bool swipe)
+    private (View Row, Action<bool> SetCollapsed) NotificationCard(Conversation item, string app, bool actions, bool swipe)
     {
         bool concealed = ConcealPreview(item.Package);
         var card = Stack();
@@ -157,15 +171,17 @@ public partial class MainActivity
         time.ContentDescription = posted.ToString("f");
         summary.AddView(time);
         card.AddView(summary, Match());
+        TextView? preview = null;
         if (item.Text.Length > 0 || concealed)
         {
-            var preview = Text(concealed ? "Unlock to open this notification." : item.Text, 13, color: palette.Muted);
+            preview = Text(concealed ? "Unlock to open this notification." : item.Text, 13, color: palette.Muted);
             preview.SetLineSpacing(Dp(2), 1);
             preview.SetMaxLines(3);
             preview.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
             preview.SetPadding(0, Dp(3), 0, 0);
             card.AddView(preview, Match());
         }
+        LinearLayout? controls = null;
         if (actions)
         {
             var buttons = new List<(string Title, Action Action)>();
@@ -192,7 +208,7 @@ public partial class MainActivity
 
             if (buttons.Count > 0)
             {
-                var controls = Stack(true);
+                controls = Stack(true);
                 controls.SetGravity(GravityFlags.Right);
 
                 foreach (var button in buttons)
@@ -234,6 +250,12 @@ public partial class MainActivity
         };
         if (swipe)
             card.SetOnTouchListener(new LauncherApp.UI.NotificationSwipeListener(Dp(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Toast("Android keeps this notification while its service is active."), (view, success) => Haptic(view, success ? HapticCue.Commit : HapticCue.Reject)));
-        return card;
+        return (card, collapsed =>
+        {
+            title.SetMaxLines(collapsed ? 1 : 2);
+            preview?.SetMaxLines(collapsed ? 1 : 3);
+            if (controls is not null)
+                controls.Visibility = collapsed ? ViewStates.Gone : ViewStates.Visible;
+        });
     }
 }

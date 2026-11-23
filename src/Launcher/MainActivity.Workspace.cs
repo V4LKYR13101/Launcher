@@ -11,9 +11,11 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private readonly List<(WorkspaceTimer Timer, TextView Text)> workspaceTimerViews = [];
+    private (WorkspaceTimer Timer, TextView Text)? overviewTimerView;
     private void RenderWorkspace()
     {
         workspaceTimerViews.Clear();
+        overviewTimerView = null;
         var cards = new Dictionary<string, Action>();
         cards["overview"] = () => RootCard("overview", "At a glance", "calendar", BuildOverview, DateTime.Today.ToString("dddd, d MMMM"));
         if (state.CalendarVisible)
@@ -73,7 +75,8 @@ public partial class MainActivity
                     input.FocusChange += (_, e) => WorkspaceEditing.NoteId = e.HasFocus ? item.Id : null;
                     panel.AddView(input, Match());
                     RootActions(panel, ("Rename", () => Prompt("Note title", item.Title, s => { item.Title = LauncherState.CleanName(s, "Note"); item.UpdatedAt = Now; Save(); RenderBody(); })));
-                }, item.Text.Length == 0 ? "Empty note" : item.Text.Split('\n')[0]);
+                }, liveSummary: () => item.Checklist ? Counted(Checklist.Read(item.Text).Count(entry => !entry.Done), "task") + " left"
+                    : item.Text.Length == 0 ? "Empty note" : item.Text.Split('\n')[0]);
             }
         }
         cards["timers"] = () => RootCard("timers", "Timers", "clock", panel =>
@@ -123,10 +126,15 @@ public partial class MainActivity
             cards["widget:" + item.Id] = () => RenderWidget(item);
         }
         var order = state.RootOrder.Concat(cards.Keys).Distinct().Where(cards.ContainsKey).OrderByDescending(k => state.RootPinned.Contains(k)).ToArray();
+        if (todayLayoutEditor is { } editor)
+        {
+            editor.Render(cards, order.Where(key => !state.RootHidden.Contains(key)).ToArray());
+            return;
+        }
         foreach (string key in order)
         if (!state.RootHidden.Contains(key))
             cards[key]();
-        RootActions(body, ("+ Add card", ShowAddCard), ("Arrange", ManageRootCards), ("+ Add widget", AddWidget));
+        RootActions(body, ("+ Add card", ShowAddCard), ("Arrange", BeginTodayLayout), ("+ Add widget", AddWidget));
     }
     private void RootOptions(string id, string title) => Choose(title, [state.RootPinned.Contains(id) ? "Unpin" : "Pin to top", "Move earlier", "Move later", "Hide card", "Remove card"], i =>
     {
@@ -166,7 +174,8 @@ public partial class MainActivity
         Paragraph("Hold any card header to pin, move, hide or remove it. Restore hidden cards below.", panel);
         foreach (string id in state.RootHidden.ToArray())
             panel.AddView(Button("Restore " + CardLabel(id), () => { if (id == "resources") state.ResourcesVisible = true; state.RootHidden.Remove(id); Save(); dialog.Dismiss(); RenderBody(); }), Match());
-        panel.AddView(Button("Root settings", () => { dialog.Dismiss(); Navigate("Root settings"); }), Match());
+        if (page != "Root settings")
+            panel.AddView(Button("Today cards settings", () => { dialog.Dismiss(); Navigate("Root settings"); }), Match());
     });
     private void CreateNote(string title)
     {
@@ -216,7 +225,12 @@ public partial class MainActivity
     }
     private void UpdateWorkspaceTimers()
     {
+        if (overviewTimerView is { } overview && overview.Text.IsAttachedToWindow)
+            UpdateLabel(overview.Timer, overview.Text);
         foreach (var (timer, label) in workspaceTimerViews)
+            UpdateLabel(timer, label);
+
+        void UpdateLabel(WorkspaceTimer timer, TextView label)
         {
             string value = TimerDisplay(timer);
             if (label.Text != value)

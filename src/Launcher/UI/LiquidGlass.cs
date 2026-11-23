@@ -107,6 +107,16 @@ internal sealed class LiquidGlass : Drawable
     public void AddPanel(View view, float cornerDp = 22, Color? surface = null, NotificationGroup.StackDepth? stack = null,
         bool persistent = false) => panels.Add(new Panel(view, cornerDp * density, surface, stack, persistent));
 
+    public void AddRecycledPanel(View view, float cornerDp)
+    {
+        view.ViewAttachedToWindow += (_, _) => AddPanel(view, cornerDp);
+        view.ViewDetachedFromWindow += (_, _) =>
+        {
+            if (panels.RemoveAll(panel => ReferenceEquals(panel.View, view)) > 0)
+                InvalidateSelf();
+        };
+    }
+
     public void ClearPanels(bool keepPersistent = false)
     {
         if (keepPersistent)

@@ -39,6 +39,7 @@ public partial class MainActivity
             return;
         }
         var old = LauncherState.Deserialize(layoutUndo.Pop());
+        offerTodayLayoutUndo = false;
         state.Apps = old.Apps;
         state.Drawers = old.Drawers;
         state.RootOrder = old.RootOrder;
@@ -54,6 +55,11 @@ public partial class MainActivity
     private string CardLabel(string id) => id.StartsWith("widget:") && int.TryParse(id[7..], out int widget) ? WidgetLabel(widget) : id.StartsWith("note:") ? state.Notes.FirstOrDefault(n => "note:" + n.Id == id)?.Title ?? "Note" : state.ExtraCards.FirstOrDefault(c => c.Id == id)?.Title ?? id switch { "overview" => "At a glance", "calendar" => "Agenda", "media" => "Now playing", "feeds" => "News & feeds", "resources" => "Phone resources", _ => char.ToUpperInvariant(id[0]) + id[1..] };
     private void ShowLayoutEditor() => Choose("Edit your layout", ["Arrange app drawers", "Arrange Today cards", "Move apps in bulk", "Undo last layout change", "Arrange favorites"], i =>
     {
+        if (i == 1)
+        {
+            BeginTodayLayout();
+            return;
+        }
         if (i == 3)
         {
             UndoLayout();
@@ -64,14 +70,14 @@ public partial class MainActivity
             BulkMoveApps();
             return;
         }
-        bool drawers = i == 0, favorites = i == 4;
-        var order = drawers ? state.Drawers.Select(d => d.Id).ToList() : favorites ? AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile && state.Apps[a.Id].Pinned).Select(a => a.Id).ToList() : TodayOrder();
-        Sheet(drawers ? "Arrange drawers" : favorites ? "Arrange favorites" : "Arrange Today", (panel, dialog) =>
+        bool drawers = i == 0;
+        var order = drawers ? state.Drawers.Select(d => d.Id).ToList() : AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile && state.Apps[a.Id].Pinned).Select(a => a.Id).ToList();
+        Sheet(drawers ? "Arrange drawers" : "Arrange favorites", (panel, dialog) =>
         {
             Paragraph("Hold a grip and drag a row into place. The arrow buttons offer the same controls. Changes apply when you save.", panel);
             var rows = Stack();
             panel.AddView(rows, Match());
-            if (favorites)
+            if (!drawers)
                 Paragraph(order.Count == 0 ? "Hold an app and choose Pin to favorites to add it here." : "The first five visible favorites appear in the dock. Pinning also brings apps to the top of their drawer.", panel);
             void Reorder(string source, string target)
             {
@@ -87,7 +93,7 @@ public partial class MainActivity
                 rows.RemoveAllViews();
                 foreach (string id in order.ToArray())
                 {
-                    string label = drawers ? state.Drawers.First(d => d.Id == id).Name : favorites ? apps.FirstOrDefault(a => a.Id == id) is { } app ? AppOrganization.DisplayName(state, app) : "Unavailable app" : CardLabel(id);
+                    string label = drawers ? state.Drawers.First(d => d.Id == id).Name : apps.FirstOrDefault(a => a.Id == id) is { } app ? AppOrganization.DisplayName(state, app) : "Unavailable app";
                     var row = Stack(true);
                     row.SetGravity(GravityFlags.CenterVertical);
                     row.Background = Surface(palette.Card, 14);
@@ -113,7 +119,7 @@ public partial class MainActivity
                 }
             }
             Rebuild();
-        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save layout", () => { RememberLayout(); if (drawers) state.Drawers = order.Select(id => state.Drawers.First(d => d.Id == id)).ToList(); else if (favorites) { for (int index = 0; index < order.Count; index++) if (state.Apps.TryGetValue(order[index], out var rule)) rule.Order = index; } else state.RootOrder = order; Save(); dialog.Dismiss(); RenderBody(); Toast("Layout saved. Undo is available in Edit layout."); })));
+        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save layout", () => { RememberLayout(); if (drawers) state.Drawers = order.Select(id => state.Drawers.First(d => d.Id == id)).ToList(); else { for (int index = 0; index < order.Count; index++) if (state.Apps.TryGetValue(order[index], out var rule)) rule.Order = index; } Save(); dialog.Dismiss(); RenderBody(); Toast("Layout saved. Undo is available in Edit layout."); })));
     });
     private sealed class LayoutDrop(string target, Action<string, string> drop, Action entered, Action exited) : Java.Lang.Object, View.IOnDragListener
     {

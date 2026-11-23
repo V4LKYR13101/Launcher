@@ -249,7 +249,7 @@ public partial class MainActivity
         if (!ConversationService.Enabled(this))
         {
             Paragraph("Connect notification access to show your current notifications here.");
-            body.AddView(Button("Notification access", () => Navigate("Permissions")), Match());
+            body.AddView(Button("Enable notification access", OpenNotificationAccessSettings), Match());
             return;
         }
         if (((KeyguardManager?)GetSystemService(KeyguardService))?.IsDeviceLocked == true)

@@ -80,7 +80,14 @@ public partial class MainActivity
         input.SetPadding(Dp(16), Dp(10), Dp(16), Dp(10));
         StyleSearchEntry(input, 16);
         row.AddView(input, new LinearLayout.LayoutParams(0, -2, 1));
-        input.TextChanged += (_, _) => { settingsQuery = input.Text ?? ""; RenderBody(); };
+        input.TextChanged += (_, _) =>
+        {
+            RememberHomeScroll();
+            settingsQuery = input.Text ?? "";
+            homeScrollPositions.Remove(SettingsSearchScrollKey);
+            RenderBody();
+            RestoreHomeScroll();
+        };
         shell.AddView(row, Match());
     }
     private void BuildOverview(LinearLayout hero)
@@ -88,6 +95,20 @@ public partial class MainActivity
         var scene = new FrameLayout(this);
         scene.SetMinimumHeight(Dp(128));
         scene.AddView(new OverviewArtwork(this, palette.Accent) { ImportantForAccessibility = ImportantForAccessibility.No }, new FrameLayout.LayoutParams(Dp(180), -1, GravityFlags.Right));
+
+        var highlight = BuildOverviewHighlight();
+        scene.AddView(highlight ?? BuildOverviewDate(), new FrameLayout.LayoutParams(-1, -2, GravityFlags.CenterVertical));
+        hero.AddView(scene, Match());
+        RootActions(hero, ("+ Capture", ShowCapture), ("Search", StartSearch), ("Arrange", BeginTodayLayout));
+        if (!state.SetupCompleted)
+        {
+            Gap(hero, 8);
+            hero.AddView(Button("Set up your home", ShowFeatureHealth), Match());
+        }
+    }
+
+    private LinearLayout BuildOverviewDate()
+    {
         var date = Stack(true);
         date.SetGravity(GravityFlags.CenterVertical);
         date.SetPadding(0, Dp(4), 0, Dp(10));
@@ -100,19 +121,46 @@ public partial class MainActivity
         month.SetPadding(0, Dp(6), 0, 0);
         context.AddView(month, Match());
         date.AddView(context, new LinearLayout.LayoutParams(0, -2, 1));
-        scene.AddView(date, new FrameLayout.LayoutParams(-1, -2, GravityFlags.CenterVertical));
-        hero.AddView(scene, Match());
-        int running = state.Timers.Count(t => t.EndsAt > 0);
-        string summary = Counted(state.Notes.Count, "note") + "   /   " + Counted(running, "active timer");
-        var status = Text(summary, 12, color: palette.Muted);
-        status.SetPadding(0, 0, 0, Dp(8));
-        hero.AddView(status, Match());
-        RootActions(hero, ("+ Capture", ShowCapture), ("Search", StartSearch), ("Arrange", ShowLayoutEditor));
-        if (!state.SetupCompleted)
+        return date;
+    }
+
+    private LinearLayout? BuildOverviewHighlight()
+    {
+        long now = Now;
+        var timer = state.RootHidden.Contains("timers") ? null :
+            state.Timers.Where(item => item.EndsAt > now).MinBy(item => item.EndsAt);
+        if (timer is not null)
         {
-            Gap(hero, 8);
-            hero.AddView(Button("Set up your home", ShowFeatureHealth), Match());
+            var countdown = Text(TimerDisplay(timer), 36, true, palette.Accent);
+            overviewTimerView = (timer, countdown);
+            return OverviewHighlight("Running timer", countdown, timer.Title, "Pause timer", () => ToggleTimer(timer));
         }
+
+        if (!state.CalendarVisible || state.RootHidden.Contains("calendar") || !AgendaReader.Allowed(this))
+            return null;
+
+        RefreshAgenda();
+        var next = agendaEvents.FirstOrDefault(item => item.Ends > now && item.Begins < now + 24 * 60 * 60 * 1000);
+        return next is null ? null : OverviewHighlight(next.Begins <= now && !next.AllDay ? "On now" : "On your agenda",
+            Text(next.Title, 24, true), AgendaTime(next), "Open in Calendar", () => OpenAgendaEvent(next));
+    }
+
+    private LinearLayout OverviewHighlight(string caption, TextView title, string detail, string actionLabel, System.Action action)
+    {
+        var group = Stack();
+        group.SetPadding(0, Dp(8), 0, Dp(8));
+        var label = Text(caption, 12, true, palette.Accent);
+        group.AddView(label, Match());
+        title.SetPadding(0, Dp(4), 0, Dp(4));
+        title.SetMaxLines(2);
+        title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+        group.AddView(title, Match());
+        var summary = Text(detail, 13, color: palette.Muted);
+        summary.SetMaxLines(1);
+        summary.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+        group.AddView(summary, Match());
+        group.AddView(RootAction(actionLabel, action), new LinearLayout.LayoutParams(-2, -2));
+        return group;
     }
     private void ShowCapture() => Choose("Capture something", ["Note", "Checklist", "Reminder", "Timer", "Journey", "Link"], i =>
     {

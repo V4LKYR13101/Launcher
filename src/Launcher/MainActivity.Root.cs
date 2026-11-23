@@ -19,7 +19,7 @@ public partial class MainActivity
     private string conversationFilter = "All";
     private HorizontalScrollView? conversationFilterScroll;
 
-    private void RootCard(string id, string title, string glyph, Action<LinearLayout> build, string? summary = null)
+    private void RootCard(string id, string title, string glyph, Action<LinearLayout> build, string? summary = null, Func<string>? liveSummary = null)
     {
         bool collapsed = state.CollapsedCards.GetValueOrDefault(id);
         var card = Stack();
@@ -61,9 +61,9 @@ public partial class MainActivity
                 build(inner);
             else
             {
-                if (!string.IsNullOrEmpty(summary))
+                if ((liveSummary?.Invoke() ?? summary) is { Length: > 0 } summaryText)
                 {
-                    var preview = Text(summary, 13, color: id == "weather" ? palette.Accent : palette.Muted);
+                    var preview = Text(summaryText, 13, color: id == "weather" ? palette.Accent : palette.Muted);
                     preview.SetMaxLines(2);
                     inner.AddView(preview, Match());
                 }
@@ -145,6 +145,7 @@ public partial class MainActivity
         ToggleRow(body, "Notes card", state.NotesVisible, v => { state.NotesVisible = v; Save(); });
         ToggleRow(body, "Phone resources card", state.ResourcesVisible, v => { state.ResourcesVisible = v; if (v) state.RootHidden.Remove("resources"); Save(); });
         ToggleRow(body, "Calculator card", state.CalculatorVisible, v => { state.CalculatorVisible = v; Save(); });
+        SettingRow(body, "Manage cards", "Restore hidden cards", ManageRootCards, "grid");
         Gap(body);
         body.AddView(Button("+  Add Android widget", AddWidget, true), Match());
         Gap(body);
@@ -254,15 +255,17 @@ public partial class MainActivity
         conversationHeader.SetGravity(GravityFlags.CenterVertical);
         var heading = Text("Notifications", 27, true);
         heading.Gravity = GravityFlags.CenterVertical;
+        heading.SetMinimumHeight(Math.Max(Dp(52), Dp(27 * FontScale * 1.25f + 12)));
         if (OperatingSystem.IsAndroidVersionAtLeast(28))
             heading.AccessibilityHeading = true;
-        conversationHeader.AddView(heading, new LinearLayout.LayoutParams(0, Math.Max(Dp(52), Dp(27 * FontScale * 1.25f + 12)), 1));
+        conversationHeader.AddView(heading, new LinearLayout.LayoutParams(0, -2, 1));
+        conversationHeader.AddView(IconButton("settings", "Launcher Settings", () => Navigate("Settings"), palette.Accent), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         conversationHeader.AddView(IconButton("filter", "Filter notification apps", PickConversationSources), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         body.AddView(conversationHeader, Match());
         if (!ConversationService.Enabled(this))
         {
             Paragraph("Your messages, in one quiet place. Connect Android notifications to see current conversations from your messaging apps.");
-            body.AddView(Button("Set up conversations", () => Navigate("Permissions"), true), Match());
+            body.AddView(Button("Enable notification access", OpenNotificationAccessSettings, true), Match());
             Gap(body);
             Paragraph("Launcher displays current notifications. Optional local history can save new message notifications after you enable it.");
             return;
