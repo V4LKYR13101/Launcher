@@ -96,7 +96,11 @@ public partial class MainActivity
             detailPosition.AddRule(LayoutRules.Below, status.Id);
             detailPosition.AddRule(LayoutRules.CenterHorizontal);
             cluster.AddView(details, detailPosition);
-            details.LayoutChange += (_, _) => PositionHomeBattery();
+            details.LayoutChange += (_, _) =>
+            {
+                PositionHomeBattery();
+                PositionHomeDownloads();
+            };
 
             homeWeatherSlot = new FrameLayout(this);
             var weatherPosition = new RelativeLayout.LayoutParams(-2, -2);
@@ -282,6 +286,8 @@ public partial class MainActivity
         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == FileSearchStoragePermission)
             UpdateFileSearchAccess();
+        if (requestCode == DownloadRequest.PermissionRequest)
+            ContinueSearchDownload();
         if (requestCode == 901)
         {
             connections.Start();

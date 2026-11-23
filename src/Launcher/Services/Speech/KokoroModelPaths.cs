@@ -8,6 +8,9 @@ public static class KokoroModelPaths
     public const string FolderName = "kokoro-multi-lang-v1_0";
 
     public static string? FindInstalled(Context context)
+        => InstallLocations(context).FirstOrDefault(IsComplete);
+
+    internal static IEnumerable<string> InstallLocations(Context context)
     {
         var roots = new List<string>();
 
@@ -29,14 +32,10 @@ public static class KokoroModelPaths
                 Path.Combine("models", FolderName)
             })
             {
-                string candidate = Path.Combine(root, relative);
-
-                if (IsComplete(candidate))
-                    return candidate;
+                yield return Path.Combine(root, relative);
             }
         }
 
-        return null;
     }
 
     public static string GetInstallDirectory(Context context)

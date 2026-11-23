@@ -28,9 +28,8 @@ public static class KokoroReaderDialog
         // If required model files are missing, offer installation.
         if (!KokoroModelInstaller.IsInstalled(activity))
         {
-            KokoroModelInstallerUi.Show(
-                activity,
-                () => Show(activity, initialText));
+            if (activity is MainActivity launcher)
+                launcher.OpenSpeechSettings(() => Show(activity, initialText));
 
             return;
         }

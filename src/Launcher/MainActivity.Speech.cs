@@ -89,9 +89,7 @@ public partial class MainActivity
     {
         if (!KokoroModelInstaller.IsInstalled(this))
         {
-            KokoroModelInstallerUi.Show(
-                this,
-                () => ShowNotificationSpeech(item));
+            OpenSpeechSettings(() => ShowNotificationSpeech(item));
 
             return;
         }

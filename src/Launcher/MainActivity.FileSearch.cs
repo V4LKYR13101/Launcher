@@ -3,7 +3,9 @@ using Android.Provider;
 using Android.Views;
 using Android.Widget;
 using LauncherApp.Services;
+using LauncherApp.Services.ImageSearch;
 using LauncherApp.UI;
+using Color = Android.Graphics.Color;
 using Uri = Android.Net.Uri;
 
 namespace LauncherApp;
@@ -11,34 +13,35 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private const int FileSearchStoragePermission = 917;
-    private bool fileSearchMode, fileSearchAccess, fileSearchFailed;
-    private SearchFile[] searchFiles = [];
-    private CancellationTokenSource? fileSearchLoad;
-    private bool SearchingFiles => searching && IsAppsSurface && fileSearchMode;
-    private sealed record SearchFile(string Path, string Name, string Folder);
+    private bool fileSearchAccess, fileSearchFailed;
+    private FileSearchCatalog.Snapshot? fileSnapshot;
+    private object? fileSearchLoad;
+    private CancellationTokenSource? imageQueryLoad;
+    private string? imageQuery;
+    private SearchFile[] imageMatches = [];
+    private bool imageQueryFailed, imageTextUsed;
+    private (int Description, int Text, int People) imageIndexRevisionSeen;
+    private HorizontalScrollView? fileTypeScroll;
+    private LinearLayout? fileTypeRow;
+    private FileSearchScope fileSearchScope;
+    private string? selectedFileType;
+    private FileSearchPill[] displayedFilePills = [];
+    private TextView[] fileTypePills = [];
+    private enum FileSearchScope { All, Images, Documents }
+    private readonly record struct FileSearchPill(string Label, FileSearchScope? Scope, string? Extension);
+    private static readonly FileSearchPill[] ScopePills =
+    [
+        new("All", FileSearchScope.All, null),
+        new("Images", FileSearchScope.Images, null),
+        new("Documents", FileSearchScope.Documents, null)
+    ];
 
-    private void AddFileSearchToggle(LinearLayout pill)
-    {
-        bool active = SearchingFiles;
-        var toggle = new FrameLayout(this)
-        {
-            ContentDescription = active ? "Turn off file search" : "Turn on file search",
-            Selected = active
-        };
-        var icon = new GlyphView(this, "file", active ? palette.Accent : palette.Text)
-        {
-            ImportantForAccessibility = ImportantForAccessibility.No
-        };
-        toggle.AddView(icon, new FrameLayout.LayoutParams(Dp(22), Dp(22), GravityFlags.Center));
-        TouchFeedback(toggle, 24);
-        toggle.Click += (_, _) => BeginSearch(files: !SearchingFiles, keepQuery: searching);
-        if (!searching)
-        {
-            BindHoldHaptics(toggle);
-            toggle.LongClick += (_, _) => QuickControls();
-        }
-        pill.AddView(toggle, new LinearLayout.LayoutParams(Dp(48), Dp(48)) { LeftMargin = Dp(2), RightMargin = Dp(4) });
-    }
+    private (int Description, int Text, int People) PhotoSearchRevision =>
+        (ImageSearch.IndexRevision, PhotoSearchPack.Text(this).Revision, PhotoSearchPack.Faces(this).Revision);
+
+    private bool HasSearchablePhotos => ImageSearch.Enabled && ImageSearch.HasIndex ||
+        PhotoSearchPack.Text(this).Searchable || PhotoSearchPack.Faces(this).Searchable;
+    private bool SearchingFiles => searching && IsAppsSurface && searchMode == AppSearchMode.Files;
 
     private void RequestFileSearchAccess()
     {
@@ -66,10 +69,14 @@ public partial class MainActivity
 
         bool access = SharedStorage.CanRead(this);
         if (access == fileSearchAccess)
+        {
+            if (access)
+                _ = LoadSearchFilesAsync();
             return;
+        }
 
         fileSearchAccess = access;
-        ResetFileSearch();
+        ResetFileSearch(keepScope: true);
         RenderBody();
         if (!fileSearchAccess)
             return;
@@ -78,29 +85,51 @@ public partial class MainActivity
         FocusSearchInput();
     }
 
-    private void ResetFileSearch()
+    private void ResetFileSearch(bool keepScope = false)
     {
-        var load = fileSearchLoad;
         fileSearchLoad = null;
-        load?.Cancel();
-        searchFiles = [];
+        fileSnapshot = null;
         fileSearchFailed = false;
+        selectedFileType = null;
+        if (!keepScope)
+            fileSearchScope = FileSearchScope.All;
+        ResetImageQuery();
+        ResetDocumentQuery();
+        if (documentEncoderUsed)
+        {
+            documentEncoderUsed = false;
+            _ = Task.Run(DocumentSearch.ReleaseEncoder);
+        }
+        if (imageTextUsed)
+        {
+            imageTextUsed = false;
+            _ = ImageSearch.ReleaseText();
+        }
     }
 
     private async Task LoadSearchFilesAsync()
     {
-        using var load = new CancellationTokenSource();
+        if (fileSearchLoad is not null || !fileSearchAccess)
+            return;
+
+        var catalog = FileSearchCatalog.For(this);
+        var load = new object();
         fileSearchLoad = load;
-        RefreshAppSearch();
+        if (fileSnapshot is null)
+            RefreshAppSearch();
         try
         {
-            var files = await Task.Run(() => ReadSearchFiles(load.Token), load.Token);
-            if (ReferenceEquals(fileSearchLoad, load))
-                searchFiles = files;
+            var saved = await catalog.Cached();
+            if (CanApplyFileCatalog(load) && saved is not null)
+                ApplyFileSnapshot(saved);
+
+            var updated = await catalog.Refresh();
+            if (CanApplyFileCatalog(load))
+                ApplyFileSnapshot(updated);
         }
-        catch (OperationCanceledException) when (load.IsCancellationRequested) { }
         catch (Exception error) when (error is Java.Lang.RuntimeException or IOException or UnauthorizedAccessException)
         {
+            Android.Util.Log.Warn("FileSearch", error.ToString());
             if (ReferenceEquals(fileSearchLoad, load))
                 fileSearchFailed = true;
         }
@@ -109,69 +138,228 @@ public partial class MainActivity
             if (ReferenceEquals(fileSearchLoad, load))
             {
                 fileSearchLoad = null;
-                RefreshAppSearch();
+                RenderFileMatches(resetScroll: false);
             }
         }
     }
 
-    private SearchFile[] ReadSearchFiles(CancellationToken token)
+    private bool CanApplyFileCatalog(object load) => ReferenceEquals(fileSearchLoad, load) &&
+        !IsDestroyed && SearchingFiles && fileSearchAccess && SharedStorage.CanRead(this);
+
+    private void ApplyFileSnapshot(FileSearchCatalog.Snapshot snapshot)
     {
-        var options = new EnumerationOptions { AttributesToSkip = FileAttributes.ReparsePoint, IgnoreInaccessible = true };
-        var results = new List<SearchFile>();
-        foreach (var volume in SharedStorage.MountedVolumes(this))
-        {
-            var directories = new Stack<DirectoryInfo>();
-            directories.Push(new DirectoryInfo(volume.Root));
-            while (directories.TryPop(out var directory))
-            {
-                token.ThrowIfCancellationRequested();
-                string folder = directory.FullName == volume.Root ? volume.Label : volume.Label + directory.FullName[volume.Root.Length..];
-                try
-                {
-                    foreach (var entry in directory.EnumerateFileSystemInfos("*", options))
-                    {
-                        token.ThrowIfCancellationRequested();
-                        if (entry is DirectoryInfo child)
-                        {
-                            if (SharedStorage.Contains(volume.Root, child.FullName))
-                                directories.Push(child);
-                        }
-                        else
-                            results.Add(new(entry.FullName, entry.Name, folder));
-                    }
-                }
-                catch (Exception error) when (error is IOException or UnauthorizedAccessException) { }
-            }
-        }
-        return results.OrderBy(file => file.Name, StringComparer.CurrentCultureIgnoreCase)
-            .ThenBy(file => file.Folder, StringComparer.CurrentCultureIgnoreCase).ToArray();
+        fileSearchFailed = false;
+        if (ReferenceEquals(fileSnapshot, snapshot))
+            return;
+        fileSnapshot = snapshot;
+        ResetImageQuery();
+        ResetDocumentQuery();
+        RefreshFileSearch(resetScroll: false);
     }
 
     private IEnumerable<SearchFile> FileSearchMatches()
     {
         string search = query.Trim();
-        if (search.Length == 0)
+        if (search.Length == 0 || !fileSearchAccess || fileSnapshot is null)
             return [];
         var terms = search.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
-        return searchFiles.Where(file => terms.All(term => file.Name.Contains(term, StringComparison.CurrentCultureIgnoreCase)))
+        return fileSnapshot.Files.Where(file => terms.All(term => file.Name.Contains(term, StringComparison.CurrentCultureIgnoreCase)) &&
+            MatchesFileScope(file))
             .OrderByDescending(file => file.Name.StartsWith(search, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    private void RefreshFileSearch()
+    private bool MatchesFileScope(SearchFile file) => fileSearchScope switch
     {
-        var matches = FileSearchMatches().Select(file => new SearchHit(null, null, file)).ToArray();
+        FileSearchScope.Images => file.IsImage,
+        FileSearchScope.Documents => file.IsDocument,
+        _ => true
+    };
+
+    private void RefreshFileSearch(bool resetScroll = true)
+    {
+        string text = query.Trim();
+        var snapshot = fileSnapshot;
+        bool canSearchImages = fileSearchScope != FileSearchScope.Documents && fileSearchAccess &&
+            snapshot is not null && HasSearchablePhotos;
+        var revision = PhotoSearchRevision;
+        if (text != imageQuery || !canSearchImages || revision != imageIndexRevisionSeen)
+        {
+            imageIndexRevisionSeen = revision;
+            ResetImageQuery();
+            if (text.Length > 0 && canSearchImages)
+            {
+                imageQuery = text;
+                imageTextUsed = true;
+                _ = FindImages(text, snapshot!);
+            }
+        }
+        RefreshDocumentMatches(text, snapshot);
+        RenderFileMatches(resetScroll);
+    }
+
+    private void RenderFileMatches(bool resetScroll)
+    {
+        var all = FileSearchMatches().Concat(documentMatches).Concat(imageMatches).DistinctBy(file => file.Path)
+            .Select(file => (File: file, Type: FileType(file.Name))).ToArray();
+        var types = all.Select(match => match.Type).Distinct(StringComparer.Ordinal)
+            .OrderBy(type => type.Length == 0).ThenBy(type => type, StringComparer.Ordinal).ToArray();
+        string? activeType = selectedFileType is { } selected && types.Contains(selected, StringComparer.Ordinal) ? selected : null;
+        if (activeType is null && imageQueryLoad is null && documentQueryLoad is null)
+            selectedFileType = null;
+        UpdateFileTypeFilters(types, activeType);
+        var matches = all.Where(match => activeType is null || match.Type == activeType)
+            .Select(match => new SearchHit(null, null, match.File)).ToArray();
         appSearchAdapter?.Replace(matches);
-        appSearchList?.SetSelection(0);
+        if (resetScroll)
+            appSearchList?.SetSelection(0);
         if (appSearchTitle is not null)
             appSearchTitle.Text = "Files";
         if (appSearchCount is not null)
             appSearchCount.Text = !fileSearchAccess ? "Allow access to search your device’s shared storage."
-                : fileSearchLoad is not null ? "Reading files…"
-                : fileSearchFailed ? "Couldn’t read shared storage. Try reopening file search."
-                : searchFiles.Length == 0 ? "No files found in shared storage."
-                : string.IsNullOrWhiteSpace(query) ? "Type a filename to search."
+                : fileSnapshot is null ? fileSearchFailed ? "Couldn’t read shared storage. Try reopening file search." : "Preparing file catalog…"
+                : fileSnapshot.Files.Length == 0 && fileSearchLoad is null ? "No files found in shared storage."
+                : string.IsNullOrWhiteSpace(query) ? FileSearchHint()
+                : documentQueryLoad is not null ? $"{Counted(matches.Length, "file")} · searching documents…"
+                : imageQueryFailed ? $"{Counted(matches.Length, "file")} · image search unavailable"
+                : documentQueryFailed ? $"{Counted(matches.Length, "file")} · document search unavailable"
+                : imageQueryLoad is not null ? $"{Counted(matches.Length, "file")} · searching images…"
+                : matches.Length == 0 && fileSearchScope != FileSearchScope.Documents && ImageSearch.Enabled && !ImageSearch.HasIndex ? "No matching filenames · image index pending."
+                : matches.Length == 0 && fileSearchLoad is not null ? "No matches yet · checking for changes…"
                 : matches.Length == 0 ? "No matching files." : Counted(matches.Length, "file");
     }
+
+    private string FileSearchHint() => fileSearchScope switch
+    {
+        FileSearchScope.Images => HasSearchablePhotos ? "Search image filenames or indexed photos." : "Type an image filename to search.",
+        FileSearchScope.Documents => DocumentSearch.Searchable ? "Search document filenames or indexed passages." : "Type a document filename to search.",
+        _ => HasSearchablePhotos || DocumentSearch.Searchable ? "Search filenames or indexed content." : "Type a filename to search."
+    };
+
+    private static string FileType(string name)
+    {
+        string extension = Path.GetExtension(name);
+        return extension.Length > 1 && extension.Length < name.Length ? extension[1..].ToUpperInvariant() : "";
+    }
+
+    private void AddFileTypeFilters()
+    {
+        fileTypeRow = Stack(true);
+        fileTypeRow.SetPaddingRelative(0, 0, 0, Dp(8));
+        fileTypeScroll = new HorizontalScrollView(this) { HorizontalScrollBarEnabled = false, Visibility = ViewStates.Gone };
+        fileTypeScroll.AddView(fileTypeRow);
+        body.AddView(fileTypeScroll, Match());
+        displayedFilePills = [];
+        fileTypePills = [];
+    }
+
+    private void UpdateFileTypeFilters(string[] types, string? activeType)
+    {
+        if (fileTypeScroll is null || fileTypeRow is null)
+            return;
+        fileTypeScroll.Visibility = fileSearchAccess ? ViewStates.Visible : ViewStates.Gone;
+        FileSearchPill[] pills = types.Length == 0 ? ScopePills :
+            [new("All", null, null), .. types.Select(type => new FileSearchPill(type.Length == 0 ? "No extension" : type, null, type))];
+        if (!pills.AsSpan().SequenceEqual(displayedFilePills))
+        {
+            bool changedKind = displayedFilePills.Length == 0 || displayedFilePills[0].Scope.HasValue != pills[0].Scope.HasValue;
+            displayedFilePills = pills;
+            fileTypeRow.RemoveAllViews();
+            fileTypePills = pills.Select(pill =>
+            {
+                var chip = RootAction(pill.Label, () => SelectFileSearchPill(pill));
+                chip.SetSingleLine(true);
+                chip.SetPaddingRelative(Dp(16), Dp(6), Dp(16), Dp(6));
+                fileTypeRow.AddView(chip, new LinearLayout.LayoutParams(-2, -2) { MarginEnd = Dp(8) });
+                return chip;
+            }).ToArray();
+            if (changedKind)
+                fileTypeScroll.ScrollTo(0, 0);
+        }
+        for (int i = 0; i < fileTypePills.Length; i++)
+        {
+            var chip = fileTypePills[i];
+            var pill = pills[i];
+            bool selected = pill.Scope is { } scope ? fileSearchScope == scope : pill.Extension == activeType;
+            if (chip.Background is not null && chip.Selected == selected)
+                continue;
+            chip.Selected = selected;
+            chip.SetTextColor(selected ? palette.OnAccent : palette.Text);
+            chip.Background = Background(selected ? palette.Accent : Color.Transparent, 24, selected ? null : palette.Divider);
+        }
+    }
+
+    private void SelectFileSearchPill(FileSearchPill pill)
+    {
+        if (pill.Scope is { } scope)
+        {
+            fileSearchScope = scope;
+            selectedFileType = null;
+            RefreshFileSearch();
+        }
+        else
+        {
+            selectedFileType = pill.Extension;
+            RenderFileMatches(resetScroll: true);
+        }
+    }
+
+    private void ResetImageQuery()
+    {
+        imageQueryLoad?.Cancel();
+        imageQueryLoad = null;
+        imageQuery = null;
+        imageQueryFailed = false;
+        imageMatches = [];
+    }
+
+    private async Task FindImages(string text, FileSearchCatalog.Snapshot snapshot)
+    {
+        using var load = new CancellationTokenSource();
+        imageQueryLoad = load;
+        try
+        {
+            await Task.Delay(175, load.Token);
+            var results = await Task.Run(async () =>
+            {
+                var candidates = snapshot.Images;
+                if (candidates.Count == 0)
+                    return Array.Empty<SearchFile>();
+                bool phrase = text.Length > 2 && text[0] == '"' && text[^1] == '"';
+                var people = phrase ? [] : PhotoSearchPack.Faces(this).Match(text, candidates.ContainsKey, load.Token);
+                var ocr = PhotoSearchPack.Text(this).Match(text, candidates.ContainsKey, load.Token);
+                string[] visual;
+                try { visual = !phrase && text.Length >= 2 ? await ImageSearch.Search(text, candidates.ContainsKey, load.Token) : []; }
+                catch (Exception error) when (people.Length + ocr.Length > 0 && IsImageSearchError(error))
+                {
+                    Android.Util.Log.Warn("ImageSearch", error.ToString());
+                    visual = [];
+                }
+                var paths = people.Concat(ocr).Concat(visual).Distinct(StringComparer.Ordinal);
+                return paths.Select(path => candidates[path]).Where(file => File.Exists(file.Path)).ToArray();
+            }, load.Token);
+            if (ReferenceEquals(imageQueryLoad, load))
+                imageMatches = results;
+        }
+        catch (OperationCanceledException) when (load.IsCancellationRequested) { }
+        catch (Exception error) when (IsImageSearchError(error))
+        {
+            Android.Util.Log.Warn("ImageSearch", error.ToString());
+            if (ReferenceEquals(imageQueryLoad, load))
+                imageQueryFailed = true;
+        }
+        finally
+        {
+            if (ReferenceEquals(imageQueryLoad, load))
+            {
+                imageQueryLoad = null;
+                if (SearchingFiles && !IsDestroyed && query.Trim() == text)
+                    RenderFileMatches(resetScroll: false);
+            }
+        }
+    }
+
+    private static bool IsImageSearchError(Exception error) => error is IOException or InvalidDataException or UnauthorizedAccessException or
+        Java.Lang.RuntimeException or Microsoft.ML.OnnxRuntime.OnnxRuntimeException or TypeInitializationException or KeyNotFoundException or System.Text.Json.JsonException;
 
     private void OpenSearchFile(SearchFile file)
     {

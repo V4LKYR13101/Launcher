@@ -91,6 +91,7 @@ public partial class MainActivity
     }
     private void RenderTiles()
     {
+        homeFavoritesDock = null;
         RenderHomeWeather();
         AddMediaCard();
         if (state.Focus)
@@ -107,10 +108,15 @@ public partial class MainActivity
         BindHoldHaptics(open);
         open.LongClick += (_, _) => ShowQuickAccess();
         homeDrawerMarker = open;
-        open.LayoutChange += (_, _) => open.Post(PositionHomeBattery);
+        open.LayoutChange += (_, _) => open.Post(() =>
+        {
+            PositionHomeBattery();
+            PositionHomeDownloads();
+        });
         var dockHandle = new FrameLayout(this);
         dockHandle.AddView(open, new FrameLayout.LayoutParams(Dp(56), Dp(48), GravityFlags.Center));
         body.AddView(dockHandle, Match());
+        AddHomeDownloads();
     }
 
     private void RenderAppDrawer()
@@ -230,6 +236,8 @@ public partial class MainActivity
         if (entries.Length > 0)
         {
             var dock = Stack(true);
+            homeFavoritesDock = dock;
+            dock.LayoutChange += (_, _) => dock.Post(PositionHomeDownloads);
             dock.SetGravity(GravityFlags.Center);
             var ink = AccentGlowDrawable.Blend(palette.Muted, palette.Accent, .42f);
             int cellWidth = Math.Clamp((Resources!.Configuration!.ScreenWidthDp - 32) / 5, 40, 54);

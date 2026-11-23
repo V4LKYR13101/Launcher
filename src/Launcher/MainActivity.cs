@@ -124,7 +124,12 @@ public partial class MainActivity : Activity
             backCallback = new BackCallback(HandleBack);
             OnBackInvokedDispatcher.RegisterOnBackInvokedCallback(0, backCallback);
         }
-        if (Intent?.GetBooleanExtra("open_root", false) == true)
+        if (Intent?.GetBooleanExtra(DownloadHomeExtra, false) == true)
+        {
+            Intent.RemoveExtra(DownloadHomeExtra);
+            page = "Tiles";
+        }
+        else if (Intent?.GetBooleanExtra("open_root", false) == true)
             page = "Root";
         StateStore.WorkspaceChanged += WorkspaceUpdated;
         var alertOwner = ApplicationContext ?? this;
@@ -180,6 +185,8 @@ public partial class MainActivity : Activity
         RefreshSystemPanelSettings();
         SystemPanelService.Refresh();
         resumed = true;
+        DownloadHistory.Changed += RefreshDownloadHistory;
+        RefreshDownloadHistory();
         if (notificationAccessBeforeSettings is { } previousAccess)
         {
             notificationAccessBeforeSettings = null;
@@ -196,6 +203,7 @@ public partial class MainActivity : Activity
         SyncDepthMotion();
         ResumeUpdateInstall();
         UpdateFileSearchAccess();
+        ResumeImageSearch();
         WorkspaceUpdated();
         if (companionSession)
             companion.Start();
@@ -229,6 +237,10 @@ public partial class MainActivity : Activity
             UpdateMediaProgress();
             UpdateWorkspaceTimers();
             UpdateResources();
+            UpdateHomeDownloads();
+            UpdateImageSearchUi();
+            UpdateDocumentSearchUi();
+            UpdateKokoroModelUi();
             EvaluateAutomaticTheme();
             if (Now >= nextWeatherCheck)
             {
@@ -246,6 +258,7 @@ public partial class MainActivity : Activity
     }
     protected override void OnPause()
     {
+        DownloadHistory.Changed -= RefreshDownloadHistory;
         touchGlow?.Clear();
         EndPageSlideForInterruption();
         FlushNoteSaves();
@@ -332,7 +345,9 @@ public partial class MainActivity : Activity
 #endif
         if (intent?.HasCategory(Intent.CategoryHome) == true)
         {
+            intent.RemoveExtra(DownloadHomeExtra);
             DismissSheets();
+            HideKeyboard();
             if (page == "Tiles" && !searching)
                 scroll.ScrollTo(0, 0);
             Navigate("Tiles");
@@ -655,8 +670,12 @@ public partial class MainActivity : Activity
         body.HapticFeedbackEnabled = false;
         body.LongClick += (_, _) => { if (page == "Tiles" && !searching) { Haptic(body, HapticCue.Hold); QuickControls(); } };
         scroll = new ScrollView(this) { FillViewport = true, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, VerticalFadingEdgeEnabled = state.LayeredInterface };
-        if (homeBattery is not null)
-            scroll.ScrollChange += (_, _) => PositionHomeBattery();
+        if (IsWallpaperHome)
+            scroll.ScrollChange += (_, _) =>
+            {
+                PositionHomeBattery();
+                PositionHomeDownloads();
+            };
         scroll.SetBackgroundColor(Color.Transparent);
         scroll.SetClipToPadding(false);
         scroll.SetFadingEdgeLength(Dp(14));
@@ -819,6 +838,24 @@ public partial class MainActivity : Activity
             case "Apps & drawers":
                 RenderAppsAndDrawersSettings();
                 break;
+            case "Image search":
+                RenderImageSearchSettings();
+                break;
+            case SearchSettingsPage:
+                RenderSearchSettings();
+                break;
+            case DownloadsSettingsPage:
+                RenderDownloadsSettings();
+                break;
+            case DocumentSearchPage:
+                RenderDocumentSearchSettings();
+                break;
+            case SpeechSettingsPage:
+                RenderSpeechSettings();
+                break;
+            case "People":
+                RenderPeopleSettings();
+                break;
             case "Notifications & panels":
                 RenderNotificationSettings();
                 break;
@@ -867,13 +904,18 @@ public partial class MainActivity : Activity
         if (!ApplyGlassCard(pill, 30, persistent: true))
             pill.Background = Background(palette.Card, 30);
         if (IsAppsSurface)
-            AddFileSearchToggle(pill);
+            AddSearchModeToggle(pill);
         if (searching)
         {
             var close = IconButton(IsAppsSurface ? "close" : "back", "Close search", HandleBack);
             if (!IsAppsSurface)
                 pill.AddView(close, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
-            var input = new EditText(this) { Text = query, Hint = SearchingFiles ? "Search files" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", TextSize = 15, Typeface = regular };
+            var input = new EditText(this) { Text = query, Hint = SearchingDownloads ? "Paste a download URL" : SearchingFiles ? "Search files" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", TextSize = 15, Typeface = regular };
+            if (SearchingDownloads)
+            {
+                input.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationUri;
+                input.Typeface = regular;
+            }
             searchInput = input;
             searchInput.SetSingleLine(true);
             searchInput.SetTextColor(palette.Text);
@@ -881,10 +923,21 @@ public partial class MainActivity : Activity
             searchInput.Background = null;
             StyleEntry(input);
             searchInput.SetPadding(Dp(4), 0, IsAppsSurface ? 0 : Dp(12), 0);
-            searchInput.ImeOptions = ImeAction.Search;
+            searchInput.ImeOptions = SearchingDownloads ? ImeAction.Go : ImeAction.Search;
+            View? downloadButton = null;
+            if (SearchingDownloads)
+            {
+                downloadButton = IconButton("download", "Download file", DownloadSearchUrl, palette.Accent);
+                UpdateDownloadButton(downloadButton);
+            }
             searchInput.TextChanged += (_, _) =>
             {
                 query = input.Text ?? "";
+                if (downloadButton is not null)
+                {
+                    UpdateDownloadButton(downloadButton);
+                    return;
+                }
                 if (pendingSearch is not null)
                     handler.RemoveCallbacks(pendingSearch);
                 pendingSearch = () => { pendingSearch = null; if (searching) { if (IsAppsSurface) RefreshAppSearch(); else RenderBody(); } };
@@ -892,7 +945,9 @@ public partial class MainActivity : Activity
             };
             searchInput.EditorAction += (_, e) =>
             {
-                if (page == "Root")
+                if (SearchingDownloads)
+                    DownloadSearchUrl();
+                else if (page == "Root")
                     ExecuteRootCommand(query);
                 else if (page != "Conversations")
                 {
@@ -901,6 +956,8 @@ public partial class MainActivity : Activity
                 e.Handled = true;
             };
             pill.AddView(searchInput, new LinearLayout.LayoutParams(0, Dp(barHeight), 1));
+            if (downloadButton is not null)
+                pill.AddView(downloadButton, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
             if (IsAppsSurface)
                 pill.AddView(close, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
         }
@@ -928,9 +985,9 @@ public partial class MainActivity : Activity
         bottom.AddView(pill, Match(Dp(barHeight)));
         shell.AddView(bottom, Match());
     }
-    private void StartSearch() => BeginSearch(files: false, keepQuery: false);
+    private void StartSearch() => BeginSearch(AppSearchMode.Apps, keepQuery: false);
 
-    private void BeginSearch(bool files, bool keepQuery)
+    private void BeginSearch(AppSearchMode mode, bool keepQuery)
     {
         if (pendingSearch is not null)
         {
@@ -938,7 +995,8 @@ public partial class MainActivity : Activity
             pendingSearch = null;
         }
         searching = true;
-        fileSearchMode = files;
+        searchMode = mode;
+        bool files = mode == AppSearchMode.Files;
         fileSearchAccess = files && SharedStorage.CanRead(this);
         searchOpening = true;
         if (!keepQuery)

@@ -7,7 +7,7 @@ public partial class MainActivity
 
     private static bool IsStyledSettingsPage(string name) => name is "Settings" or "Appearance" or
         "Theme & wallpaper" or "Tiles & icons" or "Motion & depth" or "Navigation & status" or
-        "Apps & drawers" or "Notifications & panels";
+        "Apps & drawers" or "Notifications & panels" or SearchSettingsPage or "Image search" or DocumentSearchPage or SpeechSettingsPage or "People" or DownloadsSettingsPage;
 
     private static bool IsSettingsPage(string name) => IsStyledSettingsPage(name) || name is
         "Automatic theme" or "Updates" or "Grayscale setup" or "Integrations" or "Desktop companion" or

@@ -4,6 +4,7 @@ using Android.Widget;
 using Launcher.Core;
 using LauncherApp.UI;
 using LauncherApp.Services;
+using LauncherApp.Services.ImageSearch;
 namespace LauncherApp;
 
 public partial class MainActivity
@@ -24,13 +25,30 @@ public partial class MainActivity
     }
     private void RenderAppSearch()
     {
+        if (SearchingDownloads)
+        {
+            Title("Download");
+            Paragraph("Save a file from a direct link to Downloads.");
+            return;
+        }
+        bool fileResults = SearchingFiles;
         appSearchTitle = Text(query.Trim().Length == 0 ? "All apps" : "Results", 26, true);
         appSearchTitle.SetPadding(0, Dp(8), 0, Dp(10));
-        body.AddView(appSearchTitle, Match());
+        if (fileResults)
+        {
+            var header = Stack(true);
+            header.SetGravity(GravityFlags.CenterVertical);
+            header.AddView(appSearchTitle, new LinearLayout.LayoutParams(0, -2, 1));
+            header.AddView(IconButton("settings", "Search settings", () => Navigate(SearchSettingsPage), palette.Muted),
+                new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+            body.AddView(header, Match());
+            AddFileTypeFilters();
+        }
+        else
+            body.AddView(appSearchTitle, Match());
         appSearchCount = Text("", 12, color: palette.Muted);
         appSearchCount.SetPadding(0, 0, 0, Dp(12));
         body.AddView(appSearchCount, Match());
-        bool fileResults = SearchingFiles;
         if (fileResults && !fileSearchAccess)
             body.AddView(Button("Allow file access", RequestFileSearchAccess), Match());
         appSearchList = new ListView(this) { Divider = null, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, CacheColorHint = Color.Transparent };
@@ -47,7 +65,7 @@ public partial class MainActivity
     }
     private void RefreshAppSearch()
     {
-        if (!searching || !IsAppsSurface || appSearchAdapter is null)
+        if (!searching || !IsAppsSurface || SearchingDownloads || appSearchAdapter is null)
             return;
         if (SearchingFiles)
         {
@@ -132,6 +150,7 @@ public partial class MainActivity
     private sealed class AppSearchAdapter(MainActivity host, bool fileResults) : BaseAdapter<SearchHit>
     {
         private const int FileCardRadius = 22;
+        private static readonly SemaphoreSlim ThumbnailDecoders = new(2);
         private SearchHit[] entries = [];
         public override int Count => entries.Length;
         public override SearchHit this[int position] => entries[position];
@@ -219,8 +238,22 @@ public partial class MainActivity
                 row.ContentDescription = holder.Label.Text;
             }
             holder.Art.RemoveAllViews();
+            int binding = ++holder.ArtBinding;
             string glyph = hit.File is not null || hit.Local?.Kind == "Journey" ? "file" : hit.Local?.Kind == "Saved story" ? "rss" : "note";
             holder.Art.AddView(app is not null ? host.AppIcon(app, host.palette.Text) : new GlyphView(host, glyph, host.palette.Accent), new FrameLayout.LayoutParams(host.Dp(28), host.Dp(28), GravityFlags.Center));
+            if (fileResults && holder.Art.Parent is View frame && frame.LayoutParameters is { } size)
+            {
+                bool image = hit.File?.IsImage == true;
+                int side = host.Dp(image ? 64 : 44);
+                if (size.Width != side)
+                {
+                    size.Width = side;
+                    size.Height = side;
+                    frame.LayoutParameters = size;
+                }
+                if (image)
+                    _ = ShowThumbnail(holder, hit.File!.Path, binding, side);
+            }
             holder.Pin.Visibility = app is not null && host.state.Apps[app.Id].Pinned ? ViewStates.Visible : ViewStates.Gone;
             host.badgeViews.RemoveAll(item => ReferenceEquals(item.View, holder.Badge));
             if (app is not null)
@@ -232,6 +265,34 @@ public partial class MainActivity
                 holder.Badge.Visibility = ViewStates.Gone;
             return row;
         }
+
+        private async Task ShowThumbnail(AppSearchRow holder, string path, int binding, int side)
+        {
+            await ThumbnailDecoders.WaitAsync();
+            try
+            {
+                if (holder.ArtBinding != binding || host.IsDestroyed)
+                    return;
+                using var bitmap = await Task.Run(() => ClipEncoder.Thumbnail(path, side));
+                if (bitmap is null || holder.ArtBinding != binding || host.IsDestroyed)
+                    return;
+                var thumbnail = new ImageView(host)
+                {
+                    ImportantForAccessibility = ImportantForAccessibility.No,
+                    Background = host.Surface(host.palette.Card, 10),
+                    ClipToOutline = true
+                };
+                thumbnail.SetScaleType(ImageView.ScaleType.CenterCrop);
+                thumbnail.SetImageBitmap(bitmap);
+                holder.Art.RemoveAllViews();
+                holder.Art.AddView(thumbnail, new FrameLayout.LayoutParams(-1, -1));
+            }
+            catch (Exception error) when (error is Java.Lang.RuntimeException or Java.IO.IOException or IOException or UnauthorizedAccessException)
+            {
+                // Keep the file icon when Android cannot decode the image.
+            }
+            finally { ThumbnailDecoders.Release(); }
+        }
     }
     private sealed class AppSearchRow(FrameLayout art, TextView label, TextView? folder, TextView badge, View pin, SearchHit hit) : Java.Lang.Object
     {
@@ -241,5 +302,6 @@ public partial class MainActivity
         public TextView Badge { get; } = badge;
         public View Pin { get; } = pin;
         public SearchHit Hit { get; set; } = hit;
+        public int ArtBinding { get; set; }
     }
 }
