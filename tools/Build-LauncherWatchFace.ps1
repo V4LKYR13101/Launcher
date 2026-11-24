@@ -1,20 +1,53 @@
 param(
-    [Parameter(Mandatory)][string] $AndroidSdk,
-    [Parameter(Mandatory)][string] $JavaSdk,
-    [Parameter(Mandatory)][string] $Validator,
-    [Parameter(Mandatory)][string] $KeyStore,
-    [Parameter(Mandatory)][string] $KeyAlias,
+    [string] $AndroidSdk,
+    [string] $JavaSdk,
+    [string] $Validator,
+    [string] $KeyStore,
+    [string] $KeyAlias = 'launcher-watch-face',
     [string] $BuildToolsVersion = '37.0.0',
     [string] $OutputDirectory = (Join-Path $PSScriptRoot '../artifacts/watch-face')
 )
 
 $ErrorActionPreference = 'Stop'
-if (-not $env:LAUNCHER_WATCHFACE_STOREPASS) { throw 'Set LAUNCHER_WATCHFACE_STOREPASS for the watch face keystore.' }
 
 function Invoke-BuildTool {
     param([string] $Executable, [string[]] $Arguments)
     & $Executable @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Executable exited with code $LASTEXITCODE." }
+}
+
+if (-not $AndroidSdk) {
+    $AndroidSdk = @(
+        "${env:ProgramFiles(x86)}/Android/android-sdk"
+        $env:ANDROID_HOME
+        $env:ANDROID_SDK_ROOT
+    ) | Where-Object {
+        $_ -and (Test-Path -LiteralPath "$_/platforms/android-36/android.jar") -and
+        (Test-Path -LiteralPath "$_/build-tools/$BuildToolsVersion/aapt2.exe")
+    } | Select-Object -First 1
+}
+if (-not $AndroidSdk) { throw 'Android SDK with platform 36 and the selected build tools was not found. Pass -AndroidSdk.' }
+
+if (-not $JavaSdk) {
+    $JavaSdk = @(
+        "$env:ProgramFiles/Eclipse Adoptium/jdk-21.0.12.101-hotspot"
+        $env:JAVA_HOME
+    ) | Where-Object {
+        $_ -and (Test-Path -LiteralPath "$_/bin/javac.exe")
+    } | Select-Object -First 1
+}
+if (-not $JavaSdk) { throw 'Java SDK was not found. Pass -JavaSdk with a JDK 21 installation.' }
+
+$keyDirectory = Join-Path $env:USERPROFILE '.android/launcher-release'
+$useLocalKey = -not $KeyStore
+if ($useLocalKey) { $KeyStore = Join-Path $keyDirectory 'launcher-watch-face.p12' }
+if (-not (Test-Path -LiteralPath $KeyStore -PathType Leaf)) {
+    throw "Watch face signing key not found at $KeyStore."
+}
+
+$downloadValidator = -not $Validator
+if ($downloadValidator) {
+    $Validator = Join-Path ([IO.Path]::GetTempPath()) 'launcher-watch-tools/validator.jar'
 }
 
 $source = Join-Path $PSScriptRoot '../src/Launcher.WatchFace'
@@ -25,8 +58,29 @@ $build = [long]$manifestXml.manifest.GetAttribute('android:versionCode')
 $buildTools = Join-Path $AndroidSdk "build-tools/$BuildToolsVersion"
 $work = Join-Path ([System.IO.Path]::GetTempPath()) ("launcher-roll-" + [guid]::NewGuid().ToString('N'))
 $previousJava = $env:JAVA_HOME
+$previousStorePassword = $env:LAUNCHER_WATCHFACE_STOREPASS
 New-Item -ItemType Directory -Path $work, $OutputDirectory -Force | Out-Null
 try {
+    if (-not $env:LAUNCHER_WATCHFACE_STOREPASS) {
+        if (-not $useLocalKey) { throw 'Set LAUNCHER_WATCHFACE_STOREPASS when using a custom watch face keystore.' }
+        $passwordPath = Join-Path $keyDirectory 'store-password.dpapi'
+        if (-not (Test-Path -LiteralPath $passwordPath -PathType Leaf)) {
+            throw 'The local signing password was not found. Set LAUNCHER_WATCHFACE_STOREPASS.'
+        }
+        $securePassword = Get-Content -LiteralPath $passwordPath -Raw | ConvertTo-SecureString
+        $env:LAUNCHER_WATCHFACE_STOREPASS = [Net.NetworkCredential]::new('', $securePassword).Password
+    }
+    if (-not (Test-Path -LiteralPath $Validator -PathType Leaf)) {
+        if (-not $downloadValidator) { throw "Watch Face Push validator not found at $Validator." }
+        $download = Join-Path $work 'validator.jar'
+        $validatorVersion = '1.1.0-alpha01'
+        $maven = 'https://dl.google.com/dl/android/maven2/com/google/android/wearable/watchface/validator'
+        Invoke-BuildTool 'curl.exe' @('--fail', '--silent', '--show-error', '--location',
+            '--output', $download, "$maven/validator-push-cli/$validatorVersion/validator-push-cli-$validatorVersion.jar")
+        New-Item -ItemType Directory -Path (Split-Path -Parent $Validator) -Force | Out-Null
+        Move-Item -LiteralPath $download -Destination $Validator -Force
+    }
+
     $env:JAVA_HOME = $JavaSdk
     $resources = Join-Path $work 'res.zip'
     $unsigned = Join-Path $work 'unsigned.apk'
@@ -70,7 +124,8 @@ try {
 }
 finally {
     $env:JAVA_HOME = $previousJava
-    foreach ($name in 'res.zip', 'unsigned.apk', 'aligned.apk', 'Launcher-Roll.apk', 'Launcher-Roll.apk.idsig') {
+    $env:LAUNCHER_WATCHFACE_STOREPASS = $previousStorePassword
+    foreach ($name in 'res.zip', 'unsigned.apk', 'aligned.apk', 'Launcher-Roll.apk', 'Launcher-Roll.apk.idsig', 'validator.jar') {
         $file = Join-Path $work $name
         if (Test-Path -LiteralPath $file) { Remove-Item -LiteralPath $file }
     }

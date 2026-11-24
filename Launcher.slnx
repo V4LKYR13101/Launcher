@@ -14,6 +14,7 @@
     <File Path="src/Launcher.WatchFace/res/xml/watch_face_info.xml" />
     <File Path="tools/Build-LauncherWatchFace.ps1" />
     <File Path="tools/publish_launcher_wear.py" />
+    <File Path="tools/prune_launcher_apks.py" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Launcher.Core.Tests/Launcher.Core.Tests.csproj" />

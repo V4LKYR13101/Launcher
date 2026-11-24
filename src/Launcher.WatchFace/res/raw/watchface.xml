@@ -148,7 +148,7 @@
         </PartText>
         <PartText x="147" y="126" width="156" height="120">
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="96" color="#F4F8FC" weight="MEDIUM">
+                <Font family="SYNC_TO_DEVICE" size="100" color="#F4F8FC" weight="LIGHT">
                     <Template><![CDATA[%d]]><Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23] : [HOUR_1_12]"/>
                     </Template>
                 </Font>
@@ -156,7 +156,7 @@
         </PartText>
         <PartText x="156" y="219" width="138" height="90">
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="70" color="#F4F8FC" weight="MEDIUM">
+                <Font family="SYNC_TO_DEVICE" size="74" color="#F4F8FC" weight="LIGHT">
                     <Template><![CDATA[%02d]]><Parameter expression="[MINUTE]"/>
                     </Template>
                 </Font>
@@ -171,8 +171,10 @@
                     <Variant mode="AMBIENT" target="alpha" value="0"/>
                     <Text align="CENTER">
                         <Font family="SYNC_TO_DEVICE" size="18" color="#AEBCC6">
-                            <Template><![CDATA[%s]]><Parameter expression="[AMPM_STRING]"/>
-                            </Template>
+							<Upper>
+                                <Template><![CDATA[%s]]><Parameter expression="[AMPM_STRING]"/>
+                                </Template>
+							</Upper>
                         </Font>
                     </Text>
                 </PartText>
@@ -188,7 +190,7 @@
                 </Font>
             </Text>
         </PartText>
-        <!-- The built-in divider sits underneath the companion's colored image. -->
+		<!-- The built-in divider sits underneath the companion's colored image. -->
         <ComplicationSlot slotId="2" supportedTypes="SHORT_TEXT LONG_TEXT EMPTY" x="95" y="355" width="260" height="32" displayName="@string/weather_slot">
             <BoundingBox x="0" y="0" width="260" height="32"/>
             <Variant mode="AMBIENT" target="alpha" value="0"/>

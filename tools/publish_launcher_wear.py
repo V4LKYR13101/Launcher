@@ -165,17 +165,16 @@ def apply_on_server(stage):
             id=release_id, version=f"Launcher Roll {watch['version']}" if keep_phone else phone["version"],
             date=now.date().isoformat(),
             status="published", kind="release", platforms="Android 7+ · Wear OS 6+ for face push",
-            title="Larger centered time and weather" if keep_phone else
+            title="Launcher Roll update" if keep_phone else
                 "Wear OS connection fix" if keep_companion else
                 "Wear OS setup and first install" if keep_watch else "Launcher Roll for Wear OS",
-            summary=("Larger central digits, tighter spacing and a weather complication."
+            summary=("An updated watch face available through Launcher."
                      if keep_phone else "Corrects how the phone handles replies from the watch companion."
                      if keep_companion else "Install Launcher Roll from its own setup screen in Launcher settings."),
-            body=("<p>Launcher Roll now centers the time, enlarges the active digits and staggers the two rows of neighboring numbers. "
-                  "If the built-in weather feed is unavailable, open the watch face editor and select a source "
-                  "for the Weather complication.</p>" if keep_phone else
+            body=("<p>In Launcher, open <strong>Settings → Wear OS → Check for watch face updates</strong> "
+                  "to install the latest Launcher Roll.</p>" if keep_phone else
                   "<p>This phone release fixes decoding of watch replies. The corrected install flow also requires "
-                  "Launcher for Wear OS 1.0.3 on the watch.</p>" if keep_companion else
+                  "Launcher for Wear OS 1.0.4 on the watch.</p>" if keep_companion else
                  "<p>Install and open Launcher for Wear OS on the watch. On the paired Android phone, "
                  "open Launcher and go to <strong>Settings → Wear OS → Install Launcher Roll</strong>. "
                  "Approve the download and select Launcher Roll in the watch face picker. "
@@ -199,7 +198,10 @@ def apply_on_server(stage):
         for release in releases:
             with client.head(release["url"].removeprefix(SITE)) as response:
                 if response.status_code != 200 or response.content_length != release["bytes"]:
-                    raise RuntimeError(f"Download check failed for build {release['build']}.")
+                    raise RuntimeError(
+                        f"Download check failed for {release['url']} (build {release['build']}): "
+                        f"HTTP {response.status_code}, {response.content_length} bytes; expected {release['bytes']}."
+                    )
 
         feed = dict(previous, **metadata)
         for path in manifests:
@@ -232,24 +234,31 @@ def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=Fals
     import paramiko
     import xml.etree.ElementTree as et
 
+    selected_face = None
+    if face_only and watch_directory and watch_directory.suffix.lower() == ".apk" and not watch_directory.is_dir():
+        selected_face = watch_directory
+        if not selected_face.is_file():
+            raise ValueError(f"Watch face APK not found: {selected_face}")
+        watch_directory = selected_face.parent
     face_entry = watch_directory / "watch-face-feed-entry.json" if watch_directory else None
-    has_face = face_entry and face_entry.exists()
+    has_face = face_entry is not None and face_entry.is_file()
+    if face_only and not has_face:
+        raise ValueError(f"Missing {face_entry}. Build the face and keep its feed JSON beside the signed APK.")
     if face_only or not has_face:
         with urlopen(SITE + FEED_PATH + f"?t={time.time_ns()}", timeout=25) as response:
             live = json.load(response)
     if face_only:
         phone = live["androidProduction"]
-        if not has_face:
-            raise ValueError("The watch face package and feed entry are required.")
         artifacts = []
     else:
         phone = read_json(phone_directory / "release-info.json")
         phone["build"] = int(phone["build"])
         phone["sha256"] = phone["sha256"].lower()
         artifacts = [(phone_directory / phone["file"], phone)]
-    if face_entry and face_entry.exists():
+    if has_face:
         face = read_json(face_entry)["watchFace"]
-        face["release"]["file"] = f"Launcher-Roll-{face['release']['version']}.apk"
+        face_path = selected_face or (watch_directory / f"Launcher-Roll-{face['release']['version']}.apk")
+        face["release"]["file"] = face_path.name
     else:
         face = live["watchFace"]
     if watch_directory and not face_only:
@@ -263,8 +272,8 @@ def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=Fals
     else:
         companion = live["wearCompanion"]
     metadata = dict(androidProduction=phone, watchFace=face, wearCompanion=companion)
-    if face_entry and face_entry.exists():
-        artifacts.append((watch_directory / face["release"]["file"], face["release"]))
+    if has_face:
+        artifacts.append((face_path, face["release"]))
     for path, release in artifacts:
         if path.stat().st_size != release["bytes"] or digest(path) != release["sha256"]:
             raise ValueError(f"Release artifact failed verification: {path.name}")
@@ -357,7 +366,11 @@ def verify_publication(phone_directory, verify_bridge):
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--apply":
-        apply_on_server(Path(sys.argv[2]))
+        import fcntl
+
+        with Path("/run/lock/kevlog-launcher-release.lock").open("a") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            apply_on_server(Path(sys.argv[2]))
     elif len(sys.argv) in (3, 4) and sys.argv[1] == "--verify":
         verify_publication(Path(sys.argv[2]), len(sys.argv) == 4 and sys.argv[3] == "--legacy")
     elif len(sys.argv) == 3 and sys.argv[1] == "--phone-only":

@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Launcher.WatchFace", "Launc
 		src\Launcher.WatchFace\res\xml\watch_face_info.xml = src\Launcher.WatchFace\res\xml\watch_face_info.xml
 		tools\Build-LauncherWatchFace.ps1 = tools\Build-LauncherWatchFace.ps1
 		tools\publish_launcher_wear.py = tools\publish_launcher_wear.py
+		tools\prune_launcher_apks.py = tools\prune_launcher_apks.py
 	EndProjectSection
 EndProject
 Global
