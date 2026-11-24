@@ -11,7 +11,7 @@ public partial class MainActivity
 
     private static bool IsSettingsPage(string name) => IsStyledSettingsPage(name) || name is
         "Automatic theme" or "Updates" or "Grayscale setup" or "Integrations" or "Desktop companion" or
-        "Drawers" or "Hidden" or "Permissions" or "Root settings" or "Weather";
+        "Drawers" or "Hidden" or "Permissions" or "Root settings" or "Weather" or WearSettingsPage;
 
     private void TrackSettingsNavigation(string target)
     {

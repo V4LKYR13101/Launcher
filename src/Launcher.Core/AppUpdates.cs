@@ -5,7 +5,8 @@ using System.Text.Json.Serialization;
 namespace Launcher.Core;
 
 public sealed record AppRelease(string Version, long Build, string Url, string Sha256, long Bytes, string? Notes = null);
-public sealed record AppReleases(AppRelease Android, AppRelease? AndroidProduction = null);
+public sealed record WatchFaceRelease(AppRelease Release, string ValidationToken);
+public sealed record AppReleases(AppRelease Android, AppRelease? AndroidProduction = null, WatchFaceRelease? WatchFace = null);
 
 [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(AppReleases))]
@@ -13,6 +14,7 @@ internal partial class UpdateJsonContext : JsonSerializerContext;
 
 public static class AppUpdates
 {
+    public const int MaxWatchFaceRequestBytes = 96 * 1024;
     private static readonly HttpClient Client = new(new HttpClientHandler { AllowAutoRedirect = false })
     {
         Timeout = TimeSpan.FromMinutes(10)
@@ -32,16 +34,35 @@ public static class AppUpdates
 
     public static async Task<AppRelease> CheckAsync(CancellationToken token = default, HttpClient? client = null)
     {
-        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(token);
-        timeout.CancelAfter(TimeSpan.FromSeconds(20));
-        var releases = await (client ?? Client).GetFromJsonAsync(
-            "https://kevlog.co.za/updates/launcher.json?t=" + DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-            UpdateJsonContext.Default.AppReleases, timeout.Token);
+        var releases = await ReadFeedAsync(token, client);
         // Older installations keep reading Android (the same-key bridge). The
         // migration-aware bridge and newer versions can use the rotated release.
         var release = releases?.AndroidProduction ?? releases?.Android ?? throw new IOException("Update information is unavailable.");
         Validate(release);
         return release;
+    }
+
+    public static async Task<WatchFaceRelease?> CheckWatchFaceAsync(CancellationToken token = default)
+    {
+        var watchFace = (await ReadFeedAsync(token, null))?.WatchFace;
+        if (watchFace is null)
+            return null;
+        if (watchFace.Release is null || string.IsNullOrWhiteSpace(watchFace.ValidationToken))
+            throw new InvalidDataException("The watch face release is incomplete.");
+        Validate(watchFace.Release);
+        int tokenBytes = System.Text.Encoding.UTF8.GetByteCount(watchFace.ValidationToken);
+        if (tokenBytes > 4096 || watchFace.Release.Bytes + tokenBytes + 10 > MaxWatchFaceRequestBytes)
+            throw new InvalidDataException("The watch face release is too large.");
+        return watchFace;
+    }
+
+    private static async Task<AppReleases?> ReadFeedAsync(CancellationToken token, HttpClient? client)
+    {
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(token);
+        timeout.CancelAfter(TimeSpan.FromSeconds(20));
+        return await (client ?? Client).GetFromJsonAsync(
+            "https://kevlog.co.za/updates/launcher.json?t=" + DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            UpdateJsonContext.Default.AppReleases, timeout.Token);
     }
 
     public static async Task DownloadAsync(AppRelease release, string destination, Action<int> progress,

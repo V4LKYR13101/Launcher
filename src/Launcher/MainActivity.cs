@@ -177,6 +177,7 @@ public partial class MainActivity : Activity
     protected override void OnResume()
     {
         base.OnResume();
+        WearAccentPublisher.Publish(this, state.Accent);
         string previousTheme = state.Theme;
         SyncSystemTheme();
         if (previousTheme != state.Theme)
@@ -185,6 +186,7 @@ public partial class MainActivity : Activity
         RefreshSystemPanelSettings();
         SystemPanelService.Refresh();
         resumed = true;
+        _ = CheckWatchFaceUpdateAsync();
         DownloadHistory.Changed += RefreshDownloadHistory;
         RefreshDownloadHistory();
         if (notificationAccessBeforeSettings is { } previousAccess)
@@ -496,6 +498,7 @@ public partial class MainActivity : Activity
         try
         {
             store.Save(state);
+            WearAccentPublisher.Publish(this, state.Accent);
             SystemPanelService.Refresh();
             GrayscaleService.RulesChanged();
             SyncAutomaticTheme();
@@ -822,6 +825,9 @@ public partial class MainActivity : Activity
                 break;
             case "Updates":
                 RenderUpdates();
+                break;
+            case WearSettingsPage:
+                RenderWearSettings();
                 break;
             case "Grayscale setup":
                 RenderGrayscaleSetup();
