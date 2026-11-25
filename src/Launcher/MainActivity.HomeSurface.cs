@@ -18,12 +18,58 @@ public partial class MainActivity
     {
         if (!FilteringSettings)
             return true;
-        string aliases = text.StartsWith("Appearance ") ? " accent color colour theme columns page tabs navigation icons wallpaper typography corners motion" : text.StartsWith("Setup & feature health ") ? " recovery permissions support battery sensor" : text.StartsWith("Root ") ? " today agenda calendar checklists reminders cards widgets" : "";
-        return (text + aliases).Contains(settingsQuery.Trim(), StringComparison.CurrentCultureIgnoreCase);
+        return UiCulture.CompareInfo.IndexOf(text.Replace("*", ""), settingsQuery.Trim(),
+            System.Globalization.CompareOptions.IgnoreCase | System.Globalization.CompareOptions.IgnoreNonSpace) >= 0;
+    }
+
+    private static string SettingsAliases(string title)
+    {
+        if (title == Localize(Resource.String.ui_appearance))
+            return Localize(Resource.String.ui_accent_color_colour_theme_columns_page_tabs_navigation_icons);
+        if (title == Localize(Resource.String.ui_setup_feature_health))
+            return Localize(Resource.String.ui_recovery_permissions_support_battery_sensor);
+        if (title == Localize(Resource.String.ui_root))
+            return Localize(Resource.String.ui_today_agenda_calendar_checklists_reminders_cards_widgets);
+        return "";
     }
     private bool depthAllowed = true;
     private bool DepthAvailable => depthAllowed;
-    private string PageLabel(string value) => value switch { "Root" => "Today", "Tiles" => "Apps", "Conversations" => "Notifications", "Root settings" => "Today cards", _ => value };
+    private static string PageLabel(string value) => value switch
+    {
+        "Root" => Localize(Resource.String.ui_today),
+        "Tiles" => Localize(Resource.String.ui_apps),
+        "Conversations" => Localize(Resource.String.ui_notifications),
+        "Root settings" => Localize(Resource.String.ui_today_cards),
+        "Settings" => Localize(Resource.String.ui_settings),
+        "Appearance" => Localize(Resource.String.ui_appearance),
+        "Theme & wallpaper" => Localize(Resource.String.ui_theme_wallpaper),
+        "Tiles & icons" => Localize(Resource.String.ui_tiles_icons),
+        "Motion & depth" => Localize(Resource.String.ui_motion_depth),
+        "Navigation & status" => Localize(Resource.String.ui_navigation_status),
+        "Apps & drawers" => Localize(Resource.String.ui_apps_drawers),
+        "Notifications & panels" => Localize(Resource.String.ui_notifications_panels),
+        SearchSettingsPage => Localize(Resource.String.ui_search_settings_title),
+        "Image search" => Localize(Resource.String.ui_image_search),
+        "Document search" => Localize(Resource.String.ui_document_search),
+        "People" => Localize(Resource.String.ui_people),
+        "Downloads" => Localize(Resource.String.ui_downloads),
+        "Automatic theme" => Localize(Resource.String.ui_automatic_theme),
+        "Updates" => Localize(Resource.String.ui_updates),
+        "Grayscale setup" => Localize(Resource.String.ui_grayscale_setup),
+        "Integrations" => Localize(Resource.String.ui_integrations),
+        "Desktop companion" => Localize(Resource.String.ui_desktop_companion),
+        "Drawers" => Localize(Resource.String.ui_drawers),
+        "Hidden" => Localize(Resource.String.ui_hidden),
+        "Permissions" => Localize(Resource.String.ui_permissions),
+        "Weather" => Localize(Resource.String.ui_weather),
+        "Wear OS" => Localize(Resource.String.ui_wear_os),
+        "Quick panel" => Localize(Resource.String.ui_quick_panel),
+        "Speech & audio" => Localize(Resource.String.ui_speech_audio),
+        "App drawer" => Localize(Resource.String.ui_app_drawer),
+        "All apps drawer" => Localize(Resource.String.ui_all_apps),
+        _ => value
+    };
+
     private Drawable Surface(Color color, int radius = 20, bool accent = false)
     {
         var top = accent ? new Color((byte)((color.R * 7 + palette.Accent.R) / 8), (byte)((color.G * 7 + palette.Accent.G) / 8), (byte)((color.B * 7 + palette.Accent.B) / 8)) : new Color((byte)Math.Min(255, color.R + 5), (byte)Math.Min(255, color.G + 5), (byte)Math.Min(255, color.B + 5));
@@ -51,12 +97,12 @@ public partial class MainActivity
             var item = Stack(true);
             item.SetGravity(GravityFlags.Center);
             item.SetPadding(Dp(5), Dp(8), Dp(5), Dp(8));
-            item.ContentDescription = PageLabel(target) + (selected ? ", selected" : "");
+            item.ContentDescription = PageLabel(target) + (selected ? Localize(Resource.String.ui_selected) : "");
             item.Selected = selected;
             item.Background = selected ? Background(palette.Accent, 20) : null;
             if (FontScale < 1.4f)
                 item.AddView(new GlyphView(this, glyph, ink), new LinearLayout.LayoutParams(Dp(17), Dp(17)));
-            var label = Text(target == "Conversations" && FontScale >= 1.4f ? "Alerts" : PageLabel(target), 11, true, ink);
+            var label = Text(target == "Conversations" && FontScale >= 1.4f ? Localize(Resource.String.ui_alerts) : PageLabel(target), 11, true, ink);
             label.SetSingleLine(true);
             label.Gravity = GravityFlags.Center;
             label.SetPadding(Dp(5), 0, 0, 0);
@@ -74,7 +120,7 @@ public partial class MainActivity
         var row = Stack(true);
         row.SetGravity(GravityFlags.CenterVertical);
         row.SetPadding(Dp(16), Dp(4), Dp(16), Dp(8));
-        var input = new EditText(this) { Text = settingsQuery, Hint = "Search settings", TextSize = 15, ContentDescription = "Search settings" };
+        var input = new EditText(this) { Text = settingsQuery, Hint = Localize(Resource.String.ui_search_settings), TextSize = 15, ContentDescription = Localize(Resource.String.ui_search_settings) };
         input.SetSingleLine(true);
         input.Background = Surface(palette.Card, 16);
         input.SetPadding(Dp(16), Dp(10), Dp(16), Dp(10));
@@ -99,11 +145,11 @@ public partial class MainActivity
         var highlight = BuildOverviewHighlight();
         scene.AddView(highlight ?? BuildOverviewDate(), new FrameLayout.LayoutParams(-1, -2, GravityFlags.CenterVertical));
         hero.AddView(scene, Match());
-        RootActions(hero, ("+ Capture", ShowCapture), ("Search", StartSearch), ("Arrange", BeginTodayLayout));
+        RootActions(hero, (Localize(Resource.String.ui_capture_action), ShowCapture), (Localize(Resource.String.ui_search), StartSearch), (Localize(Resource.String.ui_arrange), BeginTodayLayout));
         if (!state.SetupCompleted)
         {
             Gap(hero, 8);
-            hero.AddView(Button("Set up your home", ShowFeatureHealth), Match());
+            hero.AddView(Button(Localize(Resource.String.ui_set_up_your_home), ShowFeatureHealth), Match());
         }
     }
 
@@ -115,8 +161,8 @@ public partial class MainActivity
         date.AddView(Text(DateTime.Today.ToString("dd"), 58, true, palette.Accent));
         var context = Stack();
         context.SetPadding(Dp(14), 0, 0, 0);
-        context.AddView(Text(DateTime.Today.ToString("dddd"), 21, true), Match());
-        var month = Text(DateTime.Today.ToString("MMMM yyyy").ToUpperInvariant(), 10, true, palette.Muted);
+        context.AddView(Text(DateTime.Today.ToString("dddd", UiCulture), 21, true), Match());
+        var month = Text(DateTime.Today.ToString("MMMM yyyy", UiCulture).ToUpperInvariant(), 10, true, palette.Muted);
         month.LetterSpacing = .12f;
         month.SetPadding(0, Dp(6), 0, 0);
         context.AddView(month, Match());
@@ -133,7 +179,7 @@ public partial class MainActivity
         {
             var countdown = Text(TimerDisplay(timer), 36, true, palette.Accent);
             overviewTimerView = (timer, countdown);
-            return OverviewHighlight("Running timer", countdown, timer.Title, "Pause timer", () => ToggleTimer(timer));
+            return OverviewHighlight(Localize(Resource.String.ui_running_timer), countdown, timer.Title, Localize(Resource.String.ui_pause_timer), () => ToggleTimer(timer));
         }
 
         if (!state.CalendarVisible || state.RootHidden.Contains("calendar") || !AgendaReader.Allowed(this))
@@ -141,8 +187,8 @@ public partial class MainActivity
 
         RefreshAgenda();
         var next = agendaEvents.FirstOrDefault(item => item.Ends > now && item.Begins < now + 24 * 60 * 60 * 1000);
-        return next is null ? null : OverviewHighlight(next.Begins <= now && !next.AllDay ? "On now" : "On your agenda",
-            Text(next.Title, 24, true), AgendaTime(next), "Open in Calendar", () => OpenAgendaEvent(next));
+        return next is null ? null : OverviewHighlight(next.Begins <= now && !next.AllDay ? Localize(Resource.String.ui_on_now) : Localize(Resource.String.ui_on_your_agenda),
+            Text(next.Title, 24, true), AgendaTime(next), Localize(Resource.String.ui_open_in_calendar), () => OpenAgendaEvent(next));
     }
 
     private LinearLayout OverviewHighlight(string caption, TextView title, string detail, string actionLabel, System.Action action)
@@ -162,7 +208,7 @@ public partial class MainActivity
         group.AddView(RootAction(actionLabel, action), new LinearLayout.LayoutParams(-2, -2));
         return group;
     }
-    private void ShowCapture() => Choose("Capture something", ["Note", "Checklist", "Reminder", "Timer", "Journey", "Link"], i =>
+    private void ShowCapture() => Choose(Resource.String.ui_capture_something, [Localize(Resource.String.ui_note), Localize(Resource.String.ui_checklist), Localize(Resource.String.ui_reminder), Localize(Resource.String.ui_timer), Localize(Resource.String.ui_journey), Localize(Resource.String.ui_link)], i =>
     {
         if (i == 0)
             CreateNote("");
@@ -171,11 +217,11 @@ public partial class MainActivity
         else if (i == 2)
             EditReminder();
         else if (i == 3)
-            Prompt("Timer duration", "10 min", CreateTimer);
+            Prompt(Resource.String.ui_timer_duration, "10 min", CreateTimer);
         else if (i == 4)
             EditTicket(new(), true);
         else
-            Prompt("Save a link", "", CreateNoteFromShare);
+            Prompt(Resource.String.ui_save_a_link, "", CreateNoteFromShare);
     });
     private void DismissSheets()
     {

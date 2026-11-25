@@ -1,4 +1,4 @@
-﻿using Android.Views;
+using Android.Views;
 using Android.Widget;
 using Android.App;
 using Android.Graphics;
@@ -161,20 +161,20 @@ public partial class MainActivity
         TouchFeedback(card);
         var summary = Stack(true);
         summary.BaselineAligned = false;
-        var title = Text(concealed ? "Protected notification" : item.Title, 15, true);
+        var title = Text(concealed ? Localize(Resource.String.ui_protected_notification) : item.Title, 15, true);
         title.SetMaxLines(2);
         title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
         summary.AddView(title, new LinearLayout.LayoutParams(0, -2, 1));
         var posted = DateTimeOffset.FromUnixTimeMilliseconds(item.Time).ToLocalTime();
         var time = Text(posted.ToString(posted.Date == DateTime.Today ? "HH:mm" : "d MMM"), 11, color: palette.Muted);
         time.SetPaddingRelative(Dp(8), Dp(2), 0, 0);
-        time.ContentDescription = posted.ToString("f");
+        time.ContentDescription = posted.ToString("f", UiCulture);
         summary.AddView(time);
         card.AddView(summary, Match());
         TextView? preview = null;
         if (item.Text.Length > 0 || concealed)
         {
-            preview = Text(concealed ? "Unlock to open this notification." : item.Text, 13, color: palette.Muted);
+            preview = Text(concealed ? Localize(Resource.String.ui_unlock_to_open_this_notification) : item.Text, 13, color: palette.Muted);
             preview.SetLineSpacing(Dp(2), 1);
             preview.SetMaxLines(3);
             preview.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
@@ -236,20 +236,20 @@ public partial class MainActivity
                 ("Open notification", () => OpenNotification(item)),
                 item.Dismissible
                     ? ("Dismiss notification", () => ConversationService.Dismiss(item.Key))
-                    : ("Persistent notification", () => Toast("Android keeps this notification while its service is active."))
+                    : ("Persistent notification", () => Toast(Localize(Resource.String.ui_android_keeps_this_notification_while_its_service_is_active)))
             };
             if (OperatingSystem.IsAndroidVersionAtLeast(26))
                 menu.Add(("Snooze for one hour", () =>
                 {
                     if (!ConversationService.Snooze(item.Key, 3600000))
-                        Toast("Android could not snooze this notification.");
+                        Toast(Localize(Resource.String.ui_android_could_not_snooze_this_notification));
                 }));
             if (actions)
                 menu.Add(("Read aloud", () => ShowNotificationSpeech(item)));
             Choose(app, menu.Select(option => option.Label).ToArray(), i => menu[i].Run());
         };
         if (swipe)
-            card.SetOnTouchListener(new LauncherApp.UI.NotificationSwipeListener(Dp(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Toast("Android keeps this notification while its service is active."), (view, success) => Haptic(view, success ? HapticCue.Commit : HapticCue.Reject)));
+            card.SetOnTouchListener(new LauncherApp.UI.NotificationSwipeListener(Dp(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Toast(Localize(Resource.String.ui_android_keeps_this_notification_while_its_service_is_active)), (view, success) => Haptic(view, success ? HapticCue.Commit : HapticCue.Reject)));
         return (card, collapsed =>
         {
             title.SetMaxLines(collapsed ? 1 : 2);

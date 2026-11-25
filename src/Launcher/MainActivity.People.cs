@@ -17,10 +17,10 @@ public partial class MainActivity
         var pack = PhotoSearchPack.Faces(this);
         displayedPeopleRevision = pack.Revision;
         var card = AddSettingsCard();
-        Paragraph("Tap a face to name the person. Then use that name in Files.", card);
+        Paragraph(Localize(Resource.String.ui_tap_a_face_to_name_the_person_then_use), card);
         if (!SharedStorage.CanRead(this))
         {
-            SettingRow(card, "Allow file access", "Find people in shared photos", RequestFileSearchAccess, "lock");
+            SettingRow(card, Localize(Resource.String.ui_allow_file_access), Localize(Resource.String.ui_find_people_in_shared_photos), RequestFileSearchAccess, "lock");
             return;
         }
         _ = LoadPeople(card, pack, peopleOffset);
@@ -29,7 +29,7 @@ public partial class MainActivity
     private async Task LoadPeople(LinearLayout card, PhotoSearchPack pack, int offset)
     {
         peopleLoading = true;
-        var placeholder = Text("Loading faces…", 13, color: palette.Muted);
+        var placeholder = Text(Localize(Resource.String.ui_loading_faces), 13, color: palette.Muted);
         card.AddView(placeholder, Match());
         PhotoContentIndex.Person[] people;
         try { people = await Task.Run(() => pack.People(offset)); }
@@ -37,7 +37,7 @@ public partial class MainActivity
         {
             Android.Util.Log.Warn("ImageSearch", error.ToString());
             if (!IsDestroyed && page == "People")
-                placeholder.Text = "Couldn't load face groups. Reopen People to retry.";
+                placeholder.Text = Localize(Resource.String.ui_couldn_t_load_face_groups_reopen_people_to_retry);
             return;
         }
         finally { peopleLoading = false; }
@@ -46,7 +46,7 @@ public partial class MainActivity
         card.RemoveView(placeholder);
         if (people.Length == 0)
         {
-            Paragraph("No face groups on this page yet. Index images from Image Search to find people.", card);
+            Paragraph(Localize(Resource.String.ui_no_face_groups_on_this_page_yet_index_images), card);
         }
         foreach (var person in people.Take(PeoplePageSize))
         {
@@ -66,16 +66,16 @@ public partial class MainActivity
             row.AddView(preview, new LinearLayout.LayoutParams(Dp(58), Dp(58)) { MarginEnd = Dp(12) });
             var labels = Stack();
             labels.AddView(Text(name, 15, true), Match());
-            labels.AddView(Text(Counted(person.Photos, "photo"), 12, color: palette.Muted), Match());
+            labels.AddView(Text(Counted(person.Photos, Resource.Plurals.photo), 12, color: palette.Muted), Match());
             row.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
             TouchFeedback(row);
-            row.Click += (_, _) => Prompt("Name person", person.Name, value => _ = SavePersonName(pack, person.Id, value));
+            row.Click += (_, _) => Prompt(Resource.String.ui_name_person, person.Name, value => _ = SavePersonName(pack, person.Id, value));
             card.AddView(row, Match());
         }
         if (offset > 0)
-            SettingRow(card, "Previous faces", "", () => { peopleOffset -= PeoplePageSize; RenderBody(); }, "back");
+            SettingRow(card, Localize(Resource.String.ui_previous_faces), "", () => { peopleOffset -= PeoplePageSize; RenderBody(); }, "back");
         if (people.Length > PeoplePageSize)
-            SettingRow(card, "More faces", "", () => { peopleOffset += PeoplePageSize; RenderBody(); }, "chevron");
+            SettingRow(card, Localize(Resource.String.ui_more_faces), "", () => { peopleOffset += PeoplePageSize; RenderBody(); }, "chevron");
     }
 
     private async Task SavePersonName(PhotoSearchPack pack, long id, string name)
@@ -84,7 +84,7 @@ public partial class MainActivity
         catch (Exception error) when (IsImageSearchError(error))
         {
             Android.Util.Log.Warn("ImageSearch", error.ToString());
-            Toast("Couldn't save this name. Try again.");
+            Toast(Localize(Resource.String.ui_couldn_t_save_this_name_try_again));
         }
         if (!IsDestroyed && page == "People")
         {

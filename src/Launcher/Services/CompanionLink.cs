@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using Android.Provider;
 using Launcher.Core;
 using System.Net;
@@ -88,7 +88,7 @@ public sealed class CompanionLink(Context context) : IDisposable
         lifetime?.Cancel();
         lifetime?.Dispose();
         lifetime = null;
-        Status = "Disconnected";
+        Status = Localize(Resource.String.ui_disconnected);
         allowed.Clear();
     }
     public void Dispose() => Stop();
@@ -122,7 +122,7 @@ public sealed class CompanionLink(Context context) : IDisposable
                 using (var content = new StringContent(JsonSerializer.Serialize(snapshot, CompanionJson.Default.CompanionSnapshot), Encoding.UTF8, "application/json"))
                 using (var sent = await client.PostAsync("/api/snapshot", content, ct))
                     sent.EnsureSuccessStatusCode();
-                Status = "Connected while Launcher is open";
+                Status = Localize(Resource.String.ui_connected_while_launcher_is_open);
                 using var next = await client.GetAsync("/api/next", HttpCompletionOption.ResponseHeadersRead, ct);
                 next.EnsureSuccessStatusCode();
                 if (next.StatusCode != HttpStatusCode.NoContent && await Read(next, CompanionJson.Default.CompanionCommand, ct) is { } command)
@@ -138,7 +138,7 @@ public sealed class CompanionLink(Context context) : IDisposable
                         result = new()
                         {
                             Id = command.Id,
-                            Error = e is UnauthorizedAccessException ? "Access denied." : e.Message
+                            Error = e is UnauthorizedAccessException ? Localize(Resource.String.ui_access_denied) : e.Message
                         };
                     }
                     using var content = new StringContent(JsonSerializer.Serialize(result, CompanionJson.Default.CompanionResult), Encoding.UTF8, "application/json");
@@ -148,10 +148,10 @@ public sealed class CompanionLink(Context context) : IDisposable
                 await Task.Delay(2000, ct);
             }
         }
-        catch (OperationCanceledException) { if (!ct.IsCancellationRequested) Status = "Connection timed out. Stop and connect again."; }
+        catch (OperationCanceledException) { if (!ct.IsCancellationRequested) Status = Localize(Resource.String.ui_connection_timed_out_stop_and_connect_again); }
         catch (Exception e) when (e is HttpRequestException or IOException or ArgumentException or JsonException or Java.Lang.RuntimeException)
         {
-            Status = "Connection stopped. Check the desktop address and reconnect.";
+            Status = Localize(Resource.String.ui_connection_stopped_check_the_desktop_address_and_reconnect);
         }
         // Keep the session object until Stop: a failed connection never retries silently.
     }

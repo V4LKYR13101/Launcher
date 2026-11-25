@@ -1,4 +1,4 @@
-﻿using Android.Animation;
+using Android.Animation;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.Views;
@@ -170,37 +170,37 @@ public partial class MainActivity
         title.SetMaxLines(2);
         title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
         labels.AddView(title, Match());
-        var drawer = Text(state.Drawers.FirstOrDefault(d => d.Id == state.Apps[app.Id].DrawerId)?.Name ?? "App", 11, color: palette.Muted);
+        var drawer = Text(state.Drawers.FirstOrDefault(d => d.Id == state.Apps[app.Id].DrawerId)?.Name ?? Localize(Resource.String.ui_app), 11, color: palette.Muted);
         drawer.SetPadding(0, Dp(4), 0, 0);
         labels.AddView(drawer, Match());
         identity.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
-        identity.AddView(IconButton("close", "Close app actions", () => AnimateAppLayer(false)), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+        identity.AddView(IconButton("close", Localize(Resource.String.ui_close_app_actions), () => AnimateAppLayer(false)), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         content.AddView(identity, Match());
         if (AppCatalog.HasUsageAccess(this))
         {
-            var today = Text("Today · " + AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName)), 12, true, palette.Accent);
+            var today = Text(Localize(Resource.String.ui_today_2) + AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName)), 12, true, palette.Accent);
             today.SetPadding(0, Dp(12), 0, Dp(6));
             content.AddView(today, Match());
             int goal = state.Apps[app.Id].DailyGoalMinutes;
             if (goal > 0)
-                Paragraph("Daily goal · " + goal + " min", content);
+                Paragraph(Localize(Resource.String.ui_daily_goal_2) + goal + Localize(Resource.String.ui_min), content);
         }
         void Go(Action action) => AnimateAppLayer(false, action);
         if (OperatingSystem.IsAndroidVersionAtLeast(25))
             AddLayerShortcuts(content, app, Go);
         var actions = Stack(true);
         actions.SetPadding(0, Dp(8), 0, 0);
-        actions.AddView(RootAction("Open", () => Go(() =>
+        actions.AddView(RootAction(Localize(Resource.String.ui_open), () => Go(() =>
         {
             // This surface was authenticated on entry and is discarded on backgrounding.
             int goal = state.Apps[app.Id].DailyGoalMinutes;
             if (goal > 0 && usage.GetValueOrDefault(app.PackageName) >= goal * 60_000L)
-                Confirm("Your daily goal", $"You have used {app.Label} for {AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName))} today.", "Open app", () => LaunchDirect(app));
+                Confirm(Localize(Resource.String.ui_your_daily_goal), Localize(Resource.String.ui_you_have_used_value_for_value_today, app.Label, AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName))), Localize(Resource.String.ui_open_app), () => LaunchDirect(app));
             else
                 StartAppDirect(app);
         })), new LinearLayout.LayoutParams(0, -2, 1));
-        actions.AddView(RootAction("Edit", () => Go(() => EditAppUnlocked(app))), new LinearLayout.LayoutParams(0, -2, 1));
-        actions.AddView(RootAction("Details", () => Go(() => ShowAppDashboard(app))), new LinearLayout.LayoutParams(0, -2, 1));
+        actions.AddView(RootAction(Localize(Resource.String.ui_edit), () => Go(() => EditAppUnlocked(app))), new LinearLayout.LayoutParams(0, -2, 1));
+        actions.AddView(RootAction(Localize(Resource.String.ui_details), () => Go(() => ShowAppDashboard(app))), new LinearLayout.LayoutParams(0, -2, 1));
         content.AddView(actions, Match());
         card.Measure(View.MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly), View.MeasureSpec.MakeMeasureSpec(maxHeight, MeasureSpecMode.AtMost));
         int height = Math.Min(maxHeight, card.MeasuredHeight);
@@ -261,7 +261,7 @@ public partial class MainActivity
                     {
                         launcher.StartShortcut(item, null, null);
                     }
-                    catch (Java.Lang.RuntimeException) { Toast("This shortcut is no longer available."); }
+                    catch (Java.Lang.RuntimeException) { Toast(Localize(Resource.String.ui_this_shortcut_is_no_longer_available)); }
                 });
                 content.AddView(action, Match());
             }

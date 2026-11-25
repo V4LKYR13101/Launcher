@@ -1,4 +1,4 @@
-﻿using Android.OS;
+using Android.OS;
 using Android.Widget;
 using LauncherApp.Services;
 namespace LauncherApp;
@@ -42,7 +42,7 @@ public partial class MainActivity
     private void EvaluateAutomaticTheme()
     {
         if (ambientReading is not null && page == "Automatic theme")
-            ambientReading.Text = ambient.Lux is { } current ? $"Current light · {current:0.#} lux" : ambient.Available ? state.AutomaticLightTheme ? ambient.Running ? "Waiting for a light reading…" : "The sensor could not start. Toggle automatic switching off and on." : "Sensor available · enable automatic switching" : "No ambient-light sensor is available on this phone.";
+            ambientReading.Text = ambient.Lux is { } current ? Localize(Resource.String.ui_current_light_value_lux, current) : ambient.Available ? state.AutomaticLightTheme ? ambient.Running ? Localize(Resource.String.ui_waiting_for_a_light_reading) : Localize(Resource.String.ui_the_sensor_could_not_start_toggle_automatic_switching_off) : Localize(Resource.String.ui_sensor_available_enable_automatic_switching) : Localize(Resource.String.ui_no_ambient_light_sensor_is_available_on_this_phone);
         if (!resumed || !state.AutomaticLightTheme || ambient.Lux is not { } lux)
             return;
         string? next = lux >= state.LightThemeLux && state.Theme != "Light" ? "Light" : lux <= state.DarkThemeLux && state.Theme != "Dark" ? "Dark" : null;
@@ -74,13 +74,13 @@ public partial class MainActivity
     }
     private void RenderAutomaticTheme()
     {
-        Title("Follow the light.");
-        Paragraph("Use the phone's ambient-light sensor to switch Launcher between Light and Dark. Readings are in lux. This changes Launcher only.");
-        ToggleRow(body, "Automatic light / dark", state.AutomaticLightTheme, enabled =>
+        Title(Localize(Resource.String.ui_follow_the_light));
+        Paragraph(Localize(Resource.String.ui_use_the_phone_s_ambient_light_sensor_to_switch));
+        ToggleRow(body, Localize(Resource.String.ui_automatic_light_dark), state.AutomaticLightTheme, enabled =>
         {
             if (enabled && !ambient.Available)
             {
-                Toast("This phone does not report an ambient-light sensor.");
+                Toast(Localize(Resource.String.ui_this_phone_does_not_report_an_ambient_light_sensor));
                 RenderBody();
                 return;
             }
@@ -95,22 +95,22 @@ public partial class MainActivity
         ambientReading.SetPadding(0, Dp(12), 0, Dp(16));
         body.AddView(ambientReading, Match());
         EvaluateAutomaticTheme();
-        SettingRow(body, "Switch to Light", $"At or above {state.LightThemeLux:0.#} lux", () => LightThreshold(true), "sun");
-        SettingRow(body, "Switch to Dark", $"At or below {state.DarkThemeLux:0.#} lux", () => LightThreshold(false), "photo");
-        SettingRow(body, "Switching delay", state.LightThemeDelaySeconds + " seconds", () => Choose("Switching delay", ["3 seconds", "5 seconds", "10 seconds", "20 seconds"], i => { state.LightThemeDelaySeconds = new[] { 3, 5, 10, 20 }[i]; lightCandidate = null; Save(); RenderBody(); }), "clock");
-        Paragraph("The light level must stay beyond a threshold for the chosen delay. Separate Light and Dark thresholds prevent rapid switching. Choosing a theme manually turns automatic switching off.");
-        Paragraph("The sensor is used only while Launcher is visible. No camera, photos, location or background polling is used. Brightness is a light-level signal, not a reliable indoor/outdoor classification.");
+        SettingRow(body, Localize(Resource.String.ui_switch_to_light), Localize(Resource.String.ui_at_or_above_value_lux, state.LightThemeLux), () => LightThreshold(true), "sun");
+        SettingRow(body, Localize(Resource.String.ui_switch_to_dark), Localize(Resource.String.ui_at_or_below_value_lux, state.DarkThemeLux), () => LightThreshold(false), "photo");
+        SettingRow(body, Localize(Resource.String.ui_switching_delay), state.LightThemeDelaySeconds + Localize(Resource.String.ui_seconds), () => Choose(Resource.String.ui_switching_delay, [Localize(Resource.String.ui_3_seconds), Localize(Resource.String.ui_5_seconds), Localize(Resource.String.ui_10_seconds), Localize(Resource.String.ui_20_seconds)], i => { state.LightThemeDelaySeconds = new[] { 3, 5, 10, 20 }[i]; lightCandidate = null; Save(); RenderBody(); }), "clock");
+        Paragraph(Localize(Resource.String.ui_the_light_level_must_stay_beyond_a_threshold_for));
+        Paragraph(Localize(Resource.String.ui_the_sensor_is_used_only_while_launcher_is_visible));
     }
-    private void LightThreshold(bool bright) => Prompt(bright ? "Light threshold (lux)" : "Dark threshold (lux)", (bright ? state.LightThemeLux : state.DarkThemeLux).ToString("0.#"), value =>
+    private void LightThreshold(bool bright) => Prompt(bright ? Resource.String.ui_light_threshold_lux : Resource.String.ui_dark_threshold_lux, (bright ? state.LightThemeLux : state.DarkThemeLux).ToString("0.#", UiCulture), value =>
     {
-        if ((!double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.CurrentCulture, out var lux) && !double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lux)) || !double.IsFinite(lux) || lux < 0 || lux > 200_000)
+        if ((!double.TryParse(value, System.Globalization.NumberStyles.Float, UiCulture, out var lux) && !double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lux)) || !double.IsFinite(lux) || lux < 0 || lux > 200_000)
         {
-            Toast("Enter a light level from 0 to 200000 lux.");
+            Toast(Localize(Resource.String.ui_enter_a_light_level_from_0_to_200000_lux));
             return;
         }
         if (bright && lux <= state.DarkThemeLux || !bright && lux >= state.LightThemeLux)
         {
-            Toast("The Light threshold must be higher than the Dark threshold.");
+            Toast(Localize(Resource.String.ui_the_light_threshold_must_be_higher_than_the_dark));
             return;
         }
         if (bright)

@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Views;
 using Android.Widget;
 using Launcher.Core;
@@ -32,10 +32,10 @@ public partial class MainActivity
     private void PickDrawerIcon(Drawer drawer)
     {
         string selected = DrawerIcons.All.Contains(drawer.Icon) ? drawer.Icon : DrawerIcons.ForDrawer(drawer.Id);
-        Sheet(drawer.Name, (panel, dialog) =>
+        Sheet(DrawerName(drawer), (panel, dialog) =>
         {
-            Paragraph("Choose a symbol for this drawer.", panel);
-            RootActions(panel, ("Browse icon libraries", () => { dialog.Dismiss(); PickIconPack(selection: (package, name) => { drawer.IconPackage = package; drawer.IconResource = name; }); }
+            Paragraph(Localize(Resource.String.ui_choose_a_symbol_for_this_drawer), panel);
+            RootActions(panel, (Localize(Resource.String.ui_browse_icon_libraries), () => { dialog.Dismiss(); PickIconPack(selection: (package, name) => { drawer.IconPackage = package; drawer.IconResource = name; }); }
             ));
             var grid = Stack();
             panel.AddView(grid, Match());
@@ -49,7 +49,7 @@ public partial class MainActivity
                     foreach (string icon in DrawerIcons.All.Skip(row * 4).Take(4))
                     {
                         bool active = icon == selected;
-                        var cell = new FrameLayout(this) { ContentDescription = "Drawer symbol " + icon };
+                        var cell = new FrameLayout(this) { ContentDescription = Localize(Resource.String.ui_drawer_symbol) + icon };
                         cell.Background = Background(palette.Panel, 12, active ? palette.Accent : null);
                         cell.AddView(new GlyphView(this, icon, active ? palette.Accent : palette.Text), new FrameLayout.LayoutParams(Dp(25), Dp(25), GravityFlags.Center));
                         cell.Click += (_, _) => { selected = icon; Rebuild(); };
@@ -60,6 +60,6 @@ public partial class MainActivity
                 }
             }
             Rebuild();
-        }, (footer, dialog) => footer.AddView(Button("Save changes", () => { drawer.Icon = selected; drawer.IconPackage = ""; drawer.IconResource = ""; Save(); dialog.Dismiss(); Render(); }, true), Match()));
+        }, (footer, dialog) => footer.AddView(Button(Localize(Resource.String.ui_save_changes), () => { drawer.Icon = selected; drawer.IconPackage = ""; drawer.IconResource = ""; Save(); dialog.Dismiss(); Render(); }, true), Match()));
     }
 }

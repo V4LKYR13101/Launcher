@@ -29,35 +29,35 @@ public partial class MainActivity
             agendaEvents = events;
             agendaError = null;
         }
-        catch (Java.Lang.RuntimeException) { agendaError = "Calendar is unavailable. Check calendar access and try again."; agendaEvents = []; }
+        catch (Java.Lang.RuntimeException) { agendaError = Localize(Resource.String.ui_calendar_is_unavailable_check_calendar_access_and_try_again); agendaEvents = []; }
         finally { agendaLoading = false; if (!IsDestroyed && resumed && page == "Root" && !searching && WorkspaceEditing.NoteId is null) RefreshBodyInPlace(); }
     }
     private void BuildAgenda(Android.Widget.LinearLayout panel)
     {
         if (!AgendaReader.Allowed(this))
         {
-            Paragraph("See upcoming events from calendars you choose. Calendar data stays on this device.", panel);
-            panel.AddView(RootAction("Connect calendar", () => RequestPermissions([Android.Manifest.Permission.ReadCalendar], 916), true), Match());
+            Paragraph(Localize(Resource.String.ui_see_upcoming_events_from_calendars_you_choose_calendar_data), panel);
+            panel.AddView(RootAction(Localize(Resource.String.ui_connect_calendar), () => RequestPermissions([Android.Manifest.Permission.ReadCalendar], 916), true), Match());
             return;
         }
         RefreshAgenda();
         if (agendaError is not null)
             Paragraph(agendaError, panel);
         if (agendaEvents.Length == 0)
-            Paragraph(agendaLoading ? "Reading your calendar…" : "No upcoming events in the next seven days.", panel);
+            Paragraph(agendaLoading ? Localize(Resource.String.ui_reading_your_calendar) : Localize(Resource.String.ui_no_upcoming_events_in_the_next_seven_days), panel);
         foreach (var entry in agendaEvents)
         {
             var item = entry;
             SettingRow(panel, item.Title, AgendaTime(item) + (item.Location.Length > 0 ? " · " + item.Location : ""), () => OpenAgendaEvent(item), "calendar");
         }
-        RootActions(panel, ("Calendars", ShowCalendarChoices), ("Refresh", () => RefreshAgenda(true)));
+        RootActions(panel, (Localize(Resource.String.ui_calendars), ShowCalendarChoices), (Localize(Resource.String.ui_refresh), () => RefreshAgenda(true)));
     }
 
     private string AgendaTime(AgendaEvent item)
     {
         var begins = DateTimeOffset.FromUnixTimeMilliseconds(item.Begins);
         if (item.AllDay)
-            return begins.UtcDateTime.ToString("ddd, d MMM") + " · all day";
+            return Localize(Resource.String.ui_date_all_day, begins.UtcDateTime.ToString("ddd, d MMM", UiCulture));
         if (item.Begins <= Now)
             return "Now";
         var local = begins.ToLocalTime();
@@ -79,9 +79,9 @@ public partial class MainActivity
             var calendars = AgendaReader.Calendars(this);
             var selected = state.CalendarIds.ToHashSet();
             bool all = selected.Count == 0;
-            Sheet("Calendars in your agenda", (panel, dialog) =>
+            Sheet(Localize(Resource.String.ui_calendars_in_your_agenda), (panel, dialog) =>
             {
-                Paragraph("Choose the calendars to show. Clearing every selection returns to all visible calendars.", panel);
+                Paragraph(Localize(Resource.String.ui_choose_the_calendars_to_show_clearing_every_selection_returns), panel);
                 foreach (var calendar in calendars)
                 {
                     long id = calendar.Id;
@@ -94,8 +94,8 @@ public partial class MainActivity
                     box.CheckedChange += (_, e) => { if (e.IsChecked) selected.Add(id); else selected.Remove(id); };
                     panel.AddView(box, Match());
                 }
-            }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save calendars", () => { state.CalendarIds = selected.ToList(); Save(); dialog.Dismiss(); RefreshAgenda(true); })));
+            }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_save_calendars), () => { state.CalendarIds = selected.ToList(); Save(); dialog.Dismiss(); RefreshAgenda(true); })));
         }
-        catch (Java.Lang.RuntimeException) { Toast("Android could not list calendars."); }
+        catch (Java.Lang.RuntimeException) { Toast(Localize(Resource.String.ui_android_could_not_list_calendars)); }
     }
 }

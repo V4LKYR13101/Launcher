@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.Hardware.Biometrics;
 using Android.OS;
@@ -16,7 +16,7 @@ public partial class MainActivity
     private void WithProtectedSettings(Action action)
     {
         if (state.Apps.Values.Any(r => r.BiometricLocked))
-            AuthenticateDevice("protected settings", action);
+            AuthenticateDevice(Localize(Resource.String.ui_protected_settings), action);
         else
             action();
     }
@@ -27,7 +27,7 @@ public partial class MainActivity
             action();
             return;
         }
-        AuthenticateDevice(apps.FirstOrDefault(a => a.PackageName == package)?.Label ?? "app", action);
+        AuthenticateDevice(apps.FirstOrDefault(a => a.PackageName == package)?.Label ?? Localize(Resource.String.ui_app_2), action);
     }
     private void AuthenticateDevice(string label, Action action)
     {
@@ -36,7 +36,7 @@ public partial class MainActivity
         var keyguard = (KeyguardManager?)GetSystemService(KeyguardService);
         if (keyguard?.IsDeviceSecure != true)
         {
-            Toast("Set up a screen lock and biometrics in Android settings first.");
+            Toast(Localize(Resource.String.ui_set_up_a_screen_lock_and_biometrics_in_android));
             return;
         }
         HideKeyboard();
@@ -53,12 +53,12 @@ public partial class MainActivity
         {
             authenticationPending = true;
 #pragma warning disable CA1422 // Legacy Android fallback if native biometric authentication is unavailable.
-            var intent = keyguard.CreateConfirmDeviceCredentialIntent("Unlock " + label, "Confirm your screen lock to continue.");
+            var intent = keyguard.CreateConfirmDeviceCredentialIntent(Localize(Resource.String.ui_unlock) + label, Localize(Resource.String.ui_confirm_your_screen_lock_to_continue));
 #pragma warning restore CA1422
             if (intent is null)
             {
                 authenticationPending = false;
-                Toast("Screen lock authentication is unavailable.");
+                Toast(Localize(Resource.String.ui_screen_lock_authentication_is_unavailable));
                 return;
             }
             credentialAction = Succeeded;
@@ -71,14 +71,14 @@ public partial class MainActivity
         }
         try
         {
-            var builder = new BiometricPrompt.Builder(this).SetTitle("Unlock " + label)!
-                .SetSubtitle("Authenticate to continue in Launcher.")!;
+            var builder = new BiometricPrompt.Builder(this).SetTitle(Localize(Resource.String.ui_unlock) + label)!
+                .SetSubtitle(Localize(Resource.String.ui_authenticate_to_continue_in_launcher))!;
             if (OperatingSystem.IsAndroidVersionAtLeast(30))
                 builder.SetAllowedAuthenticators(0x000F | 0x8000);
             else if (OperatingSystem.IsAndroidVersionAtLeast(29))
                 builder.SetDeviceCredentialAllowed(true);
             else
-                builder.SetNegativeButton("Use screen lock", MainExecutor!, new AuthenticationFallback(Credential));
+                builder.SetNegativeButton(Localize(Resource.String.ui_use_screen_lock), MainExecutor!, new AuthenticationFallback(Credential));
             appAuthentication = new CancellationSignal();
             builder.Build()!.Authenticate(appAuthentication, MainExecutor!, new AppAuthenticationCallback(Succeeded, () =>
             {
@@ -145,6 +145,6 @@ public partial class MainActivity
             }
         }
         catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { }
-        Toast("This notification no longer has an available app screen.");
+        Toast(Localize(Resource.String.ui_this_notification_no_longer_has_an_available_app_screen));
     });
 }

@@ -54,12 +54,12 @@ public partial class MainActivity
         {
             var bar = Stack();
             bar.SetPadding(Dp(16), Dp(8), Dp(16), Dp(4));
-            var title = Text("Arrange Today", 22, true);
+            var title = Text(Localize(Resource.String.ui_arrange_today), 22, true);
             if (OperatingSystem.IsAndroidVersionAtLeast(28))
                 title.AccessibilityHeading = true;
             bar.AddView(title, Match());
             Gap(bar, 4);
-            DialogActions(bar, ("Cancel", () => FinishTodayLayout(false)), ("Done", () => FinishTodayLayout(true)));
+            DialogActions(bar, (Localize(Resource.String.ui_cancel), () => FinishTodayLayout(false)), (Localize(Resource.String.ui_done), () => FinishTodayLayout(true)));
             shell.AddView(bar, Match());
         }
         else if (offerTodayLayoutUndo)
@@ -67,9 +67,9 @@ public partial class MainActivity
             var bar = Stack(true);
             bar.SetPadding(Dp(16), 0, Dp(8), 0);
             bar.SetGravity(GravityFlags.CenterVertical);
-            bar.AddView(Text("Today layout saved", 13, color: palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
-            bar.AddView(Button("Undo", UndoLayout), new LinearLayout.LayoutParams(-2, -2));
-            bar.AddView(IconButton("close", "Dismiss layout confirmation", () => { offerTodayLayoutUndo = false; bar.Visibility = ViewStates.Gone; }),
+            bar.AddView(Text(Localize(Resource.String.ui_today_layout_saved), 13, color: palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
+            bar.AddView(Button(Localize(Resource.String.ui_undo), UndoLayout), new LinearLayout.LayoutParams(-2, -2));
+            bar.AddView(IconButton("close", Localize(Resource.String.ui_dismiss_layout_confirmation), () => { offerTodayLayoutUndo = false; bar.Visibility = ViewStates.Gone; }),
                 new LinearLayout.LayoutParams(Dp(48), Dp(48)));
             shell.AddView(bar, Match());
         }
@@ -98,7 +98,7 @@ public partial class MainActivity
             cards.Clear();
             rows = host.Stack();
             rows.SetOnDragListener(this);
-            host.Paragraph("Hold a grip to drag a card, or use the arrows. Pinned cards stay at the top.");
+            host.Paragraph(Localize(Resource.String.ui_hold_a_grip_to_drag_a_card_or_use));
             host.body.AddView(rows, Match());
             foreach (string id in displayOrder)
                 AddCard(id, builders[id]);
@@ -132,12 +132,12 @@ public partial class MainActivity
             var header = host.Stack(true);
             header.SetGravity(GravityFlags.CenterVertical);
             string name = host.CardLabel(id);
-            var grip = host.IconButton("grip", "Hold to drag " + name, () => host.Toast("Hold the grip to drag this card."));
+            var grip = host.IconButton("grip", Localize(Resource.String.ui_hold_to_drag) + name, () => host.Toast(Localize(Resource.String.ui_hold_the_grip_to_drag_this_card)));
             var title = host.Text(name, 14, true);
             title.SetMaxLines(2);
             title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-            var up = host.IconButton("up", "Move earlier: " + name, () => MoveBy(id, -1));
-            var down = host.IconButton("down", "Move later: " + name, () => MoveBy(id, 1));
+            var up = host.IconButton("up", Localize(Resource.String.ui_move_earlier_2) + name, () => MoveBy(id, -1));
+            var down = host.IconButton("down", Localize(Resource.String.ui_move_later_2) + name, () => MoveBy(id, 1));
             var item = new Card(id, host.state.RootPinned.Contains(id), view, up, down);
             grip.LongClick += (_, _) => StartDrag(item, header);
             header.AddView(grip, new LinearLayout.LayoutParams(host.Dp(48), host.Dp(48)));

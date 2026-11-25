@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using QRCoder;
@@ -11,7 +11,7 @@ public sealed class AppQrView : View
     public AppQrView(Context context, string value) : base(context)
     {
         code = QRCodeGenerator.GenerateQrCode(value, QRCodeGenerator.ECCLevel.M);
-        ContentDescription = "QR code for this app's Play Store page";
+        ContentDescription = Localize(Resource.String.ui_qr_code_for_this_app_s_play_store_page);
     }
     protected override void OnDraw(Canvas canvas)
     {

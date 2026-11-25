@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android;
 using Android.Content;
 using Android.Content.PM;
@@ -26,7 +26,7 @@ public partial class MainActivity
 
 
     private string StatusClockText(DateTime now) => now.ToString(page == "Tiles" ? "HH:mm" : "HH:mm   ·   ddd, d MMM");
-    private static string HomeStatusDateText(DateTime now) => now.ToString("dddd, dd MMMM");
+    private static string HomeStatusDateText(DateTime now) => now.ToString("dddd, dd MMMM", UiCulture);
 
     private void AddMinimalStatus()
     {
@@ -70,7 +70,7 @@ public partial class MainActivity
         }
         UpdateBatteryUi();
         UpdateStatusNotifications();
-        status.ContentDescription = "Open quick panel";
+        status.ContentDescription = Localize(Resource.String.ui_open_quick_panel);
         BindTapHaptics(status);
         status.Click += (_, _) => Navigate("Quick panel");
         if (centered)
@@ -181,7 +181,7 @@ public partial class MainActivity
         statusNotificationText.Text = $"● {label}";
 
         statusNotificationText.ContentDescription =
-            $"{count} active notifications";
+            Localize(Resource.String.ui_value_active_notifications, count);
 
         statusNotificationText.Visibility = ViewStates.Visible;
     }
@@ -190,9 +190,9 @@ public partial class MainActivity
 
     private void RenderQuickPanel()
     {
-        var clock = Text(DateTime.Now.ToString("HH:mm"), 36, true);
+        var clock = Text(DateTime.Now.ToString("HH:mm", UiCulture), 36, true);
         body.AddView(clock, Match());
-        Paragraph(DateTime.Now.ToString("dddd, d MMMM") + "   ·   " + BatteryPercent() + "% battery");
+        Paragraph(DateTime.Now.ToString("dddd, d MMMM", UiCulture) + "   ·   " + BatteryPercent() + Localize(Resource.String.ui_battery));
         Gap(body, 8);
         var grid = Stack();
         void Pair((string Label, string Glyph, string Detail, bool Active, Action Action) a, (string Label, string Glyph, string Detail, bool Active, Action Action) b)
@@ -230,44 +230,50 @@ public partial class MainActivity
         var wifi = connections.Wifi();
         var bluetooth = connections.Bluetooth();
         var sound = ((AudioManager?)GetSystemService(AudioService))?.RingerMode ?? RingerMode.Normal;
-        Pair(("Wi-Fi", "wifi", wifi.Detail, wifi.Active, () => OpenIntent(new Intent(OperatingSystem.IsAndroidVersionAtLeast(29) ? "android.settings.panel.action.WIFI" : Android.Provider.Settings.ActionWifiSettings))),
-            ("Bluetooth", "bluetooth", bluetooth.Detail, bluetooth.Active, () => { if (!connections.CanReadBluetooth) RequestConnectionDetails(); else OpenIntent(new Intent(Android.Provider.Settings.ActionBluetoothSettings)); }
+        string soundLabel = sound switch
+        {
+            RingerMode.Silent => Localize(Resource.String.ui_ringer_silent),
+            RingerMode.Vibrate => Localize(Resource.String.ui_ringer_vibrate),
+            _ => Localize(Resource.String.ui_ringer_normal)
+        };
+        Pair((Localize(Resource.String.ui_wi_fi), "wifi", wifi.Detail, wifi.Active, () => OpenIntent(new Intent(OperatingSystem.IsAndroidVersionAtLeast(29) ? "android.settings.panel.action.WIFI" : Android.Provider.Settings.ActionWifiSettings))),
+            (Localize(Resource.String.ui_bluetooth), "bluetooth", bluetooth.Detail, bluetooth.Active, () => { if (!connections.CanReadBluetooth) RequestConnectionDetails(); else OpenIntent(new Intent(Android.Provider.Settings.ActionBluetoothSettings)); }
         ));
-        Pair(("Sound", "sound", sound.ToString(), sound == RingerMode.Normal, () => OpenIntent(new Intent(OperatingSystem.IsAndroidVersionAtLeast(29) ? "android.settings.panel.action.VOLUME" : Android.Provider.Settings.ActionSoundSettings))),
-            ("Focus", "focus", state.Focus ? "On · outlined tiles" : "Off", state.Focus, () => { state.Focus = !state.Focus; state.FocusEndsAt = 0; Save(); RenderBody(); }
+        Pair((Localize(Resource.String.ui_sound), "sound", soundLabel, sound == RingerMode.Normal, () => OpenIntent(new Intent(OperatingSystem.IsAndroidVersionAtLeast(29) ? "android.settings.panel.action.VOLUME" : Android.Provider.Settings.ActionSoundSettings))),
+            (Localize(Resource.String.ui_focus), "focus", state.Focus ? Localize(Resource.String.ui_on_outlined_tiles) : Localize(Resource.String.ui_off), state.Focus, () => { state.Focus = !state.Focus; state.FocusEndsAt = 0; Save(); RenderBody(); }
         ));
-        Pair(("Grayscale", "photo", GrayscaleService.Global(this) ? "Whole display" : "Off", GrayscaleService.Global(this), () => { if (!GrayscaleService.Ready(this)) { Navigate("Grayscale setup"); return; } GrayscaleService.SetGlobal(this, !GrayscaleService.Global(this)); RenderBody(); }
+        Pair((Localize(Resource.String.ui_grayscale), "photo", GrayscaleService.Global(this) ? Localize(Resource.String.ui_whole_display) : Localize(Resource.String.ui_off), GrayscaleService.Global(this), () => { if (!GrayscaleService.Ready(this)) { Navigate("Grayscale setup"); return; } GrayscaleService.SetGlobal(this, !GrayscaleService.Global(this)); RenderBody(); }
         ),
-            ("Dark theme", "photo", state.Theme == "Dark" ? "On" : "Off", state.Theme == "Dark", () => { ManualTheme(state.Theme == "Dark" ? "Light" : "Dark"); }
+            (Localize(Resource.String.ui_dark_theme), "photo", state.Theme == "Dark" ? Localize(Resource.String.ui_on) : Localize(Resource.String.ui_off), state.Theme == "Dark", () => { ManualTheme(state.Theme == "Dark" ? "Light" : "Dark"); }
         ));
         body.AddView(grid, Match());
         Gap(body, 12);
         if (!connections.CanReadBluetooth || !connections.CanReadWifiName)
         {
-            body.AddView(Button("Show connected names", RequestConnectionDetails), Match());
+            body.AddView(Button(Localize(Resource.String.ui_show_connected_names), RequestConnectionDetails), Match());
             Gap(body, 8);
         }
-        var heading = Text("Notifications", 20, true);
+        var heading = Text(Localize(Resource.String.ui_notifications), 20, true);
         heading.SetPadding(0, Dp(8), 0, Dp(14));
         body.AddView(heading, Match());
         if (!ConversationService.Enabled(this))
         {
-            Paragraph("Connect notification access to show your current notifications here.");
-            body.AddView(Button("Enable notification access", OpenNotificationAccessSettings), Match());
+            Paragraph(Localize(Resource.String.ui_connect_notification_access_to_show_your_current_notifications_here));
+            body.AddView(Button(Localize(Resource.String.ui_enable_notification_access), OpenNotificationAccessSettings), Match());
             return;
         }
         if (((KeyguardManager?)GetSystemService(KeyguardService))?.IsDeviceLocked == true)
         {
-            Paragraph("Unlock your phone to see notifications.");
+            Paragraph(Localize(Resource.String.ui_unlock_your_phone_to_see_notifications));
             return;
         }
         var notifications = ConversationService.NotificationSnapshot();
         if (notifications.Count == 0)
-            Paragraph("No current notifications.");
+            Paragraph(Localize(Resource.String.ui_no_current_notifications));
         AddNotificationGroups(body, notifications, swipe: true);
     }
 
-    private void RequestConnectionDetails() => Confirm("Connection details", "Allow nearby-device access to display connected Bluetooth devices, and precise location access to display your Wi-Fi network name. Launcher does not scan for your location or upload these details.", "Continue", () =>
+    private void RequestConnectionDetails() => Confirm(Localize(Resource.String.ui_connection_details), Localize(Resource.String.ui_allow_nearby_device_access_to_display_connected_bluetooth_devices), Localize(Resource.String.ui_continue), () =>
     {
         var permissions = new List<string>();
         if (OperatingSystem.IsAndroidVersionAtLeast(31) && !connections.CanReadBluetooth)

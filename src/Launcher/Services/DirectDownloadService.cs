@@ -42,7 +42,7 @@ public sealed class DirectDownloadService : Service
         }
         if (OperatingSystem.IsAndroidVersionAtLeast(26))
         {
-            using var channel = new NotificationChannel(Channel, "File downloads", NotificationImportance.Low);
+            using var channel = new NotificationChannel(Channel, Localize(Resource.String.ui_file_downloads), NotificationImportance.Low);
             Notifications.CreateNotificationChannel(channel);
         }
         int id = Interlocked.Increment(ref lastNotificationId);
@@ -58,7 +58,7 @@ public sealed class DirectDownloadService : Service
             else
                 Notifications.Notify(id, notification);
         }
-        ShowToast("Download started.");
+        ShowToast(Localize(Resource.String.ui_download_started));
         _ = RunDownload(url, download);
         return StartCommandResult.NotSticky;
     }
@@ -87,22 +87,22 @@ public sealed class DirectDownloadService : Service
                 }, token, download.Transfer.Name);
                 return await Publish(path, file, token);
             }, token);
-            title = "Saved to Downloads";
+            title = Localize(Resource.String.ui_saved_to_downloads);
             message = completed.Name;
         }
         catch (System.OperationCanceledException) when (token.IsCancellationRequested)
         {
-            title = "Download canceled";
+            title = Localize(Resource.String.ui_download_canceled);
             message = "";
         }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException or HttpRequestException or
             TimeoutException or Java.Lang.Exception || DirectFileTransfer.IsWebPage(error))
         {
-            title = "Download failed";
-            message = DirectFileTransfer.IsWebPage(error) ? "Use a direct file link instead of a web page." :
-                error is HttpRequestException { StatusCode: { } status } ? $"The server returned HTTP {(int)status}." :
-                error is IOException or UnauthorizedAccessException or Java.Lang.Exception ? "Check available storage and try again." :
-                "Check your connection and the link, then try again.";
+            title = Localize(Resource.String.ui_download_failed);
+            message = DirectFileTransfer.IsWebPage(error) ? Localize(Resource.String.ui_use_a_direct_file_link_instead_of_a_web) :
+                error is HttpRequestException { StatusCode: { } status } ? Localize(Resource.String.ui_the_server_returned_http_value, (int)status) :
+                error is IOException or UnauthorizedAccessException or Java.Lang.Exception ? Localize(Resource.String.ui_check_available_storage_and_try_again) :
+                Localize(Resource.String.ui_check_your_connection_and_the_link_then_try_again);
         }
         finally
         {
@@ -153,7 +153,7 @@ public sealed class DirectDownloadService : Service
         using var actionBuilder = new Notification.Action.Builder(icon, "Cancel", pending);
         using var action = actionBuilder.Build();
         return builder.SetContentTitle(status.Name)!
-            .SetContentText(status.Percent is { } percent ? $"{percent}%" : "Downloading to Downloads")!
+            .SetContentText(status.Percent is { } percent ? $"{percent}%" : Localize(Resource.String.ui_downloading_to_downloads))!
             .SetProgress(100, status.Percent ?? 0, status.Percent is null)!
             .SetOngoing(true)!.SetOnlyAlertOnce(true)!
             .AddAction(action)!.Build();

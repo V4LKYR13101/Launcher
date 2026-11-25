@@ -1,4 +1,4 @@
-﻿using Android.Graphics;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Launcher.Core;
@@ -48,18 +48,18 @@ public partial class MainActivity
     }
     private void ManageFeeds()
     {
-        var dialog = Sheet("News & feeds", (panel, sheet) =>
+        var dialog = Sheet(Localize(Resource.String.ui_news_feeds), (panel, sheet) =>
         {
-            SectionCaption(panel, "Reading preferences");
-            SettingRow(panel, "Saved stories", Counted(state.SavedArticles.Count, "saved story", "saved stories"), () => { sheet.Dismiss(); ShowSavedArticles(); }, "rss");
-            ToggleRow(panel, "Unread stories only", state.FeedUnreadOnly, value => { state.FeedUnreadOnly = value; Save(); feedRows.Clear(); });
-            SettingRow(panel, "Articles to display", $"{state.FeedArticleCount} initially · show more when you want", () =>
+            SectionCaption(panel, Localize(Resource.String.ui_reading_preferences));
+            SettingRow(panel, Localize(Resource.String.ui_saved_stories), Counted(state.SavedArticles.Count, Resource.Plurals.saved_story), () => { sheet.Dismiss(); ShowSavedArticles(); }, "rss");
+            ToggleRow(panel, Localize(Resource.String.ui_unread_stories_only), state.FeedUnreadOnly, value => { state.FeedUnreadOnly = value; Save(); feedRows.Clear(); });
+            SettingRow(panel, Localize(Resource.String.ui_articles_to_display), Localize(Resource.String.ui_value_initially_show_more_when_you_want, state.FeedArticleCount), () =>
             {
-                Prompt("Articles to display", state.FeedArticleCount.ToString(), value =>
+                Prompt(Resource.String.ui_articles_to_display, state.FeedArticleCount.ToString(), value =>
                 {
                     if (!int.TryParse(value, out int count) || count < 1 || count > 50)
                     {
-                        Toast("Choose a number from 1 to 50.");
+                        Toast(Localize(Resource.String.ui_choose_a_number_from_1_to_50));
                         return;
                     }
                     state.FeedArticleCount = count;
@@ -69,11 +69,11 @@ public partial class MainActivity
                     ManageFeeds();
                 });
             }, "rss");
-            ToggleRow(panel, "Show article images", state.FeedImages, value => { state.FeedImages = value; if (!value) feedImageLifetime?.Cancel(); Save(); });
-            Paragraph("Images appear when supplied by the publisher. Stories without an image use the full width. Turning images off stops thumbnail downloads.", panel);
-            SectionCaption(panel, "Sources");
-            Paragraph("Enabled sources appear together in one Root card, newest first. Undated items appear last. No API key is needed.", panel);
-            panel.AddView(RootAction("+ Add feed", () => { sheet.Dismiss(); EditFeed(); }, true), new LinearLayout.LayoutParams(-2, -2));
+            ToggleRow(panel, Localize(Resource.String.ui_show_article_images), state.FeedImages, value => { state.FeedImages = value; if (!value) feedImageLifetime?.Cancel(); Save(); });
+            Paragraph(Localize(Resource.String.ui_images_appear_when_supplied_by_the_publisher_stories_without), panel);
+            SectionCaption(panel, Localize(Resource.String.ui_sources));
+            Paragraph(Localize(Resource.String.ui_enabled_sources_appear_together_in_one_root_card_newest), panel);
+            panel.AddView(RootAction(Localize(Resource.String.ui_add_feed_action), () => { sheet.Dismiss(); EditFeed(); }, true), new LinearLayout.LayoutParams(-2, -2));
             Gap(panel, 8);
             foreach (var feed in Sources.ToArray())
             {
@@ -93,25 +93,25 @@ public partial class MainActivity
                 var enabled = new Switch(this) { Checked = source.Enabled };
                 enabled.ThumbTintList = AccentTint();
                 enabled.TrackTintList = SwitchTrackTint();
-                enabled.ContentDescription = "Enable " + source.Name;
+                enabled.ContentDescription = Localize(Resource.String.ui_enable) + source.Name;
                 BindToggleHaptics(enabled);
                 enabled.CheckedChange += (_, e) => { source.Enabled = e.IsChecked; if (e.IsChecked) state.RootHidden.Remove("feeds"); FeedsChanged(); };
                 row.AddView(enabled, new LinearLayout.LayoutParams(-2, Dp(48)));
-                row.AddView(IconButton("settings", "Edit " + source.Name, () => { sheet.Dismiss(); EditFeed(source); }), new LinearLayout.LayoutParams(Dp(44), Dp(48)));
+                row.AddView(IconButton("settings", Localize(Resource.String.ui_edit_3) + source.Name, () => { sheet.Dismiss(); EditFeed(source); }), new LinearLayout.LayoutParams(Dp(44), Dp(48)));
                 panel.AddView(row, Match());
                 panel.AddView(new View(this) { Background = new Android.Graphics.Drawables.ColorDrawable(palette.Divider) }, Match(Dp(1)));
             }
             Gap(panel, 12);
-            Paragraph("Google News South Africa is enabled initially. The other presets are optional. You can edit, remove or add sources.", panel);
-        }, (footer, sheet) => footer.AddView(Button("Done", sheet.Dismiss, true), Match()));
+            Paragraph(Localize(Resource.String.ui_google_news_south_africa_is_enabled_initially_the_other), panel);
+        }, (footer, sheet) => footer.AddView(Button(Localize(Resource.String.ui_done), sheet.Dismiss, true), Match()));
         dialog.DismissEvent += (_, _) => { if (!IsDestroyed && !searching) RefreshBodyInPlace(); };
     }
     private void EditFeed(RssSource? source = null, string initialAddress = "")
     {
         EditText? name = null, url = null;
-        Sheet(source is null ? "Add RSS feed" : "Edit RSS feed", (panel, sheet) =>
+        Sheet(source is null ? Localize(Resource.String.ui_add_rss_feed) : Localize(Resource.String.ui_edit_rss_feed), (panel, sheet) =>
         {
-            Paragraph("Paste an RSS or Atom feed address. You can also use a site's address if it publishes a feed link.", panel);
+            Paragraph(Localize(Resource.String.ui_paste_an_rss_or_atom_feed_address_you_can), panel);
             EditText Field(string label, string value, string hint)
             {
                 var caption = Text(label, 10, true, palette.Muted);
@@ -128,21 +128,21 @@ public partial class MainActivity
                 panel.AddView(input, Match(Math.Max(Dp(52), Dp(16 * FontScale * 1.3f + 24))));
                 return input;
             }
-            name = Field("NAME", source?.Name ?? "", "Optional feed name");
+            name = Field(Localize(Resource.String.ui_name_upper), source?.Name ?? "", Localize(Resource.String.ui_optional_feed_name));
             name.SetFilters([new Android.Text.InputFilterLengthFilter(48)]);
-            url = Field("FEED ADDRESS", source?.Url ?? initialAddress, "https://example.com/feed");
+            url = Field(Localize(Resource.String.ui_feed_address_upper), source?.Url ?? initialAddress, "https://example.com/feed");
             url.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationUri;
             url.SetFilters([new Android.Text.InputFilterLengthFilter(2048)]);
             if (source is not null)
-                RootActions(panel, ("Remove feed", () => Confirm("Remove feed?", "Remove " + source.Name + " from your sources?", "Remove", () => { state.RssSources!.Remove(source); FeedsChanged(); sheet.Dismiss(); RefreshBodyInPlace(); })));
-        }, (footer, sheet) => DialogActions(footer, ("Cancel", sheet.Dismiss), ("Save feed", () =>
+                RootActions(panel, (Localize(Resource.String.ui_remove_feed), () => Confirm(Localize(Resource.String.ui_remove_feed_2), Localize(Resource.String.ui_remove_2) + source.Name + Localize(Resource.String.ui_from_your_sources), Localize(Resource.String.ui_remove), () => { state.RssSources!.Remove(source); FeedsChanged(); sheet.Dismiss(); RefreshBodyInPlace(); })));
+        }, (footer, sheet) => DialogActions(footer, (Localize(Resource.String.ui_cancel), sheet.Dismiss), (Localize(Resource.String.ui_save_feed), () =>
         {
             try
             {
                 string address = FeedReader.Address(url?.Text ?? "");
                 if (source is null && Sources.Count >= 20)
                 {
-                    Toast("You can keep up to 20 feed sources.");
+                    Toast(Localize(Resource.String.ui_you_can_keep_up_to_20_feed_sources));
                     return;
                 }
                 var item = source ?? new RssSource();
@@ -163,7 +163,7 @@ public partial class MainActivity
     }
     private View FeedRefreshControl()
     {
-        var control = new FrameLayout(this) { ContentDescription = "Refresh feeds" };
+        var control = new FrameLayout(this) { ContentDescription = Localize(Resource.String.ui_refresh_feeds) };
         feedRefreshGlyph = new GlyphView(this, "refresh", palette.Action);
         control.AddView(feedRefreshGlyph, new FrameLayout.LayoutParams(Dp(20), Dp(20), GravityFlags.Center));
         feedRefreshProgress = new ProgressBar(this, null, Android.Resource.Attribute.ProgressBarStyleSmall)
@@ -183,7 +183,7 @@ public partial class MainActivity
         if (feedRefresh is null)
             return;
         feedRefresh.Enabled = !feedsLoading;
-        feedRefresh.ContentDescription = feedsLoading ? "Refreshing feeds" : "Refresh feeds";
+        feedRefresh.ContentDescription = feedsLoading ? Localize(Resource.String.ui_refreshing_feeds) : Localize(Resource.String.ui_refresh_feeds);
         if (feedRefreshGlyph is not null)
             feedRefreshGlyph.Visibility = feedsLoading ? ViewStates.Gone : ViewStates.Visible;
         if (feedRefreshProgress is not null)
@@ -213,14 +213,14 @@ public partial class MainActivity
         var enabled = Sources.Where(s => s.Enabled).ToArray();
         if (enabled.Length == 0)
         {
-            Paragraph("Choose your sources in Settings · News & feeds.", panel);
+            Paragraph(Localize(Resource.String.ui_choose_your_sources_in_settings_news_feeds), panel);
             return;
         }
         var articles = enabled.SelectMany(s => feedCache.TryGetValue(s.Id, out var result) ? result.Links.Select(a => (Article: a, Feed: s.Name)) : [])
             .OrderByDescending(a => a.Article.PublishedAt).ThenBy(a => a.Feed, StringComparer.OrdinalIgnoreCase).DistinctBy(a => a.Article.Url).ToArray();
         if (state.FeedUnreadOnly)
             articles = articles.Where(a => !state.ReadArticleUrls.Contains(a.Article.Url)).ToArray();
-        feedStatus = Text(feedsLoading ? "Refreshing · showing saved stories" : Counted(articles.Length, "story", "stories") + " · newest first", 11, color: palette.Muted);
+        feedStatus = Text(feedsLoading ? Localize(Resource.String.ui_refreshing_showing_saved_stories) : Counted(articles.Length, Resource.Plurals.story) + Localize(Resource.String.ui_newest_first), 11, color: palette.Muted);
         feedStatus.SetPadding(0, Dp(2), 0, Dp(12));
         panel.AddView(feedStatus, Match());
         foreach (var item in articles.Take(feedLimit))
@@ -294,7 +294,7 @@ public partial class MainActivity
             //copy.AddView(readAloud, readLayout);
             if (state.FeedImages && article.ImageUrl.Length > 0)
             {
-                var picture = new ImageView(this) { ContentDescription = "Article image", ClipToOutline = true };
+                var picture = new ImageView(this) { ContentDescription = Localize(Resource.String.ui_article_image), ClipToOutline = true };
                 picture.SetScaleType(ImageView.ScaleType.CenterCrop);
                 picture.Background = Background(palette.Card, 10);
                 picture.ImportantForAccessibility = ImportantForAccessibility.No;
@@ -304,7 +304,7 @@ public partial class MainActivity
                 row.AddView(picture, imageLayout);
                 _ = ShowFeedImage(picture, panel, article.ImageUrl, imagesToken);
             }
-            row.ContentDescription = publisher + ". " + article.Title + ". " + age + (read ? ", read" : "");
+            row.ContentDescription = publisher + ". " + article.Title + ". " + age + (read ? Localize(Resource.String.ui_read) : "");
             row.Click += (_, _) => { MarkArticleRead(article.Url); OpenUrl(article.Url); };
             BindHoldHaptics(row);
             row.LongClick += (_, _) => ArticleActions(article);
@@ -314,12 +314,12 @@ public partial class MainActivity
         }
         foreach (var source in enabled)
         if (feedErrors.TryGetValue(source.Id, out var error))
-            Paragraph(source.Name + ": " + error + (feedCache.ContainsKey(source.Id) ? " Showing saved stories." : ""), panel);
+            Paragraph(source.Name + ": " + error + (feedCache.ContainsKey(source.Id) ? Localize(Resource.String.ui_showing_saved_stories) : ""), panel);
         if (articles.Length == 0)
-            Paragraph(feedsLoading ? "Fetching your first stories…" : "No stories saved yet. Refresh to check your sources.", panel);
+            Paragraph(feedsLoading ? Localize(Resource.String.ui_fetching_your_first_stories) : Localize(Resource.String.ui_no_stories_saved_yet_refresh_to_check_your_sources), panel);
         if (articles.Length > feedLimit)
         {
-            var more = RootAction("Show more", () => { feedLimit += state.FeedArticleCount; RenderFeeds(panel); });
+            var more = RootAction(Localize(Resource.String.ui_show_more), () => { feedLimit += state.FeedArticleCount; RenderFeeds(panel); });
             more.SetTextColor(palette.Action);
             var layout = new LinearLayout.LayoutParams(-2, -2) { Gravity = GravityFlags.CenterHorizontal };
             layout.SetMargins(0, Dp(8), 0, 0);
@@ -383,7 +383,7 @@ public partial class MainActivity
     {
         var date = DateTimeOffset.FromUnixTimeMilliseconds(published).ToLocalTime();
         var age = DateTimeOffset.Now - date;
-        return age.TotalMinutes < 1 ? "Just now" : age.TotalMinutes < 60 ? $"{(int)age.TotalMinutes}m ago" : age.TotalHours < 24 ? $"{(int)age.TotalHours}h ago" : date.ToString("d MMM · HH:mm");
+        return age.TotalMinutes < 1 ? "Just now" : age.TotalMinutes < 60 ? $"{(int)age.TotalMinutes}m ago" : age.TotalHours < 24 ? $"{(int)age.TotalHours}h ago" : date.ToString("d MMM · HH:mm", UiCulture);
     }
     private Action? pendingFeedPaint;
     private void ScheduleFeedPaint(LinearLayout panel)
@@ -425,7 +425,7 @@ public partial class MainActivity
         using var concurrency = new SemaphoreSlim(3);
         UpdateFeedRefresh();
         if (feedStatus is not null)
-            feedStatus.Text = feedCache.Count > 0 ? "Refreshing · showing saved stories" : "Fetching your first stories…";
+            feedStatus.Text = feedCache.Count > 0 ? Localize(Resource.String.ui_refreshing_showing_saved_stories) : Localize(Resource.String.ui_fetching_your_first_stories);
         try
         {
             var results = await Task.WhenAll(enabled.Select(async source =>

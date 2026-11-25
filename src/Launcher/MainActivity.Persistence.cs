@@ -55,26 +55,26 @@ public partial class MainActivity
             }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
             {
-                RunOnUiThread(() => { foreach (var note in batch) if (!pendingNotes.TryGetValue(note.Id, out var newer) || newer.UpdatedAt < note.UpdatedAt) pendingNotes[note.Id] = note; if (!IsDestroyed) Toast("Your draft is kept open. Saving failed; check available storage and try again."); });
+                RunOnUiThread(() => { foreach (var note in batch) if (!pendingNotes.TryGetValue(note.Id, out var newer) || newer.UpdatedAt < note.UpdatedAt) pendingNotes[note.Id] = note; if (!IsDestroyed) Toast(Localize(Resource.String.ui_your_draft_is_kept_open_saving_failed_check_available)); });
             }
         }, TaskScheduler.Default);
     }
     private void ShowRestoreOptions(LauncherState incoming)
     {
         bool appearance = true, organisation = true, notes = true, workspace = true;
-        Sheet("Restore a backup", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_restore_a_backup), (panel, dialog) =>
         {
-            Paragraph($"{incoming.Drawers.Count} drawers · {incoming.Notes.Count} notes · {incoming.Timers.Count} timers. Choose what to restore. Your current layout is kept as the previous saved state.", panel);
-            ToggleRow(panel, "Appearance", true, v => appearance = v);
-            ToggleRow(panel, "App organisation", true, v => organisation = v);
-            ToggleRow(panel, "Notes", true, v => notes = v);
-            ToggleRow(panel, "Cards, journeys and timers", true, v => workspace = v);
-            Paragraph("Android widgets, permissions, message-history consent and system-panel access remain on this device.", panel);
-        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Restore selected", () =>
+            Paragraph(Localize(Resource.String.ui_value_drawers_value_notes_value_timers_choose_what_to, incoming.Drawers.Count, incoming.Notes.Count, incoming.Timers.Count), panel);
+            ToggleRow(panel, Localize(Resource.String.ui_appearance), true, v => appearance = v);
+            ToggleRow(panel, Localize(Resource.String.ui_app_organisation), true, v => organisation = v);
+            ToggleRow(panel, Localize(Resource.String.ui_notes), true, v => notes = v);
+            ToggleRow(panel, Localize(Resource.String.ui_cards_journeys_and_timers), true, v => workspace = v);
+            Paragraph(Localize(Resource.String.ui_android_widgets_permissions_message_history_consent_and_system_panel), panel);
+        }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_restore_selected), () =>
         {
             if (!appearance && !organisation && !notes && !workspace)
             {
-                Toast("Choose at least one category.");
+                Toast(Localize(Resource.String.ui_choose_at_least_one_category));
                 return;
             }
             WithProtectedSettings(async () =>
@@ -100,9 +100,9 @@ public partial class MainActivity
                     GrayscaleService.RulesChanged();
                     dialog.Dismiss();
                     Navigate("Tiles");
-                    Toast("Selected content restored.");
+                    Toast(Localize(Resource.String.ui_selected_content_restored));
                 }
-                catch (Exception e) when (e is IOException or UnauthorizedAccessException or Java.Lang.RuntimeException) { Toast("Could not restore. Your current content is kept."); }
+                catch (Exception e) when (e is IOException or UnauthorizedAccessException or Java.Lang.RuntimeException) { Toast(Localize(Resource.String.ui_could_not_restore_your_current_content_is_kept)); }
             });
         }
         )));

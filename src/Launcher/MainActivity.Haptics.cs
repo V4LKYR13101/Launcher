@@ -1,4 +1,4 @@
-﻿using Android.OS;
+using Android.OS;
 using Android.Views;
 using Android.Widget;
 using LauncherApp.UI;
@@ -88,9 +88,9 @@ public partial class MainActivity
         if (reference.TryGetTarget(out var view))
             view.HapticFeedbackEnabled = state.HapticFeedback != "Off";
     }
-    private void ShowHapticSettings() => Sheet("Haptic feedback", (panel, dialog) =>
+    private void ShowHapticSettings() => Sheet(Localize(Resource.String.ui_haptic_feedback), (panel, dialog) =>
     {
-        Paragraph("Choose how Launcher feels when you tap controls, switch pages, fold drawers or dismiss items. Your phone controls the vibration strength.", panel);
+        Paragraph(Localize(Resource.String.ui_choose_how_launcher_feels_when_you_tap_controls_switch), panel);
         foreach (var option in new[] { ("Off", "Disable Launcher interaction feedback"), ("Subtle", "Light ticks with a firmer touch-and-hold"), ("Crisp", "More distinct taps and gesture confirmations") })
         {
             var row = Stack(true);
@@ -107,14 +107,14 @@ public partial class MainActivity
             row.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
             if (selected)
                 row.AddView(new GlyphView(this, "check", palette.Action), new LinearLayout.LayoutParams(Dp(20), Dp(20)));
-            row.ContentDescription = option.Item1 + (selected ? ", selected" : "");
+            row.ContentDescription = option.Item1 + (selected ? Localize(Resource.String.ui_selected) : "");
             TouchFeedback(row, 12, HapticCue.None);
             row.Click += (_, _) => { state.HapticFeedback = option.Item1; Save(); SyncHapticPreferences(); Haptic(row, HapticCue.Selection); dialog.Dismiss(); RefreshBodyInPlace(); };
             var lp = Match();
             lp.SetMargins(0, 0, 0, Dp(8));
             panel.AddView(row, lp);
         }
-        Paragraph("Try the current setting. Off disables Launcher’s own tap, touch-and-hold and selection feedback. Keyboard, widget-provider and Android system feedback are controlled separately.", panel);
+        Paragraph(Localize(Resource.String.ui_try_the_current_setting_off_disables_launchers_own_tap), panel);
         var previews = Stack(true);
         previews.BaselineAligned = false;
         foreach (var sample in new[] { ("Tap", HapticCue.Tap), ("Hold", HapticCue.Hold), ("Confirm", HapticCue.Commit) })
@@ -130,6 +130,6 @@ public partial class MainActivity
             previews.AddView(control, lp);
         }
         panel.AddView(previews, Match());
-        Paragraph("If you feel nothing, check Android's touch-vibration setting. Some devices provide limited haptic effects. Launcher never overrides the system setting.", panel);
+        Paragraph(Localize(Resource.String.ui_if_you_feel_nothing_check_android_s_touch_vibration), panel);
     });
 }

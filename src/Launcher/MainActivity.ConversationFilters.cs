@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Views;
 using Android.Widget;
 using LauncherApp.Services;
@@ -14,10 +14,10 @@ public partial class MainActivity
             .DistinctBy(p => p.Package).OrderBy(p => p.Name).ToArray();
         var selected = options.Where(p => !state.ConversationExcludedApps.Contains(p.Package)).Select(p => p.Package).ToHashSet();
         bool messagesOnly = state.ConversationMessagesOnly;
-        Sheet("Notification sources", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_notification_sources), (panel, dialog) =>
         {
-            Paragraph("Choose which apps appear in Conversations. This doesn’t change Android’s notification settings.", panel);
-            ToggleRow(panel, "Messages only", messagesOnly, v => messagesOnly = v);
+            Paragraph(Localize(Resource.String.ui_choose_which_apps_appear_in_conversations_this_doesnt_change), panel);
+            ToggleRow(panel, Localize(Resource.String.ui_messages_only), messagesOnly, v => messagesOnly = v);
             var controls = Stack(true);
             LinearLayout list = Stack();
             string query = "";
@@ -34,11 +34,11 @@ public partial class MainActivity
                     list.AddView(check, Match());
                 }
             }
-            controls.AddView(Button("Select all", () => { selected = options.Select(o => o.Package).ToHashSet(); Rebuild(); }), new LinearLayout.LayoutParams(0, -2, 1));
-            controls.AddView(Button("Clear", () => { selected.Clear(); Rebuild(); }), new LinearLayout.LayoutParams(0, -2, 1));
+            controls.AddView(Button(Localize(Resource.String.ui_select_all), () => { selected = options.Select(o => o.Package).ToHashSet(); Rebuild(); }), new LinearLayout.LayoutParams(0, -2, 1));
+            controls.AddView(Button(Localize(Resource.String.ui_clear), () => { selected.Clear(); Rebuild(); }), new LinearLayout.LayoutParams(0, -2, 1));
             panel.AddView(controls, Match());
             Gap(panel);
-            var search = new EditText(this) { Hint = "Filter apps", TextSize = 15, Typeface = regular, Background = Background(palette.Panel, 14) };
+            var search = new EditText(this) { Hint = Localize(Resource.String.ui_filter_apps), TextSize = 15, Typeface = regular, Background = Background(palette.Panel, 14) };
             search.SetSingleLine(true);
             search.SetTextColor(palette.Text);
             search.SetHintTextColor(palette.Muted);
@@ -49,7 +49,7 @@ public partial class MainActivity
             Gap(panel, 8);
             panel.AddView(list, Match());
             Rebuild();
-        }, (footer, dialog) => footer.AddView(Button("Apply filters", () =>
+        }, (footer, dialog) => footer.AddView(Button(Localize(Resource.String.ui_apply_filters), () =>
         {
             state.ConversationExcludedApps = options.Where(o => !selected.Contains(o.Package)).Select(o => o.Package).ToList();
             state.ConversationMessagesOnly = messagesOnly;

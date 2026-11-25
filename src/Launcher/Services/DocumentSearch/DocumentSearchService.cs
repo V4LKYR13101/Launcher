@@ -144,14 +144,14 @@ internal sealed class DocumentSearchService
         catch (OperationCanceledException) when (current.IsCancellationRequested)
         {
             if (phase == Phase.Downloading)
-                progress = progress with { Error = "Download cancelled." };
+                progress = progress with { Error = Localize(Resource.String.ui_download_cancelled) };
         }
         catch (Exception error) when (IsSearchError(error) || error is HttpRequestException or OperationCanceledException)
         {
             Android.Util.Log.Warn("DocumentSearch", error.ToString());
             progress = progress with { Error = phase == Phase.Downloading
-                ? "Download failed. Check your connection and available storage, then retry."
-                : "Document indexing failed. Try indexing again." };
+                ? Localize(Resource.String.ui_download_failed_check_your_connection_and_available_storage_then)
+                : Localize(Resource.String.ui_document_indexing_failed_try_indexing_again) };
         }
         finally
         {
@@ -221,7 +221,7 @@ internal sealed class DocumentSearchService
         }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException)
         {
-            progress = progress with { Error = "Couldn't remove the document search files. Try again." };
+            progress = progress with { Error = Localize(Resource.String.ui_couldn_t_remove_the_document_search_files_try_again) };
         }
         finally
         {

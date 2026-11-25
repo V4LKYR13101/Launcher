@@ -1,4 +1,4 @@
-﻿using Android.Graphics;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Launcher.Core;
@@ -27,19 +27,19 @@ public partial class MainActivity
     {
         if (SearchingDownloads)
         {
-            Title("Download");
-            Paragraph("Save a file from a direct link to Downloads.");
+            Title(Localize(Resource.String.ui_download));
+            Paragraph(Localize(Resource.String.ui_save_a_file_from_a_direct_link_to_downloads));
             return;
         }
         bool fileResults = SearchingFiles;
-        appSearchTitle = Text(query.Trim().Length == 0 ? "All apps" : "Results", 26, true);
+        appSearchTitle = Text(query.Trim().Length == 0 ? Localize(Resource.String.ui_all_apps) : Localize(Resource.String.ui_results), 26, true);
         appSearchTitle.SetPadding(0, Dp(8), 0, Dp(10));
         if (fileResults)
         {
             var header = Stack(true);
             header.SetGravity(GravityFlags.CenterVertical);
             header.AddView(appSearchTitle, new LinearLayout.LayoutParams(0, -2, 1));
-            header.AddView(IconButton("settings", "Search settings", () => Navigate(SearchSettingsPage), palette.Muted),
+            header.AddView(IconButton("settings", Localize(Resource.String.ui_search_settings), () => Navigate(SearchSettingsPage), palette.Muted),
                 new LinearLayout.LayoutParams(Dp(48), Dp(48)));
             body.AddView(header, Match());
             AddFileTypeFilters();
@@ -50,7 +50,7 @@ public partial class MainActivity
         appSearchCount.SetPadding(0, 0, 0, Dp(12));
         body.AddView(appSearchCount, Match());
         if (fileResults && !fileSearchAccess)
-            body.AddView(Button("Allow file access", RequestFileSearchAccess), Match());
+            body.AddView(Button(Localize(Resource.String.ui_allow_file_access), RequestFileSearchAccess), Match());
         appSearchList = new ListView(this) { Divider = null, VerticalScrollBarEnabled = false, OverScrollMode = OverScrollMode.Never, CacheColorHint = Color.Transparent };
         appSearchList.Selector = new Android.Graphics.Drawables.ColorDrawable(Color.Transparent);
         if (fileResults)
@@ -78,10 +78,10 @@ public partial class MainActivity
         appSearchAdapter.Replace(matches);
         appSearchList?.SetSelection(0);
         if (appSearchTitle is not null)
-            appSearchTitle.Text = query.Trim().Length == 0 ? "All apps" : "Results";
+            appSearchTitle.Text = query.Trim().Length == 0 ? Localize(Resource.String.ui_all_apps) : Localize(Resource.String.ui_results);
         if (appSearchCount is not null)
-            appSearchCount.Text = matches.Length > 0 ? $"{matches.Length} {(query.Trim().Length == 0 ? "apps" : "results")} · apps and saved content"
-            : !catalogLoaded && loading ? "Finding your apps…" : "No matches. Hidden apps can be restored in Settings.";
+            appSearchCount.Text = matches.Length > 0 ? Localize(query.Trim().Length == 0 ? Resource.String.ui_app_search_app_count : Resource.String.ui_app_search_result_count, matches.Length)
+            : !catalogLoaded && loading ? Localize(Resource.String.ui_finding_your_apps) : Localize(Resource.String.ui_no_matches_hidden_apps_can_be_restored_in_settings);
     }
     private sealed record SearchHit(AppEntry? App, LocalSearchResult? Local, SearchFile? File = null);
     private void OpenSearchHit(SearchHit hit)

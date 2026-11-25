@@ -349,7 +349,7 @@ public partial class MainActivity
             }
         }
         catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { }
-        Toast("The Google app is unavailable. Opening Today.");
+        Toast(Localize(Resource.String.ui_the_google_app_is_unavailable_opening_today));
         Navigate("Root");
     });
 }

@@ -30,9 +30,9 @@ public partial class MainActivity
         {
             ContentDescription = next switch
             {
-                AppSearchMode.Files => searching ? "Switch to file search" : "Search files",
-                AppSearchMode.Download => "Switch to download",
-                _ => "Switch to app search"
+                AppSearchMode.Files => searching ? Localize(Resource.String.ui_switch_to_file_search) : Localize(Resource.String.ui_search_files),
+                AppSearchMode.Download => Localize(Resource.String.ui_switch_to_download),
+                _ => Localize(Resource.String.ui_switch_to_app_search)
             }
         };
         var icon = new GlyphView(this, glyph, SearchingDownloads || SearchingFiles ? palette.Accent : palette.Text)
@@ -90,19 +90,19 @@ public partial class MainActivity
         }
     }
 
-    private void AddDownloadsSettingsLink(LinearLayout parent) => SettingRow(parent, DownloadsSettingsPage,
-        DownloadRequest.Enabled(this) ? "On · download files and view history" : "Off · view download history",
-        () => Navigate(DownloadsSettingsPage), "download", "share links transfer file history");
+    private void AddDownloadsSettingsLink(LinearLayout parent) => SettingRow(parent, PageLabel(DownloadsSettingsPage),
+        DownloadRequest.Enabled(this) ? Localize(Resource.String.ui_on_download_files_and_view_history) : Localize(Resource.String.ui_off_view_download_history),
+        () => Navigate(DownloadsSettingsPage), "download", Localize(Resource.String.ui_share_links_transfer_file_history));
 
     private void RenderDownloadsSettings()
     {
         var options = AddSettingsCard();
-        ToggleRow(options, "Enable downloads", DownloadRequest.Enabled(this), enabled => DownloadRequest.SetEnabled(this, enabled));
+        ToggleRow(options, Localize(Resource.String.ui_enable_downloads), DownloadRequest.Enabled(this), enabled => DownloadRequest.SetEnabled(this, enabled));
 
-        var history = AddSettingsCard("Download history");
+        var history = AddSettingsCard(Localize(Resource.String.ui_download_history));
         var entries = DownloadHistory.Read(this);
         if (entries.Length == 0)
-            Paragraph("Files downloaded with Launcher will appear here.", history);
+            Paragraph(Localize(Resource.String.ui_files_downloaded_with_launcher_will_appear_here), history);
         foreach (var entry in entries)
             SettingRow(history, entry.Name, entry.CompletedAt.ToLocalTime().ToString("g"), () => OpenDownload(entry), "file");
     }
@@ -121,13 +121,13 @@ public partial class MainActivity
             using var file = ContentResolver!.OpenFileDescriptor(uri, "r");
             if (file is null)
             {
-                Toast("This downloaded file is no longer available.");
+                Toast(Localize(Resource.String.ui_this_downloaded_file_is_no_longer_available));
                 return;
             }
         }
         catch (Exception error) when (error is Java.IO.FileNotFoundException or Java.Lang.SecurityException)
         {
-            Toast("This downloaded file is no longer available.");
+            Toast(Localize(Resource.String.ui_this_downloaded_file_is_no_longer_available));
             return;
         }
         using var intent = new Intent(Intent.ActionView);

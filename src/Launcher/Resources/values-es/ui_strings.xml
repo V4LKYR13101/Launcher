@@ -1,0 +1,1474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_10_seconds" formatted="false">"10 segundos"</string>
+    <string name="ui_120_minutes" formatted="false">"120 minutos"</string>
+    <string name="ui_15_minutes" formatted="false">"15 minutos"</string>
+    <string name="ui_1_foreground_app_detection" formatted="false">"1. Detección de aplicaciones de primer plano"</string>
+    <string name="ui_1_hour" formatted="false">"1 hora"</string>
+    <string name="ui_20_seconds" formatted="false">"20 segundos"</string>
+    <string name="ui_2_display_permission" formatted="false">"2. Permiso de visualización"</string>
+    <string name="ui_30_minutes" formatted="false">"30 minutos"</string>
+    <string name="ui_3_hours" formatted="false">"3 horas"</string>
+    <string name="ui_3_seconds" formatted="false">"3 segundos"</string>
+    <string name="ui_3d_perspective_card_reveal_parallax_animations" formatted="false">"Tarjeta de perspectiva 3D revela animaciones paralaje"</string>
+    <string name="ui_45_minutes" formatted="false">"45 minutos"</string>
+    <string name="ui_5_seconds" formatted="false">"5 segundos"</string>
+    <string name="ui_60_minutes" formatted="false">"60 minutos"</string>
+    <string name="ui_64_bit_android_build_access_and_device_capabilities_are" formatted="false">" · 64-bit Android build. Las capacidades de acceso y dispositivo se revisan de nuevo cuando se reanudará el Launcher."</string>
+    <string name="ui_6_hours" formatted="false">"6 horas"</string>
+    <string name="ui_90_minutes" formatted="false">"90 minutos"</string>
+    <string name="ui_a_matching_status_strip_and_quick_panel_across_your" formatted="false">"Muestra la fila de estado y el panel rápido de Launcher sobre otras aplicaciones. Desliza hacia abajo desde el tirador del borde para abrirlo. El panel de Android sigue disponible."</string>
+    <string name="ui_a_recovery_copy_is_retained_on_this_phone" formatted="false">"Una copia de recuperación se mantiene en este teléfono"</string>
+    <string name="ui_a_recovery_point_is_created_after_saving" formatted="false">"Un punto de recuperación se crea después de ahorrar"</string>
+    <string name="ui_accent" formatted="false">"Color de acento"</string>
+    <string name="ui_accent_color_colour_finger_tap_ripple" formatted="false">"acento color dedo toque onda"</string>
+    <string name="ui_accent_color_colour_theme_columns_page_tabs_navigation_icons" formatted="false">"color de acento tema columnas pestañas navegación iconos fondo de pantalla tipografía esquinas movimiento"</string>
+    <string name="ui_accent_rrggbb" formatted="false">"Color de acento · #RRGGBB"</string>
+    <string name="ui_access_denied" formatted="false">"Acceso negado."</string>
+    <string name="ui_access_is_optional_and_used_by_the_features_you" formatted="false">"El acceso es opcional y utilizado por las características que habilita. App grayscale utiliza un servicio de accesibilidad y un permiso de visualización de una sola vez. El uso compartido de archivos utiliza una carpeta que seleccione. Los nombres de conexión pueden requerir acceso cercano al dispositivo y a la ubicación; el tiempo utiliza la ciudad que ingresa. Los perfiles de trabajo y Android 15+ Private Space requieren Lanzador como el hogar predeterminado."</string>
+    <string name="ui_accessibility_access" formatted="false">"Acceso a la accesibilidad"</string>
+    <string name="ui_accessibility_settings_to_lock_the_screen" formatted="false">"Ajustes de accesibilidad para bloquear la pantalla."</string>
+    <string name="ui_activity_recorded_by_android_hourly_bars_and_today_s" formatted="false">"Actividad registrada por Android. Barras horarias y el uso total de hoy de la misma línea de tiempo de actividad. Android puede retener menos historia de eventos que sus registros de uso agregado."</string>
+    <string name="ui_adaptive_settings" formatted="false">"Ajustes adaptados ·"</string>
+    <string name="ui_adb_shell_pm_grant_com_launcher_home_android_permission" formatted="false">"adb shell pm grant com.Launcher.home android.permission.WRITE_SECURE_SETTINGS"</string>
+    <string name="ui_add_a_card" formatted="false">"Añadir una tarjeta"</string>
+    <string name="ui_add_android_widget" formatted="false">"¿Agregar el widget Android?"</string>
+    <string name="ui_add_android_widget_action" formatted="false">"+ Add Android widget"</string>
+    <string name="ui_add_card_action" formatted="false">"+ Añadir tarjeta"</string>
+    <string name="ui_add_drawer" formatted="false">"Añadir cajón"</string>
+    <string name="ui_add_feed_action" formatted="false">"+ Añada alimentación"</string>
+    <string name="ui_add_journey_action" formatted="false">"+ Agregar viaje"</string>
+    <string name="ui_add_rss_feed" formatted="false">"Añadir fuente RSS"</string>
+    <string name="ui_add_rss_feed_action" formatted="false">"+ Añadir fuente RSS"</string>
+    <string name="ui_add_shortcut" formatted="false">"Añadir acceso directo"</string>
+    <string name="ui_add_to_your_home" formatted="false">"¿Agregar a tu casa?"</string>
+    <string name="ui_add_widget" formatted="false">"Añadir widget"</string>
+    <string name="ui_add_widget_action" formatted="false">"+ Añadir widget"</string>
+    <string name="ui_added_to_kokoro_speech_queue" formatted="false">"Se agregó a la cola del discurso de Kokoro."</string>
+    <string name="ui_added_to_speech_queue" formatted="false">"Añadido a la cola del discurso"</string>
+    <string name="ui_address_upper" formatted="false">"DIRECCIÓN"</string>
+    <string name="ui_agenda" formatted="false">"Agenda"</string>
+    <string name="ui_ai_semantic_files_photos_ocr_faces_embedding_clip_model" formatted="false">"AI archivos semánticos fotos OCR caras embedding CLIP modelo descarga almacenamiento"</string>
+    <string name="ui_alerts" formatted="false">"Avisos"</string>
+    <string name="ui_alerts_are_ready" formatted="false">"Las alertas están listas."</string>
+    <string name="ui_alerts_enabled_exact_timing_needs_access" formatted="false">"Alertas habilitadas · acceso preciso a las necesidades de tiempo"</string>
+    <string name="ui_all" formatted="false">"Todos"</string>
+    <string name="ui_all_apps" formatted="false">"Todas las aplicaciones"</string>
+    <string name="ui_all_apps_grid" formatted="false">"Cuadrícula de todas las aplicaciones"</string>
+    <string name="ui_all_caught_up" formatted="false">"Todos atrapados"</string>
+    <string name="ui_all_notification_types_choose_apps" formatted="false">"Todos los tipos de notificación · elegir aplicaciones"</string>
+    <string name="ui_allow" formatted="false">"Permitir"</string>
+    <string name="ui_allow_access_to_search_your_devices_shared_storage" formatted="false">"Permitir el acceso para buscar el almacenamiento compartido de su dispositivo."</string>
+    <string name="ui_allow_desktop_uploads" formatted="false">"Permitir las cargas de escritorio"</string>
+    <string name="ui_allow_file_access" formatted="false">"Permitir acceso a archivos"</string>
+    <string name="ui_allow_launcher_to_install_updates_then_return_here" formatted="false">"Permitir que el lanzador instale actualizaciones, luego regrese aquí."</string>
+    <string name="ui_allow_launcher_to_show_current_notifications_and_message_previews" formatted="false">"Permitir que el lanzador muestre las notificaciones actuales y las previsiones de mensajes. Historia del mensaje es opcional y almacenado en este teléfono."</string>
+    <string name="ui_allow_nearby_device_access_to_display_connected_bluetooth_devices" formatted="false">"Permite el acceso de dispositivos cercanos a la pantalla de dispositivos Bluetooth conectados, y el acceso preciso a la ubicación para mostrar su nombre de red Wi-Fi. El lanzador no escanea su ubicación o subir estos detalles."</string>
+    <string name="ui_allowed" formatted="false">"Permiso"</string>
+    <string name="ui_ambient_theme" formatted="false">"Tema según la luz ambiental"</string>
+    <string name="ui_an_unreadable_state_copy_is_preserved_in_launcher_s" formatted="false">"Una copia de estado no legible se conserva en el almacenamiento privado de Launcher. Exporte su contenido actual recuperado antes de hacer nuevos cambios."</string>
+    <string name="ui_android" formatted="false">"Android"</string>
+    <string name="ui_android_2" formatted="false">"Android "</string>
+    <string name="ui_android_app_info" formatted="false">"Información de la aplicación Android"</string>
+    <string name="ui_android_app_information" formatted="false">"Información de la aplicación de Android"</string>
+    <string name="ui_android_can_reclaim_cached_memory_when_apps_need_it" formatted="false">"Android puede recuperar la memoria caché cuando las aplicaciones lo necesitan. Un porcentaje alto utilizado no significa por sí mismo que el teléfono está luchando. El total excluye la memoria reservada por el dispositivo."</string>
+    <string name="ui_android_colour_correction" formatted="false">"Corrección de color Android"</string>
+    <string name="ui_android_could_not_add_this_widget" formatted="false">"Android no pudo añadir este widget."</string>
+    <string name="ui_android_could_not_change_this_profile_check_that_launcher" formatted="false">"Android no podía cambiar este perfil. Compruebe que el lanzador es su hogar predeterminado."</string>
+    <string name="ui_android_could_not_list_calendars" formatted="false">"Android no podía listar calendarios."</string>
+    <string name="ui_android_could_not_lock_the_screen" formatted="false">"Android no pudo bloquear la pantalla. "</string>
+    <string name="ui_android_could_not_pin_this_shortcut" formatted="false">"Android no podía marcar este atajo."</string>
+    <string name="ui_android_could_not_remove_this_shortcut_try_again" formatted="false">"Android no pudo eliminar este atajo. Inténtelo de nuevo."</string>
+    <string name="ui_android_could_not_snooze_this_notification" formatted="false">"Android no pudo snooze esta notificación."</string>
+    <string name="ui_android_has_restricted_this_control" formatted="false">"Android ha restringido este control"</string>
+    <string name="ui_android_is_set_to_hide_this_space_while_locked" formatted="false">"Android se establece para ocultar este espacio mientras está bloqueado. Cambiar esa preferencia en la configuración del espacio privado de Android."</string>
+    <string name="ui_android_keeps_this_notification_while_its_service_is_active" formatted="false">"Android mantiene esta notificación mientras su servicio está activo."</string>
+    <string name="ui_android_may_delay_this_alert_until_exact_alarm_access" formatted="false">"Android puede retrasar esta alerta hasta que el acceso exacto de alarma está habilitado."</string>
+    <string name="ui_android_notifications_and_exact_alarm_access" formatted="false">"Notificaciones de Android y acceso exacto de alarma"</string>
+    <string name="ui_android_requires_accessibility_access_to_lock_the_screen" formatted="false">"Android requiere acceso a la accesibilidad para bloquear la pantalla. "</string>
+    <string name="ui_android_widget" formatted="false">"Widget de Android"</string>
+    <string name="ui_android_widgets_permissions_message_history_consent_and_system_panel" formatted="false">"Los widgets de Android, permisos, consentimiento de la historia del mensaje y acceso del sistema-panel permanecen en este dispositivo."</string>
+    <string name="ui_animation_switching_pages" formatted="false">"páginas de conmutación de animación"</string>
+    <string name="ui_announce_sender_only" formatted="false">"Anunciar solo el remitente"</string>
+    <string name="ui_any_sender_or_title" formatted="false">"Cualquier remitente o título"</string>
+    <string name="ui_api_key_upper" formatted="false">"LLAVE API"</string>
+    <string name="ui_app" formatted="false">"Aplicación"</string>
+    <string name="ui_app_2" formatted="false">"aplicación"</string>
+    <string name="ui_app_behaviour" formatted="false">"Comportamiento de la aplicación"</string>
+    <string name="ui_app_box" formatted="false">"Otras aplicaciones"</string>
+    <string name="ui_app_controls" formatted="false">"Controles de aplicaciones"</string>
+    <string name="ui_app_dashboard" formatted="false">"Panel de la aplicación"</string>
+    <string name="ui_app_display_colour" formatted="false">"Color de la aplicación"</string>
+    <string name="ui_app_drawer" formatted="false">"Cajón de aplicaciones"</string>
+    <string name="ui_app_grayscale" formatted="false">"Escala de grises por aplicación"</string>
+    <string name="ui_app_icon" formatted="false">"Icono de la aplicación"</string>
+    <string name="ui_app_information_is_unavailable_open_android_app_information_instead" formatted="false">"La información de la aplicación no está disponible. Abrir información de la aplicación Android en su lugar."</string>
+    <string name="ui_app_labels" formatted="false">"Etiquetas de la aplicación"</string>
+    <string name="ui_app_lock_protects_launches_and_app_editing_through_launcher" formatted="false">"App lock protege los lanzamientos y la edición de aplicaciones a través de Launcher. notificaciones de Android, Recientes y otros lanzadores siguen siendo controlados por Android."</string>
+    <string name="ui_app_name" formatted="false">"Nombre de la aplicación"</string>
+    <string name="ui_app_name_or_package" formatted="false">"Nombre de la aplicación o paquete"</string>
+    <string name="ui_app_organisation" formatted="false">"Organización de aplicaciones"</string>
+    <string name="ui_app_protection" formatted="false">"Protección de aplicaciones"</string>
+    <string name="ui_app_qr_code" formatted="false">"Código QR de la aplicación"</string>
+    <string name="ui_app_updates" formatted="false">"Actualizaciones de Launcher"</string>
+    <string name="ui_appearance" formatted="false">"Apariencia"</string>
+    <string name="ui_appearance_presets" formatted="false">"Estilos de apariencia"</string>
+    <string name="ui_apply_filters" formatted="false">"Aplicar filtros"</string>
+    <string name="ui_apply_preset" formatted="false">"Aplicar estilo"</string>
+    <string name="ui_apply_value_preset" formatted="false">"¿Aplicar el estilo {0}?"</string>
+    <string name="ui_apps" formatted="false">"Aplicaciones"</string>
+    <string name="ui_apps_drawers" formatted="false">"Aplicaciones y cajones"</string>
+    <string name="ui_apps_move_to_app_box" formatted="false">"Las aplicaciones se mueven a Otras aplicaciones"</string>
+    <string name="ui_apps_own_icon" formatted="false">"El propio icono de App"</string>
+    <string name="ui_apps_own_icons" formatted="false">"Los propios iconos de las aplicaciones"</string>
+    <string name="ui_arrange" formatted="false">"Organizar"</string>
+    <string name="ui_arrange_app_drawers" formatted="false">"Organizar cajones de aplicaciones"</string>
+    <string name="ui_arrange_drawers" formatted="false">"Extraídos cajones"</string>
+    <string name="ui_arrange_favorites" formatted="false">"Organizar favoritos"</string>
+    <string name="ui_arrange_tiles_and_cards_undo_changes" formatted="false">"Organiza mosaicos y tarjetas · deshaz cambios"</string>
+    <string name="ui_arrange_today" formatted="false">"Arregla hoy"</string>
+    <string name="ui_arrange_today_cards" formatted="false">"Arregla las tarjetas de hoy"</string>
+    <string name="ui_article_image" formatted="false">"Imagen del artículo"</string>
+    <string name="ui_articles_to_display" formatted="false">"Artículos que se muestran"</string>
+    <string name="ui_at_a_glance" formatted="false">"De un vistazo"</string>
+    <string name="ui_at_or_above_value_lux" formatted="false">"En o por encima de {0:0.#} lux"</string>
+    <string name="ui_at_or_below_value_lux" formatted="false">"En o debajo de {0:0.#} lux"</string>
+    <string name="ui_attach_boarding_pass" formatted="false">"Adjuntar tarjeta de embarque"</string>
+    <string name="ui_authenticate_to_continue_in_launcher" formatted="false">"Autenticate para continuar en Launcher."</string>
+    <string name="ui_automatic_light_dark" formatted="false">"Luz automática / oscuridad"</string>
+    <string name="ui_automatic_refresh" formatted="false">"Refrigerio automático"</string>
+    <string name="ui_automatic_theme" formatted="false">"Tema automático"</string>
+    <string name="ui_available" formatted="false">"Disponible"</string>
+    <string name="ui_available_2" formatted="false">" disponible"</string>
+    <string name="ui_available_tap_to_lock_or_pause" formatted="false">"Disponible · grifo para bloquear o pausar"</string>
+    <string name="ui_available_to_apps" formatted="false">"Disponibles en aplicaciones"</string>
+    <string name="ui_back" formatted="false">"Atrás"</string>
+    <string name="ui_back_up_layout" formatted="false">"Retrocede el diseño"</string>
+    <string name="ui_backup" formatted="false">"respaldo"</string>
+    <string name="ui_backup_restore" formatted="false">"Copia de seguridad y restauración"</string>
+    <string name="ui_balanced_100" formatted="false">"Saldo · 100"</string>
+    <string name="ui_balanced_50" formatted="false">"Saldo · 50%"</string>
+    <string name="ui_battery" formatted="false">"Porcentaje de batería"</string>
+    <string name="ui_battery_2" formatted="false">"Batería"</string>
+    <string name="ui_battery_memory_storage" formatted="false">"Batería, memoria y almacenamiento"</string>
+    <string name="ui_battery_percentage_indicator" formatted="false">"indicador de porcentaje de batería"</string>
+    <string name="ui_battery_remaining" formatted="false">"Batería restante: "</string>
+    <string name="ui_battery_temperature" formatted="false">"Temperatura de la batería"</string>
+    <string name="ui_battery_value_percent" formatted="false">"Batería al {0} por ciento"</string>
+    <string name="ui_battery_valuec" formatted="false">"Batería {0:0.#} °C · "</string>
+    <string name="ui_below_camera_cutout" formatted="false">"Debajo de la cámara"</string>
+    <string name="ui_biometric_lock" formatted="false">"Cerradura biométrica"</string>
+    <string name="ui_bluetooth" formatted="false">"Bluetooth"</string>
+    <string name="ui_booking_reference" formatted="false">"Referencia de reserva"</string>
+    <string name="ui_both_setup_steps_are_needed_before_a_saved_grayscale" formatted="false">"Ambos pasos de configuración son necesarios antes de que una opción de grayscale guardada puede afectar la pantalla."</string>
+    <string name="ui_bottom" formatted="false">"Abajo"</string>
+    <string name="ui_brave_api_account" formatted="false">"Cuenta de API de gran tamaño"</string>
+    <string name="ui_brave_search_api_key" formatted="false">"Brave API de búsqueda clave"</string>
+    <string name="ui_brightness_access" formatted="false">"Acceso de brillo"</string>
+    <string name="ui_brightness_upper" formatted="false">"BRILLANTE"</string>
+    <string name="ui_browse_and_name_detected_face_groups" formatted="false">"Buscar y nombrar grupos faciales detectados"</string>
+    <string name="ui_browse_icon_libraries" formatted="false">"Explorar bibliotecas de iconos"</string>
+    <string name="ui_build" formatted="false">" · construcción "</string>
+    <string name="ui_built_by_kevin" formatted="false">"\nConstruido por *Kevin*."</string>
+    <string name="ui_built_in_libraries" formatted="false">"Bibliotecas integradas"</string>
+    <string name="ui_calculator" formatted="false">"Calculadora"</string>
+    <string name="ui_calculator_card" formatted="false">"Tarjeta de cálculo"</string>
+    <string name="ui_calendar_card" formatted="false">"Tarjeta de calendario"</string>
+    <string name="ui_calendar_is_unavailable_check_calendar_access_and_try_again" formatted="false">"Calendario no está disponible. Compruebe el acceso al calendario e inténtelo de nuevo."</string>
+    <string name="ui_calendars" formatted="false">"Calendarios"</string>
+    <string name="ui_calendars_in_your_agenda" formatted="false">"Calendarios en su agenda"</string>
+    <string name="ui_cancel" formatted="false">"Cancelar"</string>
+    <string name="ui_cancel_download" formatted="false">"Cancelar descarga"</string>
+    <string name="ui_capture_action" formatted="false">"+ Capturar"</string>
+    <string name="ui_capture_in_launcher" formatted="false">"Captura en el lanzador"</string>
+    <string name="ui_capture_something" formatted="false">"Guardar algo"</string>
+    <string name="ui_cards_feeds_weather" formatted="false">"Tarjetas, noticias y tiempo"</string>
+    <string name="ui_cards_journeys_and_timers" formatted="false">"Tarjetas, viajes y temporizadores"</string>
+    <string name="ui_celsius_c" formatted="false">"Celsius · °C"</string>
+    <string name="ui_center" formatted="false">"Centro"</string>
+    <string name="ui_centered_drawer_headings" formatted="false">"Epígrafes de cajón centrado"</string>
+    <string name="ui_changes_are_kept_in_this_session_could_not_save" formatted="false">"Los cambios se guardan en esta sesión. No se puede guardar; comprobar el almacenamiento gratuito."</string>
+    <string name="ui_charging" formatted="false">", cargando"</string>
+    <string name="ui_charging_2" formatted="false">", cargando"</string>
+    <string name="ui_check_access_compatibility_and_recovery" formatted="false">"Consultar acceso, compatibilidad y recuperación"</string>
+    <string name="ui_check_available_storage_and_try_again" formatted="false">"Compruebe el almacenamiento disponible e inténtelo de nuevo."</string>
+    <string name="ui_check_download_and_install_from_kevlog" formatted="false">"Compruebe, descargar e instalar desde Kevlog"</string>
+    <string name="ui_check_for_a_new_launcher_version" formatted="false">"Busca una nueva versión de Launcher"</string>
+    <string name="ui_check_for_updates" formatted="false">"Buscar actualizaciones"</string>
+    <string name="ui_check_for_watch_face_updates" formatted="false">"Comprobación para actualizaciones de la cara del reloj"</string>
+    <string name="ui_check_that_launcher_accessibility_is_connected" formatted="false">"Comprueba que la accesibilidad de Launcher está conectada."</string>
+    <string name="ui_check_your_connection_and_the_link_then_try_again" formatted="false">"Comprueba tu conexión y el enlace, y luego vuelve a intentarlo."</string>
+    <string name="ui_checking_for_updates" formatted="false">"Comprobando actualizaciones..."</string>
+    <string name="ui_checking_kevlog_for_launcher_roll" formatted="false">"Comprobando Kevlog para Roller Roll..."</string>
+    <string name="ui_checking_your_watch_try_again_in_a_moment" formatted="false">"Revisando tu reloj, intenta de nuevo en un momento."</string>
+    <string name="ui_checklist" formatted="false">"Lista de tareas"</string>
+    <string name="ui_choose_a_card_or_type_a_command" formatted="false">"Elija una tarjeta o escriba un comando."</string>
+    <string name="ui_choose_a_card_or_type_a_command_below" formatted="false">"Elija una tarjeta, o escriba un comando a continuación."</string>
+    <string name="ui_choose_a_city" formatted="false">"Elige una ciudad"</string>
+    <string name="ui_choose_a_city_to_show_the_forecast" formatted="false">"Elige una ciudad para mostrar el pronóstico."</string>
+    <string name="ui_choose_a_date_within_the_next_ten_years" formatted="false">"Elige una fecha dentro de los próximos diez años."</string>
+    <string name="ui_choose_a_future_time" formatted="false">"Elige un momento futuro."</string>
+    <string name="ui_choose_a_number_from_1_to_50" formatted="false">"Elige un número del 1 al 50."</string>
+    <string name="ui_choose_a_surface_for_this_app_focus_and_sun" formatted="false">"Elija una superficie para esta aplicación. Focus y Sun pueden aplicar su tratamiento descrito."</string>
+    <string name="ui_choose_a_symbol_for_this_drawer" formatted="false">"Elige un símbolo para este cajón."</string>
+    <string name="ui_choose_an_apps_display_colour_by_holding_its_tile" formatted="false">"Elija el color de la pantalla de una aplicación manteniendo su ficha. Esto cambia la aplicación abierta, independientemente de su icono."</string>
+    <string name="ui_choose_an_icon_from_any_library_or_installed_pack" formatted="false">"Elija un icono de cualquier biblioteca o paquete instalado. Su selección se aplica sólo a esta aplicación."</string>
+    <string name="ui_choose_any_city_launcher_sends_the_city_search_and" formatted="false">"Elija cualquier ciudad. El lanzador envía la búsqueda de la ciudad y seleccionó coordenadas a Open-Meteo para el tiempo; no utiliza GPS ni rastrea su ubicación."</string>
+    <string name="ui_choose_any_glyph_for_this_drawer" formatted="false">"Elige cualquier glifo para este cajón."</string>
+    <string name="ui_choose_apps" formatted="false">"Elija aplicaciones"</string>
+    <string name="ui_choose_at_least_one_category" formatted="false">"Elige al menos una categoría."</string>
+    <string name="ui_choose_city_and_units" formatted="false">"Elige la ciudad y las unidades"</string>
+    <string name="ui_choose_how_launcher_feels_when_you_tap_controls_switch" formatted="false">"Elija cómo se siente el lanzador al pulsar controles, cambiar páginas, doblar cajones o desmontar elementos. Su teléfono controla la fuerza de vibración."</string>
+    <string name="ui_choose_how_many_stories_appear_initially_from_1_to" formatted="false">"Elige cuántas historias aparecen inicialmente, de 1 a 50."</string>
+    <string name="ui_choose_launcher_in_android_settings" formatted="false">"Elija Launcher en la configuración de Android"</string>
+    <string name="ui_choose_launcher_in_androids_chooser" formatted="false">"Elija el lanzador en el selector de Android"</string>
+    <string name="ui_choose_media_player" formatted="false">"Elija el reproductor multimedia"</string>
+    <string name="ui_choose_one_folder_for_photos_and_files" formatted="false">"Elija una carpeta para fotos y archivos"</string>
+    <string name="ui_choose_the_apps_for_this_drawer" formatted="false">"Elija las aplicaciones para este cajón."</string>
+    <string name="ui_choose_the_apps_on_your_home_screen" formatted="false">"Elija las aplicaciones en su pantalla de inicio"</string>
+    <string name="ui_choose_the_calendars_to_show_clearing_every_selection_returns" formatted="false">"Elige los calendarios para mostrar. Limpiar cada selección vuelve a todos los calendarios visibles."</string>
+    <string name="ui_choose_up_to_five_apps_for_the_home_dock" formatted="false">"Elija hasta cinco aplicaciones para el muelle del hogar"</string>
+    <string name="ui_choose_what_belongs_in_your_workspace" formatted="false">"Elige lo que pertenece en tu espacio de trabajo."</string>
+    <string name="ui_choose_which_apps_appear_in_conversations_this_doesnt_change" formatted="false">"Elija qué aplicaciones aparecen en Conversaciones. Esto no cambia la configuración de notificación de Android."</string>
+    <string name="ui_choose_which_buttons_appear_below_home_swipe_between_pages" formatted="false">"Escoge los botones que aparecen debajo de casa. Cambia entre las páginas o utiliza el menú de Lanzamiento para llegar a una página cuyo botón está oculto."</string>
+    <string name="ui_choose_your_sources_in_settings_news_feeds" formatted="false">"Elija sus fuentes en Ajustes · Noticias &amp; feeds."</string>
+    <string name="ui_city_upper" formatted="false">"CIUDAD"</string>
+    <string name="ui_classic" formatted="false">"Clásico"</string>
+    <string name="ui_classic_112" formatted="false">"Clásico · 112"</string>
+    <string name="ui_classic_and_studio_theme_and_layout" formatted="false">"Clásico y Studio · tema y diseño"</string>
+    <string name="ui_clear" formatted="false">"Despejado"</string>
+    <string name="ui_clear_history" formatted="false">"Historia clara"</string>
+    <string name="ui_clear_saved_history" formatted="false">"Historia clara salvada"</string>
+    <string name="ui_clear_saved_history_2" formatted="false">"¿Extraña historia salva?"</string>
+    <string name="ui_clock_battery_status" formatted="false">"estado de la batería del reloj"</string>
+    <string name="ui_close" formatted="false">"Cerrar"</string>
+    <string name="ui_close_2" formatted="false">"Cerrar "</string>
+    <string name="ui_close_app_actions" formatted="false">"Acciones de aplicaciones cercanas"</string>
+    <string name="ui_close_app_drawer" formatted="false">"Cerrar cajón de aplicaciones"</string>
+    <string name="ui_close_search" formatted="false">"Búsqueda cercana"</string>
+    <string name="ui_collapsed" formatted="false">", contraído"</string>
+    <string name="ui_collecting_30_days_or_5_000_messages" formatted="false">"Recopilación · 30 días o 5.000 mensajes"</string>
+    <string name="ui_colour" formatted="false">"Color"</string>
+    <string name="ui_colour_correction_applies_to_the_whole_display_while_the" formatted="false">"La corrección de color se aplica a toda la pantalla mientras que la aplicación seleccionada está delante. Ventanas de pantalla dividida comparten ese estado de color. Lanzador restaura el ajuste anterior cuando se va. El comportamiento de pantalla de su Samsung todavía necesita sus pruebas."</string>
+    <string name="ui_columns" formatted="false">"Columnas"</string>
+    <string name="ui_command_copied" formatted="false">"Comando copiado."</string>
+    <string name="ui_common_choices_first" formatted="false">" · elecciones comunes primero"</string>
+    <string name="ui_compact_72_dp" formatted="false">"Compacto · 72 dp"</string>
+    <string name="ui_compact_88" formatted="false">"Compacto · 88"</string>
+    <string name="ui_compare_fingerprints" formatted="false">"Compare las huellas digitales"</string>
+    <string name="ui_complete_both_setup_steps_first" formatted="false">"Complete ambos pasos de configuración primero."</string>
+    <string name="ui_complete_the_android_unlock_screen_to_continue" formatted="false">"Completa la pantalla de desbloqueo Android para continuar."</string>
+    <string name="ui_complete_the_update_in_androids_installer" formatted="false">"Complete la actualización en el instalador de Android."</string>
+    <string name="ui_completed" formatted="false">"Completado"</string>
+    <string name="ui_completed_2" formatted="false">" terminada"</string>
+    <string name="ui_computer_paired" formatted="false">"Computadora emparejada."</string>
+    <string name="ui_configure_how_launcher_responds_to_gestures_on_your_home" formatted="false">"Configure cómo el lanzador responde a los gestos en su pantalla de inicio. "</string>
+    <string name="ui_configure_your_api_key_for_inline_results_or_open" formatted="false">"Configure su clave API para los resultados en línea, o abra esta búsqueda en su navegador."</string>
+    <string name="ui_configured" formatted="false">"Configurado"</string>
+    <string name="ui_confirm_your_screen_lock_to_continue" formatted="false">"Confirme su cerradura de pantalla para continuar."</string>
+    <string name="ui_connect_calendar" formatted="false">"Calendario de conexión"</string>
+    <string name="ui_connect_notification_access_to_show_your_current_notifications_here" formatted="false">"Conecte el acceso de notificación para mostrar sus notificaciones actuales aquí."</string>
+    <string name="ui_connect_the_phone_to_your_computer_with_usb_debugging" formatted="false">"Conecte el teléfono a su computadora con USB depuración activada. Ejecute este comando una vez:"</string>
+    <string name="ui_connected" formatted="false">"Conectado"</string>
+    <string name="ui_connected_choose_calendars" formatted="false">"Conectado · elegir calendarios"</string>
+    <string name="ui_connected_screen_locking_available" formatted="false">"Conexión · bloqueo de pantalla disponible"</string>
+    <string name="ui_connected_while_launcher_is_open" formatted="false">"Conectado mientras el lanzador está abierto"</string>
+    <string name="ui_connecting_to_your_watch" formatted="false">"Conectando a tu reloj..."</string>
+    <string name="ui_connection" formatted="false">"Conexión"</string>
+    <string name="ui_connection_details" formatted="false">"Detalles de la conexión"</string>
+    <string name="ui_connection_names" formatted="false">"Nombres de conexión"</string>
+    <string name="ui_connection_stopped_check_the_desktop_address_and_reconnect" formatted="false">"Se detuvo la conexión. Compruebe la dirección de escritorio y vuelva a conectarse."</string>
+    <string name="ui_connection_timed_out_stop_and_connect_again" formatted="false">"La conexión se aceleró."</string>
+    <string name="ui_connections_first" formatted="false">"Primero las conexiones"</string>
+    <string name="ui_content" formatted="false">"Índice"</string>
+    <string name="ui_continue" formatted="false">"Continuar"</string>
+    <string name="ui_continue_to_speech" formatted="false">"Continuar con el discurso"</string>
+    <string name="ui_control_order" formatted="false">"Orden de control"</string>
+    <string name="ui_conversation_history" formatted="false">"Historia de la conversación"</string>
+    <string name="ui_conversations_messages_filters" formatted="false">"conversaciones mensajes filtros de mensajes"</string>
+    <string name="ui_copy_command" formatted="false">"Copiar el comando"</string>
+    <string name="ui_core_launching_works_without_optional_access_enable_only_the" formatted="false">"Trabajos básicos de lanzamiento sin acceso opcional. Habilitar sólo las características que desee. Herraje indisponible y restricciones de ahorro de batería apagan automáticamente los efectos de profundidad."</string>
+    <string name="ui_could_not_add_this_widget" formatted="false">"No podía añadir este widget."</string>
+    <string name="ui_could_not_check_for_updates_check_your_connection_and" formatted="false">"No podía revisar las actualizaciones. Revisar su conexión e intentarlo de nuevo."</string>
+    <string name="ui_could_not_connect_check_the_address_wi_fi_and" formatted="false">"No se puede conectar. Compruebe la dirección, Wi-Fi y el firewall de Windows."</string>
+    <string name="ui_could_not_connect_to_the_watch_or_check_kevlog" formatted="false">"No podía conectarse al reloj o comprobar Kevlog. Inténtelo de nuevo."</string>
+    <string name="ui_could_not_follow_this_feed_address" formatted="false">"No podía seguir esta dirección de alimentación."</string>
+    <string name="ui_could_not_install_the_update" formatted="false">"No podía instalar la actualización. "</string>
+    <string name="ui_could_not_open_the_update" formatted="false">"No podía abrir la actualización. "</string>
+    <string name="ui_could_not_read_or_write_this_backup_choose_a" formatted="false">"No se puede leer o escribir esta copia de seguridad. Elija un archivo JSON válido Launcher."</string>
+    <string name="ui_could_not_refresh_apps_reopen_launcher_to_retry" formatted="false">"No podía refrescar las aplicaciones. Reabrir el lanzador para volver a entrar."</string>
+    <string name="ui_could_not_restore_your_current_content_is_kept" formatted="false">"No se puede restaurar. Su contenido actual se mantiene."</string>
+    <string name="ui_couldn_t_load_face_groups_reopen_people_to_retry" formatted="false">"No podía cargar grupos faciales, reabrir a la gente para volver a entrar."</string>
+    <string name="ui_couldn_t_remove_the_document_search_files_try_again" formatted="false">"No se pudieron eliminar los archivos de búsqueda de documentos. Vuelve a intentarlo."</string>
+    <string name="ui_couldn_t_remove_the_image_search_data_try_again" formatted="false">"No pude eliminar los datos de búsqueda de imágenes. Inténtalo de nuevo."</string>
+    <string name="ui_couldn_t_remove_the_model_files_try_again" formatted="false">"No pude quitar los archivos modelo. Prueba de nuevo."</string>
+    <string name="ui_couldn_t_save_this_name_try_again" formatted="false">"No pude salvar este nombre."</string>
+    <string name="ui_couldnt_read_shared_storage_try_reopening_file_search" formatted="false">"No podía leer almacenamiento compartido. Prueba la reapertura de la búsqueda de archivos."</string>
+    <string name="ui_couldnt_search_locations_check_your_connection_and_try_again" formatted="false">"No podía buscar localizaciones. Compruebe su conexión e inténtelo de nuevo."</string>
+    <string name="ui_create_drawer" formatted="false">"Crear cajón"</string>
+    <string name="ui_create_rename_or_reorder" formatted="false">" · crear, renombrar o reordenar"</string>
+    <string name="ui_creativity" formatted="false">"Creatividad"</string>
+    <string name="ui_current_light_value_lux" formatted="false">"Luz actual · {0:0.#} lux"</string>
+    <string name="ui_custom_hex_color" formatted="false">"Color de hex personalizado"</string>
+    <string name="ui_customise" formatted="false">"Personalizar"</string>
+    <string name="ui_daily" formatted="false">"A diario"</string>
+    <string name="ui_daily_2" formatted="false">" · diario"</string>
+    <string name="ui_daily_goal" formatted="false">"Objetivo diario"</string>
+    <string name="ui_daily_goal_2" formatted="false">"Objetivo diario · "</string>
+    <string name="ui_daily_goal_value_minutes" formatted="false">"Objetivo diario · {0} minutos"</string>
+    <string name="ui_daily_usage_goal" formatted="false">"Objetivo de uso diario"</string>
+    <string name="ui_dark" formatted="false">"Oscuro"</string>
+    <string name="ui_dark_theme" formatted="false">"Tema oscuro"</string>
+    <string name="ui_dark_threshold_lux" formatted="false">"Umbral de oscuridad (lux)"</string>
+    <string name="ui_data_volume_total" formatted="false">"Total del volumen de datos"</string>
+    <string name="ui_date" formatted="false">"Fecha"</string>
+    <string name="ui_date_2" formatted="false">"Fecha · "</string>
+    <string name="ui_date_departure" formatted="false">"Fecha/salida"</string>
+    <string name="ui_deep_65" formatted="false">"Profundidad · 65%"</string>
+    <string name="ui_default" formatted="false">" · Por defecto"</string>
+    <string name="ui_default_100" formatted="false">"Predeterminado · 100%"</string>
+    <string name="ui_default_home" formatted="false">"Inicio predeterminado"</string>
+    <string name="ui_default_home_app" formatted="false">"Aplicación de inicio predeterminada"</string>
+    <string name="ui_default_home_set_device_access" formatted="false">"Pantalla de inicio predeterminada configurada · acceso al dispositivo"</string>
+    <string name="ui_default_home_usage_and_notification_access" formatted="false">"Hogar predeterminado, uso y acceso a la notificación"</string>
+    <string name="ui_delete" formatted="false">"Eliminar"</string>
+    <string name="ui_delete_all_messages_saved_by_launcher_messages_in_the" formatted="false">"Eliminar todos los mensajes guardados por Launcher? Los mensajes en las aplicaciones originales no se cambian."</string>
+    <string name="ui_delete_reminder" formatted="false">"Suprímalo"</string>
+    <string name="ui_delete_reminder_2" formatted="false">"¿Supir recordatorio?"</string>
+    <string name="ui_depth_motion" formatted="false">"Profundidad \""</string>
+    <string name="ui_desktop" formatted="false">"Escritorio"</string>
+    <string name="ui_desktop_can_read_files_inside_the_selected_folder_and" formatted="false">"El escritorio puede leer archivos dentro de la carpeta seleccionada y editar notas. Las descargas crean nuevos archivos. No puede eliminar sus archivos. El emparejamiento se reinicia cuando cierra y reinicia el programa de escritorio."</string>
+    <string name="ui_desktop_companion" formatted="false">"Aplicación de escritorio"</string>
+    <string name="ui_desktop_companion_address" formatted="false">"Dirección de la aplicación de escritorio"</string>
+    <string name="ui_destination_drawer" formatted="false">"Cajón de destino"</string>
+    <string name="ui_details" formatted="false">"Detalles"</string>
+    <string name="ui_device_data" formatted="false">"Dispositivo y datos"</string>
+    <string name="ui_disable" formatted="false">"Desactivar"</string>
+    <string name="ui_disable_accessibility_service" formatted="false">"Servicio de accesibilidad deshabilitable"</string>
+    <string name="ui_disconnected" formatted="false">"Desconectado"</string>
+    <string name="ui_dismiss" formatted="false">"Retírense"</string>
+    <string name="ui_dismiss_layout_confirmation" formatted="false">"Confirmación de la distribución de permisos"</string>
+    <string name="ui_display_first" formatted="false">"Mostrar primero"</string>
+    <string name="ui_display_permission" formatted="false">"Permiso de visualización"</string>
+    <string name="ui_display_permission_and_foreground_detection" formatted="false">"Exhibición de permisos y detección de primer plano"</string>
+    <string name="ui_display_settings" formatted="false">"Configuración de visualización"</string>
+    <string name="ui_document_indexing_failed_try_indexing_again" formatted="false">"Indización de documentos falló. Intente indexar de nuevo."</string>
+    <string name="ui_document_search" formatted="false">"Búsqueda de documentos"</string>
+    <string name="ui_documents" formatted="false">"Documentos"</string>
+    <string name="ui_documents_semantic_embeddings_embeddinggemma_files_pdf_docx_txt_model" formatted="false">"documentos incrustaciones semánticas EmbeddingGemma ficheros PDF DOCX TXT modelo"</string>
+    <string name="ui_done" formatted="false">"Listo"</string>
+    <string name="ui_double_tap_an_empty_area_on_the_today_or" formatted="false">"Doble punción de una *zona vacía* en la pantalla de hoy o aplicaciones para bloquear su teléfono. "</string>
+    <string name="ui_double_tap_to_lock" formatted="false">"Bloqueo con doble toque: "</string>
+    <string name="ui_double_tap_to_lock_screen" formatted="false">"Toca dos veces para bloquear la pantalla"</string>
+    <string name="ui_download" formatted="false">"Descargar"</string>
+    <string name="ui_download_and_install" formatted="false">"Descargar e instalar"</string>
+    <string name="ui_download_and_update" formatted="false">"Descargar y actualizar"</string>
+    <string name="ui_download_canceled" formatted="false">"Descarga cancelada"</string>
+    <string name="ui_download_cancelled" formatted="false">"Descarga cancelada."</string>
+    <string name="ui_download_enable" formatted="false">"Descargar &gt;"</string>
+    <string name="ui_download_failed" formatted="false">"Descarga fallido"</string>
+    <string name="ui_download_failed_check_your_connection_and_available_storage_then" formatted="false">"Descarga fallado. Compruebe su conexión y almacenamiento disponible, luego volver a entrar."</string>
+    <string name="ui_download_failed_check_your_connection_and_free_storage_then" formatted="false">"Descargue fallado. Compruebe su conexión y almacenamiento gratuito, y luego vuelva a entrar."</string>
+    <string name="ui_download_file" formatted="false">"Descargar archivo"</string>
+    <string name="ui_download_history" formatted="false">"Descargar historia"</string>
+    <string name="ui_download_image_search_model" formatted="false">"Descargar modelo de búsqueda de imágenes?"</string>
+    <string name="ui_download_it_again_to_use_kokoro_offline_speech" formatted="false">"Descárguelo de nuevo para usar Kokoro discurso sin conexión."</string>
+    <string name="ui_download_model" formatted="false">"Descargar modelo"</string>
+    <string name="ui_download_model_files" formatted="false">"Descargar archivos modelo"</string>
+    <string name="ui_download_started" formatted="false">"Descargar comenzado."</string>
+    <string name="ui_download_the_document_search_model" formatted="false">"¿Descargar el modelo de búsqueda de documentos?"</string>
+    <string name="ui_download_value_models" formatted="false">"Descargar {0} modelos?"</string>
+    <string name="ui_download_version_value_value_mb_your_layout_and_settings" formatted="false">"Versión de descarga {0} ( {1:0.0} MB)? Su diseño y configuración se mantienen."</string>
+    <string name="ui_download_with_launcher" formatted="false">"Descargar con Launcher"</string>
+    <string name="ui_downloading_embeddinggemma_2_value" formatted="false">"Descargar EmbeddingGemma 2 · {0} %"</string>
+    <string name="ui_downloading_launcher_roll" formatted="false">"Descargar Roller..."</string>
+    <string name="ui_downloading_openclip_fast_value" formatted="false">"Descarga de OpenCLIP Fast · {0} %"</string>
+    <string name="ui_downloading_to_downloads" formatted="false">"Descargando a Descargas"</string>
+    <string name="ui_downloading_update_value" formatted="false">"Actualización de descargas... {0} %"</string>
+    <string name="ui_downloads" formatted="false">"Descargas"</string>
+    <string name="ui_downloads_are_off_in_launcher_settings" formatted="false">"Las descargas están desactivadas en los ajustes de Launcher."</string>
+    <string name="ui_dp" formatted="false">" ♪"</string>
+    <string name="ui_dp_below_androids_status_bar" formatted="false">" dp debajo de la barra de estado de Android"</string>
+    <string name="ui_drag" formatted="false">"Arrastre "</string>
+    <string name="ui_drag_down_to_close_sheet" formatted="false">"Desliza hacia abajo para cerrar el panel"</string>
+    <string name="ui_drag_headings_to_fold" formatted="false">"Arrastre los títulos para plegar"</string>
+    <string name="ui_drawer" formatted="false">"Dibujo"</string>
+    <string name="ui_drawer_alignment" formatted="false">"Alineación del cajón"</string>
+    <string name="ui_drawer_icon" formatted="false">"Icono del cajón"</string>
+    <string name="ui_drawer_name" formatted="false">"Nombre del cajón"</string>
+    <string name="ui_drawer_symbol" formatted="false">"Símbolo de drenaje "</string>
+    <string name="ui_drawer_title_placement" formatted="false">"colocación del título del cajón"</string>
+    <string name="ui_drawer_usage" formatted="false">"Uso del cajón: "</string>
+    <string name="ui_drawers" formatted="false">"Cajones"</string>
+    <string name="ui_duration_upper" formatted="false">"DURACIÓN"</string>
+    <string name="ui_e_g_18_nov_14_30" formatted="false">"18 de noviembre, 14:30"</string>
+    <string name="ui_e_g_cape_town_south_africa" formatted="false">"p. ej., Ciudad del Cabo"</string>
+    <string name="ui_e_g_collect_the_parcel" formatted="false">"por ejemplo, recoger el paquete"</string>
+    <string name="ui_e_g_daily_essentials" formatted="false">"p. ej., Uso diario"</string>
+    <string name="ui_e_g_danielle" formatted="false">"por ejemplo, Danielle"</string>
+    <string name="ui_e_g_flight_home" formatted="false">"e.g. Vuelo a casa"</string>
+    <string name="ui_e_g_johannesburg_to_cape_town" formatted="false">"por ejemplo, Johannesburgo a Ciudad del Cabo"</string>
+    <string name="ui_edit" formatted="false">"Editar"</string>
+    <string name="ui_edit_2" formatted="false">"  · Editar"</string>
+    <string name="ui_edit_3" formatted="false">"Editar "</string>
+    <string name="ui_edit_checklist" formatted="false">"Editar lista de verificación"</string>
+    <string name="ui_edit_home_layout" formatted="false">"Editar la pantalla de inicio"</string>
+    <string name="ui_edit_reminder" formatted="false">"Editar recordatorio"</string>
+    <string name="ui_edit_rss_feed" formatted="false">"Editar el feed RSS"</string>
+    <string name="ui_edit_your_layout" formatted="false">"Editar el diseño"</string>
+    <string name="ui_embeddinggemma_2_about_165_mb" formatted="false">"EmbeddingGemma 2 · alrededor de 165 MB"</string>
+    <string name="ui_embeddinggemma_2_needs_about_165_mb_launcher_reads_and" formatted="false">"EmbeddingGemma 2 necesita aproximadamente 165 MB. El lanzador lee y indexa pasajes en este dispositivo."</string>
+    <string name="ui_enable" formatted="false">"Habilitación "</string>
+    <string name="ui_enable_downloads" formatted="false">"Permitir descargas"</string>
+    <string name="ui_enable_launcher_accessibility_access_to_use_screen_locking" formatted="false">"Permite acceso de acceso al lanzador para usar el bloqueo de pantalla."</string>
+    <string name="ui_enable_launcher_app_grayscale_in_android_accessibility_settings" formatted="false">"Activar la aplicación de lanzador grayscale en la configuración de accesibilidad Android"</string>
+    <string name="ui_enable_launcher_system_panel_in_android" formatted="false">"Activar el panel del sistema de lanzamiento en Android "</string>
+    <string name="ui_enable_local_message_history" formatted="false">"Permitir la historia del mensaje local"</string>
+    <string name="ui_enable_notification_access" formatted="false">"Activar el acceso a las notificaciones"</string>
+    <string name="ui_enable_notification_access_in_launcher_settings_to_show_notifications" formatted="false">"Activa el acceso a las notificaciones en los ajustes de Launcher para verlas aquí."</string>
+    <string name="ui_enable_notification_whispers" formatted="false">"Hable susurros de notificación"</string>
+    <string name="ui_enable_system_panel" formatted="false">"Panel de sistema habilitado"</string>
+    <string name="ui_enable_system_panel_and_its_accessibility_access_first" formatted="false">"Enable System panel y su acceso a la accesibilidad primero"</string>
+    <string name="ui_enable_usage_access" formatted="false">"Permitir el acceso al uso"</string>
+    <string name="ui_enabled" formatted="false">"Activado"</string>
+    <string name="ui_enabled_light_sensor" formatted="false">"Activado · sensor de luz"</string>
+    <string name="ui_enabled_sources_appear_together_in_one_root_card_newest" formatted="false">"Fuentes habilitadas aparecen juntas en una tarjeta Root, la más reciente primero. Los elementos no actualizados aparecen por última vez. No se necesita ninguna clave de API."</string>
+    <string name="ui_end_focus" formatted="false">"Centrarse en el fin"</string>
+    <string name="ui_enter_a_city_or_town_name" formatted="false">"Introduzca un nombre de ciudad o ciudad."</string>
+    <string name="ui_enter_a_full_http_or_https_link" formatted="false">"Escribe un enlace completo que empiece por http:// o https://."</string>
+    <string name="ui_enter_a_light_level_from_0_to_200000_lux" formatted="false">"Escribe un nivel de luz de 0 a 200 000 lux."</string>
+    <string name="ui_enter_a_name_below" formatted="false">"Escribe un nombre."</string>
+    <string name="ui_enter_a_reminder" formatted="false">"Ingrese un recordatorio."</string>
+    <string name="ui_enter_a_value_before_saving" formatted="false">"Escribe un valor antes de guardar."</string>
+    <string name="ui_enter_at_least_two_characters" formatted="false">"Escribe al menos dos caracteres."</string>
+    <string name="ui_enter_some_text_to_speak" formatted="false">"Introduzca un texto para hablar."</string>
+    <string name="ui_enter_text_to_speak" formatted="false">"Escriba texto para hablar..."</string>
+    <string name="ui_enter_the_address_shown_by_launcher_companion" formatted="false">"Introduzca la dirección mostrada por Launcher Companion."</string>
+    <string name="ui_enter_the_eight_digit_code_shown_on_the_computer" formatted="false">"Introduzca el código de ocho dígitos que se muestra en el ordenador."</string>
+    <string name="ui_enter_the_eight_digit_code_shown_on_your_computer" formatted="false">"Introduzca el código de ocho dígitos que se muestra en su computadora."</string>
+    <string name="ui_enter_the_search_or_value_for_this_card" formatted="false">"Introduzca la búsqueda o el valor de esta tarjeta."</string>
+    <string name="ui_enter_the_sensor_level_in_lux_the_light_threshold" formatted="false">"Ingrese el nivel de sensor en el lux. El umbral de luz debe ser superior al umbral oscuro."</string>
+    <string name="ui_entertainment" formatted="false">"Entretenimiento"</string>
+    <string name="ui_essentials" formatted="false">"Esenciales"</string>
+    <string name="ui_every_value_minutes_while_launcher_is_open" formatted="false">"Cada {0} minutos mientras que el lanzador está abierto"</string>
+    <string name="ui_expand_text" formatted="false">"Ampliar el texto"</string>
+    <string name="ui_expanded" formatted="false">", desplegado"</string>
+    <string name="ui_expanded_2" formatted="false">"Ampliación"</string>
+    <string name="ui_expanded_tile" formatted="false">"Azulejos ampliados"</string>
+    <string name="ui_export_a_backup" formatted="false">"Exportar un respaldo"</string>
+    <string name="ui_export_or_restore_your_layout" formatted="false">"Exporta o restaura tu diseño"</string>
+    <string name="ui_export_settings_as_a_json_file" formatted="false">"Configuración de exportación como un archivo JSON"</string>
+    <string name="ui_fahrenheit_f" formatted="false">"Fahrenheit · °F"</string>
+    <string name="ui_favorites_favourites_pinned_apps" formatted="false">"favoritos de las aplicaciones de pinned"</string>
+    <string name="ui_feed_address_upper" formatted="false">"DIRECCIÓN DE ALIMENTACIÓN"</string>
+    <string name="ui_fetching_your_first_stories" formatted="false">"Consiguiendo tus primeras historias..."</string>
+    <string name="ui_file_downloads" formatted="false">"Descargas de archivos"</string>
+    <string name="ui_files" formatted="false">"Archivos"</string>
+    <string name="ui_files_downloaded_with_launcher_will_appear_here" formatted="false">"Los archivos descargados con Launcher aparecerán aquí."</string>
+    <string name="ui_files_image_search_and_document_search" formatted="false">"Archivos, búsqueda de imágenes y búsqueda de documentos"</string>
+    <string name="ui_filter_apps" formatted="false">"Aplicaciones de filtro"</string>
+    <string name="ui_filter_notification_apps" formatted="false">"Filtrar aplicaciones con notificaciones"</string>
+    <string name="ui_filter_so_only_matching_notifications_are_whispered" formatted="false">"filtro para que sólo las notificaciones coincidentes sean susurradas."</string>
+    <string name="ui_finance" formatted="false">"Finanzas"</string>
+    <string name="ui_find_a_notification" formatted="false">"Busque una notificación."</string>
+    <string name="ui_find_an_app" formatted="false">"Buscar una aplicación"</string>
+    <string name="ui_find_an_app_by_name" formatted="false">"Encuentra una aplicación por nombre."</string>
+    <string name="ui_find_apps" formatted="false">"Encontrar aplicaciones"</string>
+    <string name="ui_find_people_in_shared_photos" formatted="false">"Encontrar gente en fotos compartidas"</string>
+    <string name="ui_find_photos_by_description_text_or_people" formatted="false">"Encontrar fotos por descripción, texto o personas"</string>
+    <string name="ui_find_something_online" formatted="false">"Encontrar algo en línea"</string>
+    <string name="ui_find_this_app_using_your_own_words" formatted="false">"Encuentra esta aplicación con tus propias palabras"</string>
+    <string name="ui_find_words_in_screenshots_receipts_and_other_photos_from" formatted="false">"Encuentra palabras en imágenes, recibos y otras fotos de archivos. Usar presupuestos para una frase."</string>
+    <string name="ui_finding_your_apps" formatted="false">"Encontrar tus aplicaciones..."</string>
+    <string name="ui_finished_value" formatted="false">"Terminado: {0}"</string>
+    <string name="ui_fit_widget_automatically" formatted="false">"Fit widget automaticamente"</string>
+    <string name="ui_focus" formatted="false">"Concentración"</string>
+    <string name="ui_focus_card" formatted="false">"Tarjeta de enfoque"</string>
+    <string name="ui_focus_gives_your_app_tiles_a_quieter_outlined_look" formatted="false">"Focus le da a tus fichas de aplicación una mirada más tranquila."</string>
+    <string name="ui_focus_mode" formatted="false">"Modo de enfoque"</string>
+    <string name="ui_folder_access_was_not_granted" formatted="false">"No se concedió acceso a carpetas."</string>
+    <string name="ui_follow_android" formatted="false">"Seguir el tema de Android"</string>
+    <string name="ui_follow_launcher" formatted="false">"Seguir el tema de Launcher"</string>
+    <string name="ui_follow_the_global_selection" formatted="false">"Seguir la selección mundial"</string>
+    <string name="ui_follow_the_light" formatted="false">"Sigue la luz."</string>
+    <string name="ui_follows_android_touch_vibration" formatted="false">" · sigue vibración táctil de Android"</string>
+    <string name="ui_forecast_and_location_data_attribution" formatted="false">"Datos de pronóstico y ubicación · atribución"</string>
+    <string name="ui_foreground_app_detection" formatted="false">"Detección de aplicaciones de primer plano"</string>
+    <string name="ui_forget_computer" formatted="false">"Olvida el ordenador."</string>
+    <string name="ui_free_document_search_storage" formatted="false">"Almacenamiento gratuito de búsqueda de documentos"</string>
+    <string name="ui_free_model_and_index_storage" formatted="false">"Libre modelo y almacenamiento de índices"</string>
+    <string name="ui_free_offline_speech_storage" formatted="false">"Almacenamiento gratuito de discursos fuera de línea"</string>
+    <string name="ui_free_text_model_and_index_storage" formatted="false">"Modelo de texto libre y almacenamiento de índices"</string>
+    <string name="ui_from_your_sources" formatted="false">" ¿de tus fuentes?"</string>
+    <string name="ui_generated_value_value" formatted="false">"Generado {0} / {1}"</string>
+    <string name="ui_gestures" formatted="false">"Gestos"</string>
+    <string name="ui_gestures_drawers_and_customisation" formatted="false">"Gestos, cajones y personalización"</string>
+    <string name="ui_gestures_drawers_tiles_and_privacy" formatted="false">"Gestos, cajones, azulejos y privacidad"</string>
+    <string name="ui_gestures_only_work_within_launcher_and_do_not_interfere" formatted="false">"Los gestos solo funcionan en Launcher y no interfieren con los gestos del sistema Android."</string>
+    <string name="ui_get_launcher_for_wear_os" formatted="false">"Obtener Launcher para Wear OS"</string>
+    <string name="ui_google_discover_feed_today_root_gestures" formatted="false">"Google Discover feed Hoy en día gestos de raíz"</string>
+    <string name="ui_google_news_south_africa_is_enabled_initially_the_other" formatted="false">"Google News Sudáfrica está habilitada inicialmente. Los otros presets son opcionales. Puede editar, eliminar o añadir fuentes."</string>
+    <string name="ui_got_it" formatted="false">"Lo tengo."</string>
+    <string name="ui_granted" formatted="false">"Subvenciones"</string>
+    <string name="ui_grayscale" formatted="false">"Escala de grises"</string>
+    <string name="ui_grayscale_setup" formatted="false">"Configurar escala de grises"</string>
+    <string name="ui_grayscale_whole_display" formatted="false">"Pantalla completa de Grayscale"</string>
+    <string name="ui_group_similar_faces_on_this_device_name_a_group" formatted="false">"Grupo de caras similares en este dispositivo. Nombre de un grupo para encontrar sus fotos en Archivos."</string>
+    <string name="ui_grouped_apps" formatted="false">"Aplicaciones agrupadas"</string>
+    <string name="ui_gyroscope_rotation_sensor_motion" formatted="false">"movimiento del sensor de rotación del giroscopio"</string>
+    <string name="ui_handle_distance" formatted="false">"Distancia del mango"</string>
+    <string name="ui_handle_position" formatted="false">"Posición de mano"</string>
+    <string name="ui_haptic_feedback" formatted="false">"Respuesta háptica"</string>
+    <string name="ui_help" formatted="false">"Ayuda"</string>
+    <string name="ui_hex_colour_upper" formatted="false">"COLOR HEX"</string>
+    <string name="ui_hidden" formatted="false">"Ocultas"</string>
+    <string name="ui_hidden_2" formatted="false">" (oculta)"</string>
+    <string name="ui_hidden_apps" formatted="false">"Aplicaciones ocultas"</string>
+    <string name="ui_hidden_apps_are_removed_from_launcher_tiles_and_search" formatted="false">"Las aplicaciones ocultas se eliminan de los azulejos de la lanza y la búsqueda. Esto no los asegura o desactiva."</string>
+    <string name="ui_hidden_restore_visibility" formatted="false">" ocultas · visibilidad de la restauración"</string>
+    <string name="ui_hidden_spaces_can_be_opened_here_through_setup_feature" formatted="false">"Los espacios ocultos pueden abrirse aquí a través de la salud de la función Setup. Las aplicaciones privadas permanecen fuera de los cajones globales y la búsqueda."</string>
+    <string name="ui_hide_card" formatted="false">"Ocultar tarjeta"</string>
+    <string name="ui_hide_from_launcher" formatted="false">"Escóndete del lanzador"</string>
+    <string name="ui_hide_private_space_when_locked" formatted="false">"Ocultar espacio privado cuando está bloqueado"</string>
+    <string name="ui_hide_protected_app_previews" formatted="false">"Ocultar aplicaciones protegidas previsualizaciones"</string>
+    <string name="ui_high" formatted="false">"Alto "</string>
+    <string name="ui_high_contrast_outdoors" formatted="false">"Alta contraste, exterior"</string>
+    <string name="ui_high_value_low_value" formatted="false">"Alto {0} · Bajo {1}"</string>
+    <string name="ui_history" formatted="false">"Historia"</string>
+    <string name="ui_hold_a_drawer_heading_on_the_home_screen_to" formatted="false">"Mantén pulsado el encabezado de un cajón en la pantalla de inicio para editarlo. Las aplicaciones de los cajones eliminados vuelven a Otras aplicaciones."</string>
+    <string name="ui_hold_a_grip_and_drag_a_row_into_place" formatted="false">"Mantenga un agarre y arrastre una fila en su lugar. Los botones de flecha ofrecen los mismos controles. Los cambios se aplican cuando se guarda."</string>
+    <string name="ui_hold_a_grip_to_drag_a_card_or_use" formatted="false">"Sostenga un agarre para arrastrar una tarjeta, o utilice las flechas. Las tarjetas pintadas permanecen en la parte superior."</string>
+    <string name="ui_hold_a_story_in_news_feeds_and_choose_save" formatted="false">"Mantén pulsado un artículo en Noticias y fuentes y elige Guardar para más tarde. Los títulos y enlaces guardados se conservan en este dispositivo."</string>
+    <string name="ui_hold_an_app_and_choose_pin_to_favorites_to" formatted="false">"Sostenga una aplicación y elija Pin a los favoritos para añadirla aquí."</string>
+    <string name="ui_hold_any_card_header_to_pin_move_hide_or" formatted="false">"Mantenga cualquier encabezado de la tarjeta para clavar, mover, ocultar o eliminarlo. Restaurar las tarjetas ocultas debajo."</string>
+    <string name="ui_hold_for_app_actions" formatted="false">", mantén pulsado para ver las acciones de la aplicación"</string>
+    <string name="ui_hold_the_grip_to_drag_or_use_the_arrows" formatted="false">"Mantenga el agarre para arrastrar, o utilice las flechas."</string>
+    <string name="ui_hold_the_grip_to_drag_this_card" formatted="false">"Mantenga el agarre para arrastrar esta tarjeta."</string>
+    <string name="ui_hold_the_search_icon_or_tap_the_three_dots" formatted="false">"Sostenga el icono de búsqueda, o toque los tres puntos, para los controles de tema y enfoque. Focus le da a los azulejos de la aplicación una apariencia discreta silenciosa."</string>
+    <string name="ui_hold_to_customize" formatted="false">", aferrarse a personalizar"</string>
+    <string name="ui_hold_to_drag" formatted="false">"Sostén la arrastre "</string>
+    <string name="ui_home_accent_glow" formatted="false">"Hogar acento brillo"</string>
+    <string name="ui_home_cards_widgets" formatted="false">"Inicio tarjetas &amp; widgets"</string>
+    <string name="ui_home_navigation_buttons" formatted="false">"botones de navegación de inicio"</string>
+    <string name="ui_how_to_use_launcher" formatted="false">"Cómo usar Launcher"</string>
+    <string name="ui_icon_pack" formatted="false">"Paquete de iconos"</string>
+    <string name="ui_icon_style" formatted="false">"Estilo de iconos"</string>
+    <string name="ui_icons" formatted="false">" iconos"</string>
+    <string name="ui_icons_common_choices_first" formatted="false">" iconos · elecciones comunes primero"</string>
+    <string name="ui_if_android_blocks_access_for_an_apk_installed_through" formatted="false">"Si Android bloquea el acceso para un APK instalado a través de su navegador, abra la información de la aplicación del lanzador y permita la configuración restringida, a continuación, vuelva aquí."</string>
+    <string name="ui_if_you_feel_nothing_check_android_s_touch_vibration" formatted="false">"Si no sientes nada, compruebe el ajuste de la vibración táctil de Android. Algunos dispositivos proporcionan efectos escépticos limitados. El lanzador nunca anula la configuración del sistema."</string>
+    <string name="ui_ii_focus_is_on" formatted="false">"II Focus is on"</string>
+    <string name="ui_image_indexing_failed_try_indexing_again" formatted="false">"Indización de imágenes falló. Intente indexar de nuevo."</string>
+    <string name="ui_image_search" formatted="false">"Búsqueda de imágenes"</string>
+    <string name="ui_images" formatted="false">"Imágenes"</string>
+    <string name="ui_images_appear_when_supplied_by_the_publisher_stories_without" formatted="false">"Las imágenes aparecen cuando son suministradas por el editor. Las historias sin una imagen usan el ancho completo. Apague las imágenes detiene las descargas de miniaturas."</string>
+    <string name="ui_import_a_previously_saved_layout" formatted="false">"Importar un diseño previamente guardado"</string>
+    <string name="ui_includes_notes_and_journeys_as_readable_json_keep_it" formatted="false">"Incluye notas y viajes como legible JSON. Mantenlo en algún lugar privado."</string>
+    <string name="ui_index_documents_now" formatted="false">"Documentos del índice ahora"</string>
+    <string name="ui_index_images_now" formatted="false">"Imágenes de índice ahora"</string>
+    <string name="ui_indexing_documents_value_of_value" formatted="false">"Documentos de indización · {0:N0} de {1:N0}"</string>
+    <string name="ui_indexing_images_value_of_value_processed" formatted="false">"Imágenes de indexación · {0:N0} de {1:N0} procesado"</string>
+    <string name="ui_install_launcher_roll" formatted="false">"Instalar Launcher Roll"</string>
+    <string name="ui_installation_failed" formatted="false">"La instalación falló. "</string>
+    <string name="ui_installation_permission_was_not_granted_check_for_updates_to" formatted="false">"No se concedió el permiso de instalación. Compruebe las actualizaciones para probar de nuevo."</string>
+    <string name="ui_installed_adw_nova_or_go_compatible_packs_appear_here" formatted="false">"Los paquetes instalados ADW, Nova o Go-compatible aparecen aquí. Reabrir este picker después de instalar un paquete."</string>
+    <string name="ui_installed_apps_will_appear_here" formatted="false">"Las aplicaciones instaladas aparecerán aquí."</string>
+    <string name="ui_installed_icon_packs" formatted="false">"Paquetes de iconos instalados"</string>
+    <string name="ui_installing_from_launcher_requires_wear_os_6_or_later" formatted="false">"Instalar desde el lanzador requiere Wear OS 6 o posterior."</string>
+    <string name="ui_integrations" formatted="false">"Integraciones"</string>
+    <string name="ui_is_available" formatted="false">" está disponible."</string>
+    <string name="ui_is_up_to_date" formatted="false">" está al día."</string>
+    <string name="ui_items_one_per_line" formatted="false">"Artículos · uno por línea"</string>
+    <string name="ui_its_apps_will_move_to_app_box" formatted="false">"Sus aplicaciones se moverán a Otras aplicaciones."</string>
+    <string name="ui_journey" formatted="false">"Viaje"</string>
+    <string name="ui_keep_a_journey_and_its_boarding_pass_together_tickets" formatted="false">"Mantenga un viaje y su embarque pasan juntos. Los boletos se ingresan aquí; El lanzador no lee sus cuentas de correo electrónico o de reserva."</string>
+    <string name="ui_keep_a_ticket_handy" formatted="false">"Mantenga un billete útil"</string>
+    <string name="ui_keep_completed_model_files" formatted="false">"Mantenga archivos de modelo completados"</string>
+    <string name="ui_keep_launcher_visible_while_using_the_companion_the_connection" formatted="false">"Mantenga el lanzador visible mientras utiliza el compañero. La conexión se detiene cada vez que deja el lanzador. Las transferencias se limitan a 16 MB por archivo."</string>
+    <string name="ui_keep_messages_made_available_by_notifications_on_this_phone" formatted="false">"Mantenga los mensajes disponibles por notificaciones en este teléfono. La historia es privada para Launcher, retenido durante 30 días o 5.000 mensajes, y excluido de copias de seguridad de diseño. No puede importar conversaciones privadas anteriores de otra aplicación."</string>
+    <string name="ui_keep_track_of_small_tasks" formatted="false">"Realizar un seguimiento de pequeñas tareas"</string>
+    <string name="ui_keys_enable_inline_search_results_rss_feeds_do_not" formatted="false">"Las claves permiten mostrar los resultados de búsqueda dentro de Launcher. Las fuentes RSS no necesitan clave. Las claves se guardan en este teléfono y no se incluyen en las copias de seguridad del diseño."</string>
+    <string name="ui_kokoro_model_files" formatted="false">"Archivo modelo Kokoro"</string>
+    <string name="ui_kokoro_model_files_voice_speech_download_storage" formatted="false">"Kokoro modelo archivos de voz discurso descarga almacenamiento"</string>
+    <string name="ui_kokoro_multilingual_about_350_mb" formatted="false">"Kokoro multilingüe · unos 350 MB"</string>
+    <string name="ui_kokoro_reads_articles_notifications_and_other_text_aloud_on" formatted="false">"Kokoro lee artículos, notificaciones y otro texto en voz alta en este dispositivo."</string>
+    <string name="ui_kokoro_ready_value_voices" formatted="false">"Kokoro listo: {0} voces"</string>
+    <string name="ui_kokoro_speech" formatted="false">"Voz de Kokoro"</string>
+    <string name="ui_kokoro_speech_2" formatted="false">"Voz de Kokoro"</string>
+    <string name="ui_language" formatted="false">"Idioma"</string>
+    <string name="ui_language_search_terms" formatted="false">"idioma lengua traducción"</string>
+    <string name="ui_large_152" formatted="false">"Grandes · 152"</string>
+    <string name="ui_large_320_dp" formatted="false">"Grande · 320 dp"</string>
+    <string name="ui_last_7_days" formatted="false">"Últimos 7 días"</string>
+    <string name="ui_last_seven_days_upper" formatted="false">"ÚLTIMOS SIETE DÍAS"</string>
+    <string name="ui_launcher" formatted="false">"Launcher"</string>
+    <string name="ui_launcher_2" formatted="false">"Lanzador "</string>
+    <string name="ui_launcher_3" formatted="false">"Lanzamiento · "</string>
+    <string name="ui_launcher_accessibility" formatted="false">"Accesibilidad de Launcher"</string>
+    <string name="ui_launcher_can_request_android_to_lock_the_screen_using" formatted="false">"El lanzador puede solicitar a Android para bloquear la pantalla utilizando su servicio de accesibilidad existente."</string>
+    <string name="ui_launcher_couldn_t_reach_its_watch_companion_install_or" formatted="false">"El lanzador no pudo llegar a su compañero de reloj. Instalar o actualizar el lanzador para Wear OS, abrirlo en su reloj, y luego intentarlo de nuevo."</string>
+    <string name="ui_launcher_couldn_t_send_the_watch_face_reconnect_your" formatted="false">"El lanzador no pudo enviar la cara del reloj. Reconecte su reloj y vuelva a intentarlo."</string>
+    <string name="ui_launcher_displays_current_notifications_optional_local_history_can_save" formatted="false">"El lanzador muestra las notificaciones actuales. Historia local opcional puede guardar nuevas notificaciones de mensajes después de habilitarla."</string>
+    <string name="ui_launcher_features" formatted="false">"Funciones de Launcher"</string>
+    <string name="ui_launcher_is_your_home" formatted="false">"El lanzador es tu hogar"</string>
+    <string name="ui_launcher_roll_installed_select_it_in_your_watch_face" formatted="false">"Rollo de lanzamiento instalado. Seleccione en el selector de la cara del reloj."</string>
+    <string name="ui_launcher_roll_is_already_installed_select_it_in_your" formatted="false">"Lanzamiento Roll ya está instalado. Seleccione en su reloj de cara."</string>
+    <string name="ui_launcher_roll_is_already_up_to_date" formatted="false">"Lanzador Roll ya está al día."</string>
+    <string name="ui_launcher_roll_is_available_for_first_time_setup_tap" formatted="false">"Lanzamiento Roll está disponible para la configuración de primera vez. Tap Install Launcher Roll."</string>
+    <string name="ui_launcher_roll_is_up_to_date" formatted="false">"Lanzador Roll está al día."</string>
+    <string name="ui_launcher_roll_updated_on_your_watch" formatted="false">"Rollo de lanzamiento actualizado en su reloj."</string>
+    <string name="ui_launcher_roll_value_is_available_for_value" formatted="false">"Lanzador Roll {0} está disponible para {1}."</string>
+    <string name="ui_launcher_settings" formatted="false">"Ajustes de Launcher"</string>
+    <string name="ui_launcher_system_panel" formatted="false">"Panel del sistema de Launcher"</string>
+    <string name="ui_launcher_update" formatted="false">"Actualización de lanzamiento"</string>
+    <string name="ui_launcher_uses_window_change_events_to_identify_the_app" formatted="false">"El lanzador utiliza eventos de cambio de ventana para identificar la aplicación delante. No lee contenido de pantalla, registra tu actividad o sube esta información."</string>
+    <string name="ui_launcher_works_without_optional_permissions_enable_only_the_features" formatted="false">"El lanzador funciona sin permisos opcionales. Permite sólo las características que desee."</string>
+    <string name="ui_layered_interface" formatted="false">"Interfaz por capas"</string>
+    <string name="ui_layered_interface_off" formatted="false">"Interfaz de capa apagada"</string>
+    <string name="ui_layered_interface_on" formatted="false">"Interfaz de capas en"</string>
+    <string name="ui_layout" formatted="false">"Diseño"</string>
+    <string name="ui_layout_change_undone" formatted="false">"No cambies de opinión."</string>
+    <string name="ui_layout_restore" formatted="false">"diseño restaurado"</string>
+    <string name="ui_layout_saved" formatted="false">"Te salvaste."</string>
+    <string name="ui_layout_saved_undo_is_available_in_edit_layout" formatted="false">"Deshacer está disponible en Editar diseño."</string>
+    <string name="ui_leave_blank_to_allow_all_notifications_from_this_app" formatted="false">"Deja en blanco para permitir todas las notificaciones de esta aplicación."</string>
+    <string name="ui_left" formatted="false">"Izquierda"</string>
+    <string name="ui_left_2" formatted="false">"izquierda"</string>
+    <string name="ui_libraries_use_recognised_app_matches_unmatched_apps_keep_their" formatted="false">"Las bibliotecas usan los partidos de aplicaciones reconocidos. Las aplicaciones sin igual mantienen su propio icono; mantengan una ficha para elegir un icono específico."</string>
+    <string name="ui_lifestyle" formatted="false">"Estilo de vida"</string>
+    <string name="ui_light" formatted="false">"Claro"</string>
+    <string name="ui_light_level_lux_upper" formatted="false">"NIVEL DE LUZ (LUX)"</string>
+    <string name="ui_light_sensor_available" formatted="false">"Sensor de luz disponible"</string>
+    <string name="ui_light_thin_regular_bold_fill" formatted="false">"Ligera, fina, regular, atrevida &amp; llena"</string>
+    <string name="ui_light_threshold_lux" formatted="false">"Umbral de luz (lux)"</string>
+    <string name="ui_link" formatted="false">"Enlace"</string>
+    <string name="ui_liquid_glass_cards" formatted="false">"Tarjetas de cristal líquido"</string>
+    <string name="ui_listen_to_latest_news" formatted="false">"Escucha las últimas noticias"</string>
+    <string name="ui_live" formatted="false">"Vivir"</string>
+    <string name="ui_loading" formatted="false">"Cargando..."</string>
+    <string name="ui_loading_faces" formatted="false">"Carga caras..."</string>
+    <string name="ui_loading_kokoro_model" formatted="false">"Cargando modelo Kokoro..."</string>
+    <string name="ui_location" formatted="false">"Ubicación"</string>
+    <string name="ui_lock_private_space" formatted="false">"Cierre espacio privado"</string>
+    <string name="ui_locked" formatted="false">", bloqueado"</string>
+    <string name="ui_locked_2" formatted="false">"Cerrado"</string>
+    <string name="ui_locked_or_paused_tap_to_unlock" formatted="false">"Encerrado o pausado · pulsación para desbloquear"</string>
+    <string name="ui_locked_private_apps_stay_out_of_drawers_and_search" formatted="false">"Las aplicaciones privadas permanecen fuera de cajones y busquen."</string>
+    <string name="ui_looking_for_new_and_changed_documents" formatted="false">"Buscando documentos nuevos y cambiados..."</string>
+    <string name="ui_looking_for_new_and_changed_images" formatted="false">"Buscando imágenes nuevas y cambiadas..."</string>
+    <string name="ui_low" formatted="false">"  / Bajo "</string>
+    <string name="ui_lower_80_dp" formatted="false">"Bajo · 80 dp"</string>
+    <string name="ui_make_it_yours" formatted="false">"Personalización"</string>
+    <string name="ui_make_launcher_your_own" formatted="false">"Personaliza Launcher"</string>
+    <string name="ui_manage_cards" formatted="false">"Gestionar tarjetas"</string>
+    <string name="ui_manage_drawers" formatted="false">"Gestionar cajones"</string>
+    <string name="ui_manage_this_profile_in_android_settings" formatted="false">"Administrar este perfil en la configuración de Android."</string>
+    <string name="ui_manual_only" formatted="false">"Solo manual"</string>
+    <string name="ui_mark_read" formatted="false">"Mark leyó"</string>
+    <string name="ui_mark_unread" formatted="false">"Mark noread"</string>
+    <string name="ui_master_switch_for_app_expansion_page_and_drawer_transitions" formatted="false">"Interruptor maestro para la expansión de aplicaciones, transiciones de página y cajón, efectos de desplazamiento y inclinación del dispositivo."</string>
+    <string name="ui_matches" formatted="false">"Coincide"</string>
+    <string name="ui_matching_your_search" formatted="false">" · emparejando su búsqueda"</string>
+    <string name="ui_media_playback_card" formatted="false">"Tarjeta de reproducción de medios"</string>
+    <string name="ui_media_player" formatted="false">"Reproductor multimedia"</string>
+    <string name="ui_media_volume" formatted="false">"Volumen multimedia"</string>
+    <string name="ui_media_volume_upper" formatted="false">"VOLUMEN DE MEDIOS"</string>
+    <string name="ui_medium_220_dp" formatted="false">"Medio · 220 dp"</string>
+    <string name="ui_memory" formatted="false">"Memoria"</string>
+    <string name="ui_memory_information_is_unavailable_on_this_device" formatted="false">"La información de memoria no está disponible en este dispositivo."</string>
+    <string name="ui_memory_used" formatted="false">"Memoria utilizada: "</string>
+    <string name="ui_message" formatted="false">"Mensaje"</string>
+    <string name="ui_message_history" formatted="false">"Historial de mensajes"</string>
+    <string name="ui_messages_only" formatted="false">"Mensajes solamente"</string>
+    <string name="ui_messages_only_choose_apps" formatted="false">"Mensajes sólo · elegir aplicaciones"</string>
+    <string name="ui_messaging" formatted="false">"Mensajería"</string>
+    <string name="ui_middle_48_dp" formatted="false">"Medio · 48 dp"</string>
+    <string name="ui_min" formatted="false">" min"</string>
+    <string name="ui_minimal_status_bar" formatted="false">"Barra de estado mínimo"</string>
+    <string name="ui_model_and_index" formatted="false">"Modelo e índice"</string>
+    <string name="ui_model_download_required_about_165_mb" formatted="false">"Descarga del modelo necesaria · alrededor de 165 MB"</string>
+    <string name="ui_model_download_required_about_238_mb" formatted="false">"Descarga del modelo requerida · alrededor de 238 MB"</string>
+    <string name="ui_model_download_required_about_350_mb" formatted="false">"Descarga del modelo necesaria · unos 350 MB"</string>
+    <string name="ui_model_download_required_value" formatted="false">"Descarga del modelo necesaria · {0}"</string>
+    <string name="ui_model_ready_offline_speech_available" formatted="false">"Modelo listo · discurso fuera de línea disponible"</string>
+    <string name="ui_model_ready_waiting_to_index_documents" formatted="false">"Modelo listo · espera a los documentos índice"</string>
+    <string name="ui_model_ready_waiting_to_index_images" formatted="false">"Modelo listo · espera para indexar imágenes"</string>
+    <string name="ui_monochrome" formatted="false">"Monocromático"</string>
+    <string name="ui_monochrome_uses_themed_app_icons_where_supported_other_app" formatted="false">"Monochrome utiliza iconos temáticos de aplicaciones donde se admite; otros iconos de aplicaciones siguen siendo reconocibles en grayscale."</string>
+    <string name="ui_more_faces" formatted="false">"Más caras"</string>
+    <string name="ui_motion_depth" formatted="false">"Movimiento y profundidad"</string>
+    <string name="ui_move_apps_in_bulk" formatted="false">"Mover aplicaciones a granel"</string>
+    <string name="ui_move_apps_together" formatted="false">"Mover aplicaciones juntos"</string>
+    <string name="ui_move_down" formatted="false">"Bajar"</string>
+    <string name="ui_move_earlier" formatted="false">"Mover hacia arriba"</string>
+    <string name="ui_move_earlier_2" formatted="false">"Muévete antes: "</string>
+    <string name="ui_move_later" formatted="false">"Mover hacia abajo"</string>
+    <string name="ui_move_later_2" formatted="false">"Muévete más tarde.: "</string>
+    <string name="ui_move_selected" formatted="false">"Mover seleccionado"</string>
+    <string name="ui_move_to_drawer" formatted="false">"Mover al cajón"</string>
+    <string name="ui_move_up" formatted="false">"Subir"</string>
+    <string name="ui_moved" formatted="false">" se movió."</string>
+    <string name="ui_music_now_playing" formatted="false">"ahora toca música"</string>
+    <string name="ui_mute_notification_badge" formatted="false">"Insignia de notificación de mute"</string>
+    <string name="ui_name_people" formatted="false">"Nombre de la gente"</string>
+    <string name="ui_name_person" formatted="false">"Poner nombre a la persona"</string>
+    <string name="ui_name_upper" formatted="false">"NOMBRE"</string>
+    <string name="ui_navigation_status" formatted="false">"Navegación y estado"</string>
+    <string name="ui_near_32_dp" formatted="false">"Cerca · 32 dp"</string>
+    <string name="ui_new_and_changed_images_only_automatic_indexing_while_charging" formatted="false">"Imágenes nuevas y cambiadas solamente · indexación automática mientras se carga"</string>
+    <string name="ui_new_checklist" formatted="false">"Nueva lista de verificación"</string>
+    <string name="ui_new_drawer" formatted="false">"Nuevo cajón"</string>
+    <string name="ui_new_drawer_action" formatted="false">"+ Nuevo cajón"</string>
+    <string name="ui_new_journey" formatted="false">"Nuevo viaje"</string>
+    <string name="ui_new_note_action" formatted="false">"+ Nueva nota"</string>
+    <string name="ui_new_reminder" formatted="false">"Nuevo recordatorio"</string>
+    <string name="ui_new_timer_action" formatted="false">"+ Nuevo temporizador"</string>
+    <string name="ui_newest_first" formatted="false">" · más reciente primero"</string>
+    <string name="ui_news_feeds" formatted="false">"Noticias y fuentes"</string>
+    <string name="ui_next_track" formatted="false">"Siguiente pista"</string>
+    <string name="ui_no_active_player" formatted="false">"No hay ningún reproductor activo"</string>
+    <string name="ui_no_additional_accessible_profiles_android_exposes_work_profiles_and" formatted="false">"No hay perfiles accesibles adicionales. Android expone los perfiles de trabajo y apoyó el espacio privado cuando el lanzador es su hogar predeterminado."</string>
+    <string name="ui_no_ambient_light_sensor_is_available_on_this_phone" formatted="false">"No hay ningún sensor de luz ambiente disponible en este teléfono."</string>
+    <string name="ui_no_app_is_available_for_this_action" formatted="false">"No hay ninguna aplicación disponible para esta acción."</string>
+    <string name="ui_no_apps_are_available" formatted="false">"No hay aplicaciones disponibles."</string>
+    <string name="ui_no_apps_are_visible_restore_hidden_apps_in_settings" formatted="false">"No hay aplicaciones visibles. Restaurar aplicaciones ocultas en Ajustes."</string>
+    <string name="ui_no_connected_watch_found_pair_your_watch_with_this" formatted="false">"No hay ningún reloj conectado. Pare su reloj con este teléfono y compruebe que está conectado."</string>
+    <string name="ui_no_current_notifications" formatted="false">"No hay notificaciones actuales."</string>
+    <string name="ui_no_extension" formatted="false">"No extensión"</string>
+    <string name="ui_no_face_groups_on_this_page_yet_index_images" formatted="false">"Aún no hay grupos de la cara en esta página. Imágenes del índice desde Image Search para encontrar gente."</string>
+    <string name="ui_no_files_found_in_shared_storage" formatted="false">"No hay archivos encontrados en almacenamiento compartido."</string>
+    <string name="ui_no_hidden_apps_hold_an_app_tile_to_hide" formatted="false">"No hay aplicaciones ocultas. Mantenga una ficha de aplicación para ocultarla."</string>
+    <string name="ui_no_icons_match_try_a_shorter_name" formatted="false">"No hay coincidencias de iconos. Prueba un nombre más corto."</string>
+    <string name="ui_no_launcher_roll_release_is_available_yet" formatted="false">"Aún no hay versión de Launcher Roll."</string>
+    <string name="ui_no_matches_hidden_apps_can_be_restored_in_settings" formatted="false">"No hay coincidencias. Las aplicaciones ocultas se pueden restaurar en Ajustes."</string>
+    <string name="ui_no_matches_yet_checking_for_changes" formatted="false">"Aún no hay coincidencias · comprobando cambios..."</string>
+    <string name="ui_no_matching_apps" formatted="false">"No hay aplicaciones que coincidan."</string>
+    <string name="ui_no_matching_filenames_image_index_pending" formatted="false">"Sin nombres de archivo iguales · índice de imagen pendiente."</string>
+    <string name="ui_no_matching_files" formatted="false">"No se encontraron archivos."</string>
+    <string name="ui_no_matching_locations_try_adding_a_country" formatted="false">"No hay ubicaciones que coincidan."</string>
+    <string name="ui_no_notifications_from_the_selected_apps_use_the_filter" formatted="false">"No hay notificaciones de las aplicaciones seleccionadas. Utilice el icono del filtro para elegir qué aplicaciones aparecen aquí."</string>
+    <string name="ui_no_notifications_match_your_search" formatted="false">"No hay notificaciones que coincidan con su búsqueda."</string>
+    <string name="ui_no_results_returned" formatted="false">"No se han devuelto resultados."</string>
+    <string name="ui_no_rss_or_atom_feed_was_found_on_this" formatted="false">"No se encontró ningún feed RSS o Atom en esta página. Utilice la dirección de alimentación del sitio."</string>
+    <string name="ui_no_rss_stories_are_available_refresh_your_feeds_first" formatted="false">"No hay historias de RSS disponibles. Refresca tus feeds primero."</string>
+    <string name="ui_no_saved_content_matches_search_apps_to_include_installed" formatted="false">"No hay coincidencias de contenido guardado. Aplicaciones de búsqueda para incluir aplicaciones instaladas."</string>
+    <string name="ui_no_saved_messages_yet_enable_history_then_allow_new" formatted="false">"Todavía no hay mensajes guardados. Activa el historial y espera a recibir notificaciones de mensajes."</string>
+    <string name="ui_no_settings_match_value_try_theme_icon_voice_permissions" formatted="false">"No hay ajustes que coincidan con «{0}». Prueba con tema, icono, voz, permisos o privacidad."</string>
+    <string name="ui_no_stories_saved_yet_refresh_to_check_your_sources" formatted="false">"No hay historias guardadas todavía. Refresh para comprobar sus fuentes."</string>
+    <string name="ui_no_upcoming_events_in_the_next_seven_days" formatted="false">"No hay próximos eventos en los próximos siete días."</string>
+    <string name="ui_none_shown" formatted="false">"Ninguno."</string>
+    <string name="ui_not_collecting" formatted="false">"No coleccionar"</string>
+    <string name="ui_not_configured" formatted="false">"No configurado"</string>
+    <string name="ui_not_connected_required_for_screen_locking" formatted="false">"No conectado · requerido para el bloqueo de pantalla"</string>
+    <string name="ui_not_paired" formatted="false">"No emparejado"</string>
+    <string name="ui_note" formatted="false">"Nota"</string>
+    <string name="ui_note_title" formatted="false">"Título de la nota"</string>
+    <string name="ui_notes" formatted="false">"Notas"</string>
+    <string name="ui_notes_card" formatted="false">"Tarjeta de notas"</string>
+    <string name="ui_notes_cards_and_android_widgets" formatted="false">"Notas, tarjetas y widgets Android"</string>
+    <string name="ui_notification_access" formatted="false">"Acceso a las notificaciones"</string>
+    <string name="ui_notification_access_is_off_enable_timer_alerts_in_setup" formatted="false">"El acceso a notificaciones está apagado. Activar alertas de temporizador en Configuración &amp; característica de salud para recibir alertas."</string>
+    <string name="ui_notification_access_off" formatted="false">"Acceso a las notificaciones desactivado"</string>
+    <string name="ui_notification_access_on" formatted="false">"Acceso a las notificaciones activado"</string>
+    <string name="ui_notification_count_badges" formatted="false">"Insignias de recuento de notificaciones"</string>
+    <string name="ui_notification_permission_required" formatted="false">"Permiso de notificación requerido"</string>
+    <string name="ui_notification_sources" formatted="false">"Fuentes de notificaciones"</string>
+    <string name="ui_notification_title_contains_this_text" formatted="false">"el título de notificación contiene este texto. "</string>
+    <string name="ui_notification_whispers" formatted="false">"Susurros de notificación"</string>
+    <string name="ui_notifications" formatted="false">"Notificaciones"</string>
+    <string name="ui_notifications_and_exact_alarms_ready" formatted="false">"Notificaciones y alarmas exactas listas"</string>
+    <string name="ui_notifications_media" formatted="false">"Notificaciones \" medios de comunicación"</string>
+    <string name="ui_notifications_panels" formatted="false">"Notificaciones y paneles"</string>
+    <string name="ui_notifications_today_root_app_tiles_search_translucent_refraction_wallpaper" formatted="false">"notificaciones hoy root app azulejos búsqueda papel pintado refracción translúcida"</string>
+    <string name="ui_notifications_upper" formatted="false">"NOTIFICACIONES"</string>
+    <string name="ui_now_playing" formatted="false">"En reproducción"</string>
+    <string name="ui_now_playing_open" formatted="false">"Ahora jugando · abierto "</string>
+    <string name="ui_of" formatted="false">" of of "</string>
+    <string name="ui_off" formatted="false">"Desactivado"</string>
+    <string name="ui_off_2" formatted="false">"desactivado"</string>
+    <string name="ui_off_choose_apps_and_senders" formatted="false">"· Elija aplicaciones y envíos"</string>
+    <string name="ui_off_controls_across_apps" formatted="false">"· Controles a través de aplicaciones"</string>
+    <string name="ui_off_enable_to_show_notifications_in_launcher" formatted="false">"Off · habilitar para mostrar notificaciones en el lanzador"</string>
+    <string name="ui_off_find_files_by_what_they_say" formatted="false">"· encontrar archivos por lo que dicen"</string>
+    <string name="ui_off_in_appearance" formatted="false">"Off en Apariance"</string>
+    <string name="ui_off_keep_app_colours" formatted="false">"· Mantener los colores de la aplicación"</string>
+    <string name="ui_off_low_memory_device" formatted="false">"· Dispositivo de baja memoria"</string>
+    <string name="ui_off_manual_or_system_theme" formatted="false">"· Tema manual o del sistema"</string>
+    <string name="ui_off_optional_local_history" formatted="false">"· Historia local opcional"</string>
+    <string name="ui_off_view_download_history" formatted="false">"· ver historial de descargas"</string>
+    <string name="ui_off_while_battery_saver_is_active" formatted="false">"Apagado mientras que el guardabotas está activo"</string>
+    <string name="ui_offline_voice_ready_playback_and_news" formatted="false">"Voz Offline lista · reproducción y noticias"</string>
+    <string name="ui_on" formatted="false">"Activado"</string>
+    <string name="ui_on_2" formatted="false">"activado"</string>
+    <string name="ui_on_3" formatted="false">" activado"</string>
+    <string name="ui_on_app_display_not_icon_colour" formatted="false">"En · pantalla de aplicaciones, no color icono"</string>
+    <string name="ui_on_authenticate_to_open" formatted="false">"On · autenticar para abrir"</string>
+    <string name="ui_on_available_across_apps" formatted="false">"En · disponible a través de aplicaciones"</string>
+    <string name="ui_on_download_files_and_view_history" formatted="false">"Activadas · descarga archivos y consulta el historial"</string>
+    <string name="ui_on_enable_accessibility_access" formatted="false">"· Permitir acceso a la accesibilidad"</string>
+    <string name="ui_on_manage_in_android_settings" formatted="false">"En · administrar en la configuración de Android"</string>
+    <string name="ui_on_model_indexing_and_storage" formatted="false">"· Modelo, indexación y almacenamiento"</string>
+    <string name="ui_on_now" formatted="false">"Ahora."</string>
+    <string name="ui_on_outlined_tiles" formatted="false">"· Azulejos esbozados"</string>
+    <string name="ui_on_quiet_spoken_announcements" formatted="false">"· Anuncios hablados silenciosos"</string>
+    <string name="ui_on_saving_new_messages" formatted="false">"· Salvando nuevos mensajes"</string>
+    <string name="ui_on_tap_to_turn_off" formatted="false">"Activado · toca para desactivar"</string>
+    <string name="ui_on_your_agenda" formatted="false">"Sobre su agenda"</string>
+    <string name="ui_once" formatted="false">"Una vez"</string>
+    <string name="ui_one_time_permission_from_your_computer" formatted="false">"Permiso de una sola vez de su computadora"</string>
+    <string name="ui_online_card_settings" formatted="false">"Ajustes de tarjetas en línea"</string>
+    <string name="ui_online_cards" formatted="false">"Tarjetas en línea"</string>
+    <string name="ui_only_continue_if_this_matches_the_fingerprint_shown_on" formatted="false">"\n\nSólo continuar si esto coincide con la huella mostrada en su propio escritorio."</string>
+    <string name="ui_only_whisper_notifications_when_the_sender_or" formatted="false">"Sólo susurra notificaciones cuando el remitente o "</string>
+    <string name="ui_open" formatted="false">"Abierto"</string>
+    <string name="ui_open_accessibility_settings_and_enable_launcher_system_panel" formatted="false">"Configuración de accesibilidad abierta y habilitar *Launcher system panel*. "</string>
+    <string name="ui_open_android_settings" formatted="false">"Abrir ajustes de Android"</string>
+    <string name="ui_open_app" formatted="false">"Aplicación abierta"</string>
+    <string name="ui_open_app_drawer" formatted="false">"Abrir cajón de aplicaciones"</string>
+    <string name="ui_open_app_in_grayscale" formatted="false">"Aplicación abierta en grayscale"</string>
+    <string name="ui_open_attachment" formatted="false">"Apego abierto"</string>
+    <string name="ui_open_in_calendar" formatted="false">"Abierto en Calendario"</string>
+    <string name="ui_open_launcher_companion_on_a_windows_computer_on_the" formatted="false">"Open Launcher Companion en un equipo de Windows en el mismo Wi-Fi. Pare con su dirección y código, luego compare la huella de certificado. Notas y archivos compartidos permanecen en su red."</string>
+    <string name="ui_open_launcher_controls_and_current_notifications" formatted="false">"Controles Open Launcher y notificaciones actuales"</string>
+    <string name="ui_open_launcher_system_panel" formatted="false">"Abrir el panel del sistema de Launcher"</string>
+    <string name="ui_open_panel" formatted="false">"Panel abierto"</string>
+    <string name="ui_open_quick_panel" formatted="false">"Abrir panel rápido"</string>
+    <string name="ui_open_saved_conversations" formatted="false">"Abrir conversaciones salvadas"</string>
+    <string name="ui_open_search" formatted="false">"Búsqueda abierta"</string>
+    <string name="ui_open_story" formatted="false">"Abrir artículo"</string>
+    <string name="ui_openclip_fast_about_238_mb" formatted="false">"OpenCLIP Fast · alrededor de 238 MB"</string>
+    <string name="ui_openclip_fast_needs_about_238_mb_photos_are_processed" formatted="false">"OpenCLIP Necesita aproximadamente 238 MB. Las fotos se procesan en este dispositivo. Use Wi-Fi para evitar cargos de datos móviles."</string>
+    <string name="ui_optional_access_not_connected" formatted="false">"Opcional · acceso no conectado"</string>
+    <string name="ui_optional_calendar_access_not_connected" formatted="false">"Opcional · acceso al calendario no conectado"</string>
+    <string name="ui_optional_change_system_brightness" formatted="false">"Opcional · el brillo del sistema de cambio"</string>
+    <string name="ui_optional_feed_name" formatted="false">"Nombre de alimentación opcional"</string>
+    <string name="ui_optional_nearby_devices_and_wi_fi_name" formatted="false">"Opcional · dispositivos cercanos y Wi-Fi nombre"</string>
+    <string name="ui_optional_real_app_usage_and_daily_goals" formatted="false">"Opcional · uso real de aplicaciones y objetivos diarios"</string>
+    <string name="ui_optional_vertical_drag_on_drawer_headings_leave_off_for" formatted="false">"Arrastre vertical opcional en los encabezados del cajón. Dejar para el desplazamiento de página normal. Pulse cualquier partida para abrir o cerrar su cajón."</string>
+    <string name="ui_optional_wi_fi_and_connected_bluetooth_names" formatted="false">"Opcional · Wi-Fi y nombres Bluetooth conectados"</string>
+    <string name="ui_organise_apps" formatted="false">"Organizar aplicaciones"</string>
+    <string name="ui_original" formatted="false">"Original"</string>
+    <string name="ui_other_screens" formatted="false">"% · otras pantallas"</string>
+    <string name="ui_other_screens_2" formatted="false">"otras pantallas"</string>
+    <string name="ui_outline_filled_brand_icons" formatted="false">"Esquema, llenado \" iconos de marca"</string>
+    <string name="ui_outlined_rounded_filled_sharp" formatted="false">"Esquema, redondeada, llenada y afilada"</string>
+    <string name="ui_page_tab_buttons" formatted="false">"Botones de página"</string>
+    <string name="ui_page_tabs_off" formatted="false">"Pestañas de página apagadas"</string>
+    <string name="ui_page_tabs_on" formatted="false">"Fichas de página en"</string>
+    <string name="ui_page_transitions" formatted="false">"Transiciones de páginas"</string>
+    <string name="ui_pair_a_wear_os_6_or_later_watch_with" formatted="false">"Par a Wear OS 6 o posterior reloj con este teléfono. Instalar y abrir el lanzador para Wear OS en el reloj, luego enviar la cara desde aquí."</string>
+    <string name="ui_pairing_code" formatted="false">"Código de vinculación"</string>
+    <string name="ui_pairing_code_upper" formatted="false">"CÓDIGO DE UNIÓN"</string>
+    <string name="ui_pairing_failed_check_the_code_and_desktop_connection" formatted="false">"El emparejamiento falló. Compruebe el código y la conexión de escritorio."</string>
+    <string name="ui_panel_animations" formatted="false">"Animaciones de panel"</string>
+    <string name="ui_panel_settings" formatted="false">"Ajustes del panel"</string>
+    <string name="ui_panel_theme" formatted="false">"Tema del panel"</string>
+    <string name="ui_paste_a_download_url" formatted="false">"Pega una URL de descarga"</string>
+    <string name="ui_paste_an_rss_or_atom_feed_address_you_can" formatted="false">"Pruebe una dirección de alimentación RSS o Atom. También puede usar la dirección de un sitio si publica un enlace de alimentación."</string>
+    <string name="ui_paste_your_provider_key_leave_this_blank_to_remove" formatted="false">"Pruebe la clave de su proveedor. Deje este espacio en blanco para eliminarlo."</string>
+    <string name="ui_pause" formatted="false">"Pausar"</string>
+    <string name="ui_pause_playback" formatted="false">"Reproducción de pausa"</string>
+    <string name="ui_pause_timer" formatted="false">"Pausar temporizador"</string>
+    <string name="ui_people" formatted="false">"Personas"</string>
+    <string name="ui_permissions" formatted="false">"Permisos"</string>
+    <string name="ui_permissions_notification_listener_quick_panel_conversations" formatted="false">"permisos notificaciones escucha rápidas conversaciones de panel"</string>
+    <string name="ui_phone_resources" formatted="false">"Recursos telefónicos"</string>
+    <string name="ui_phone_resources_card" formatted="false">"Tarjeta de recursos telefónicos"</string>
+    <string name="ui_photo_descriptions" formatted="false">"Descripciones fotográficas"</string>
+    <string name="ui_pill_28" formatted="false">"Píldora · 28"</string>
+    <string name="ui_pin_to_favorites" formatted="false">"Pin a los favoritos"</string>
+    <string name="ui_pin_to_top" formatted="false">"Fijar arriba"</string>
+    <string name="ui_pinned" formatted="false">", clavado"</string>
+    <string name="ui_place_below_android_status_bar" formatted="false">"Lugar debajo de la barra de estado Android"</string>
+    <string name="ui_play" formatted="false">"Reproducir"</string>
+    <string name="ui_playback" formatted="false">"Reproducción"</string>
+    <string name="ui_playback_control_is_unavailable" formatted="false">"El control de Playback no está disponible."</string>
+    <string name="ui_playback_control_unavailable" formatted="false">"Control de Playback no disponible"</string>
+    <string name="ui_playback_controls" formatted="false">"Controles de Playback"</string>
+    <string name="ui_playback_position" formatted="false">"Posición de reproducción"</string>
+    <string name="ui_preparing_file_catalog" formatted="false">"Preparando el catálogo de archivos..."</string>
+    <string name="ui_presets" formatted="false">"Estilos"</string>
+    <string name="ui_preview_after_enabling_the_switch_and_accessibility_access" formatted="false">"Vista previa después de habilitar el interruptor y el acceso a la accesibilidad"</string>
+    <string name="ui_preview_and_choose_what_to_restore" formatted="false">"Previsualizar y elegir qué restaurar"</string>
+    <string name="ui_previous_faces" formatted="false">"Caras anteriores"</string>
+    <string name="ui_previous_saved_state_available" formatted="false">"Estado guardado anterior disponible"</string>
+    <string name="ui_previous_track" formatted="false">"Cargo anterior"</string>
+    <string name="ui_privacy" formatted="false">"Privacidad"</string>
+    <string name="ui_privacy_recovery" formatted="false">"Privacidad y recuperación"</string>
+    <string name="ui_private_space" formatted="false">"Espacio privado"</string>
+    <string name="ui_process_new_and_changed_files_automatic_indexing_while_charging" formatted="false">"Proceso de archivos nuevos y cambiados · indexación automática mientras se carga"</string>
+    <string name="ui_process_new_and_changed_images" formatted="false">"Procesar imágenes nuevas y modificadas"</string>
+    <string name="ui_productivity" formatted="false">"Productividad"</string>
+    <string name="ui_profiles_private_space" formatted="false">"Perfiles \" espacio privado"</string>
+    <string name="ui_protected_conversation_unlock_to_read" formatted="false">"Conversación protegida · desbloqueo para leer"</string>
+    <string name="ui_protected_notification" formatted="false">"Notificaciones protegidas"</string>
+    <string name="ui_protected_notification_titles_and_text_are_hidden_across_launcher" formatted="false">"Los títulos de notificación protegidos y el texto están ocultos a través de Launcher y su panel de sistema. Las aplicaciones protegidas están excluidas de la nueva colección de historias de mensajes mientras esto está habilitado."</string>
+    <string name="ui_protected_previews_and_message_history" formatted="false">"Vistas previas protegidas e historial de mensajes"</string>
+    <string name="ui_protected_previews_backups_and_data" formatted="false">"Previsualizaciones, copias de seguridad y datos protegidos"</string>
+    <string name="ui_protected_settings" formatted="false">"configuración protegida"</string>
+    <string name="ui_pull_down_within_the_top_of_the_tiles_screen" formatted="false">"Retire dentro de la parte superior de la pantalla Azulejos para el panel rápido de Launcher. Pulse la fila de estado mínimo para abrirlo también. La pantalla-edge sombra de notificación pertenece a Android."</string>
+    <string name="ui_qr_code_for_this_app_s_play_store_page" formatted="false">"Código QR para la página Play Store de esta aplicación"</string>
+    <string name="ui_queue_speech" formatted="false">"Añadir lectura a la cola"</string>
+    <string name="ui_queued_value" formatted="false">"En cola: {0}"</string>
+    <string name="ui_quick_access" formatted="false">"Acceso rápido"</string>
+    <string name="ui_quick_arithmetic" formatted="false">"Aritmética rápida"</string>
+    <string name="ui_quick_panel" formatted="false">"Panel rápido"</string>
+    <string name="ui_quiet_dark_surfaces" formatted="false">"Superficies tranquilas y oscuras"</string>
+    <string name="ui_quiet_outlined_tiles" formatted="false">"Mosaicos con bordes discretos"</string>
+    <string name="ui_quiet_outlined_tiles_distraction" formatted="false">"distracciones de las baldosas"</string>
+    <string name="ui_read" formatted="false">", leer"</string>
+    <string name="ui_read_aloud" formatted="false">"Lea en voz alta"</string>
+    <string name="ui_read_message_content" formatted="false">"Contenido del mensaje"</string>
+    <string name="ui_read_notification" formatted="false">"Notificación de lectura"</string>
+    <string name="ui_read_rss_headlines_and_summaries_aloud" formatted="false">"Leer los titulares de RSS y resúmenes en voz alta"</string>
+    <string name="ui_reading_cancelled" formatted="false">"Lectura cancelada"</string>
+    <string name="ui_reading_preferences" formatted="false">"Preferencias de lectura"</string>
+    <string name="ui_reading_value_value_chunks" formatted="false">"Leyendo {0} : {1} chunks"</string>
+    <string name="ui_reading_your_calendar" formatted="false">"Leyendo tu calendario..."</string>
+    <string name="ui_ready" formatted="false">"Listo"</string>
+    <string name="ui_ready_follows_android_animation_settings" formatted="false">"Listo · sigue los ajustes de animación Android"</string>
+    <string name="ui_ready_to_use" formatted="false">"Listo para usar"</string>
+    <string name="ui_recover_previous_saved_state" formatted="false">"Recuperar estado guardado anterior"</string>
+    <string name="ui_recovery" formatted="false">"Recuperación"</string>
+    <string name="ui_recovery_permissions_support_battery_sensor" formatted="false">"recuperación permisos ayuda batería sensor"</string>
+    <string name="ui_refresh" formatted="false">"Actualizar"</string>
+    <string name="ui_refresh_feeds" formatted="false">"Refrescos de alimentación"</string>
+    <string name="ui_refresh_weather" formatted="false">"Tiempo de refresco"</string>
+    <string name="ui_refreshing" formatted="false">"Refrescante..."</string>
+    <string name="ui_refreshing_feeds" formatted="false">"Refrescantes alimentarios"</string>
+    <string name="ui_refreshing_showing_saved_stories" formatted="false">"Refrescante · mostrando historias salvas"</string>
+    <string name="ui_remaining" formatted="false">"Permaneciendo"</string>
+    <string name="ui_reminder" formatted="false">"Recordatorio"</string>
+    <string name="ui_reminder_action" formatted="false">"+ Recordatorio"</string>
+    <string name="ui_reminders" formatted="false">"Recordatorios"</string>
+    <string name="ui_remove" formatted="false">"Eliminar"</string>
+    <string name="ui_remove_2" formatted="false">"Retirar "</string>
+    <string name="ui_remove_a_card_before_adding_another" formatted="false">"Retire una tarjeta antes de añadir otra."</string>
+    <string name="ui_remove_an_app_before_adding_another" formatted="false">"Retire una aplicación antes de añadir otra."</string>
+    <string name="ui_remove_card" formatted="false">"Quitar tarjeta"</string>
+    <string name="ui_remove_data" formatted="false">"Eliminar datos"</string>
+    <string name="ui_remove_document_search_data" formatted="false">"Eliminar los datos de búsqueda de documentos?"</string>
+    <string name="ui_remove_drawer" formatted="false">"Eliminar cajón"</string>
+    <string name="ui_remove_face_groups_and_names_from_launcher" formatted="false">"Eliminar grupos de cara y nombres de la lanzadora"</string>
+    <string name="ui_remove_feed" formatted="false">"Retire la alimentación"</string>
+    <string name="ui_remove_feed_2" formatted="false">"¿Retirar la alimentación?"</string>
+    <string name="ui_remove_from_saved" formatted="false">"Retire de los salvados"</string>
+    <string name="ui_remove_image_search_data" formatted="false">"Eliminar datos de búsqueda de imágenes"</string>
+    <string name="ui_remove_image_search_data_2" formatted="false">"Eliminar los datos de búsqueda de imágenes?"</string>
+    <string name="ui_remove_journey" formatted="false">"Retire el viaje"</string>
+    <string name="ui_remove_journey_2" formatted="false">"¿Retirar el viaje?"</string>
+    <string name="ui_remove_kokoro_model" formatted="false">"¿Retirar el modelo Kokoro?"</string>
+    <string name="ui_remove_model" formatted="false">"Quitar modelo"</string>
+    <string name="ui_remove_model_and_index" formatted="false">"Eliminar el modelo e índice"</string>
+    <string name="ui_remove_model_files" formatted="false">"Eliminar archivos modelo"</string>
+    <string name="ui_remove_shortcut" formatted="false">"Quitar atajo"</string>
+    <string name="ui_remove_shortcut_2" formatted="false">"¿Retirar el atajo?"</string>
+    <string name="ui_remove_the_panel_and_disconnect_its_service" formatted="false">"Quitar el panel y desconectar su servicio"</string>
+    <string name="ui_remove_this_card_and_its_content" formatted="false">"¿Retirar esta tarjeta y su contenido?"</string>
+    <string name="ui_remove_this_card_the_original_attachment_stays_where_it" formatted="false">"Quitar esta tarjeta? El accesorio original se queda donde está."</string>
+    <string name="ui_remove_this_shortcut_from_launcher_the_app_stays_installed" formatted="false">"Eliminar este atajo de Launcher? La aplicación se mantiene instalada."</string>
+    <string name="ui_remove_value_data" formatted="false">"Eliminar los datos {0}?"</string>
+    <string name="ui_remove_widget" formatted="false">"Quitar widget"</string>
+    <string name="ui_removing_model_and_image_index" formatted="false">"Modelo de extracción e índice de imagen..."</string>
+    <string name="ui_removing_model_and_index" formatted="false">"Modelo e índice de extracción..."</string>
+    <string name="ui_removing_model_files" formatted="false">"Eliminación de archivos de modelo..."</string>
+    <string name="ui_rename" formatted="false">"Cambiar nombre"</string>
+    <string name="ui_repeat" formatted="false">"Repetir"</string>
+    <string name="ui_repeat_2" formatted="false">"Repetición · "</string>
+    <string name="ui_repeat_reminder" formatted="false">"Repetir recordatorio"</string>
+    <string name="ui_reply" formatted="false">"Responder"</string>
+    <string name="ui_reply_passed_to_the_app" formatted="false">"Responder pasó a la aplicación."</string>
+    <string name="ui_reply_sent" formatted="false">"Respuesta enviada"</string>
+    <string name="ui_reply_to" formatted="false">"Responder a "</string>
+    <string name="ui_reply_unavailable_open_the_app_to_continue" formatted="false">"Responder indisponible. Abra la aplicación para continuar."</string>
+    <string name="ui_required_access" formatted="false">"Acceso requerido"</string>
+    <string name="ui_required_enable_launcher_system_panel" formatted="false">"Panel de sistema de arranque"</string>
+    <string name="ui_required_for_notifications_and_media" formatted="false">"Necesidad para notificaciones y medios de comunicación"</string>
+    <string name="ui_reset" formatted="false">"Restablecer"</string>
+    <string name="ui_reset_to_default" formatted="false">"Reiniciar por defecto"</string>
+    <string name="ui_resize_app_icons_inside_standard_and_expanded_tiles_icons" formatted="false">"Redimensione los iconos de aplicaciones dentro de las baldosas estándar y ampliadas. Los iconos encajan en el espacio disponible; las dimensiones de las baldosas y el espaciamiento de la cuadrícula permanecen iguales."</string>
+    <string name="ui_restore" formatted="false">"Restauración "</string>
+    <string name="ui_restore_a_backup" formatted="false">"Restaurar una copia de seguridad"</string>
+    <string name="ui_restore_hidden_cards" formatted="false">"Restaurar tarjetas ocultas"</string>
+    <string name="ui_restore_layout" formatted="false">"Restaurar diseño"</string>
+    <string name="ui_restore_original_icon" formatted="false">"Restaurar el icono original"</string>
+    <string name="ui_restore_selected" formatted="false">"Restauración seleccionada"</string>
+    <string name="ui_restore_selected_content" formatted="false">"Restaurar el contenido seleccionado"</string>
+    <string name="ui_results" formatted="false">"Resultados"</string>
+    <string name="ui_resume" formatted="false">"Resumen"</string>
+    <string name="ui_resume_playback" formatted="false">"Resumir la reproducción"</string>
+    <string name="ui_review_before_restoring" formatted="false">"Examen antes de restaurar"</string>
+    <string name="ui_right" formatted="false">"Derecha"</string>
+    <string name="ui_root" formatted="false">"Hoy"</string>
+    <string name="ui_root_cards" formatted="false">"Tarjetas rotatorias"</string>
+    <string name="ui_root_has_editable_notes_calendar_calculator_a_focus_timer" formatted="false">"Root tiene notas editables, calendario, calculadora, un temporizador de enfoque y soporte para sus widgets Android instalados."</string>
+    <string name="ui_rotation_sensor_available" formatted="false">"Sensor de rotación disponible"</string>
+    <string name="ui_round_20" formatted="false">"Ronda · 20"</string>
+    <string name="ui_route" formatted="false">"Ruta"</string>
+    <string name="ui_rss_feeds" formatted="false">"Fuentes RSS"</string>
+    <string name="ui_rss_sources_in_one_card" formatted="false">"Fuentes RSS en una sola tarjeta"</string>
+    <string name="ui_rss_web_search_and_youtube" formatted="false">"RSS, búsqueda web y YouTube"</string>
+    <string name="ui_run" formatted="false">"Corre: "</string>
+    <string name="ui_running_timer" formatted="false">"Tiempo de ejecución"</string>
+    <string name="ui_save" formatted="false">"Guardar"</string>
+    <string name="ui_save_a_file_from_a_direct_link_to_downloads" formatted="false">"Guardar un archivo desde un enlace directo a Descargas."</string>
+    <string name="ui_save_a_link" formatted="false">"Guardar un enlace"</string>
+    <string name="ui_save_calendars" formatted="false">"Guardar calendarios"</string>
+    <string name="ui_save_changes" formatted="false">"Guardar cambios"</string>
+    <string name="ui_save_checklist" formatted="false">"Guardar la lista de verificación"</string>
+    <string name="ui_save_feed" formatted="false">"Guardar alimento"</string>
+    <string name="ui_save_for_later" formatted="false">"Guardar para más tarde"</string>
+    <string name="ui_save_journey" formatted="false">"Viaje a salvo"</string>
+    <string name="ui_save_layout" formatted="false">"Guardar el diseño"</string>
+    <string name="ui_save_note" formatted="false">"Guardar nota"</string>
+    <string name="ui_save_reminder" formatted="false">"Guardar recordatorio"</string>
+    <string name="ui_saved_conversations" formatted="false">"Conversaciones guardadas"</string>
+    <string name="ui_saved_history_cleared" formatted="false">"La historia guardada se despejó."</string>
+    <string name="ui_saved_locally_as_a_note_nothing_is_uploaded" formatted="false">"Guardado localmente como una nota. Nada se carga."</string>
+    <string name="ui_saved_stories" formatted="false">"Artículos guardados"</string>
+    <string name="ui_saved_to_downloads" formatted="false">"Guardado a Descargas"</string>
+    <string name="ui_saves_replace_the_state_file_atomically_and_keep_a" formatted="false">"Guarda reemplazar el archivo de estado atómico y mantener una copia válida anterior. Las copias de seguridad de diseño excluyen las claves de API, emparejando las credenciales e historial de mensajes."</string>
+    <string name="ui_scan_to_open_the_app_on_google_play_apps" formatted="false">"Escaneo para abrir la aplicación en Google Play. Las aplicaciones instaladas de otras fuentes pueden no tener un listado."</string>
+    <string name="ui_screen_brightness" formatted="false">"Brillo de la pantalla"</string>
+    <string name="ui_screen_gestures" formatted="false">"Gestos de pantalla"</string>
+    <string name="ui_screen_lock_authentication_available" formatted="false">"Autenticación de bloqueo de pantalla disponible"</string>
+    <string name="ui_screen_lock_authentication_is_unavailable" formatted="false">"La autenticación de cerradura de pantalla no está disponible."</string>
+    <string name="ui_screen_lock_tap_double_tap_accessibility" formatted="false">"bloqueo de pantalla tocar doble toque accesibilidad"</string>
+    <string name="ui_screen_locking" formatted="false">"Lotería de pantalla"</string>
+    <string name="ui_screen_time" formatted="false">"tiempo de pantalla"</string>
+    <string name="ui_search" formatted="false">"Buscar"</string>
+    <string name="ui_search_aliases" formatted="false">"Palabras clave de búsqueda"</string>
+    <string name="ui_search_apps" formatted="false">"Buscar aplicaciones"</string>
+    <string name="ui_search_by_person" formatted="false">"Búsqueda por persona"</string>
+    <string name="ui_search_document_filenames_or_indexed_passages" formatted="false">"Busca nombres de archivos de documentos o fragmentos indexados."</string>
+    <string name="ui_search_documents_by_meaning" formatted="false">"Documentos de búsqueda por significado"</string>
+    <string name="ui_search_filenames_or_indexed_content" formatted="false">"Buscar nombres de archivo o contenido indexado."</string>
+    <string name="ui_search_files" formatted="false">"Buscar archivos"</string>
+    <string name="ui_search_for_a_city_or_town" formatted="false">"Buscar una ciudad o ciudad"</string>
+    <string name="ui_search_for_a_city_or_town_2" formatted="false">"Busca una ciudad o localidad."</string>
+    <string name="ui_search_hold_for_launcher_controls" formatted="false">"Buscar. Mantén pulsado para abrir los controles de Launcher"</string>
+    <string name="ui_search_icons_by_name" formatted="false">"Buscar iconos por nombre"</string>
+    <string name="ui_search_image_filenames_or_indexed_photos" formatted="false">"Busca nombres de archivos de imágenes o fotos indexadas."</string>
+    <string name="ui_search_in_files_using_a_description_such_as_dog" formatted="false">"Busque en Archivos usando una descripción como “perro en un sofá”. Los archivos modelo y el índice de imagen se almacenan en este dispositivo."</string>
+    <string name="ui_search_in_files_using_a_description_such_as_the" formatted="false">"Busque en Archivos usando una descripción como “la cláusula de arrendamiento sobre mascotas”. Soporta archivos PDF con texto seleccionable, DOCX, TXT, Markdown y CSV."</string>
+    <string name="ui_search_notifications" formatted="false">"Buscar notificaciones"</string>
+    <string name="ui_search_photos_by_description" formatted="false">"Buscar fotos por descripción"</string>
+    <string name="ui_search_providers_upper" formatted="false">"PROVEEDORES DE BÚSQUEDA"</string>
+    <string name="ui_search_settings" formatted="false">"Buscar en ajustes"</string>
+    <string name="ui_search_shared_storage_on_this_device" formatted="false">"Busca en el almacenamiento compartido del dispositivo"</string>
+    <string name="ui_search_text_inside_images" formatted="false">"Buscar texto dentro de imágenes"</string>
+    <string name="ui_search_today_or_enter_a_command" formatted="false">"Buscar hoy o introducir un comando"</string>
+    <string name="ui_search_your_installed_apps" formatted="false">"Busca entre las aplicaciones instaladas"</string>
+    <string name="ui_search_your_workspace" formatted="false">"Busque su espacio de trabajo"</string>
+    <string name="ui_searching_locations" formatted="false">"Buscando lugares..."</string>
+    <string name="ui_seconds" formatted="false">" segundos"</string>
+    <string name="ui_see_upcoming_events_from_calendars_you_choose_calendar_data" formatted="false">"Vea los próximos eventos de calendarios que elija. Los datos del calendario se quedan en este dispositivo."</string>
+    <string name="ui_select_all" formatted="false">"Seleccione todo"</string>
+    <string name="ui_select_apps_below_optionally_add_a_sender_or_title" formatted="false">"Seleccione las aplicaciones a continuación. Opcionalmente agregue un remitente o título "</string>
+    <string name="ui_select_at_least_one_app" formatted="false">"Seleccione por lo menos una aplicación."</string>
+    <string name="ui_select_location" formatted="false">"Seleccionar ubicación"</string>
+    <string name="ui_select_the_apps_in_this_drawer" formatted="false">"Seleccione las aplicaciones en este cajón"</string>
+    <string name="ui_selected" formatted="false">", seleccionado"</string>
+    <string name="ui_selected_apps_message_contents_are_never_read_aloud" formatted="false">"* Aplicaciones seleccionadas*. El contenido del mensaje nunca se lee en voz alta."</string>
+    <string name="ui_selected_content_restored" formatted="false">"Contenido seleccionado restaurado."</string>
+    <string name="ui_selected_tap_to_change" formatted="false">"Seleccionado · toca para cambiar"</string>
+    <string name="ui_send" formatted="false">"Enviar"</string>
+    <string name="ui_send_reply" formatted="false">"Enviar respuesta"</string>
+    <string name="ui_sending_launcher_roll_to_your_watch" formatted="false">"Enviando Roller a tu reloj..."</string>
+    <string name="ui_sensor_available_enable_automatic_switching" formatted="false">"Sensor disponible · habilitación de conmutación automática"</string>
+    <string name="ui_set_a_daily_goal_below_for_a_mindful_launch" formatted="false">"Establezca un objetivo diario a continuación para un recordatorio de lanzamiento consciente."</string>
+    <string name="ui_set_a_date_and_time" formatted="false">"Establecer una fecha y hora"</string>
+    <string name="ui_set_a_duration" formatted="false">"Establece una duración"</string>
+    <string name="ui_set_default_home_device_access" formatted="false">"Elige la pantalla de inicio predeterminada · acceso al dispositivo"</string>
+    <string name="ui_set_location" formatted="false">"Ubicación"</string>
+    <string name="ui_set_up_a_screen_lock_and_biometrics_in_android" formatted="false">"Configurar una cerradura de pantalla y biometría en la configuración de Android primero."</string>
+    <string name="ui_set_up_and_install_launcher_roll_on_your_watch" formatted="false">"Configura e instala Launcher Roll en tu reloj"</string>
+    <string name="ui_set_up_your_home" formatted="false">"Configura tu pantalla de inicio"</string>
+    <string name="ui_settings" formatted="false">"Ajustes"</string>
+    <string name="ui_setup_complete_per_app_grayscale_choices_are_ready_for" formatted="false">"Configuración completa. Las opciones de grayscale per-app están listas para que lo intente."</string>
+    <string name="ui_setup_feature_health" formatted="false">"Configuración y estado de funciones"</string>
+    <string name="ui_setup_permissions" formatted="false">"Configuración y permisos"</string>
+    <string name="ui_share_an_http_or_https_file_link" formatted="false">"Comparte un enlace de archivo HTTP o HTTPS."</string>
+    <string name="ui_share_app" formatted="false">"Aplicación compartida"</string>
+    <string name="ui_share_link" formatted="false">"Enlace compartido"</string>
+    <string name="ui_share_links_transfer_file_history" formatted="false">"compartir enlaces transferencia historia del archivo"</string>
+    <string name="ui_share_text_or_a_link_to_capture_it_in" formatted="false">"Compartir texto o un enlace para capturarlo en Launcher."</string>
+    <string name="ui_shared_folder" formatted="false">"Carpeta compartida"</string>
+    <string name="ui_shortcut" formatted="false">"Ataque"</string>
+    <string name="ui_show_app" formatted="false">"Mostrar app"</string>
+    <string name="ui_show_article_images" formatted="false">"Mostrar imágenes de artículo"</string>
+    <string name="ui_show_battery_on_home" formatted="false">"Mostrar batería en casa"</string>
+    <string name="ui_show_connected_names" formatted="false">"Mostrar nombres conectados"</string>
+    <string name="ui_show_more" formatted="false">"Mostrar más"</string>
+    <string name="ui_show_more_icons" formatted="false">"Mostrar más iconos"</string>
+    <string name="ui_show_page_tabs" formatted="false">"Mostrar fichas de página"</string>
+    <string name="ui_show_private_space_in_apps" formatted="false">"Mostrar espacio privado en aplicaciones"</string>
+    <string name="ui_show_status_strip" formatted="false">"Mostrar el estado de la raya"</string>
+    <string name="ui_show_usage_time" formatted="false">"Mostrar tiempo de uso"</string>
+    <string name="ui_showing_saved_stories" formatted="false">" Mostrando historias salvas."</string>
+    <string name="ui_skip_chunk" formatted="false">"Saltar fragmento"</string>
+    <string name="ui_skipping_current_chunk" formatted="false">"Salteando la corriente actual"</string>
+    <string name="ui_small_140_dp" formatted="false">"Pequeño · 140 dp"</string>
+    <string name="ui_social" formatted="false">"Redes sociales"</string>
+    <string name="ui_soft_12" formatted="false">"Suave · 12"</string>
+    <string name="ui_soft_light_theme" formatted="false">"Tema de luz suave"</string>
+    <string name="ui_sound" formatted="false">"Sonido"</string>
+    <string name="ui_sound_first" formatted="false">"Sonido primero"</string>
+    <string name="ui_sources" formatted="false">"Fuentes"</string>
+    <string name="ui_sources_panels" formatted="false">"Fuentes y paneles"</string>
+    <string name="ui_spacious_132" formatted="false">"Espléndido · 132"</string>
+    <string name="ui_speaking_speed_0_5x_to_2_0x" formatted="false">"Velocidad de habla: 0,5x a 2.0x"</string>
+    <string name="ui_speech_audio" formatted="false">"Voz y audio"</string>
+    <string name="ui_speech_error_value" formatted="false">"Error de voz: {0}"</string>
+    <string name="ui_speech_paused" formatted="false">"El discurso se detuvo"</string>
+    <string name="ui_speech_resumed" formatted="false">"Reanudación del discurso"</string>
+    <string name="ui_speech_stopped" formatted="false">"El discurso paró"</string>
+    <string name="ui_speech_voice_spoken_alerts" formatted="false">"voz de voz alertas habladas"</string>
+    <string name="ui_square" formatted="false">"Plaza"</string>
+    <string name="ui_start" formatted="false">"Inicio"</string>
+    <string name="ui_start_playback_in_a_media_app_to_show_its" formatted="false">"Comience la reproducción en una aplicación multimedia para mostrar sus controles."</string>
+    <string name="ui_start_timer" formatted="false">"Hora de inicio"</string>
+    <string name="ui_state" formatted="false">"Estado"</string>
+    <string name="ui_status_row_position" formatted="false">"Posición de la fila de estado"</string>
+    <string name="ui_stop_and_clear_queue" formatted="false">"Detener y vaciar la cola"</string>
+    <string name="ui_stop_collecting_messages" formatted="false">"Deja de recolectar mensajes"</string>
+    <string name="ui_stop_downloading_the_model" formatted="false">"Deja de descargar el modelo"</string>
+    <string name="ui_stop_sharing_folder" formatted="false">"Deja de compartir carpeta"</string>
+    <string name="ui_stop_this_installation" formatted="false">"Para esta instalación"</string>
+    <string name="ui_storage" formatted="false">"Almacenamiento"</string>
+    <string name="ui_storage_information_is_unavailable_on_this_device" formatted="false">"La información de almacenamiento no está disponible en este dispositivo."</string>
+    <string name="ui_storage_used" formatted="false">"Almacenamiento utilizado: "</string>
+    <string name="ui_story_count_upper" formatted="false">"CUENTA DE HISTORIA"</string>
+    <string name="ui_strong_80" formatted="false">"Fuerte · 80%"</string>
+    <string name="ui_studio" formatted="false">"Estudio"</string>
+    <string name="ui_style" formatted="false">" estilo"</string>
+    <string name="ui_subtle_35" formatted="false">"Sutilidad · 35%"</string>
+    <string name="ui_subtle_6" formatted="false">"Sutil · 6"</string>
+    <string name="ui_subtle_movement_from_the_phone_rotation_sensor_it_pauses" formatted="false">"Movimiento sutil del sensor de rotación del teléfono. Se detiene al tocar la pantalla."</string>
+    <string name="ui_sun" formatted="false">"Alto contraste"</string>
+    <string name="ui_surface_opacity" formatted="false">"Opacidad superficial"</string>
+    <string name="ui_swipe_right_for_root_swipe_left_for_conversations_the" formatted="false">"Gire a la derecha para la raíz; gire a la izquierda para las conversaciones. El menú dentro de la búsqueda también abre la raíz, aplicaciones y notificaciones."</string>
+    <string name="ui_swipe_right_on_home" formatted="false">"Girar derecho en casa"</string>
+    <string name="ui_swipe_up_to_close_system_panel" formatted="false">"Desliza hacia arriba para cerrar el panel del sistema"</string>
+    <string name="ui_switch_to_app_search" formatted="false">"Cambiar a la búsqueda de aplicaciones"</string>
+    <string name="ui_switch_to_dark" formatted="false">"Cambiar a Oscuro"</string>
+    <string name="ui_switch_to_download" formatted="false">"Cambiar a descargar"</string>
+    <string name="ui_switch_to_file_search" formatted="false">"Cambiar a búsqueda de archivos"</string>
+    <string name="ui_switch_to_light" formatted="false">"Cambiar a la luz"</string>
+    <string name="ui_switching_delay" formatted="false">"Tiempo de espera para el cambio"</string>
+    <string name="ui_symbols_libraries_installed_packs" formatted="false">"Símbolos, bibliotecas \" paquetes instalados"</string>
+    <string name="ui_system_default" formatted="false">"Idioma del sistema"</string>
+    <string name="ui_system_panel" formatted="false">"Panel del sistema"</string>
+    <string name="ui_system_total" formatted="false">"Total del sistema"</string>
+    <string name="ui_tall_440_dp" formatted="false">"Alto · 440 dp"</string>
+    <string name="ui_tap_a_drawer_heading_to_expand_it_hold_it" formatted="false">"Toca el encabezado de un cajón para desplegarlo. Mantenlo pulsado para cambiar su nombre, moverlo o elegir sus aplicaciones."</string>
+    <string name="ui_tap_a_face_to_name_the_person_then_use" formatted="false">"Toca una cara para llamar a la persona y luego usa ese nombre en Archivos."</string>
+    <string name="ui_tap_an_app_to_open_it_hold_an_app" formatted="false">"Toque una aplicación para abrirlo. Sostenga una aplicación para mover, renombrar, pin, resaltar, expandir, ocultar o establecer un objetivo de uso diario."</string>
+    <string name="ui_tap_to_show" formatted="false">"Pulse para mostrar"</string>
+    <string name="ui_tapping_app_icons_widgets_and_other_controls_will_continue" formatted="false">"Tapping app iconos, widgets y otros controles continuarán funcionando normalmente."</string>
+    <string name="ui_temperature_is_reported_by_the_battery_sensor_it_is" formatted="false">"La temperatura es reportada por el sensor de batería. No es una lectura de temperatura de CPU."</string>
+    <string name="ui_temperature_units" formatted="false">"Unidades de temperatura"</string>
+    <string name="ui_test_screen_lock" formatted="false">"Cerradura de prueba"</string>
+    <string name="ui_the_feed_returned_invalid_xml_check_its_address_or" formatted="false">"La alimentación devolvió XML inválido. Revise su dirección o inténtelo de nuevo más tarde."</string>
+    <string name="ui_the_feed_server_returned_value_try_again_later_or" formatted="false">"El servidor de alimentación devolvió {0}. Inténtelo de nuevo más tarde o edita la dirección."</string>
+    <string name="ui_the_first_five_visible_favorites_appear_in_the_dock" formatted="false">"Los primeros cinco favoritos visibles aparecen en el muelle. Pinning también trae aplicaciones a la parte superior de su cajón."</string>
+    <string name="ui_the_google_app_is_unavailable_opening_today" formatted="false">"La aplicación Google no está disponible. Apertura Hoy."</string>
+    <string name="ui_the_handle_uses_only_its_small_visible_area_the" formatted="false">"El mango utiliza sólo su pequeño área visible. La tira no acepta toques. La navegación Android se mantiene disponible. El panel se esconde cuando el teléfono se bloquea, la pantalla se apaga o Android abre los controles del sistema protegido. El comportamiento de Samsung todavía necesita la verificación del dispositivo."</string>
+    <string name="ui_the_light_level_must_stay_beyond_a_threshold_for" formatted="false">"El nivel de luz debe permanecer por encima o por debajo del umbral durante el intervalo elegido. Los umbrales distintos para claro y oscuro evitan cambios rápidos. Al elegir un tema manualmente se desactiva el cambio automático."</string>
+    <string name="ui_the_light_threshold_must_be_higher_than_the_dark" formatted="false">"El umbral de luz debe ser mayor que el de oscuridad."</string>
+    <string name="ui_the_note_limit_is_200" formatted="false">"El límite de la nota es de 200."</string>
+    <string name="ui_the_note_limit_is_200_export_or_remove_a" formatted="false">"El límite de la nota es 200. Exportar o eliminar una nota primero."</string>
+    <string name="ui_the_optional_status_strip_draws_over_other_apps_below" formatted="false">"La tira de estado opcional dibuja sobre otras aplicaciones. La colocación en la barra inferior puede cubrir los encabezados de aplicaciones; apágalo si se interpone en el camino. La colocación superior deja visible el área de indicador derecho de Android."</string>
+    <string name="ui_the_reminder_limit_is_200" formatted="false">"El límite de recordatorio es de 200."</string>
+    <string name="ui_the_saved_story_limit_is_200" formatted="false">"El límite de la historia es de 200."</string>
+    <string name="ui_the_sensor_could_not_start_toggle_automatic_switching_off" formatted="false">"El sensor no podía empezar, apagado automático y encendido."</string>
+    <string name="ui_the_sensor_is_used_only_while_launcher_is_visible" formatted="false">"El sensor se utiliza sólo mientras que el lanzador es visible. No se utiliza ninguna cámara, fotos, localización o encuesta de fondo. El brillo es una señal de nivel ligero, no una clasificación confiable de interiores / exteriores."</string>
+    <string name="ui_the_server_returned_http_value" formatted="false">"El servidor devolvió HTTP {0}."</string>
+    <string name="ui_the_shortcut_limit_is_200" formatted="false">"El límite de acceso directo es de 200."</string>
+    <string name="ui_the_timer_limit_is_20" formatted="false">"El límite de tiempo es 20."</string>
+    <string name="ui_the_widget_limit_is_20" formatted="false">"El límite de widget es 20."</string>
+    <string name="ui_theme" formatted="false">"Tema"</string>
+    <string name="ui_theme_effects" formatted="false">"Tema y efectos"</string>
+    <string name="ui_theme_wallpaper" formatted="false">"Tema y fondo de pantalla"</string>
+    <string name="ui_then_return_here_android_does_not_offer_a_normal" formatted="false">"Entonces regresa aquí. Android no ofrece un permiso normal popup para cambiar los colores de la pantalla."</string>
+    <string name="ui_there_are_no_layout_changes_to_undo_in_this" formatted="false">"No hay cambios de diseño para deshacer en este período de sesiones."</string>
+    <string name="ui_this_address_does_not_return_a_recognised_rss_or" formatted="false">"Esta dirección no devuelve una fuente reconocida de RSS o Atom."</string>
+    <string name="ui_this_address_returns_a_web_page_not_an_rss" formatted="false">"Esta dirección devuelve una página web, no un feed RSS o Atom. Edita la dirección de alimentación."</string>
+    <string name="ui_this_app_cannot_be_opened" formatted="false">"Esta aplicación no puede abrirse"</string>
+    <string name="ui_this_app_is_no_longer_available" formatted="false">"Esta aplicación ya no está disponible."</string>
+    <string name="ui_this_changes_multiple_appearance_settings" formatted="false">"Se cambiarán varios ajustes de apariencia."</string>
+    <string name="ui_this_control_is_unavailable_on_this_device" formatted="false">"Este control no está disponible en este dispositivo"</string>
+    <string name="ui_this_downloaded_file_is_no_longer_available" formatted="false">"Este archivo descargado ya no está disponible."</string>
+    <string name="ui_this_feed_exceeds_the_4_mb_size_limit" formatted="false">"Esta alimentación supera el límite de tamaño de 4 MB."</string>
+    <string name="ui_this_feed_redirects_to_an_unencrypted_address_use_its" formatted="false">"Esta alimentación se redirige a una dirección no cifrada. Utilice su dirección de alimentación HTTPS."</string>
+    <string name="ui_this_feed_redirects_too_many_times_edit_its_address" formatted="false">"Este pienso redirige demasiadas veces. Edite su dirección."</string>
+    <string name="ui_this_file_is_no_longer_available" formatted="false">"Este archivo ya no está disponible."</string>
+    <string name="ui_this_is_the_internal_data_volume_used_by_apps" formatted="false">"Este es el volumen de datos interno utilizado por las aplicaciones, en lugar de la capacidad anunciada del dispositivo. El espacio reservado por Android se incluye en la parte no disponible."</string>
+    <string name="ui_this_notification_has_no_readable_message" formatted="false">"Esta notificación no tiene ningún mensaje legible."</string>
+    <string name="ui_this_notification_no_longer_has_an_available_app_screen" formatted="false">"Esta notificación ya no tiene una pantalla de aplicación disponible."</string>
+    <string name="ui_this_notification_stays_until_its_app_clears_it" formatted="false">"Esta notificación se mantiene hasta que su aplicación la despeja"</string>
+    <string name="ui_this_pack_does_not_expose_a_readable_icon_list" formatted="false">"Este paquete no expone una lista de iconos legible."</string>
+    <string name="ui_this_pack_has_no_browsable_icons_choose_another_library" formatted="false">"Este paquete no tiene íconos sombríos. Elige otra biblioteca o paquete."</string>
+    <string name="ui_this_phone_does_not_provide_a_rotation_sensor" formatted="false">"Este teléfono no proporciona un sensor de rotación."</string>
+    <string name="ui_this_phone_does_not_report_an_ambient_light_sensor" formatted="false">"Este teléfono no reporta un sensor de luz ambiente."</string>
+    <string name="ui_this_pin_request_expired_request_it_again_from_the" formatted="false">"Esta solicitud de pin caducó. Solicítalo de nuevo de la aplicación fuente."</string>
+    <string name="ui_this_player_does_not_expose_an_app_screen" formatted="false">"Este jugador no expone una pantalla de aplicación."</string>
+    <string name="ui_this_profile_is_no_longer_available" formatted="false">"Este perfil ya no está disponible."</string>
+    <string name="ui_this_recovery_point_could_not_be_read" formatted="false">"Este punto de recuperación no se podía leer."</string>
+    <string name="ui_this_removes_the_face_model_face_groups_and_saved" formatted="false">"Esto elimina el modelo facial, los grupos faciales y los nombres guardados de Launcher."</string>
+    <string name="ui_this_removes_the_text_model_and_recognized_text_index" formatted="false">"Esto elimina el modelo de texto y el índice de texto reconocido de Launcher."</string>
+    <string name="ui_this_reply_action_is_no_longer_available_open_the" formatted="false">"Esta respuesta ya no está disponible. Abra la aplicación para responder."</string>
+    <string name="ui_this_shortcut_is_no_longer_available" formatted="false">"Este atajo ya no está disponible."</string>
+    <string name="ui_this_story_has_no_readable_text" formatted="false">"Esta historia no tiene texto legible."</string>
+    <string name="ui_this_time_is_skipped_by_daylight_saving_choose_another" formatted="false">"Esta vez se salta por el ahorro de la luz del día. Elige otra vez."</string>
+    <string name="ui_this_turns_off_document_search_and_removes_its_downloaded" formatted="false">"Esto apaga la búsqueda de documentos y elimina su modelo descargado y el índice de pasaje."</string>
+    <string name="ui_this_turns_off_image_search_and_removes_the_downloaded" formatted="false">"Esto apaga la búsqueda de imagen y elimina el modelo e índice descargado de Launcher."</string>
+    <string name="ui_this_widget_is_unavailable_hold_its_header_to_remove" formatted="false">"Este widget no está disponible. Mantenga su cabecera para eliminarlo."</string>
+    <string name="ui_this_widget_request_expired" formatted="false">"Esta solicitud de widget caducó."</string>
+    <string name="ui_tickets" formatted="false">"Billetes"</string>
+    <string name="ui_tile_appearance" formatted="false">"Aspecto del azul"</string>
+    <string name="ui_tile_corners" formatted="false">"Esquinas de los mosaicos"</string>
+    <string name="ui_tile_height" formatted="false">"Altura de los mosaicos"</string>
+    <string name="ui_tile_icon_size" formatted="false">"Tamaño del icono del azul"</string>
+    <string name="ui_tile_names_text" formatted="false">"nombres de mosaicos texto etiquetas"</string>
+    <string name="ui_tiles_icons" formatted="false">"Mosaicos e iconos"</string>
+    <string name="ui_tilt_depth" formatted="false">"Profundidad inclinada"</string>
+    <string name="ui_tilt_depth_is_unavailable_on_this_device_other_effects" formatted="false">"La profundidad de inclinación no está disponible en este dispositivo; otros efectos todavía funcionan."</string>
+    <string name="ui_time" formatted="false">"Hora"</string>
+    <string name="ui_time_2" formatted="false">"Tiempo · "</string>
+    <string name="ui_timer" formatted="false">"Temporizador"</string>
+    <string name="ui_timer_alerts" formatted="false">"Alertas de temporizador"</string>
+    <string name="ui_timer_alerts_are_available_check_android_notification_settings_if" formatted="false">"Las alertas del temporizador están disponibles. Compruebe los ajustes de notificación de Android si las alertas son silenciosas."</string>
+    <string name="ui_timer_duration" formatted="false">"Duración del temporizador"</string>
+    <string name="ui_timer_finished" formatted="false">"Timer terminado"</string>
+    <string name="ui_timers" formatted="false">"Temporizadores"</string>
+    <string name="ui_title" formatted="false">"Título"</string>
+    <string name="ui_title_contains" formatted="false">"El título contiene: "</string>
+    <string name="ui_today" formatted="false">"Hoy"</string>
+    <string name="ui_today_2" formatted="false">"Hoy · "</string>
+    <string name="ui_today_agenda_calendar_checklists_reminders_cards_widgets" formatted="false">"hoy agenda calendario listas de tareas recordatorios tarjetas widgets"</string>
+    <string name="ui_today_cards" formatted="false">"Tarjetas de Hoy"</string>
+    <string name="ui_today_cards_settings" formatted="false">"Configuración de tarjetas de hoy"</string>
+    <string name="ui_today_layout_saved" formatted="false">"Hoy se guarda el diseño"</string>
+    <string name="ui_today_upper" formatted="false">"HOY"</string>
+    <string name="ui_top" formatted="false">"Arriba"</string>
+    <string name="ui_top_corners" formatted="false">"Esquinas superiores"</string>
+    <string name="ui_touch_glow" formatted="false">"Brillo al tocar"</string>
+    <string name="ui_try_the_current_setting_off_disables_launchers_own_tap" formatted="false">"Prueba el ajuste actual. Desactivar las desactivaciones El propio grifo, el tacto y la selección de retroalimentación. Teclado, widget-provider y Android sistema de retroalimentación se controlan por separado."</string>
+    <string name="ui_turn_off_service_and_restore_colours" formatted="false">"Apaga el servicio y restaura los colores"</string>
+    <string name="ui_type_a_command" formatted="false">"Introduzca un comando"</string>
+    <string name="ui_type_a_document_filename_to_search" formatted="false">"Escriba un nombre de archivo de documento para buscar."</string>
+    <string name="ui_type_a_filename_to_search" formatted="false">"Escriba un nombre de archivo para buscar."</string>
+    <string name="ui_type_an_image_filename_to_search" formatted="false">"Escriba un nombre de archivo de imagen para buscar."</string>
+    <string name="ui_unable_to_lock_the_screen_check_launcher_accessibility_access" formatted="false">"Incapaz de bloquear la pantalla. Compruebe acceso a la accesibilidad del lanzador."</string>
+    <string name="ui_unavailable" formatted="false">"No está disponible"</string>
+    <string name="ui_unavailable_2" formatted="false">"no disponible"</string>
+    <string name="ui_unavailable_app" formatted="false">"Aplicación no disponible"</string>
+    <string name="ui_unavailable_for_this_player" formatted="false">" no disponible para este jugador"</string>
+    <string name="ui_unavailable_no_light_sensor" formatted="false">"No disponible · sin sensor de luz"</string>
+    <string name="ui_unavailable_no_rotation_sensor" formatted="false">"No disponible · ningún sensor de rotación"</string>
+    <string name="ui_unavailable_set_an_android_screen_lock" formatted="false">"No disponible · establecer un bloqueo de pantalla Android"</string>
+    <string name="ui_undo" formatted="false">"Deshacer"</string>
+    <string name="ui_undo_last_layout_change" formatted="false">"Deshacer el último cambio de diseño"</string>
+    <string name="ui_unlock" formatted="false">"Desbloquear "</string>
+    <string name="ui_unlock_in_launcher_to_open" formatted="false">"Desbloquear en el lanzador para abrir."</string>
+    <string name="ui_unlock_private_space" formatted="false">"Desbloquear el espacio privado"</string>
+    <string name="ui_unlock_to_open_this_notification" formatted="false">"Desbloquear para abrir esta notificación."</string>
+    <string name="ui_unlock_your_phone_before_reading_messages" formatted="false">"Desbloquea tu teléfono antes de leer mensajes."</string>
+    <string name="ui_unlock_your_phone_first" formatted="false">"Abre el teléfono primero."</string>
+    <string name="ui_unlock_your_phone_to_see_notifications" formatted="false">"Desbloquea tu teléfono para ver notificaciones."</string>
+    <string name="ui_unlock_your_phone_to_view_message_previews" formatted="false">"Desbloquea tu teléfono para ver las previsiones del mensaje."</string>
+    <string name="ui_unlocked" formatted="false">"Desbloqueado"</string>
+    <string name="ui_unpin" formatted="false">"Desfijar"</string>
+    <string name="ui_unread_counts_tile_dots" formatted="false">"no leído cuenta puntos de azulejos"</string>
+    <string name="ui_unread_stories_only" formatted="false">"Historias falsas sólo"</string>
+    <string name="ui_update_check_cancelled" formatted="false">"Se canceló la búsqueda de actualizaciones."</string>
+    <string name="ui_update_download_cancelled" formatted="false">"Actualizar la descarga cancelada."</string>
+    <string name="ui_update_launcher_roll" formatted="false">"Rollo de lanzamiento de actualización"</string>
+    <string name="ui_updated" formatted="false">"Actualizado "</string>
+    <string name="ui_updates" formatted="false">"Actualizaciones"</string>
+    <string name="ui_updates_every_10s_while_open" formatted="false">"Actualiza cada 10s mientras está abierto."</string>
+    <string name="ui_updates_keep_your_drawers_settings_and_widgets_android_asks" formatted="false">"Las actualizaciones mantienen sus cajones, configuraciones y widgets. Android le pide que apruebe la instalación."</string>
+    <string name="ui_updating" formatted="false">"Actualizando..."</string>
+    <string name="ui_usage_access" formatted="false">"Acceso al uso"</string>
+    <string name="ui_usage_charts_version_storage_data" formatted="false">"Gráficos de uso, versión, datos de almacenamiento"</string>
+    <string name="ui_use_a_direct_file_link_instead_of_a_web" formatted="false">"Utilice un enlace de archivo directo en lugar de una página web."</string>
+    <string name="ui_use_a_duration_such_as_10_min_30s_or" formatted="false">"Introduce una duración como 10 min, 30s o 1h."</string>
+    <string name="ui_use_a_quiet_kokoro_voice_for_notifications_from" formatted="false">"Utilice una voz Kokoro silenciosa para las notificaciones de "</string>
+    <string name="ui_use_a_six_digit_hex_colour_such_as_e4ff00" formatted="false">"Usa un color hex de seis dígitos, como #E4FF00."</string>
+    <string name="ui_use_apps_own_icons" formatted="false">"Utilice los propios iconos de las aplicaciones"</string>
+    <string name="ui_use_geometric_symbol" formatted="false">"Usar símbolo geométrico"</string>
+    <string name="ui_use_global_selection" formatted="false">"Usar la selección general"</string>
+    <string name="ui_use_screen_lock" formatted="false">"Use cerradura de pantalla"</string>
+    <string name="ui_use_six_hex_digits_such_as_e4ff00" formatted="false">"Usa seis dígitos de hex, como #E4FF00."</string>
+    <string name="ui_use_system_wallpaper" formatted="false">"Uso del sistema de papel pintado"</string>
+    <string name="ui_use_the_existing_file_search_permission" formatted="false">"Utilice el permiso de búsqueda de archivos existente"</string>
+    <string name="ui_use_the_existing_files_permission" formatted="false">"Utilice el permiso de archivos existentes"</string>
+    <string name="ui_use_the_installed_voice_model" formatted="false">"Utilice el modelo de voz instalado"</string>
+    <string name="ui_use_the_phone_s_ambient_light_sensor_to_switch" formatted="false">"Utilice el sensor de luz ambiente del teléfono para cambiar el lanzador entre luz y oscuridad. Las lecturas están en lux. Esto solo cambia el lanzador."</string>
+    <string name="ui_used" formatted="false">"Usado"</string>
+    <string name="ui_used_2" formatted="false">"usados"</string>
+    <string name="ui_used_3" formatted="false">" usados"</string>
+    <string name="ui_uses_this_apps_current_notification_reply_action_launcher_cannot" formatted="false">"Utiliza la acción actual de respuesta de notificación de esta aplicación. El lanzador no puede confirmar la entrega al destinatario."</string>
+    <string name="ui_using_launcher" formatted="false">"Uso de Launcher"</string>
+    <string name="ui_value_active_notifications" formatted="false">"{0} notificaciones activas"</string>
+    <string name="ui_value_columns" formatted="false">" · {0} columnas"</string>
+    <string name="ui_value_columns_value" formatted="false">"{0} columnas · {1}"</string>
+    <string name="ui_value_document_search_unavailable" formatted="false">"{0} · búsqueda de documentos no disponible"</string>
+    <string name="ui_value_downloading_value" formatted="false">"{0}, descarga, {1}"</string>
+    <string name="ui_value_drawers_value_notes_value_timers_choose_what_to" formatted="false">"Cajones {0} · Notas {1} · Códulas {2}. Elija qué restaurar. Su diseño actual se mantiene como el estado guardado anterior."</string>
+    <string name="ui_value_enabled_sources_one_news_card" formatted="false">"Fuentes habilitadas para {0} · una tarjeta de noticias"</string>
+    <string name="ui_value_image_search_unavailable" formatted="false">"{0} · búsqueda de imágenes no disponible"</string>
+    <string name="ui_value_images_indexed" formatted="false">"{0:N0} imágenes indexadas"</string>
+    <string name="ui_value_images_processed" formatted="false">"Imágenes {0:N0} procesadas"</string>
+    <string name="ui_value_indexed_value" formatted="false">"{0} indexado · {1}"</string>
+    <string name="ui_value_initially_show_more_when_you_want" formatted="false">"{0} inicialmente · mostrar más cuando quieras"</string>
+    <string name="ui_value_kb_upper" formatted="false">"{0:0.#} KB"</string>
+    <string name="ui_value_mb_upper" formatted="false">"{0:0.#} MB"</string>
+    <string name="ui_value_needs_value_processing_runs_on_this_device" formatted="false">"{0} necesita {1}. El procesamiento funciona en este dispositivo."</string>
+    <string name="ui_value_news_sources_today_cards_and_widgets" formatted="false">"Fuentes de noticias: {0} · Tarjetas y widgets de Hoy"</string>
+    <string name="ui_value_of_5_selected" formatted="false">"{0} de 5 seleccionados"</string>
+    <string name="ui_value_of_value_processed_indexing_resumes_while_charging" formatted="false">"{0:N0} de {1:N0} procesado · curriculum vitae de indización mientras se carga"</string>
+    <string name="ui_value_running_value_timers" formatted="false">"{0} activos · {1} temporizadores"</string>
+    <string name="ui_value_saved_journeys" formatted="false">"{0} viajes guardados"</string>
+    <string name="ui_value_searching_documents" formatted="false">"{0} · documentos de búsqueda..."</string>
+    <string name="ui_value_searching_images" formatted="false">"{0} · imágenes de búsqueda..."</string>
+    <string name="ui_value_unread_notifications" formatted="false">"{0} notificaciones sin leer"</string>
+    <string name="ui_value_value_downloaded" formatted="false">"{0}, {1} % descargado"</string>
+    <string name="ui_value_value_hidden" formatted="false">"{0} · Ocultas: {1}"</string>
+    <string name="ui_value_value_notifications_value" formatted="false">"{0}, {1} notificaciones{2}"</string>
+    <string name="ui_value_version_value_on_value" formatted="false">"{0} versión {1} en {2}?"</string>
+    <string name="ui_value_without_readable_text" formatted="false">" · {0:N0} sin texto legible"</string>
+    <string name="ui_version" formatted="false">"Versión "</string>
+    <string name="ui_videos_channels" formatted="false">"Videos &amp; canales"</string>
+    <string name="ui_voice" formatted="false">"Voz"</string>
+    <string name="ui_voice_model_not_installed_download_and_playback" formatted="false">"Modelo de voz no instalado · descarga y reproducción"</string>
+    <string name="ui_voice_selection_speed_and_offline_playback" formatted="false">"Selección de voz, velocidad y reproducción offline"</string>
+    <string name="ui_volume" formatted="false">"Volumen"</string>
+    <string name="ui_waiting_for_a_light_reading" formatted="false">"Esperando una lectura de luz..."</string>
+    <string name="ui_wallpaper_dimming" formatted="false">"Oscurecimiento del fondo"</string>
+    <string name="ui_wallpaper_off_automatic_theme_and_dimming" formatted="false">"Papel pintado · tema automático y regulación"</string>
+    <string name="ui_wallpaper_on_value_dimming" formatted="false">"Papel pintado · {0} % dimming"</string>
+    <string name="ui_watch_watchface_watch_face_companion_install" formatted="false">"reloj esfera aplicación complementaria instalar"</string>
+    <string name="ui_wear_os" formatted="false">"Wear OS"</string>
+    <string name="ui_weather" formatted="false">"Tiempo"</string>
+    <string name="ui_weather_by_open_meteo" formatted="false">"El tiempo por Open-Meteo"</string>
+    <string name="ui_weather_contacts_open_meteo_enabled_feeds_contact_their_publishers" formatted="false">"Contactos meteorológicos Open-Meteo. Los alimentadores habilitados contactan a sus editores y hosts de imagen. La búsqueda en línea contacta al proveedor que configura. La conexión de escritorio opcional comparte notas y la carpeta seleccionada con su ordenador emparejado."</string>
+    <string name="ui_weather_location" formatted="false">"Ubicación del tiempo"</string>
+    <string name="ui_weather_refresh" formatted="false">"Actualización del tiempo"</string>
+    <string name="ui_weather_settings_value_value_valuevalue" formatted="false">"Ajustes del tiempo, {0}, {1} {2} {3}"</string>
+    <string name="ui_weather_strip_on_home" formatted="false">"El tiempo en casa"</string>
+    <string name="ui_web_query" formatted="false">"Búsqueda web"</string>
+    <string name="ui_web_search" formatted="false">"Búsqueda web"</string>
+    <string name="ui_weekly" formatted="false">"Cada semana"</string>
+    <string name="ui_weekly_2" formatted="false">" · semanal"</string>
+    <string name="ui_what" formatted="false">"¿Qué?"</string>
+    <string name="ui_whisper_filter" formatted="false">"Filtro para Whisper · "</string>
+    <string name="ui_whole_display" formatted="false">"Pantalla completa"</string>
+    <string name="ui_wi_fi" formatted="false">"Wi-Fi"</string>
+    <string name="ui_widget" formatted="false">"Widget"</string>
+    <string name="ui_widget_picker_is_unavailable_on_this_device" formatted="false">"Widget picker no está disponible en este dispositivo."</string>
+    <string name="ui_widget_setup_is_unavailable" formatted="false">"La configuración del Widget no está disponible."</string>
+    <string name="ui_work_apps_and_supported_private_profiles" formatted="false">"Aplicaciones de trabajo y perfiles privados compatibles"</string>
+    <string name="ui_work_profile" formatted="false">"Perfil de trabajo"</string>
+    <string name="ui_working" formatted="false">"Trabajando..."</string>
+    <string name="ui_write_a_note" formatted="false">"Escribe una nota..."</string>
+    <string name="ui_write_something_down" formatted="false">"Escribe algo."</string>
+    <string name="ui_you" formatted="false">"Tú."</string>
+    <string name="ui_you_can_add_up_to_20_widgets" formatted="false">"Puedes agregar hasta 20 widgets."</string>
+    <string name="ui_you_can_create_up_to_40_drawers" formatted="false">"Puedes crear hasta 40 cajones."</string>
+    <string name="ui_you_can_keep_up_to_20_feed_sources" formatted="false">"Puedes mantener hasta 20 fuentes de alimentación."</string>
+    <string name="ui_you_do_not_need_to_enable_the_system_panel" formatted="false">"No es necesario habilitar la superposición del panel del sistema."</string>
+    <string name="ui_you_have_used_value_for_value_today" formatted="false">"Usted ha utilizado {0} para {1} hoy."</string>
+    <string name="ui_you_have_used_value_for_value_today_open_it" formatted="false">"Has usado {0} para {1} hoy. ¿Lo abriste intencionalmente?"</string>
+    <string name="ui_your_city_forecast" formatted="false">"Pronóstico de su ciudad"</string>
+    <string name="ui_your_daily_goal" formatted="false">"Su objetivo diario"</string>
+    <string name="ui_your_date_and_active_items" formatted="false">"Su fecha y elementos activos"</string>
+    <string name="ui_your_draft_is_kept_open_saving_failed_check_available" formatted="false">"Su borrador se mantiene abierto. Ahorro fallado; comprobar el almacenamiento disponible e intentarlo de nuevo."</string>
+    <string name="ui_your_home_ready" formatted="false">"Tu hogar, listo"</string>
+    <string name="ui_your_installed_apps_provide_android_widgets_tap_a_widget" formatted="false">"Sus aplicaciones instaladas proporcionan widgets Android. Pulse un encabezado widget para derrumbarlo; mantenga el encabezado para redimensionar o eliminarlo. La configuración del proveedor puede abrir una pantalla separada."</string>
+    <string name="ui_your_launcher_reminder" formatted="false">"Su recordatorio de lanzamiento"</string>
+    <string name="ui_your_messages_in_one_quiet_place_connect_android_notifications" formatted="false">"Sus mensajes, en un lugar tranquilo. Conecte notificaciones de Android para ver las conversaciones actuales de sus aplicaciones de mensajería."</string>
+    <string name="ui_your_reply" formatted="false">"Su respuesta"</string>
+    <string name="ui_your_selected_calendars" formatted="false">"Sus calendarios seleccionados"</string>
+    <string name="ui_your_upcoming_events" formatted="false">"Tus próximos eventos"</string>
+    <string name="ui_your_watch_could_not_install_launcher_roll" formatted="false">"Tu reloj no pudo instalar Roller Roll."</string>
+    <string name="ui_your_watch_has_no_available_launcher_watch_face_slot" formatted="false">"Su reloj no tiene disponible Lanzador reloj de la ranura de la cara."</string>
+    <string name="ui_youre_in_control" formatted="false">"Estás en control."</string>
+    <string name="ui_youtube" formatted="false">"YouTube"</string>
+    <string name="ui_youtube_api_setup" formatted="false">"Configuración de API de YouTube"</string>
+    <string name="ui_youtube_data_api_key" formatted="false">"Clave de YouTube Data API"</string>
+    <string name="ui_youtube_query" formatted="false">"Búsqueda en YouTube"</string>
+    <plurals name="app">
+        <item quantity="one">"{0} aplicación"</item>
+        <item quantity="other">"{0} aplicaciones"</item>
+    </plurals>
+    <plurals name="drawer">
+        <item quantity="one">"{0} cajón"</item>
+        <item quantity="other">"{0} cajones"</item>
+    </plurals>
+    <plurals name="document">
+        <item quantity="one">"{0} documento"</item>
+        <item quantity="other">"{0} documentos"</item>
+    </plurals>
+    <plurals name="enabled_source">
+        <item quantity="one">"{0} fuente activa"</item>
+        <item quantity="other">"{0} fuentes activas"</item>
+    </plurals>
+    <plurals name="file">
+        <item quantity="one">"{0} archivo"</item>
+        <item quantity="other">"{0} archivos"</item>
+    </plurals>
+    <plurals name="passage">
+        <item quantity="one">"{0} fragmento"</item>
+        <item quantity="other">"{0} fragmentos"</item>
+    </plurals>
+    <plurals name="photo">
+        <item quantity="one">"{0} foto"</item>
+        <item quantity="other">"{0} fotos"</item>
+    </plurals>
+    <plurals name="saved_note">
+        <item quantity="one">"{0} nota guardada"</item>
+        <item quantity="other">"{0} notas guardadas"</item>
+    </plurals>
+    <plurals name="saved_story">
+        <item quantity="one">"{0} artículo guardado"</item>
+        <item quantity="other">"{0} artículos guardados"</item>
+    </plurals>
+    <plurals name="source">
+        <item quantity="one">"{0} fuente"</item>
+        <item quantity="other">"{0} fuentes"</item>
+    </plurals>
+    <plurals name="story">
+        <item quantity="one">"{0} artículo"</item>
+        <item quantity="other">"{0} artículos"</item>
+    </plurals>
+    <plurals name="task">
+        <item quantity="one">"{0} tarea"</item>
+        <item quantity="other">"{0} tareas"</item>
+    </plurals>
+    <plurals name="upcoming_reminder">
+        <item quantity="one">"{0} recordatorio próximo"</item>
+        <item quantity="other">"{0} recordatorios próximos"</item>
+    </plurals>
+    <string name="ui_remove_named_drawer" formatted="false">"¿Eliminar {0}?"</string>
+    <string name="ui_date_all_day" formatted="false">"{0} · todo el día"</string>
+    <string name="ui_connected_show_names" formatted="false">"Conectado · mostrar nombres"</string>
+    <string name="ui_on_not_connected" formatted="false">"Activado · sin conexión"</string>
+    <string name="ui_show_connection_details" formatted="false">"Mostrar detalles de conexión"</string>
+    <string name="ui_allow_nearby_devices" formatted="false">"Permitir acceso a dispositivos cercanos"</string>
+    <string name="ui_ringer_silent" formatted="false">"Silencio"</string>
+    <string name="ui_ringer_vibrate" formatted="false">"Vibración"</string>
+    <string name="ui_ringer_normal" formatted="false">"Normal"</string>
+    <string name="ui_use_desktop_address" formatted="false">"Usa la dirección de la aplicación de escritorio, por ejemplo https://192.168.1.10:17842."</string>
+    <string name="ui_use_private_network_address" formatted="false">"Usa una dirección de una red Wi-Fi privada."</string>
+    <string name="ui_launcher_notifications" formatted="false">"Notificaciones de Launcher"</string>
+    <string name="ui_launcher_app_grayscale" formatted="false">"Escala de grises de Launcher"</string>
+    <string name="ui_search_settings_title" formatted="false">"Búsqueda"</string>
+    <string name="ui_app_search_app_count" formatted="false">"{0} aplicaciones · aplicaciones y contenido guardado"</string>
+    <string name="ui_app_search_result_count" formatted="false">"{0} resultados · aplicaciones y contenido guardado"</string>
+    <string name="ui_feed_images_on" formatted="false">" · imágenes activadas"</string>
+    <string name="ui_feed_images_off" formatted="false">" · imágenes desactivadas"</string>
+    <string name="ui_watch_install" formatted="false">"Instalar"</string>
+    <string name="ui_watch_update_to" formatted="false">"Actualizar a"</string>
+</resources>

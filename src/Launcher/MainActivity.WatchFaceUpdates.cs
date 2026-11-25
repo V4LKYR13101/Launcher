@@ -25,12 +25,12 @@ public partial class MainActivity
     private void RenderWearSettings()
     {
         Title(WearSettingsPage);
-        Paragraph("Pair a Wear OS 6 or later watch with this phone. Install and open Launcher for Wear OS on the watch, then send the face from here.");
-        body.AddView(Button("Install Launcher Roll", () => _ = CheckWatchFaceUpdateAsync(WatchFaceAction.FirstInstall), true), Match());
+        Paragraph(Localize(Resource.String.ui_pair_a_wear_os_6_or_later_watch_with));
+        body.AddView(Button(Localize(Resource.String.ui_install_launcher_roll), () => _ = CheckWatchFaceUpdateAsync(WatchFaceAction.FirstInstall), true), Match());
         Gap(body, 12);
-        body.AddView(Button("Check for watch face updates", () => _ = CheckWatchFaceUpdateAsync(WatchFaceAction.CheckUpdates)), Match());
+        body.AddView(Button(Localize(Resource.String.ui_check_for_watch_face_updates), () => _ = CheckWatchFaceUpdateAsync(WatchFaceAction.CheckUpdates)), Match());
         Gap(body, 12);
-        body.AddView(Button("Get Launcher for Wear OS",
+        body.AddView(Button(Localize(Resource.String.ui_get_launcher_for_wear_os),
             () => OpenUrl("https://kevlog.co.za/projects/launcher/")), Match());
         Gap(body, 12);
         wearStatusView = Text(wearStatus, 15);
@@ -53,14 +53,14 @@ public partial class MainActivity
         bool firstInstall = action == WatchFaceAction.FirstInstall;
         if (watchUpdateBusy)
         {
-            if (manual) WearMessage("Checking your watch. Try again in a moment.");
+            if (manual) WearMessage(Localize(Resource.String.ui_checking_your_watch_try_again_in_a_moment));
             return;
         }
         if (!manual && Android.OS.SystemClock.ElapsedRealtime() < nextWatchUpdateCheck)
             return;
 
         watchUpdateBusy = true;
-        if (manual) WearMessage("Connecting to your watch…");
+        if (manual) WearMessage(Localize(Resource.String.ui_connecting_to_your_watch));
         try
         {
             using var nodes = WearableClass.GetNodeClient(this);
@@ -89,40 +89,40 @@ public partial class MainActivity
 
                 if (!manual)
                     nextWatchUpdateCheck = Android.OS.SystemClock.ElapsedRealtime() + (long)TimeSpan.FromHours(1).TotalMilliseconds;
-                if (manual) WearMessage("Checking Kevlog for Launcher Roll…");
+                if (manual) WearMessage(Localize(Resource.String.ui_checking_kevlog_for_launcher_roll));
                 var update = await AppUpdates.CheckWatchFaceAsync(updateLifetime.Token);
                 if (IsDestroyed || !resumed)
                     return;
                 if (update is null || update.Release.Build <= installedBuild)
                 {
-                    if (manual) WearMessage(update is null ? "No Launcher Roll release is available yet." : "Launcher Roll is up to date.");
+                    if (manual) WearMessage(update is null ? Localize(Resource.String.ui_no_launcher_roll_release_is_available_yet) : Localize(Resource.String.ui_launcher_roll_is_up_to_date));
                     return;
                 }
                 string nodeId = node.Id!;
                 if (!manual && !OfferedWatchUpdates.Add((nodeId, update.Release.Build)))
                     continue;
 
-                if (manual) WearMessage($"Launcher Roll {update.Release.Version} is available for {node.DisplayName}.");
-                Confirm(firstInstall ? "Install Launcher Roll" : "Update Launcher Roll",
-                    $"{(firstInstall ? "Install" : "Update to")} version {update.Release.Version} on {node.DisplayName}?",
-                    firstInstall ? "Download and install" : "Download and update",
+                if (manual) WearMessage(Localize(Resource.String.ui_launcher_roll_value_is_available_for_value, update.Release.Version, node.DisplayName));
+                Confirm(firstInstall ? Localize(Resource.String.ui_install_launcher_roll) : Localize(Resource.String.ui_update_launcher_roll),
+                    Localize(Resource.String.ui_value_version_value_on_value, Localize(firstInstall ? Resource.String.ui_watch_install : Resource.String.ui_watch_update_to), update.Release.Version, node.DisplayName),
+                    firstInstall ? Localize(Resource.String.ui_download_and_install) : Localize(Resource.String.ui_download_and_update),
                     () => _ = InstallWatchFaceAsync(nodeId, update));
                 return;
             }
             if (manual) WearMessage((firstInstall, foundInstalledFace, foundEmptyWatch, unsupported) switch
             {
-                (true, true, _, _) => "Launcher Roll is already installed. Select it in your watch face picker.",
-                (false, _, true, _) => "Launcher Roll is available for first-time setup. Tap Install Launcher Roll.",
-                (_, _, _, true) => "Installing from Launcher requires Wear OS 6 or later.",
-                _ when connected.Count == 0 => "No connected watch found. Pair your watch with this phone and check that it's connected.",
-                _ => "Launcher couldn't reach its watch companion. Install or update Launcher for Wear OS, open it on your watch, then try again."
+                (true, true, _, _) => Localize(Resource.String.ui_launcher_roll_is_already_installed_select_it_in_your),
+                (false, _, true, _) => Localize(Resource.String.ui_launcher_roll_is_available_for_first_time_setup_tap),
+                (_, _, _, true) => Localize(Resource.String.ui_installing_from_launcher_requires_wear_os_6_or_later),
+                _ when connected.Count == 0 => Localize(Resource.String.ui_no_connected_watch_found_pair_your_watch_with_this),
+                _ => Localize(Resource.String.ui_launcher_couldn_t_reach_its_watch_companion_install_or)
             });
         }
         catch (OperationCanceledException) { }
         catch (Exception error)
         {
             Log.Debug("LauncherWear", $"Watch face check failed: {error.Message}");
-            if (manual && !IsDestroyed) WearMessage("Could not connect to the watch or check Kevlog. Try again.");
+            if (manual && !IsDestroyed) WearMessage(Localize(Resource.String.ui_could_not_connect_to_the_watch_or_check_kevlog));
         }
         finally
         {
@@ -146,7 +146,7 @@ public partial class MainActivity
         if (watchUpdateBusy)
             return;
         watchUpdateBusy = true;
-        if (page == WearSettingsPage) WearMessage("Downloading Launcher Roll…");
+        if (page == WearSettingsPage) WearMessage(Localize(Resource.String.ui_downloading_launcher_roll));
         string apkPath = Path.Combine(CacheDir!.AbsolutePath, "launcher-roll-" + Guid.NewGuid().ToString("N") + ".apk");
         try
         {
@@ -158,23 +158,23 @@ public partial class MainActivity
             BinaryPrimitives.WriteUInt16BigEndian(request.AsSpan(8), (ushort)token.Length);
             token.CopyTo(request, 10);
             apk.CopyTo(request, 10 + token.Length);
-            if (page == WearSettingsPage) WearMessage("Sending Launcher Roll to your watch…");
+            if (page == WearSettingsPage) WearMessage(Localize(Resource.String.ui_sending_launcher_roll_to_your_watch));
             using var messages = WearableClass.GetMessageClient(this);
             string result = await RequestWatchAsync(messages, nodeId, "install", request);
             if (!IsDestroyed) WearMessage(result switch
             {
-                "added" => "Launcher Roll installed. Select it in your watch face picker.",
-                "updated" => "Launcher Roll updated on your watch.",
-                "current" => "Launcher Roll is already up to date.",
-                "no-slot" => "Your watch has no available Launcher watch face slot.",
-                _ => "Your watch could not install Launcher Roll."
+                "added" => Localize(Resource.String.ui_launcher_roll_installed_select_it_in_your_watch_face),
+                "updated" => Localize(Resource.String.ui_launcher_roll_updated_on_your_watch),
+                "current" => Localize(Resource.String.ui_launcher_roll_is_already_up_to_date),
+                "no-slot" => Localize(Resource.String.ui_your_watch_has_no_available_launcher_watch_face_slot),
+                _ => Localize(Resource.String.ui_your_watch_could_not_install_launcher_roll)
             });
         }
         catch (OperationCanceledException) { }
         catch (Exception error)
         {
             Log.Debug("LauncherWear", $"Watch face install failed: {error.Message}");
-            if (!IsDestroyed) WearMessage("Launcher couldn't send the watch face. Reconnect your watch and try again.");
+            if (!IsDestroyed) WearMessage(Localize(Resource.String.ui_launcher_couldn_t_send_the_watch_face_reconnect_your));
         }
         finally
         {

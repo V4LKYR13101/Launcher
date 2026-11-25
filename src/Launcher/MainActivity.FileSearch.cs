@@ -29,11 +29,11 @@ public partial class MainActivity
     private TextView[] fileTypePills = [];
     private enum FileSearchScope { All, Images, Documents }
     private readonly record struct FileSearchPill(string Label, FileSearchScope? Scope, string? Extension);
-    private static readonly FileSearchPill[] ScopePills =
+    private static FileSearchPill[] ScopePills =>
     [
-        new("All", FileSearchScope.All, null),
-        new("Images", FileSearchScope.Images, null),
-        new("Documents", FileSearchScope.Documents, null)
+        new(Localize(Resource.String.ui_all), FileSearchScope.All, null),
+        new(Localize(Resource.String.ui_images), FileSearchScope.Images, null),
+        new(Localize(Resource.String.ui_documents), FileSearchScope.Documents, null)
     ];
 
     private (int Description, int Text, int People) PhotoSearchRevision =>
@@ -213,26 +213,26 @@ public partial class MainActivity
         if (resetScroll)
             appSearchList?.SetSelection(0);
         if (appSearchTitle is not null)
-            appSearchTitle.Text = "Files";
+            appSearchTitle.Text = Localize(Resource.String.ui_files);
         if (appSearchCount is not null)
-            appSearchCount.Text = !fileSearchAccess ? "Allow access to search your device’s shared storage."
-                : fileSnapshot is null ? fileSearchFailed ? "Couldn’t read shared storage. Try reopening file search." : "Preparing file catalog…"
-                : fileSnapshot.Files.Length == 0 && fileSearchLoad is null ? "No files found in shared storage."
+            appSearchCount.Text = !fileSearchAccess ? Localize(Resource.String.ui_allow_access_to_search_your_devices_shared_storage)
+                : fileSnapshot is null ? fileSearchFailed ? Localize(Resource.String.ui_couldnt_read_shared_storage_try_reopening_file_search) : Localize(Resource.String.ui_preparing_file_catalog)
+                : fileSnapshot.Files.Length == 0 && fileSearchLoad is null ? Localize(Resource.String.ui_no_files_found_in_shared_storage)
                 : string.IsNullOrWhiteSpace(query) ? FileSearchHint()
-                : documentQueryLoad is not null ? $"{Counted(matches.Length, "file")} · searching documents…"
-                : imageQueryFailed ? $"{Counted(matches.Length, "file")} · image search unavailable"
-                : documentQueryFailed ? $"{Counted(matches.Length, "file")} · document search unavailable"
-                : imageQueryLoad is not null ? $"{Counted(matches.Length, "file")} · searching images…"
-                : matches.Length == 0 && fileSearchScope != FileSearchScope.Documents && ImageSearch.Enabled && !ImageSearch.HasIndex ? "No matching filenames · image index pending."
-                : matches.Length == 0 && fileSearchLoad is not null ? "No matches yet · checking for changes…"
-                : matches.Length == 0 ? "No matching files." : Counted(matches.Length, "file");
+                : documentQueryLoad is not null ? Localize(Resource.String.ui_value_searching_documents, Counted(matches.Length, Resource.Plurals.file))
+                : imageQueryFailed ? Localize(Resource.String.ui_value_image_search_unavailable, Counted(matches.Length, Resource.Plurals.file))
+                : documentQueryFailed ? Localize(Resource.String.ui_value_document_search_unavailable, Counted(matches.Length, Resource.Plurals.file))
+                : imageQueryLoad is not null ? Localize(Resource.String.ui_value_searching_images, Counted(matches.Length, Resource.Plurals.file))
+                : matches.Length == 0 && fileSearchScope != FileSearchScope.Documents && ImageSearch.Enabled && !ImageSearch.HasIndex ? Localize(Resource.String.ui_no_matching_filenames_image_index_pending)
+                : matches.Length == 0 && fileSearchLoad is not null ? Localize(Resource.String.ui_no_matches_yet_checking_for_changes)
+                : matches.Length == 0 ? Localize(Resource.String.ui_no_matching_files) : Counted(matches.Length, Resource.Plurals.file);
     }
 
     private string FileSearchHint() => fileSearchScope switch
     {
-        FileSearchScope.Images => HasSearchablePhotos ? "Search image filenames or indexed photos." : "Type an image filename to search.",
-        FileSearchScope.Documents => DocumentSearch.Searchable ? "Search document filenames or indexed passages." : "Type a document filename to search.",
-        _ => HasSearchablePhotos || DocumentSearch.Searchable ? "Search filenames or indexed content." : "Type a filename to search."
+        FileSearchScope.Images => HasSearchablePhotos ? Localize(Resource.String.ui_search_image_filenames_or_indexed_photos) : Localize(Resource.String.ui_type_an_image_filename_to_search),
+        FileSearchScope.Documents => DocumentSearch.Searchable ? Localize(Resource.String.ui_search_document_filenames_or_indexed_passages) : Localize(Resource.String.ui_type_a_document_filename_to_search),
+        _ => HasSearchablePhotos || DocumentSearch.Searchable ? Localize(Resource.String.ui_search_filenames_or_indexed_content) : Localize(Resource.String.ui_type_a_filename_to_search)
     };
 
     private static string FileType(string name)
@@ -258,7 +258,7 @@ public partial class MainActivity
             return;
         fileTypeScroll.Visibility = fileSearchAccess ? ViewStates.Visible : ViewStates.Gone;
         FileSearchPill[] pills = types.Length == 0 ? ScopePills :
-            [new("All", null, null), .. types.Select(type => new FileSearchPill(type.Length == 0 ? "No extension" : type, null, type))];
+            [new(Localize(Resource.String.ui_all), null, null), .. types.Select(type => new FileSearchPill(type.Length == 0 ? Localize(Resource.String.ui_no_extension) : type, null, type))];
         if (!pills.AsSpan().SequenceEqual(displayedFilePills))
         {
             bool changedKind = displayedFilePills.Length == 0 || displayedFilePills[0].Scope.HasValue != pills[0].Scope.HasValue;
@@ -366,7 +366,7 @@ public partial class MainActivity
         HideKeyboard();
         if (!SharedStorage.CanRead(this) || !File.Exists(file.Path))
         {
-            Toast("This file is no longer available.");
+            Toast(Localize(Resource.String.ui_this_file_is_no_longer_available));
             return;
         }
         using var uri = SharedFileProvider.UriFor(file.Path);

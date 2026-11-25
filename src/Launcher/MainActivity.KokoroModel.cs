@@ -45,8 +45,8 @@ public partial class MainActivity
 
     private void RenderSpeechSettings()
     {
-        AddSpeechActions(AddSettingsCard("Playback"));
-        var panel = AddSettingsCard("Kokoro model files");
+        AddSpeechActions(AddSettingsCard(Localize(Resource.String.ui_playback)));
+        var panel = AddSettingsCard(Localize(Resource.String.ui_kokoro_model_files));
         bool installed = KokoroModelInstaller.IsInstalled(this);
         displayedKokoroBusy = kokoroDownload is not null || kokoroRemoving;
         kokoroStatus = Text("", 13, color: palette.Muted);
@@ -56,14 +56,14 @@ public partial class MainActivity
         if (kokoroDownload is not null)
         {
             kokoroBar = ModelProgressBar(panel);
-            SettingRow(panel, "Cancel download", "Stop this installation", () => kokoroDownload?.Cancel(), "close");
+            SettingRow(panel, Localize(Resource.String.ui_cancel_download), Localize(Resource.String.ui_stop_this_installation), () => kokoroDownload?.Cancel(), "close");
         }
         else if (!kokoroRemoving)
         {
             if (installed)
             {
                 if (afterKokoroInstall is not null)
-                    SettingRow(panel, "Continue to speech", "Use the installed voice model", () =>
+                    SettingRow(panel, Localize(Resource.String.ui_continue_to_speech), Localize(Resource.String.ui_use_the_installed_voice_model), () =>
                     {
                         var next = afterKokoroInstall;
                         afterKokoroInstall = null;
@@ -73,13 +73,13 @@ public partial class MainActivity
                             RenderBody();
                         next?.Invoke();
                     }, "play");
-                SettingRow(panel, "Remove model files", "Free offline speech storage", () => Confirm("Remove Kokoro model?",
-                    "Download it again to use Kokoro offline speech.", "Remove model", () => _ = RemoveKokoroModel()), "close");
+                SettingRow(panel, Localize(Resource.String.ui_remove_model_files), Localize(Resource.String.ui_free_offline_speech_storage), () => Confirm(Localize(Resource.String.ui_remove_kokoro_model),
+                    Localize(Resource.String.ui_download_it_again_to_use_kokoro_offline_speech), Localize(Resource.String.ui_remove_model), () => _ = RemoveKokoroModel()), "close");
             }
             else
-                SettingRow(panel, "Download model", "Kokoro multilingual · about 350 MB", () => _ = DownloadKokoroModel(), "down");
+                SettingRow(panel, Localize(Resource.String.ui_download_model), Localize(Resource.String.ui_kokoro_multilingual_about_350_mb), () => _ = DownloadKokoroModel(), "down");
         }
-        Paragraph("Kokoro reads articles, notifications and other text aloud on this device.", panel);
+        Paragraph(Localize(Resource.String.ui_kokoro_reads_articles_notifications_and_other_text_aloud_on), panel);
         kokoroBytes = 0;
         if (installed)
             _ = ReadKokoroStorage();
@@ -107,9 +107,9 @@ public partial class MainActivity
             RenderBody();
             return;
         }
-        string detail = kokoroRemoving ? "Removing model files…" : kokoroDownload is not null
+        string detail = kokoroRemoving ? Localize(Resource.String.ui_removing_model_files) : kokoroDownload is not null
             ? kokoroProgress.Message
-            : kokoroMessage ?? (KokoroModelInstaller.IsInstalled(this) ? "Model ready · offline speech available" : "Model download required · about 350 MB");
+            : kokoroMessage ?? (KokoroModelInstaller.IsInstalled(this) ? Localize(Resource.String.ui_model_ready_offline_speech_available) : Localize(Resource.String.ui_model_download_required_about_350_mb));
         string statusText = kokoroBytes > 0 ? $"{detail}\n{StorageSize(kokoroBytes)} stored on device" : detail;
         if (kokoroStatus.Text != statusText)
             kokoroStatus.Text = statusText;
@@ -135,11 +135,11 @@ public partial class MainActivity
             }
         });
         try { await Task.Run(() => KokoroModelInstaller.InstallAsync(ApplicationContext!, progress, download.Token)); }
-        catch (OperationCanceledException) when (download.IsCancellationRequested) { kokoroMessage = "Download cancelled."; }
+        catch (OperationCanceledException) when (download.IsCancellationRequested) { kokoroMessage = Localize(Resource.String.ui_download_cancelled); }
         catch (Exception error)
         {
             Android.Util.Log.Warn("LauncherKokoro", error.ToString());
-            kokoroMessage = "Installation failed. " + error.Message;
+            kokoroMessage = Localize(Resource.String.ui_installation_failed) + error.Message;
         }
         finally
         {
@@ -158,7 +158,7 @@ public partial class MainActivity
         try { await Task.Run(() => KokoroModelInstaller.RemoveAsync(ApplicationContext!)); }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException)
         {
-            kokoroMessage = "Couldn't remove the model files. Try again.";
+            kokoroMessage = Localize(Resource.String.ui_couldn_t_remove_the_model_files_try_again);
         }
         finally
         {

@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using LauncherApp.Services;
 using System;
 using System.Collections.Generic;
@@ -8,18 +8,18 @@ namespace LauncherApp
 {
     public partial class MainActivity : Activity
     {
-        private void ShowGestureSetup() => Sheet("Screen gestures", (panel, dialog) =>
+        private void ShowGestureSetup() => Sheet(Localize(Resource.String.ui_screen_gestures), (panel, dialog) =>
         {
             Paragraph(
-                "Configure how Launcher responds to gestures on your home screen. " +
-                "Gestures only work within Launcher and do not interfere with Android's system gestures.",
+                Localize(Resource.String.ui_configure_how_launcher_responds_to_gestures_on_your_home) +
+                Localize(Resource.String.ui_gestures_only_work_within_launcher_and_do_not_interfere),
                 panel);
 
-            SectionCaption(panel, "Screen locking");
+            SectionCaption(panel, Localize(Resource.String.ui_screen_locking));
 
             ToggleRow(
                 panel,
-                "Double-tap to lock screen",
+                Localize(Resource.String.ui_double_tap_to_lock_screen),
                 state.DoubleTapToLock,
                 enabled =>
                 {
@@ -28,27 +28,27 @@ namespace LauncherApp
 
                     if (enabled && !SystemPanelService.IsEnabled(this))
                     {
-                        Toast("Enable Launcher accessibility access to use screen locking.");
+                        Toast(Localize(Resource.String.ui_enable_launcher_accessibility_access_to_use_screen_locking));
                     }
                 });
 
             Paragraph(
-                "Double-tap an *empty area* on the Today or Apps screen to lock your phone. " +
-                "Tapping app icons, widgets and other controls will continue working normally.",
+                Localize(Resource.String.ui_double_tap_an_empty_area_on_the_today_or) +
+                Localize(Resource.String.ui_tapping_app_icons_widgets_and_other_controls_will_continue),
                 panel);
 
             Gap(panel, 8);
 
-            SectionCaption(panel, "Required access");
+            SectionCaption(panel, Localize(Resource.String.ui_required_access));
 
             bool accessibilityEnabled = SystemPanelService.IsEnabled(this);
 
             SettingRow(
                 panel,
-                "Launcher accessibility",
+                Localize(Resource.String.ui_launcher_accessibility),
                 accessibilityEnabled
-                    ? "Connected · screen locking available"
-                    : "Not connected · required for screen locking",
+                    ? Localize(Resource.String.ui_connected_screen_locking_available)
+                    : Localize(Resource.String.ui_not_connected_required_for_screen_locking),
                 () =>
                 {
                     OpenIntent(new Intent(
@@ -58,10 +58,10 @@ namespace LauncherApp
 
             Paragraph(
                 accessibilityEnabled
-                    ? "Launcher can request Android to lock the screen using its existing accessibility service."
-                    : "Android requires accessibility access to lock the screen. " +
-                      "Open Accessibility settings and enable *Launcher system panel*. " +
-                      "You do not need to enable the system panel overlay.",
+                    ? Localize(Resource.String.ui_launcher_can_request_android_to_lock_the_screen_using)
+                    : Localize(Resource.String.ui_android_requires_accessibility_access_to_lock_the_screen) +
+                      Localize(Resource.String.ui_open_accessibility_settings_and_enable_launcher_system_panel) +
+                      Localize(Resource.String.ui_you_do_not_need_to_enable_the_system_panel),
                 panel);
 
             Gap(panel, 8);
@@ -70,14 +70,14 @@ namespace LauncherApp
             {
                 panel.AddView(
                     Button(
-                        "Test screen lock",
+                        Localize(Resource.String.ui_test_screen_lock),
                         () =>
                         {
                             dialog.Dismiss();
 
                             if (!SystemPanelService.TryLockScreen())
                             {
-                                Toast("Unable to lock the screen. Check Launcher accessibility access.");
+                                Toast(Localize(Resource.String.ui_unable_to_lock_the_screen_check_launcher_accessibility_access));
                             }
                         }),
                     Match());
@@ -87,7 +87,7 @@ namespace LauncherApp
         {
             footer.AddView(
                 Button(
-                    "Done",
+                    Localize(Resource.String.ui_done),
                     () =>
                     {
                         dialog.Dismiss();

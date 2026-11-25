@@ -1,4 +1,4 @@
-﻿using Android.Widget;
+using Android.Widget;
 using Launcher.Core;
 using LauncherApp.Services;
 using LauncherApp.UI;
@@ -24,10 +24,10 @@ public partial class MainActivity
                 package.SetSingleLine(true);
                 package.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                 details.AddView(package, Match());
-                details.AddView(Text("Version " + profile.Version, 12), Match());
+                details.AddView(Text(Localize(Resource.String.ui_version) + profile.Version, 12), Match());
                 identity.AddView(details, new LinearLayout.LayoutParams(0, -2, 1));
                 var qr = new AppQrView(this, "https://play.google.com/store/apps/details?id=" + app.PackageName);
-                qr.Click += (_, _) => Sheet("App QR code", (content, sheet) => { content.AddView(new AppQrView(this, "https://play.google.com/store/apps/details?id=" + app.PackageName), Match(Dp(240))); Paragraph("Scan to open the app on Google Play. Apps installed from other sources may not have a listing.", content); });
+                qr.Click += (_, _) => Sheet(Localize(Resource.String.ui_app_qr_code), (content, sheet) => { content.AddView(new AppQrView(this, "https://play.google.com/store/apps/details?id=" + app.PackageName), Match(Dp(240))); Paragraph(Localize(Resource.String.ui_scan_to_open_the_app_on_google_play_apps), content); });
                 identity.AddView(qr, new LinearLayout.LayoutParams(Dp(64), Dp(64)));
                 panel.AddView(identity, Match());
                 var source = Text(profile.Source, 11, color: palette.Muted);
@@ -50,7 +50,7 @@ public partial class MainActivity
                 Gap(panel, 16);
                 if (AppCatalog.HasUsageAccess(this))
                 {
-                    var period = Text("TODAY", 10, true, palette.Muted);
+                    var period = Text(Localize(Resource.String.ui_today_upper), 10, true, palette.Muted);
                     period.LetterSpacing = .10f;
                     panel.AddView(period, Match());
                     string Duration(long ms)
@@ -70,32 +70,32 @@ public partial class MainActivity
                     TextView? today = null, week = null;
                     void Period(bool weekly)
                     {
-                        period.Text = weekly ? "LAST SEVEN DAYS" : "TODAY";
+                        period.Text = weekly ? Localize(Resource.String.ui_last_seven_days_upper) : Localize(Resource.String.ui_today_upper);
                         total.Text = Duration((weekly ? profile.Days : profile.Hours).Sum());
                         graph.RemoveAllViews();
-                        graph.AddView(new HistoryChart(this, (weekly ? profile.Days : profile.Hours).Select(v => v / 60000f).ToArray(), weekly ? Enumerable.Range(0, 7).Select(i => DateTime.Today.AddDays(i - 6).ToString("ddd")).ToArray() : Enumerable.Range(0, 24).Select(i => i.ToString("00") + ":00").ToArray(), palette.Accent, palette.Text, true), new Android.Widget.FrameLayout.LayoutParams(-1, -1));
+                        graph.AddView(new HistoryChart(this, (weekly ? profile.Days : profile.Hours).Select(v => v / 60000f).ToArray(), weekly ? Enumerable.Range(0, 7).Select(i => DateTime.Today.AddDays(i - 6).ToString("ddd", UiCulture)).ToArray() : Enumerable.Range(0, 24).Select(i => i.ToString("00") + ":00").ToArray(), palette.Accent, palette.Text, true), new Android.Widget.FrameLayout.LayoutParams(-1, -1));
                         foreach (var pair in new[] { (View: today!, Selected: !weekly), (View: week!, Selected: weekly) })
                         {
                             pair.View.Background = pair.Selected ? Background(palette.Accent, 9) : null;
                             pair.View.SetTextColor(pair.Selected ? palette.OnAccent : palette.Muted);
                         }
                     }
-                    today = RootAction("Today", () => Period(false));
-                    week = RootAction("Last 7 days", () => Period(true));
+                    today = RootAction(Localize(Resource.String.ui_today), () => Period(false));
+                    week = RootAction(Localize(Resource.String.ui_last_7_days), () => Period(true));
                     tabs.AddView(today, new LinearLayout.LayoutParams(0, -2, 1));
                     tabs.AddView(week, new LinearLayout.LayoutParams(0, -2, 1));
                     Period(false);
                 }
                 else
-                    panel.AddView(Button("Enable usage access", () => { dialog.Dismiss(); Navigate("Permissions"); }), Match());
-                Paragraph("Activity recorded by Android. Hourly bars and today's total use the same activity timeline. Android may retain less event history than its aggregate usage records.", panel);
-                RootActions(panel, ("App controls", () => { dialog.Dismiss(); EditAppUnlocked(app); }
+                    panel.AddView(Button(Localize(Resource.String.ui_enable_usage_access), () => { dialog.Dismiss(); Navigate("Permissions"); }), Match());
+                Paragraph(Localize(Resource.String.ui_activity_recorded_by_android_hourly_bars_and_today_s), panel);
+                RootActions(panel, (Localize(Resource.String.ui_app_controls), () => { dialog.Dismiss(); EditAppUnlocked(app); }
                 ),
-                    ("Share link", () => OpenIntent(Android.Content.Intent.CreateChooser(new Android.Content.Intent(Android.Content.Intent.ActionSend).SetType("text/plain")!.PutExtra(Android.Content.Intent.ExtraText, "https://play.google.com/store/apps/details?id=" + app.PackageName), "Share app")!)));
-                RootActions(panel, ("Android app information", () => AppInfo(app)));
+                    (Localize(Resource.String.ui_share_link), () => OpenIntent(Android.Content.Intent.CreateChooser(new Android.Content.Intent(Android.Content.Intent.ActionSend).SetType("text/plain")!.PutExtra(Android.Content.Intent.ExtraText, "https://play.google.com/store/apps/details?id=" + app.PackageName), Localize(Resource.String.ui_share_app))!)));
+                RootActions(panel, (Localize(Resource.String.ui_android_app_information), () => AppInfo(app)));
 
             });
         }
-        catch (Exception e) when (e is Java.Lang.Exception or InvalidOperationException) { Toast("App information is unavailable. Open Android app information instead."); }
+        catch (Exception e) when (e is Java.Lang.Exception or InvalidOperationException) { Toast(Localize(Resource.String.ui_app_information_is_unavailable_open_android_app_information_instead)); }
     }
 }

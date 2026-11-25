@@ -8,7 +8,7 @@ namespace LauncherApp;
 
 public partial class MainActivity
 {
-    private static string Counted(int count, string singular, string? plural = null) => $"{count} {(count == 1 ? singular : plural ?? singular + "s")}";
+    private static string Counted(int count, int resource) => LocalizeQuantity(resource, count);
     private void SectionCaption(LinearLayout parent, string title)
     {
         if (FilteringSettings && ReferenceEquals(parent, body))

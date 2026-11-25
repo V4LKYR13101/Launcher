@@ -7,7 +7,7 @@ using Android.Views.Accessibility;
 
 namespace LauncherApp.Services;
 
-[Service(Name = "com.launcher.home.GrayscaleService", Label = "Launcher app grayscale", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
+[Service(Name = "com.launcher.home.GrayscaleService", Label = "@string/ui_launcher_app_grayscale", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
 [IntentFilter(["android.accessibilityservice.AccessibilityService"])]
 [MetaData("android.accessibilityservice", Resource = "@xml/grayscale_service")]
 public sealed class GrayscaleService : AccessibilityService

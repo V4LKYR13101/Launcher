@@ -1,4 +1,4 @@
-﻿using Android.Graphics.Drawables;
+using Android.Graphics.Drawables;
 using Android.App;
 using Android.App.Roles;
 using Android.Content;
@@ -20,7 +20,7 @@ public partial class MainActivity
     private void SettingRow(LinearLayout parent, string title, string detail, Action action, string glyph = "more", string searchTerms = "")
     {
         if (ReferenceEquals(parent, body) &&
-            !SettingMatches(title + " " + detail + " " + searchTerms))
+            !SettingMatches(title + " " + detail + " " + searchTerms + " " + SettingsAliases(title)))
             return;
 
         if (ReferenceEquals(parent, body))
@@ -94,34 +94,36 @@ public partial class MainActivity
         parent.AddView(toggle, Match());
     }
 
-    private int SelectedChoice(string title) => title switch
+    private int SelectedChoice(int title) => title switch
     {
-        "Theme" => state.FollowSystemTheme ? 3 : Array.IndexOf(new[] { "Dark", "Light", "Sun" }, state.Theme),
-        "Columns" => state.Columns - 3,
-        "Tile height" => Array.IndexOf(new[] { 88, 100, 112, 132, 152 }, state.TileHeight),
-        "Wallpaper dimming" => Array.IndexOf(new[] { 35, 50, 65, 80 }, state.WallpaperDim),
-        "Tile corners" => Array.IndexOf(new[] { 0, 6, 12, 20, 28 }, state.CornerRadius),
-        "Icon style" => Array.IndexOf(new[] { "Monochrome", "Grayscale", "Original" }, state.IconStyle),
-        "Drawer alignment" => Array.IndexOf(new[] { "Top", "Center", "Bottom" }, state.Alignment),
-        "Temperature units" => state.Weather.Fahrenheit ? 1 : 0,
-        "Weather refresh" => Array.IndexOf(new[] { 0, 30, 60, 180, 360 }, state.Weather.RefreshMinutes),
-        "Status row position" => state.StatusPlacement == "Top" ? 0 : 1,
-        "Switching delay" => Array.IndexOf(new[] { 3, 5, 10, 20 }, state.LightThemeDelaySeconds),
+        Resource.String.ui_theme => state.FollowSystemTheme ? 3 : Array.IndexOf(new[] { "Dark", "Light", "Sun" }, state.Theme),
+        Resource.String.ui_columns => state.Columns - 3,
+        Resource.String.ui_tile_height => Array.IndexOf(new[] { 88, 100, 112, 132, 152 }, state.TileHeight),
+        Resource.String.ui_wallpaper_dimming => Array.IndexOf(new[] { 35, 50, 65, 80 }, state.WallpaperDim),
+        Resource.String.ui_tile_corners => Array.IndexOf(new[] { 0, 6, 12, 20, 28 }, state.CornerRadius),
+        Resource.String.ui_icon_style => Array.IndexOf(new[] { "Monochrome", "Grayscale", "Original" }, state.IconStyle),
+        Resource.String.ui_drawer_alignment => Array.IndexOf(new[] { "Top", "Center", "Bottom" }, state.Alignment),
+        Resource.String.ui_temperature_units => state.Weather.Fahrenheit ? 1 : 0,
+        Resource.String.ui_weather_refresh => Array.IndexOf(new[] { 0, 30, 60, 180, 360 }, state.Weather.RefreshMinutes),
+        Resource.String.ui_status_row_position => state.StatusPlacement == "Top" ? 0 : 1,
+        Resource.String.ui_switching_delay => Array.IndexOf(new[] { 3, 5, 10, 20 }, state.LightThemeDelaySeconds),
         _ => -1
     };
+    private void Choose(int title, string[] options, Action<int> action, int selected = -1) =>
+        Choose(Localize(title), options, action, selected >= 0 ? selected : SelectedChoice(title));
+
     private void Choose(string title, string[] options, Action<int> action, int selected = -1) => Sheet(title, (panel, dialog) =>
     {
-        int current = selected >= 0 ? selected : SelectedChoice(title);
         for (int i = 0; i < options.Length; i++)
         {
             int index = i;
-            bool active = i == current;
+            bool active = i == selected;
             var option = Text(options[i] + (active ? "   ✓" : ""), 15, active, active ? palette.Accent : palette.Text);
             option.Gravity = GravityFlags.Start | GravityFlags.CenterVertical;
             option.SetMinimumHeight(Dp(52));
             option.SetPadding(Dp(14), Dp(14), Dp(14), Dp(14));
             option.Selected = active;
-            option.ContentDescription = options[i] + (active ? ", selected" : "");
+            option.ContentDescription = options[i] + (active ? Localize(Resource.String.ui_selected) : "");
             if (active)
                 option.Background = Background(new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, (byte)20), 12);
             TouchFeedback(option, 10);
@@ -132,22 +134,22 @@ public partial class MainActivity
         }
     });
 
-    private void Prompt(string title, string initial, Action<string> action)
+    private void Prompt(int title, string initial, Action<string> action)
     {
         EditText? input = null;
-        var dialog = Sheet(title, (panel, sheet) =>
+        var dialog = Sheet(Localize(title), (panel, sheet) =>
         {
-            bool weather = title == "Weather location";
-            bool secret = title.Contains("API key", StringComparison.OrdinalIgnoreCase);
-            bool lux = title.Contains("(lux)");
-            bool feedCount = title == "Articles to display";
-            bool duration = title.Contains("duration", StringComparison.OrdinalIgnoreCase), address = title.Contains("address", StringComparison.OrdinalIgnoreCase), code = title == "Pairing code", colour = title.Contains("#");
-            string help = feedCount ? "Choose how many stories appear initially, from 1 to 50." : lux ? "Enter the sensor level in lux. The Light threshold must be higher than the Dark threshold." : weather ? "Search for a city or town." : secret ? "Paste your provider key. Leave this blank to remove it." : duration ? "Use a duration such as 10 min, 30s or 1h." : address ? "Enter the address shown by Launcher Companion." : code ? "Enter the eight-digit code shown on your computer." : colour ? "Use a six-digit hex colour, such as #E4FF00." : title.Contains("command") || title.Contains("query") ? "Enter the search or value for this card." : "Enter a name below.";
+            bool weather = title == Resource.String.ui_weather_location;
+            bool secret = title is Resource.String.ui_brave_search_api_key or Resource.String.ui_youtube_data_api_key;
+            bool lux = title is Resource.String.ui_light_threshold_lux or Resource.String.ui_dark_threshold_lux;
+            bool feedCount = title == Resource.String.ui_articles_to_display;
+            bool duration = title == Resource.String.ui_timer_duration, address = title == Resource.String.ui_desktop_companion_address, code = title == Resource.String.ui_pairing_code, colour = title == Resource.String.ui_accent_rrggbb;
+            string help = feedCount ? Localize(Resource.String.ui_choose_how_many_stories_appear_initially_from_1_to) : lux ? Localize(Resource.String.ui_enter_the_sensor_level_in_lux_the_light_threshold) : weather ? Localize(Resource.String.ui_search_for_a_city_or_town_2) : secret ? Localize(Resource.String.ui_paste_your_provider_key_leave_this_blank_to_remove) : duration ? Localize(Resource.String.ui_use_a_duration_such_as_10_min_30s_or) : address ? Localize(Resource.String.ui_enter_the_address_shown_by_launcher_companion) : code ? Localize(Resource.String.ui_enter_the_eight_digit_code_shown_on_your_computer) : colour ? Localize(Resource.String.ui_use_a_six_digit_hex_colour_such_as_e4ff00) : title is Resource.String.ui_web_query or Resource.String.ui_youtube_query ? Localize(Resource.String.ui_enter_the_search_or_value_for_this_card) : Localize(Resource.String.ui_enter_a_name_below);
             Paragraph(help, panel);
-            var label = Text(feedCount ? "STORY COUNT" : lux ? "LIGHT LEVEL (LUX)" : weather ? "CITY" : secret ? "API KEY" : duration ? "DURATION" : address ? "ADDRESS" : code ? "PAIRING CODE" : colour ? "HEX COLOUR" : "NAME", 10, true, palette.Muted);
+            var label = Text(feedCount ? Localize(Resource.String.ui_story_count_upper) : lux ? Localize(Resource.String.ui_light_level_lux_upper) : weather ? Localize(Resource.String.ui_city_upper) : secret ? Localize(Resource.String.ui_api_key_upper) : duration ? Localize(Resource.String.ui_duration_upper) : address ? Localize(Resource.String.ui_address_upper) : code ? Localize(Resource.String.ui_pairing_code_upper) : colour ? Localize(Resource.String.ui_hex_colour_upper) : Localize(Resource.String.ui_name_upper), 10, true, palette.Muted);
             label.SetPadding(Dp(4), 0, 0, Dp(8));
             panel.AddView(label, Match());
-            input = new EditText(this) { Text = initial, Hint = weather ? "e.g. Cape Town, South Africa" : title == "New drawer" ? "e.g. Daily essentials" : title, TextSize = 18, Typeface = regular };
+            input = new EditText(this) { Text = initial, Hint = weather ? Localize(Resource.String.ui_e_g_cape_town_south_africa) : title == Resource.String.ui_new_drawer ? Localize(Resource.String.ui_e_g_daily_essentials) : Localize(title), TextSize = 18, Typeface = regular };
             input.SetSingleLine(true);
             if (lux)
                 input.InputType = Android.Text.InputTypes.ClassNumber | Android.Text.InputTypes.NumberFlagDecimal;
@@ -171,7 +173,7 @@ public partial class MainActivity
             Gap(panel, 6);
         }, (actions, sheet) =>
         {
-            DialogActions(actions, ("Cancel", sheet.Dismiss), (title == "Weather location" ? "Search" : title == "New drawer" ? "Create drawer" : "Save", () =>
+            DialogActions(actions, (Localize(Resource.String.ui_cancel), sheet.Dismiss), (title == Resource.String.ui_weather_location ? Localize(Resource.String.ui_search) : title == Resource.String.ui_new_drawer ? Localize(Resource.String.ui_create_drawer) : Localize(Resource.String.ui_save), () =>
             {
                 string value = input?.Text ?? "", error = ValidatePrompt(title, value);
                 if (error.Length > 0)
@@ -189,57 +191,57 @@ public partial class MainActivity
         input.PostDelayed(() => ((Android.Views.InputMethods.InputMethodManager?)GetSystemService(InputMethodService))?.ShowSoftInput(input, Android.Views.InputMethods.ShowFlags.Implicit), 180);
     }
 
-    private string ValidatePrompt(string title, string value)
+    private string ValidatePrompt(int title, string value)
     {
         string text = value.Trim();
-        if (title.Contains("API key", StringComparison.OrdinalIgnoreCase) || title == "Search aliases")
+        if (title is Resource.String.ui_brave_search_api_key or Resource.String.ui_youtube_data_api_key || title == Resource.String.ui_search_aliases)
             return "";
-        if (title.Contains('#'))
-            return System.Text.RegularExpressions.Regex.IsMatch(text, "^#[0-9a-fA-F]{6}$") ? "" : "Use six hex digits, such as #E4FF00.";
-        if (title == "Articles to display")
-            return int.TryParse(text, out int count) && count is >= 1 and <= 50 ? "" : "Choose a number from 1 to 50.";
-        if (title.Contains("(lux)"))
+        if (title == Resource.String.ui_accent_rrggbb)
+            return System.Text.RegularExpressions.Regex.IsMatch(text, "^#[0-9a-fA-F]{6}$") ? "" : Localize(Resource.String.ui_use_six_hex_digits_such_as_e4ff00);
+        if (title == Resource.String.ui_articles_to_display)
+            return int.TryParse(text, System.Globalization.NumberStyles.Integer, UiCulture, out int count) && count is >= 1 and <= 50 ? "" : Localize(Resource.String.ui_choose_a_number_from_1_to_50);
+        if (title is Resource.String.ui_light_threshold_lux or Resource.String.ui_dark_threshold_lux)
         {
-            if ((!double.TryParse(text, out double lux) && !double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lux)) || !double.IsFinite(lux) || lux is < 0 or > 200000)
-                return "Enter a light level from 0 to 200000 lux.";
-            return title.StartsWith("Light") && lux <= state.DarkThemeLux || title.StartsWith("Dark") && lux >= state.LightThemeLux ? "The Light threshold must be higher than the Dark threshold." : "";
+            if ((!double.TryParse(text, System.Globalization.NumberStyles.Float, UiCulture, out double lux) && !double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lux)) || !double.IsFinite(lux) || lux is < 0 or > 200000)
+                return Localize(Resource.String.ui_enter_a_light_level_from_0_to_200000_lux);
+            return title == Resource.String.ui_light_threshold_lux && lux <= state.DarkThemeLux || title == Resource.String.ui_dark_threshold_lux && lux >= state.LightThemeLux ? Localize(Resource.String.ui_the_light_threshold_must_be_higher_than_the_dark) : "";
         }
-        if (title.Contains("duration", StringComparison.OrdinalIgnoreCase))
+        if (title == Resource.String.ui_timer_duration)
         {
             try
             {
                 RootCommand.TimerDuration(text);
                 return "";
             }
-            catch (ArgumentException e) { return e.Message; }
+            catch (ArgumentException e) { return PromptError(e); }
         }
-        if (title.Contains("address", StringComparison.OrdinalIgnoreCase))
+        if (title == Resource.String.ui_desktop_companion_address)
         {
             try
             {
                 CompanionLink.ValidateAddress(text);
                 return "";
             }
-            catch (ArgumentException e) { return e.Message; }
+            catch (ArgumentException e) { return PromptError(e); }
         }
-        if (title == "Pairing code")
-            return text.Length == 8 && text.All(char.IsAsciiDigit) ? "" : "Enter the eight-digit code shown on the computer.";
-        if (title == "Weather location")
-            return text.Length >= 2 ? "" : "Enter at least two characters.";
-        if (title == "Save a link")
-            return OnlineCards.SafeLink(text) ? "" : "Enter a full http:// or https:// link.";
-        return text.Length == 0 ? "Enter a value before saving." : "";
+        if (title == Resource.String.ui_pairing_code)
+            return text.Length == 8 && text.All(char.IsAsciiDigit) ? "" : Localize(Resource.String.ui_enter_the_eight_digit_code_shown_on_the_computer);
+        if (title == Resource.String.ui_weather_location)
+            return text.Length >= 2 ? "" : Localize(Resource.String.ui_enter_at_least_two_characters);
+        if (title == Resource.String.ui_save_a_link)
+            return OnlineCards.SafeLink(text) ? "" : Localize(Resource.String.ui_enter_a_full_http_or_https_link);
+        return text.Length == 0 ? Localize(Resource.String.ui_enter_a_value_before_saving) : "";
     }
 
     private void Confirm(string title, string message, string actionLabel, Action action) => Sheet(title, (panel, dialog) => Paragraph(message, panel), (footer, dialog) =>
     {
-        DialogActions(footer, ("Cancel", dialog.Dismiss), (actionLabel, () => { dialog.Dismiss(); action(); }
+        DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (actionLabel, () => { dialog.Dismiss(); action(); }
         ));
     });
 
     private void QuickControls()
     {
-        Sheet("Launcher", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_launcher), (panel, dialog) =>
         {
             void Go(Action action)
             {
@@ -255,15 +257,15 @@ public partial class MainActivity
             }
             panel.AddView(navigation, Match());
             Gap(panel, 8);
-            SettingRow(panel, "Light", state.Theme == "Light" ? "On" : "Soft light theme", () => Go(() => { ManualTheme("Light"); }), "sun");
-            SettingRow(panel, "Sun", state.Theme == "Sun" ? "On" : "High contrast, outdoors", () => Go(() => { ManualTheme("Sun"); }), "sun");
-            SettingRow(panel, "Dark", state.Theme == "Dark" ? "On" : "Quiet, dark surfaces", () => Go(() => { ManualTheme("Dark"); }), "focus");
-            SettingRow(panel, "Accent", state.Accent, () => Go(ShowAccentChoice), "photo");
-            SettingRow(panel, "Quick access", "Choose the apps on your home screen", () => Go(ShowQuickAccess), "pin");
-            SettingRow(panel, "Focus", state.Focus ? "On · tap to turn off" : "Quiet outlined tiles", () => Go(() => { state.Focus = !state.Focus; state.FocusEndsAt = 0; Save(); Render(); }), "focus");
-            SettingRow(panel, page == "Root" ? "Add widget" : "Add drawer", "", () => Go(() => { if (page == "Root") AddWidget(); else NewDrawer(); }), "plus");
-            SettingRow(panel, "All apps", "Search your installed apps", () => Go(() => { page = "Tiles"; StartSearch(); }), "grid");
-            SettingRow(panel, "Settings", "Make Launcher your own", () => Go(() => Navigate("Settings")), "settings");
+            SettingRow(panel, Localize(Resource.String.ui_light), state.Theme == "Light" ? Localize(Resource.String.ui_on) : Localize(Resource.String.ui_soft_light_theme), () => Go(() => { ManualTheme("Light"); }), "sun");
+            SettingRow(panel, Localize(Resource.String.ui_sun), state.Theme == "Sun" ? Localize(Resource.String.ui_on) : Localize(Resource.String.ui_high_contrast_outdoors), () => Go(() => { ManualTheme("Sun"); }), "sun");
+            SettingRow(panel, Localize(Resource.String.ui_dark), state.Theme == "Dark" ? Localize(Resource.String.ui_on) : Localize(Resource.String.ui_quiet_dark_surfaces), () => Go(() => { ManualTheme("Dark"); }), "focus");
+            SettingRow(panel, Localize(Resource.String.ui_accent), state.Accent, () => Go(ShowAccentChoice), "photo");
+            SettingRow(panel, Localize(Resource.String.ui_quick_access), Localize(Resource.String.ui_choose_the_apps_on_your_home_screen), () => Go(ShowQuickAccess), "pin");
+            SettingRow(panel, Localize(Resource.String.ui_focus), state.Focus ? Localize(Resource.String.ui_on_tap_to_turn_off) : Localize(Resource.String.ui_quiet_outlined_tiles), () => Go(() => { state.Focus = !state.Focus; state.FocusEndsAt = 0; Save(); Render(); }), "focus");
+            SettingRow(panel, page == "Root" ? Localize(Resource.String.ui_add_widget) : Localize(Resource.String.ui_add_drawer), "", () => Go(() => { if (page == "Root") AddWidget(); else NewDrawer(); }), "plus");
+            SettingRow(panel, Localize(Resource.String.ui_all_apps), Localize(Resource.String.ui_search_your_installed_apps), () => Go(() => { page = "Tiles"; StartSearch(); }), "grid");
+            SettingRow(panel, Localize(Resource.String.ui_settings), Localize(Resource.String.ui_make_launcher_your_own), () => Go(() => Navigate("Settings")), "settings");
         });
     }
 
@@ -291,44 +293,45 @@ public partial class MainActivity
             return;
         }
 
-        var personal = AddSettingsCard("Make it yours");
-        SettingRow(personal, "Appearance", (state.FollowSystemTheme ? "Follow Android" : state.Theme) +
-            $" · {state.Columns} columns", () => Navigate("Appearance"), "sun");
-        SettingRow(personal, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
-        SettingRow(personal, "Apps & drawers", $"{Counted(state.Drawers.Count, "drawer")} · {HiddenAppCount} hidden",
+        var personal = AddSettingsCard(Localize(Resource.String.ui_make_it_yours));
+        AddLanguageSetting(personal);
+        SettingRow(personal, Localize(Resource.String.ui_appearance), (state.FollowSystemTheme ? Localize(Resource.String.ui_follow_android) : AppearanceValue(state.Theme)) +
+            Localize(Resource.String.ui_value_columns, state.Columns), () => Navigate("Appearance"), "sun");
+        SettingRow(personal, Localize(Resource.String.ui_edit_home_layout), Localize(Resource.String.ui_arrange_tiles_and_cards_undo_changes), ShowLayoutEditor, "grid");
+        SettingRow(personal, Localize(Resource.String.ui_apps_drawers), Localize(Resource.String.ui_value_value_hidden, Counted(state.Drawers.Count, Resource.Plurals.drawer), HiddenAppCount),
             () => Navigate("Apps & drawers"), "grid");
         AddGestureSetting(personal);
 
-        var features = AddSettingsCard("Launcher features");
+        var features = AddSettingsCard(Localize(Resource.String.ui_launcher_features));
         AddSearchSettingsLink(features);
         AddDownloadsSettingsLink(features);
-        SettingRow(features, "Cards, feeds & weather", $"{Sources.Count(s => s.Enabled)} news sources · Today cards and widgets",
-            () => ShowSettingsCategory("Cards, feeds & weather", AddContentSettings), "rss");
-        SettingRow(features, "Notifications & panels", ConversationService.Enabled(this) ? "Notification access on" : "Notification access off",
+        SettingRow(features, Localize(Resource.String.ui_cards_feeds_weather), Localize(Resource.String.ui_value_news_sources_today_cards_and_widgets, Sources.Count(s => s.Enabled)),
+            () => ShowSettingsCategory(Localize(Resource.String.ui_cards_feeds_weather), AddContentSettings), "rss");
+        SettingRow(features, Localize(Resource.String.ui_notifications_panels), ConversationService.Enabled(this) ? Localize(Resource.String.ui_notification_access_on) : Localize(Resource.String.ui_notification_access_off),
             () => Navigate("Notifications & panels"), "message");
         AddSpeechSettingsLink(features);
 
-        var device = AddSettingsCard("Device & data");
+        var device = AddSettingsCard(Localize(Resource.String.ui_device_data));
         AddWearSettingsLink(device);
-        SettingRow(device, "Setup & permissions", IsDefaultHome() ? "Default Home set · device access" : "Set default Home · device access",
-            () => ShowSettingsCategory("Setup & permissions", AddDeviceSettings), "phone");
-        SettingRow(device, "Privacy", "Protected previews and message history", ShowPrivacyRecovery, "lock");
-        SettingRow(device, "Backup & restore", "Export or restore your layout", () => ShowSettingsCategory("Backup & restore", AddBackupSettings), "file");
-        SettingRow(device, "App updates", "Check for a new Launcher version", () => Navigate("Updates"), "down");
+        SettingRow(device, Localize(Resource.String.ui_setup_permissions), IsDefaultHome() ? Localize(Resource.String.ui_default_home_set_device_access) : Localize(Resource.String.ui_set_default_home_device_access),
+            () => ShowSettingsCategory(Localize(Resource.String.ui_setup_permissions), AddDeviceSettings), "phone");
+        SettingRow(device, Localize(Resource.String.ui_privacy), Localize(Resource.String.ui_protected_previews_and_message_history), ShowPrivacyRecovery, "lock");
+        SettingRow(device, Localize(Resource.String.ui_backup_restore), Localize(Resource.String.ui_export_or_restore_your_layout), () => ShowSettingsCategory(Localize(Resource.String.ui_backup_restore), AddBackupSettings), "file");
+        SettingRow(device, Localize(Resource.String.ui_app_updates), Localize(Resource.String.ui_check_for_a_new_launcher_version), () => Navigate("Updates"), "down");
 
-        var support = AddSettingsCard("Help");
-        SettingRow(support, "How to use Launcher", "Gestures, drawers and customisation", ShowGuide, "note");
+        var support = AddSettingsCard(Localize(Resource.String.ui_help));
+        SettingRow(support, Localize(Resource.String.ui_how_to_use_launcher), Localize(Resource.String.ui_gestures_drawers_and_customisation), ShowGuide, "note");
         Gap(body);
-        Paragraph("Launcher · " + InstalledPackage().VersionName + "\nBuilt by *Kevin*.", null, TextAlignment.Center);
+        Paragraph(Localize(Resource.String.ui_launcher_3) + InstalledPackage().VersionName + Localize(Resource.String.ui_built_by_kevin), null, TextAlignment.Center);
     }
 
     private void AddGestureSetting(LinearLayout parent) =>
-        SettingRow(parent, "Gestures", "Double-tap to lock " + (state.DoubleTapToLock ? "on" : "off"),
-            ShowGestureSetup, "phone", "screen lock tap double tap accessibility");
+        SettingRow(parent, Localize(Resource.String.ui_gestures), Localize(Resource.String.ui_double_tap_to_lock) + (state.DoubleTapToLock ? Localize(Resource.String.ui_on_2) : Localize(Resource.String.ui_off_2)),
+            ShowGestureSetup, "phone", Localize(Resource.String.ui_screen_lock_tap_double_tap_accessibility));
 
     private void AddWearSettingsLink(LinearLayout parent) =>
-        SettingRow(parent, "Wear OS", "Set up and install Launcher Roll on your watch",
-            () => Navigate(WearSettingsPage), "clock", "watch watchface watch face companion install");
+        SettingRow(parent, Localize(Resource.String.ui_wear_os), Localize(Resource.String.ui_set_up_and_install_launcher_roll_on_your_watch),
+            () => Navigate(WearSettingsPage), "clock", Localize(Resource.String.ui_watch_watchface_watch_face_companion_install));
 
     // Dismiss category sheets before opening a second screen or dialog.
     // Switches remain in place so several related choices can be changed together.
@@ -353,57 +356,57 @@ public partial class MainActivity
 
     private void RenderAppsAndDrawersSettings()
     {
-        AddAppOrganisationSettings(AddSettingsCard("Organise apps"));
-        AddFocusSetting(AddSettingsCard("Focus"));
+        AddAppOrganisationSettings(AddSettingsCard(Localize(Resource.String.ui_organise_apps)));
+        AddFocusSetting(AddSettingsCard(Localize(Resource.String.ui_focus)));
     }
 
     private void AddAppOrganisationSettings(LinearLayout parent)
     {
-        SettingRow(parent, "Edit home layout", "Arrange tiles and cards · undo changes", ShowLayoutEditor, "grid");
-        SettingRow(parent, "Manage drawers", Counted(state.Drawers.Count, "drawer") + " · create, rename or reorder",
+        SettingRow(parent, Localize(Resource.String.ui_edit_home_layout), Localize(Resource.String.ui_arrange_tiles_and_cards_undo_changes), ShowLayoutEditor, "grid");
+        SettingRow(parent, Localize(Resource.String.ui_manage_drawers), Counted(state.Drawers.Count, Resource.Plurals.drawer) + Localize(Resource.String.ui_create_rename_or_reorder),
             () => Navigate("Drawers"), "grid");
-        SettingRow(parent, "Hidden apps", Counted(HiddenAppCount, "app") + " hidden · restore visibility",
+        SettingRow(parent, Localize(Resource.String.ui_hidden_apps), Counted(HiddenAppCount, Resource.Plurals.app) + Localize(Resource.String.ui_hidden_restore_visibility),
             () => Navigate("Hidden"), "app");
-        SettingRow(parent, "Quick access", "Choose up to five apps for the Home dock", ShowQuickAccess, "pin", "favorites favourites pinned apps");
+        SettingRow(parent, Localize(Resource.String.ui_quick_access), Localize(Resource.String.ui_choose_up_to_five_apps_for_the_home_dock), ShowQuickAccess, "pin", Localize(Resource.String.ui_favorites_favourites_pinned_apps));
     }
 
     private void AddFocusSetting(LinearLayout parent)
     {
-        ToggleRow(parent, "Focus mode", state.Focus, enabled =>
+        ToggleRow(parent, Localize(Resource.String.ui_focus_mode), state.Focus, enabled =>
         {
             state.Focus = enabled;
             if (!enabled) state.FocusEndsAt = 0;
             Save();
-        }, "quiet outlined tiles distraction");
-        SettingsExplanation(parent, "Focus gives your app tiles a quieter outlined look.");
+        }, Localize(Resource.String.ui_quiet_outlined_tiles_distraction));
+        SettingsExplanation(parent, Localize(Resource.String.ui_focus_gives_your_app_tiles_a_quieter_outlined_look));
     }
 
     private void AddContentSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Home cards & widgets", "Notes, cards and Android widgets",
+        SettingRow(parent, Localize(Resource.String.ui_home_cards_widgets), Localize(Resource.String.ui_notes_cards_and_android_widgets),
             () => go(() => Navigate("Root settings")), "root");
-        SettingRow(parent, "News & feeds", Counted(Sources.Count(s => s.Enabled), "source") + " · " +
-            Counted(state.FeedArticleCount, "story", "stories") + $" · images {(state.FeedImages ? "on" : "off")}",
+        SettingRow(parent, Localize(Resource.String.ui_news_feeds), Counted(Sources.Count(s => s.Enabled), Resource.Plurals.source) + " · " +
+            Counted(state.FeedArticleCount, Resource.Plurals.story) + Localize(state.FeedImages ? Resource.String.ui_feed_images_on : Resource.String.ui_feed_images_off),
             () => go(ManageFeeds), "rss");
-        SettingRow(parent, "Saved stories", Counted(state.SavedArticles.Count, "saved story", "saved stories"),
+        SettingRow(parent, Localize(Resource.String.ui_saved_stories), Counted(state.SavedArticles.Count, Resource.Plurals.saved_story),
             () => go(ShowSavedArticles), "rss");
-        SettingRow(parent, "Weather", string.IsNullOrEmpty(state.Weather.City) ? "Choose city and units" : state.Weather.City,
+        SettingRow(parent, Localize(Resource.String.ui_weather), string.IsNullOrEmpty(state.Weather.City) ? Localize(Resource.String.ui_choose_city_and_units) : state.Weather.City,
             () => go(() => Navigate("Weather")), "cloud");
-        SettingRow(parent, "Online cards", "RSS, web search and YouTube",
+        SettingRow(parent, Localize(Resource.String.ui_online_cards), Localize(Resource.String.ui_rss_web_search_and_youtube),
             () => go(() => Navigate("Integrations")), "link");
     }
 
     private void AddSpeechSettingsLink(LinearLayout parent) =>
-        SettingRow(parent, SpeechSettingsPage, KokoroModelInstaller.IsInstalled(this)
-                ? "Offline voice ready · playback and news"
-                : "Voice model not installed · download and playback",
-            () => OpenSpeechSettings(), "play", "Kokoro model files voice speech download storage");
+        SettingRow(parent, PageLabel(SpeechSettingsPage), KokoroModelInstaller.IsInstalled(this)
+                ? Localize(Resource.String.ui_offline_voice_ready_playback_and_news)
+                : Localize(Resource.String.ui_voice_model_not_installed_download_and_playback),
+            () => OpenSpeechSettings(), "play", Localize(Resource.String.ui_kokoro_model_files_voice_speech_download_storage));
 
     private void AddSpeechActions(LinearLayout parent)
     {
-        SettingRow(parent, "Kokoro speech", "Voice selection, speed and offline playback",
+        SettingRow(parent, Localize(Resource.String.ui_kokoro_speech_2), Localize(Resource.String.ui_voice_selection_speed_and_offline_playback),
             () => KokoroReaderDialog.Show(this), "play");
-        SettingRow(parent, "Listen to latest news", "Read RSS headlines and summaries aloud",
+        SettingRow(parent, Localize(Resource.String.ui_listen_to_latest_news), Localize(Resource.String.ui_read_rss_headlines_and_summaries_aloud),
             ReadLatestFeedsWithKokoro, "rss");
     }
 
@@ -411,22 +414,22 @@ public partial class MainActivity
     {
         LinearLayout Group(string title) => searchResults ?? AddSettingsCard(title);
 
-        AddNotificationAccessSetting(Group("Permissions"));
+        AddNotificationAccessSetting(Group(Localize(Resource.String.ui_permissions)));
 
-        var sources = Group("Sources & panels");
-        SettingRow(sources, "Notification sources", state.ConversationMessagesOnly ? "Messages only · choose apps" : "All notification types · choose apps",
-            PickConversationSources, "filter", "conversations messages filters");
-        SettingRow(sources, "Quick panel", "Open Launcher controls and current notifications",
+        var sources = Group(Localize(Resource.String.ui_sources_panels));
+        SettingRow(sources, Localize(Resource.String.ui_notification_sources), state.ConversationMessagesOnly ? Localize(Resource.String.ui_messages_only_choose_apps) : Localize(Resource.String.ui_all_notification_types_choose_apps),
+            PickConversationSources, "filter", Localize(Resource.String.ui_conversations_messages_filters));
+        SettingRow(sources, Localize(Resource.String.ui_quick_panel), Localize(Resource.String.ui_open_launcher_controls_and_current_notifications),
             () => Navigate("Quick panel"), "down");
 
-        SettingRow(Group("History"), "Message history", state.KeepMessageHistory ? "On · saving new messages" : "Off · optional local history",
+        SettingRow(Group(Localize(Resource.String.ui_history)), Localize(Resource.String.ui_message_history), state.KeepMessageHistory ? Localize(Resource.String.ui_on_saving_new_messages) : Localize(Resource.String.ui_off_optional_local_history),
             MessageHistorySettings, "message");
 
-        var alerts = Group("Alerts");
-        SettingRow(alerts, "Notification whispers", NotificationWhisperPreferences.Enabled(this)
-                ? "On · quiet spoken announcements" : "Off · choose apps and senders",
-            ShowNotificationWhisperSettings, "message", "speech voice spoken alerts");
-        SettingRow(alerts, "Timer alerts", "Android notifications and exact alarm access", OpenTimerPermissions, "clock");
+        var alerts = Group(Localize(Resource.String.ui_alerts));
+        SettingRow(alerts, Localize(Resource.String.ui_notification_whispers), NotificationWhisperPreferences.Enabled(this)
+                ? Localize(Resource.String.ui_on_quiet_spoken_announcements) : Localize(Resource.String.ui_off_choose_apps_and_senders),
+            ShowNotificationWhisperSettings, "message", Localize(Resource.String.ui_speech_voice_spoken_alerts));
+        SettingRow(alerts, Localize(Resource.String.ui_timer_alerts), Localize(Resource.String.ui_android_notifications_and_exact_alarm_access), OpenTimerPermissions, "clock");
     }
 
     private bool? notificationAccessBeforeSettings;
@@ -434,8 +437,8 @@ public partial class MainActivity
     private void AddNotificationAccessSetting(LinearLayout parent)
     {
         bool enabled = ConversationService.Enabled(this);
-        SettingRow(parent, "Notification access", enabled ? "On · manage in Android settings" : "Off · enable to show notifications in Launcher",
-            OpenNotificationAccessSettings, "lock", "permissions notification listener quick panel conversations");
+        SettingRow(parent, Localize(Resource.String.ui_notification_access), enabled ? Localize(Resource.String.ui_on_manage_in_android_settings) : Localize(Resource.String.ui_off_enable_to_show_notifications_in_launcher),
+            OpenNotificationAccessSettings, "lock", Localize(Resource.String.ui_permissions_notification_listener_quick_panel_conversations));
     }
 
     private void OpenNotificationAccessSettings()
@@ -451,51 +454,52 @@ public partial class MainActivity
         if (enabled)
             OpenAndroidSettings();
         else
-            Confirm("Notification access", "Allow Launcher to show current notifications and message previews. Message history is optional and stored on this phone.",
-                "Open Android settings", OpenAndroidSettings);
+            Confirm(Localize(Resource.String.ui_notification_access), Localize(Resource.String.ui_allow_launcher_to_show_current_notifications_and_message_previews),
+                Localize(Resource.String.ui_open_android_settings), OpenAndroidSettings);
     }
 
     private void AddDeviceSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Setup & feature health", "Check access, compatibility and recovery",
+        SettingRow(parent, Localize(Resource.String.ui_setup_feature_health), Localize(Resource.String.ui_check_access_compatibility_and_recovery),
             () => go(ShowFeatureHealth), "settings");
-        SettingRow(parent, "Permissions", "Default home, usage and notification access",
+        SettingRow(parent, Localize(Resource.String.ui_permissions), Localize(Resource.String.ui_default_home_usage_and_notification_access),
             () => go(() => Navigate("Permissions")), "settings");
-        SettingRow(parent, "Haptic feedback", state.HapticFeedback == "Off"
-                ? "Off"
-                : state.HapticFeedback + " · follows Android touch vibration",
+        SettingRow(parent, Localize(Resource.String.ui_haptic_feedback), state.HapticFeedback == "Off"
+                ? Localize(Resource.String.ui_off)
+                : state.HapticFeedback + Localize(Resource.String.ui_follows_android_touch_vibration),
             () => go(ShowHapticSettings), "phone");
-        SettingRow(parent, "System panel", state.SystemPanelEnabled
-                ? SystemPanelService.IsEnabled(this) ? "On · available across apps" : "On · enable accessibility access"
-                : "Off · controls across apps",
+        SettingRow(parent, Localize(Resource.String.ui_system_panel), state.SystemPanelEnabled
+                ? SystemPanelService.IsEnabled(this) ? Localize(Resource.String.ui_on_available_across_apps) : Localize(Resource.String.ui_on_enable_accessibility_access)
+                : Localize(Resource.String.ui_off_controls_across_apps),
             () => go(ShowSystemPanelSettings), "phone");
-        SettingRow(parent, "App grayscale", "Display permission and foreground detection",
+        SettingRow(parent, Localize(Resource.String.ui_app_grayscale), Localize(Resource.String.ui_display_permission_and_foreground_detection),
             () => go(() => Navigate("Grayscale setup")), "photo");
         // Desktop companion intentionally remains hidden until it is ready.
     }
 
     private void AddMaintenanceSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Privacy & recovery", "Protected previews, backups and data",
+        SettingRow(parent, Localize(Resource.String.ui_privacy_recovery), Localize(Resource.String.ui_protected_previews_backups_and_data),
             () => go(ShowPrivacyRecovery), "lock");
-        SettingRow(parent, "App updates", "Check, download and install from Kevlog",
+        SettingRow(parent, Localize(Resource.String.ui_app_updates), Localize(Resource.String.ui_check_download_and_install_from_kevlog),
             () => go(() => Navigate("Updates")), "down");
         AddBackupSettings(parent, go);
-        SettingRow(parent, "How to use Launcher", "Gestures, drawers, tiles and privacy",
+        SettingRow(parent, Localize(Resource.String.ui_how_to_use_launcher), Localize(Resource.String.ui_gestures_drawers_tiles_and_privacy),
             () => go(ShowGuide), "note");
     }
 
     private void AddBackupSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Back up layout", "Export settings as a JSON file", () => go(ExportBackup), "file", "backup");
-        SettingRow(parent, "Restore layout", "Import a previously saved layout", () => go(ImportBackup), "file");
+        SettingRow(parent, Localize(Resource.String.ui_back_up_layout), Localize(Resource.String.ui_export_settings_as_a_json_file), () => go(ExportBackup), "file", Localize(Resource.String.ui_backup));
+        SettingRow(parent, Localize(Resource.String.ui_restore_layout), Localize(Resource.String.ui_import_a_previously_saved_layout), () => go(ImportBackup), "file");
     }
 
     private void RenderSettingsSearchResults()
     {
         Action<Action> open = action => action();
+        AddLanguageSetting(body);
         AddGestureSetting(body);
-        SettingRow(body, "Appearance presets", "Classic and Studio · theme and layout",
+        SettingRow(body, Localize(Resource.String.ui_appearance_presets), Localize(Resource.String.ui_classic_and_studio_theme_and_layout),
             () => Navigate("Appearance"), "sun");
         AddGlassSetting(body);
         AddTouchGlowSetting(body);
@@ -518,8 +522,7 @@ public partial class MainActivity
 
         if (matchingSettings == 0)
         {
-            var empty = Text("No settings match “" + settingsQuery.Trim() +
-                "”. Try theme, icon, voice, permissions or privacy.", 14, color: palette.Muted);
+            var empty = Text(Localize(Resource.String.ui_no_settings_match_value_try_theme_icon_voice_permissions, settingsQuery.Trim()), 14, color: palette.Muted);
             empty.SetPadding(0, Dp(20), 0, Dp(20));
             body.AddView(empty, Match());
         }
@@ -527,30 +530,30 @@ public partial class MainActivity
 
     private void RenderAppearance()
     {
-        var appearance = AddSettingsCard("Theme & effects");
-        SettingRow(appearance, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme, ShowThemeChoice, "sun");
-        SettingRow(appearance, "Accent", state.Accent, ShowAccentChoice, "photo");
+        var appearance = AddSettingsCard(Localize(Resource.String.ui_theme_effects));
+        SettingRow(appearance, Localize(Resource.String.ui_theme), state.FollowSystemTheme ? Localize(Resource.String.ui_follow_android) : AppearanceValue(state.Theme), ShowThemeChoice, "sun");
+        SettingRow(appearance, Localize(Resource.String.ui_accent), state.Accent, ShowAccentChoice, "photo");
         AddGlassSetting(appearance);
         AddTouchGlowSetting(appearance);
 
-        var customisation = AddSettingsCard("Customise");
-        SettingRow(customisation, "Theme & wallpaper", state.UseWallpaper ? $"Wallpaper on · {state.WallpaperDim}% dimming" : "Wallpaper off · automatic theme and dimming",
+        var customisation = AddSettingsCard(Localize(Resource.String.ui_customise));
+        SettingRow(customisation, Localize(Resource.String.ui_theme_wallpaper), state.UseWallpaper ? Localize(Resource.String.ui_wallpaper_on_value_dimming, state.WallpaperDim) : Localize(Resource.String.ui_wallpaper_off_automatic_theme_and_dimming),
             () => Navigate("Theme & wallpaper"), "photo");
-        SettingRow(customisation, "Tiles & icons", $"{state.Columns} columns · {state.IconStyle}",
+        SettingRow(customisation, Localize(Resource.String.ui_tiles_icons), Localize(Resource.String.ui_value_columns_value, state.Columns, AppearanceValue(state.IconStyle)),
             () => Navigate("Tiles & icons"), "grid");
-        SettingRow(customisation, "Motion & depth", state.LayeredInterface ? "Layered interface on" : "Layered interface off",
+        SettingRow(customisation, Localize(Resource.String.ui_motion_depth), state.LayeredInterface ? Localize(Resource.String.ui_layered_interface_on) : Localize(Resource.String.ui_layered_interface_off),
             () => Navigate("Motion & depth"), "focus");
-        SettingRow(customisation, "Navigation & status", state.ShowHomeNavigation ? "Page tabs on" : "Page tabs off",
+        SettingRow(customisation, Localize(Resource.String.ui_navigation_status), state.ShowHomeNavigation ? Localize(Resource.String.ui_page_tabs_on) : Localize(Resource.String.ui_page_tabs_off),
             () => Navigate("Navigation & status"), "settings");
 
-        var presetCard = AddSettingsCard("Presets");
+        var presetCard = AddSettingsCard(Localize(Resource.String.ui_presets));
         var presets = Stack(true);
         presets.SetPadding(0, Dp(6), 0, Dp(6));
         foreach (string preset in new[] { "Classic", "Studio" })
         {
             var choice = preset;
-            var button = Button(choice, () => Confirm("Apply " + choice + " preset?",
-                "This changes multiple appearance settings.", "Apply preset", () =>
+            var button = Button(AppearanceValue(choice), () => Confirm(Localize(Resource.String.ui_apply_value_preset, AppearanceValue(choice)),
+                Localize(Resource.String.ui_this_changes_multiple_appearance_settings), Localize(Resource.String.ui_apply_preset), () =>
                 {
                     state.AutomaticLightTheme = false;
                     state.ApplyPreset(choice);
@@ -566,15 +569,15 @@ public partial class MainActivity
     private void RenderAppearanceSection(Action<LinearLayout, Action<Action>> addRows) =>
         addRows(AddSettingsCard(), action => action());
 
-    private void AddTouchGlowSetting(LinearLayout parent) => ToggleRow(parent, "Touch glow", state.TouchGlow, enabled =>
+    private void AddTouchGlowSetting(LinearLayout parent) => ToggleRow(parent, Localize(Resource.String.ui_touch_glow), state.TouchGlow, enabled =>
     {
         state.TouchGlow = enabled;
         if (!enabled)
             touchGlow?.Clear();
         Save();
-    }, "accent color colour finger tap ripple");
+    }, Localize(Resource.String.ui_accent_color_colour_finger_tap_ripple));
 
-    private void ShowThemeChoice() => Choose("Theme", ["Dark", "Light", "Sun", "Follow Android"], index =>
+    private void ShowThemeChoice() => Choose(Resource.String.ui_theme, [Localize(Resource.String.ui_dark), Localize(Resource.String.ui_light), Localize(Resource.String.ui_sun), Localize(Resource.String.ui_follow_android)], index =>
     {
         if (index == 3)
         {
@@ -591,37 +594,37 @@ public partial class MainActivity
     private void AddGlassSetting(LinearLayout parent)
     {
         if (OperatingSystem.IsAndroidVersionAtLeast(33))
-            ToggleRow(parent, "Liquid glass cards", state.LiquidGlassCards,
+            ToggleRow(parent, Localize(Resource.String.ui_liquid_glass_cards), state.LiquidGlassCards,
                 value =>
                 {
                     state.LiquidGlassCards = value;
                     Save();
                     if (IsStyledSettingsPage(page))
                         Render();
-                }, "notifications today root app tiles search translucent refraction wallpaper");
+                }, Localize(Resource.String.ui_notifications_today_root_app_tiles_search_translucent_refraction_wallpaper));
     }
 
     private void AddAppearanceThemeSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Automatic theme", state.AutomaticLightTheme ? "Enabled · light sensor" : "Off · manual or system theme",
+        SettingRow(parent, Localize(Resource.String.ui_automatic_theme), state.AutomaticLightTheme ? Localize(Resource.String.ui_enabled_light_sensor) : Localize(Resource.String.ui_off_manual_or_system_theme),
             () => go(() => Navigate("Automatic theme")), "sun");
-        SettingRow(parent, "Theme", state.FollowSystemTheme ? "Follow Android" : state.Theme,
+        SettingRow(parent, Localize(Resource.String.ui_theme), state.FollowSystemTheme ? Localize(Resource.String.ui_follow_android) : AppearanceValue(state.Theme),
             () => go(ShowThemeChoice), "sun");
-        SettingRow(parent, "Accent", state.Accent, () => go(ShowAccentChoice), "photo");
-        SettingRow(parent, "Wallpaper dimming", state.WallpaperDim + "% · other screens",
-            () => go(() => Choose("Wallpaper dimming", ["Subtle · 35%", "Balanced · 50%", "Deep · 65%", "Strong · 80%"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_accent), state.Accent, () => go(ShowAccentChoice), "photo");
+        SettingRow(parent, Localize(Resource.String.ui_wallpaper_dimming), state.WallpaperDim + Localize(Resource.String.ui_other_screens),
+            () => go(() => Choose(Resource.String.ui_wallpaper_dimming, [Localize(Resource.String.ui_subtle_35), Localize(Resource.String.ui_balanced_50), Localize(Resource.String.ui_deep_65), Localize(Resource.String.ui_strong_80)], index =>
             {
                 state.WallpaperDim = new[] { 35, 50, 65, 80 }[index];
                 Save();
                 Render();
             })), "photo");
-        ToggleRow(parent, "Use system wallpaper", state.UseWallpaper, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_use_system_wallpaper), state.UseWallpaper, value =>
         {
             state.UseWallpaper = value;
             Save();
             Render();
-        }, "other screens");
-        ToggleRow(parent, "Home accent glow", state.HomeAccentGlow, value =>
+        }, Localize(Resource.String.ui_other_screens_2));
+        ToggleRow(parent, Localize(Resource.String.ui_home_accent_glow), state.HomeAccentGlow, value =>
         {
             state.HomeAccentGlow = value;
             Save();
@@ -631,59 +634,59 @@ public partial class MainActivity
 
     private void AddAppearanceTileSettings(LinearLayout parent, Action<Action> go)
     {
-        SettingRow(parent, "Columns", state.Columns.ToString(),
-            () => go(() => Choose("Columns", ["3", "4", "5", "6"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_columns), state.Columns.ToString(),
+            () => go(() => Choose(Resource.String.ui_columns, ["3", "4", "5", "6"], index =>
             {
                 state.Columns = index + 3;
                 Save();
                 Render();
             })), "grid");
-        SettingRow(parent, "Tile height", state.TileHeight + " dp",
-            () => go(() => Choose("Tile height", ["Compact · 88", "Balanced · 100", "Classic · 112", "Spacious · 132", "Large · 152"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_tile_height), state.TileHeight + Localize(Resource.String.ui_dp),
+            () => go(() => Choose(Resource.String.ui_tile_height, [Localize(Resource.String.ui_compact_88), Localize(Resource.String.ui_balanced_100), Localize(Resource.String.ui_classic_112), Localize(Resource.String.ui_spacious_132), Localize(Resource.String.ui_large_152)], index =>
             {
                 state.TileHeight = new[] { 88, 100, 112, 132, 152 }[index];
                 Save();
                 Render();
             })));
-        SettingRow(parent, "Tile corners", state.CornerRadius + " dp",
-            () => go(() => Choose("Tile corners", ["Square", "Subtle · 6", "Soft · 12", "Round · 20", "Pill · 28"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_tile_corners), state.CornerRadius + Localize(Resource.String.ui_dp),
+            () => go(() => Choose(Resource.String.ui_tile_corners, [Localize(Resource.String.ui_square), Localize(Resource.String.ui_subtle_6), Localize(Resource.String.ui_soft_12), Localize(Resource.String.ui_round_20), Localize(Resource.String.ui_pill_28)], index =>
             {
                 state.CornerRadius = new[] { 0, 6, 12, 20, 28 }[index];
                 Save();
                 Render();
             })));
-        SettingRow(parent, "Tile icon size", state.TileIconScale == 100 ? "Default · 100%" : state.TileIconScale + "%",
+        SettingRow(parent, Localize(Resource.String.ui_tile_icon_size), state.TileIconScale == 100 ? Localize(Resource.String.ui_default_100) : state.TileIconScale + "%",
             () => go(ShowTileIconSize), "photo");
-        SettingRow(parent, "Icon style", state.IconStyle,
-            () => go(() => Choose("Icon style", ["Monochrome", "Grayscale", "Original"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_icon_style), AppearanceValue(state.IconStyle),
+            () => go(() => Choose(Resource.String.ui_icon_style, [Localize(Resource.String.ui_monochrome), Localize(Resource.String.ui_grayscale), Localize(Resource.String.ui_original)], index =>
             {
                 state.IconStyle = new[] { "Monochrome", "Grayscale", "Original" }[index];
                 Save();
                 Render();
             })), "photo");
-        SettingRow(parent, "Icon pack", state.IconPack.Length == 0 ? "Apps’ own icons" :
+        SettingRow(parent, Localize(Resource.String.ui_icon_pack), state.IconPack.Length == 0 ? Localize(Resource.String.ui_apps_own_icons) :
             BuiltinIcons.Libraries.FirstOrDefault(p => p.Package == state.IconPack)?.Label ?? state.IconPack,
             () => go(() => PickIconPack()), "photo");
-        ToggleRow(parent, "App labels", state.ShowLabels, value => { state.ShowLabels = value; Save(); }, "tile names text");
-        ToggleRow(parent, "Show usage time", state.ShowUsage, value => { state.ShowUsage = value; Save(); }, "screen time");
-        ToggleRow(parent, "Notification count badges", state.ShowNotificationBadges, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_app_labels), state.ShowLabels, value => { state.ShowLabels = value; Save(); }, Localize(Resource.String.ui_tile_names_text));
+        ToggleRow(parent, Localize(Resource.String.ui_show_usage_time), state.ShowUsage, value => { state.ShowUsage = value; Save(); }, Localize(Resource.String.ui_screen_time));
+        ToggleRow(parent, Localize(Resource.String.ui_notification_count_badges), state.ShowNotificationBadges, value =>
         {
             state.ShowNotificationBadges = value;
             Save();
-        }, "unread counts tile dots");
-        ToggleRow(parent, "Media playback card", state.ShowMediaCard, value =>
+        }, Localize(Resource.String.ui_unread_counts_tile_dots));
+        ToggleRow(parent, Localize(Resource.String.ui_media_playback_card), state.ShowMediaCard, value =>
         {
             state.ShowMediaCard = value;
             Save();
-        }, "music now playing");
-        SettingsExplanation(parent, "Monochrome uses themed app icons where supported; other app icons remain recognisable in grayscale.");
+        }, Localize(Resource.String.ui_music_now_playing));
+        SettingsExplanation(parent, Localize(Resource.String.ui_monochrome_uses_themed_app_icons_where_supported_other_app));
     }
 
     private void AddAppearanceMotionSettings(LinearLayout parent, Action<Action> go)
     {
         Switch? tiltSwitch = null;
         Switch? transitionsSwitch = null;
-        ToggleRow(parent, "Layered interface", state.LayeredInterface, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_layered_interface), state.LayeredInterface, value =>
         {
             state.LayeredInterface = value;
             if (!value)
@@ -699,37 +702,37 @@ public partial class MainActivity
             if (tiltSwitch is not null) tiltSwitch.Enabled = value && depthMotion.Available;
             if (transitionsSwitch is not null) transitionsSwitch.Enabled = value;
             if (ReferenceEquals(parent, body)) RenderBody();
-        }, "3d perspective card reveal parallax animations");
-        SettingsExplanation(parent, "Master switch for app expansion, page and drawer transitions, scrolling effects and device tilt.");
+        }, Localize(Resource.String.ui_3d_perspective_card_reveal_parallax_animations));
+        SettingsExplanation(parent, Localize(Resource.String.ui_master_switch_for_app_expansion_page_and_drawer_transitions));
 
         int before = parent.ChildCount;
-        ToggleRow(parent, "Tilt depth", state.TiltDepth, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_tilt_depth), state.TiltDepth, value =>
         {
             if (value && !depthMotion.Available)
             {
-                Toast("This phone does not provide a rotation sensor.");
+                Toast(Localize(Resource.String.ui_this_phone_does_not_provide_a_rotation_sensor));
                 if (ReferenceEquals(parent, body)) RenderBody();
                 return;
             }
             state.TiltDepth = value;
             Save();
-        }, "gyroscope rotation sensor motion");
+        }, Localize(Resource.String.ui_gyroscope_rotation_sensor_motion));
         if (parent.ChildCount > before)
         {
             tiltSwitch = parent.GetChildAt(parent.ChildCount - 1) as Switch;
             if (tiltSwitch is not null) tiltSwitch.Enabled = state.LayeredInterface && depthMotion.Available;
         }
         SettingsExplanation(parent, depthMotion.Available
-            ? "Subtle movement from the phone rotation sensor. It pauses while touching the screen."
-            : "Tilt depth is unavailable on this device; other effects still work.");
+            ? Localize(Resource.String.ui_subtle_movement_from_the_phone_rotation_sensor_it_pauses)
+            : Localize(Resource.String.ui_tilt_depth_is_unavailable_on_this_device_other_effects));
 
         before = parent.ChildCount;
-        ToggleRow(parent, "Page transitions", state.PageTransitions, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_page_transitions), state.PageTransitions, value =>
         {
             state.PageTransitions = value;
             if (!value) EndPageSlideForInterruption();
             Save();
-        }, "animation switching pages");
+        }, Localize(Resource.String.ui_animation_switching_pages));
         if (parent.ChildCount > before)
         {
             transitionsSwitch = parent.GetChildAt(parent.ChildCount - 1) as Switch;
@@ -740,39 +743,39 @@ public partial class MainActivity
     private void AddAppearanceNavigationSettings(LinearLayout parent, Action<Action> go)
     {
         AddHomeSwipeSetting(parent, go);
-        SettingRow(parent, "Drawer alignment", state.Alignment,
-            () => go(() => Choose("Drawer alignment", ["Top", "Center", "Bottom"], index =>
+        SettingRow(parent, Localize(Resource.String.ui_drawer_alignment), AppearanceValue(state.Alignment),
+            () => go(() => Choose(Resource.String.ui_drawer_alignment, [Localize(Resource.String.ui_top), Localize(Resource.String.ui_center), Localize(Resource.String.ui_bottom)], index =>
             {
                 state.Alignment = new[] { "Top", "Center", "Bottom" }[index];
                 Save();
                 Render();
             })));
-        ToggleRow(parent, "Centered drawer headings", state.CenterHeadings, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_centered_drawer_headings), state.CenterHeadings, value =>
         {
             state.CenterHeadings = value;
             Save();
-        }, "drawer title placement");
-        ToggleRow(parent, "Show page tabs", state.ShowHomeNavigation, value =>
+        }, Localize(Resource.String.ui_drawer_title_placement));
+        ToggleRow(parent, Localize(Resource.String.ui_show_page_tabs), state.ShowHomeNavigation, value =>
         {
             state.ShowHomeNavigation = value;
             Save();
-        }, "home navigation buttons");
-        SettingRow(parent, "Page tab buttons", state.HomeNavigationPages.Count == 0
-                ? "None shown" : string.Join(" · ", state.HomeNavigationPages.Select(PageLabel)),
+        }, Localize(Resource.String.ui_home_navigation_buttons));
+        SettingRow(parent, Localize(Resource.String.ui_page_tab_buttons), state.HomeNavigationPages.Count == 0
+                ? Localize(Resource.String.ui_none_shown) : string.Join(" · ", state.HomeNavigationPages.Select(PageLabel)),
             () => go(ShowPageTabChoices), "grid");
-        ToggleRow(parent, "Minimal status bar", state.MinimalStatusBar, value =>
+        ToggleRow(parent, Localize(Resource.String.ui_minimal_status_bar), state.MinimalStatusBar, value =>
         {
             state.MinimalStatusBar = value;
             Save();
             Render();
-        }, "clock battery status");
-        ToggleRow(parent, "Show battery on home", state.ShowHomeBattery, value =>
+        }, Localize(Resource.String.ui_clock_battery_status));
+        ToggleRow(parent, Localize(Resource.String.ui_show_battery_on_home), state.ShowHomeBattery, value =>
         {
             state.ShowHomeBattery = value;
             Save();
-        }, "battery percentage indicator");
-        SettingRow(parent, "Status row position", state.StatusPlacement == "Top" ? "Top corners" : "Below camera cutout",
-            () => go(() => Choose("Status row position", ["Top corners", "Below camera cutout"], index =>
+        }, Localize(Resource.String.ui_battery_percentage_indicator));
+        SettingRow(parent, Localize(Resource.String.ui_status_row_position), state.StatusPlacement == "Top" ? Localize(Resource.String.ui_top_corners) : Localize(Resource.String.ui_below_camera_cutout),
+            () => go(() => Choose(Resource.String.ui_status_row_position, [Localize(Resource.String.ui_top_corners), Localize(Resource.String.ui_below_camera_cutout)], index =>
             {
                 state.StatusPlacement = index == 0 ? "Top" : "Safe";
                 Save();
@@ -781,45 +784,45 @@ public partial class MainActivity
     }
 
     private void AddHomeSwipeSetting(LinearLayout parent, Action<Action> go) =>
-        SettingRow(parent, "Swipe right on Home", state.SwipeRightOpensDiscover ? GoogleDiscover : "Today",
-            () => go(() => Choose("Swipe right on Home", ["Today", GoogleDiscover], index =>
+        SettingRow(parent, Localize(Resource.String.ui_swipe_right_on_home), state.SwipeRightOpensDiscover ? GoogleDiscover : Localize(Resource.String.ui_today),
+            () => go(() => Choose(Resource.String.ui_swipe_right_on_home, [Localize(Resource.String.ui_today), GoogleDiscover], index =>
             {
                 state.SwipeRightOpensDiscover = index == 1;
                 Save();
                 if (page is "Settings" or "Navigation & status")
                     RenderBody();
-            }, state.SwipeRightOpensDiscover ? 1 : 0)), "grid", "Google Discover feed Today root gestures");
+            }, state.SwipeRightOpensDiscover ? 1 : 0)), "grid", Localize(Resource.String.ui_google_discover_feed_today_root_gestures));
 
-    private void ShowPageTabChoices() => Sheet("Page tab buttons", (panel, dialog) =>
+    private void ShowPageTabChoices() => Sheet(Localize(Resource.String.ui_page_tab_buttons), (panel, dialog) =>
     {
-        Paragraph("Choose which buttons appear below home. Swipe between pages or use the Launcher menu to reach a page whose button is hidden.", panel);
+        Paragraph(Localize(Resource.String.ui_choose_which_buttons_appear_below_home_swipe_between_pages), panel);
         foreach (string target in new[] { "Root", "Tiles", "Conversations" })
         {
             string pageId = target;
             ToggleRow(panel, PageLabel(pageId), state.HomeNavigationPages.Contains(pageId), value => { if (value) { if (!state.HomeNavigationPages.Contains(pageId)) state.HomeNavigationPages.Add(pageId); } else state.HomeNavigationPages.Remove(pageId); Save(); });
         }
-    }, (footer, dialog) => footer.AddView(Button("Done", () => { dialog.Dismiss(); RenderBody(); }, true), Match()));
+    }, (footer, dialog) => footer.AddView(Button(Localize(Resource.String.ui_done), () => { dialog.Dismiss(); RenderBody(); }, true), Match()));
 
     private void RenderDrawerSettings()
     {
-        ToggleRow(body, "Drag headings to fold", state.DragDrawerHeadings, value => { state.DragDrawerHeadings = value; Save(); });
-        Paragraph("Optional vertical drag on drawer headings. Leave off for normal page scrolling. Tap any heading to open or close its drawer.");
-        body.AddView(Button("+  New drawer", NewDrawer, true), Match());
+        ToggleRow(body, Localize(Resource.String.ui_drag_headings_to_fold), state.DragDrawerHeadings, value => { state.DragDrawerHeadings = value; Save(); });
+        Paragraph(Localize(Resource.String.ui_optional_vertical_drag_on_drawer_headings_leave_off_for));
+        body.AddView(Button(Localize(Resource.String.ui_new_drawer_action), NewDrawer, true), Match());
         Gap(body);
         foreach (var drawer in state.Drawers)
         {
-            SettingRow(body, drawer.Name, $"{apps.Count(a => state.Apps[a.Id].DrawerId == drawer.Id)} apps", () => EditDrawer(drawer), "grid");
+            SettingRow(body, DrawerName(drawer), Counted(apps.Count(a => state.Apps[a.Id].DrawerId == drawer.Id), Resource.Plurals.app), () => EditDrawer(drawer), "grid");
         }
         Gap(body);
-        Paragraph("Hold a drawer heading on the home screen to edit it. Apps in a removed drawer return to App box.");
+        Paragraph(Localize(Resource.String.ui_hold_a_drawer_heading_on_the_home_screen_to));
     }
-    private void NewDrawer() => Prompt("New drawer", "", s =>
+    private void NewDrawer() => Prompt(Resource.String.ui_new_drawer, "", s =>
     {
         if (string.IsNullOrWhiteSpace(s))
             return;
         if (state.Drawers.Count >= 40)
         {
-            Toast("You can create up to 40 drawers.");
+            Toast(Localize(Resource.String.ui_you_can_create_up_to_40_drawers));
             return;
         }
         var drawer = new Drawer { Name = LauncherState.CleanName(s, "Drawer"), Expanded = true };
@@ -830,7 +833,7 @@ public partial class MainActivity
     });
     private void EditDrawer(Drawer drawer)
     {
-        Sheet(drawer.Name, (panel, dialog) =>
+        Sheet(DrawerName(drawer), (panel, dialog) =>
         {
             void Done(Action change)
             {
@@ -839,16 +842,16 @@ public partial class MainActivity
                 dialog.Dismiss();
                 Render();
             }
-            SettingRow(panel, "Rename", drawer.Name, () => Prompt("Drawer name", drawer.Name, s => Done(() => drawer.Name = LauncherState.CleanName(s, drawer.Name))));
-            SettingRow(panel, "Drawer icon", "Symbols, libraries & installed packs", () => { dialog.Dismiss(); PickDrawerIcon(drawer); }, DrawerIcons.All.Contains(drawer.Icon) ? drawer.Icon : DrawerIcons.ForDrawer(drawer.Id));
-            SettingRow(panel, "Choose apps", "Select the apps in this drawer", () => { dialog.Dismiss(); SelectDrawerApps(drawer); }, "grid");
-            ToggleRow(panel, "Expanded", drawer.Expanded, v => Done(() => drawer.Expanded = v));
-            SettingRow(panel, "Move up", "", () => Done(() => MoveDrawer(drawer, -1)), "up");
-            SettingRow(panel, "Move down", "", () => Done(() => MoveDrawer(drawer, 1)), "down");
+            SettingRow(panel, Localize(Resource.String.ui_rename), DrawerName(drawer), () => Prompt(Resource.String.ui_drawer_name, drawer.Name, s => Done(() => drawer.Name = LauncherState.CleanName(s, drawer.Name))));
+            SettingRow(panel, Localize(Resource.String.ui_drawer_icon), Localize(Resource.String.ui_symbols_libraries_installed_packs), () => { dialog.Dismiss(); PickDrawerIcon(drawer); }, DrawerIcons.All.Contains(drawer.Icon) ? drawer.Icon : DrawerIcons.ForDrawer(drawer.Id));
+            SettingRow(panel, Localize(Resource.String.ui_choose_apps), Localize(Resource.String.ui_select_the_apps_in_this_drawer), () => { dialog.Dismiss(); SelectDrawerApps(drawer); }, "grid");
+            ToggleRow(panel, Localize(Resource.String.ui_expanded_2), drawer.Expanded, v => Done(() => drawer.Expanded = v));
+            SettingRow(panel, Localize(Resource.String.ui_move_up), "", () => Done(() => MoveDrawer(drawer, -1)), "up");
+            SettingRow(panel, Localize(Resource.String.ui_move_down), "", () => Done(() => MoveDrawer(drawer, 1)), "down");
             if (drawer.Id != "other")
-                SettingRow(panel, "Remove drawer", "Apps move to App box", () =>
-                Confirm("Remove " + drawer.Name + "?", "Its apps will move to App box.", "Remove drawer", () => Done(() => state.RemoveDrawer(drawer.Id))));
-            panel.AddView(Button("Done", () => dialog.Dismiss(), true), Match());
+                SettingRow(panel, Localize(Resource.String.ui_remove_drawer), Localize(Resource.String.ui_apps_move_to_app_box), () =>
+                Confirm(Localize(Resource.String.ui_remove_named_drawer, DrawerName(drawer)), Localize(Resource.String.ui_its_apps_will_move_to_app_box), Localize(Resource.String.ui_remove_drawer), () => Done(() => state.RemoveDrawer(drawer.Id))));
+            panel.AddView(Button(Localize(Resource.String.ui_done), () => dialog.Dismiss(), true), Match());
         });
     }
     private void MoveDrawer(Drawer drawer, int direction)
@@ -862,14 +865,14 @@ public partial class MainActivity
     {
         var options = apps.Where(a => !a.PrivateProfile).OrderBy(a => a.Label).ToArray();
         var selected = options.Select(a => state.Apps[a.Id].DrawerId == drawer.Id).ToArray();
-        Sheet(drawer.Name, (panel, dialog) =>
+        Sheet(DrawerName(drawer), (panel, dialog) =>
         {
-            Paragraph("Choose the apps for this drawer.", panel);
+            Paragraph(Localize(Resource.String.ui_choose_the_apps_for_this_drawer), panel);
             for (int i = 0; i < options.Length; i++)
             {
                 int index = i;
                 var app = options[i];
-                var check = new CheckBox(this) { Text = app.Label + (state.Apps[app.Id].Hidden ? " (hidden)" : ""), Checked = selected[i], Typeface = regular, TextSize = 15 };
+                var check = new CheckBox(this) { Text = app.Label + (state.Apps[app.Id].Hidden ? Localize(Resource.String.ui_hidden_2) : ""), Checked = selected[i], Typeface = regular, TextSize = 15 };
                 check.ButtonTintList = AccentTint();
                 BindToggleHaptics(check);
                 check.SetTextColor(palette.Text);
@@ -879,7 +882,7 @@ public partial class MainActivity
             }
         }, (footer, dialog) =>
         {
-            footer.AddView(Button("Save", () =>
+            footer.AddView(Button(Localize(Resource.String.ui_save), () =>
             {
                 for (int i = 0; i < options.Length; i++)
                 {
@@ -894,27 +897,27 @@ public partial class MainActivity
                 Render();
             }, true), Match());
             Gap(footer, 8);
-            footer.AddView(Button("Cancel", () => dialog.Dismiss()), Match());
+            footer.AddView(Button(Localize(Resource.String.ui_cancel), () => dialog.Dismiss()), Match());
         });
     }
     private void RenderHidden()
     {
-        Paragraph("Hidden apps are removed from Launcher tiles and search. This does not secure or disable them.");
+        Paragraph(Localize(Resource.String.ui_hidden_apps_are_removed_from_launcher_tiles_and_search));
         var hidden = apps.Where(a => !a.PrivateProfile && state.Apps[a.Id].Hidden).ToArray();
         if (hidden.Length == 0)
-            Paragraph("No hidden apps. Hold an app tile to hide it.");
+            Paragraph(Localize(Resource.String.ui_no_hidden_apps_hold_an_app_tile_to_hide));
         foreach (var app in hidden)
-            SettingRow(body, app.Label, "Tap to show", () => { state.Apps[app.Id].Hidden = false; Save(); Render(); }, "plus");
+            SettingRow(body, app.Label, Localize(Resource.String.ui_tap_to_show), () => { state.Apps[app.Id].Hidden = false; Save(); Render(); }, "plus");
     }
     private void RenderPermissions()
     {
-        Title("You’re in control.");
-        Paragraph("Launcher works without optional permissions. Enable only the features you want.");
-        SettingRow(body, "Default home app", IsDefaultHome() ? "Launcher is your home" : "Choose Launcher in Android’s chooser", RequestHome, "grid");
-        SettingRow(body, "Usage access", AppCatalog.HasUsageAccess(this) ? "Enabled" : "Optional · real app usage and daily goals", () => OpenIntent(new Intent(Android.Provider.Settings.ActionUsageAccessSettings, Uri.Parse("package:" + PackageName))), "clock");
+        Title(Localize(Resource.String.ui_youre_in_control));
+        Paragraph(Localize(Resource.String.ui_launcher_works_without_optional_permissions_enable_only_the_features));
+        SettingRow(body, Localize(Resource.String.ui_default_home_app), IsDefaultHome() ? Localize(Resource.String.ui_launcher_is_your_home) : Localize(Resource.String.ui_choose_launcher_in_androids_chooser), RequestHome, "grid");
+        SettingRow(body, Localize(Resource.String.ui_usage_access), AppCatalog.HasUsageAccess(this) ? Localize(Resource.String.ui_enabled) : Localize(Resource.String.ui_optional_real_app_usage_and_daily_goals), () => OpenIntent(new Intent(Android.Provider.Settings.ActionUsageAccessSettings, Uri.Parse("package:" + PackageName))), "clock");
         AddNotificationAccessSetting(body);
-        SettingRow(body, "Connection names", connections.CanReadBluetooth && connections.CanReadWifiName ? "Enabled" : "Optional · Wi-Fi and connected Bluetooth names", RequestConnectionDetails, "wifi");
-        Paragraph("Access is optional and used by the features you enable. App grayscale uses an accessibility service and a one-time display permission. File sharing uses a folder you select. Connection names may require nearby-device and location access; weather uses the city you enter. Work profiles and Android 15+ Private Space require Launcher as the default home. Android controls which profiles are accessible.");
+        SettingRow(body, Localize(Resource.String.ui_connection_names), connections.CanReadBluetooth && connections.CanReadWifiName ? Localize(Resource.String.ui_enabled) : Localize(Resource.String.ui_optional_wi_fi_and_connected_bluetooth_names), RequestConnectionDetails, "wifi");
+        Paragraph(Localize(Resource.String.ui_access_is_optional_and_used_by_the_features_you));
     }
     private bool IsDefaultHome()
     {
@@ -935,15 +938,15 @@ public partial class MainActivity
         }
         OpenIntent(new Intent(Android.Provider.Settings.ActionHomeSettings));
     }
-    private void ShowGuide() => Sheet("Using Launcher", (panel, dialog) =>
+    private void ShowGuide() => Sheet(Localize(Resource.String.ui_using_launcher), (panel, dialog) =>
     {
-        Paragraph("Tap a drawer heading to expand it. Hold it to rename, reorder or choose its apps.", panel);
-        Paragraph("Tap an app to open it. Hold an app to move, rename, pin, highlight, expand, hide or set a daily usage goal.", panel);
-        Paragraph("Swipe right for Root; swipe left for Conversations. The menu inside search also opens Root, Apps and Notifications.", panel);
-        Paragraph("Pull down within the top of the Tiles screen for Launcher’s quick panel. Tap the minimal status row to open it too. The screen-edge notification shade belongs to Android.", panel);
-        Paragraph("Hold the search icon, or tap the three dots, for theme and focus controls. Focus gives app tiles a quiet outlined appearance.", panel);
-        Paragraph("Root has editable notes, calendar, calculator, a focus timer and support for your installed Android widgets.", panel);
-        panel.AddView(Button("Got it", () => dialog.Dismiss(), true), Match());
+        Paragraph(Localize(Resource.String.ui_tap_a_drawer_heading_to_expand_it_hold_it), panel);
+        Paragraph(Localize(Resource.String.ui_tap_an_app_to_open_it_hold_an_app), panel);
+        Paragraph(Localize(Resource.String.ui_swipe_right_for_root_swipe_left_for_conversations_the), panel);
+        Paragraph(Localize(Resource.String.ui_pull_down_within_the_top_of_the_tiles_screen), panel);
+        Paragraph(Localize(Resource.String.ui_hold_the_search_icon_or_tap_the_three_dots), panel);
+        Paragraph(Localize(Resource.String.ui_root_has_editable_notes_calendar_calculator_a_focus_timer), panel);
+        panel.AddView(Button(Localize(Resource.String.ui_got_it), () => dialog.Dismiss(), true), Match());
     });
     private void ExportBackup()
     {
@@ -963,7 +966,7 @@ public partial class MainActivity
             StartActivityForResult(intent, 702);
         }
         if (state.Apps.Values.Any(r => r.BiometricLocked))
-            AuthenticateDevice("layout restore", Pick);
+            AuthenticateDevice(Localize(Resource.String.ui_layout_restore), Pick);
         else
             Pick();
     }

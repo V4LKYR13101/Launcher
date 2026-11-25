@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -36,10 +36,10 @@ public static class FeedReader
             if (html)
             {
                 if (discovery > 0)
-                    throw new FeedLoadException("This address returns a web page, not an RSS or Atom feed. Edit the feed address.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_this_address_returns_a_web_page_not_an_rss));
                 var found = Discover(Encoding.UTF8.GetString(bytes), uri);
                 if (found is null)
-                    throw new FeedLoadException("No RSS or Atom feed was found on this page. Use the site's feed address.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_no_rss_or_atom_feed_was_found_on_this));
                 uri = found;
                 continue;
             }
@@ -55,7 +55,7 @@ public static class FeedReader
                 });
                 var document = XDocument.Load(reader);
                 if (document.Root?.Name.LocalName is not ("rss" or "feed" or "RDF"))
-                    throw new FeedLoadException("This address does not return a recognised RSS or Atom feed.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_this_address_does_not_return_a_recognised_rss_or));
                 string Read(XElement entry, params string[] names) => entry.Elements().FirstOrDefault(e => names.Contains(e.Name.LocalName))?.Value ?? "";
                 var links = new List<CardLink>();
                 foreach (var entry in document.Descendants().Where(e => e.Name.LocalName is "item" or "entry").Take(100))
@@ -78,7 +78,7 @@ public static class FeedReader
                 }
                 return links.ToArray();
             }
-            catch (XmlException) { throw new FeedLoadException("The feed returned invalid XML. Check its address or try again later."); }
+            catch (XmlException) { throw new FeedLoadException(Localize(Resource.String.ui_the_feed_returned_invalid_xml_check_its_address_or)); }
         }
         return [];
     }
@@ -141,17 +141,17 @@ public static class FeedReader
             if ((int)response.StatusCode is 301 or 302 or 303 or 307 or 308)
             {
                 if (redirects == 5 || response.Headers.Location is not { } next)
-                    throw new FeedLoadException("This feed redirects too many times. Edit its address.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_this_feed_redirects_too_many_times_edit_its_address));
                 var destination = next.IsAbsoluteUri ? next : new Uri(uri, next);
                 if (destination.Scheme != "https" || destination.UserInfo.Length > 0)
-                    throw new FeedLoadException("This feed redirects to an unencrypted address. Use its HTTPS feed address.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_this_feed_redirects_to_an_unencrypted_address_use_its));
                 uri = destination;
                 continue;
             }
             if (!response.IsSuccessStatusCode)
-                throw new FeedLoadException($"The feed server returned {(int)response.StatusCode}. Try again later or edit the address.");
+                throw new FeedLoadException(Localize(Resource.String.ui_the_feed_server_returned_value_try_again_later_or, (int)response.StatusCode));
             if (response.Content.Headers.ContentLength > Limit)
-                throw new FeedLoadException("This feed exceeds the 4 MB size limit.");
+                throw new FeedLoadException(Localize(Resource.String.ui_this_feed_exceeds_the_4_mb_size_limit));
             await using var input = await response.Content.ReadAsStreamAsync(ct);
             using var output = new MemoryStream();
             var buffer = new byte[16384];
@@ -159,12 +159,12 @@ public static class FeedReader
             while ((count = await input.ReadAsync(buffer, ct)) > 0)
             {
                 if (output.Length + count > Limit)
-                    throw new FeedLoadException("This feed exceeds the 4 MB size limit.");
+                    throw new FeedLoadException(Localize(Resource.String.ui_this_feed_exceeds_the_4_mb_size_limit));
                 output.Write(buffer, 0, count);
             }
             return (output.ToArray(), uri, response.Content.Headers.ContentType?.MediaType);
         }
-        throw new FeedLoadException("Could not follow this feed address.");
+        throw new FeedLoadException(Localize(Resource.String.ui_could_not_follow_this_feed_address));
     }
     private static Uri? Discover(string html, Uri basis)
     {

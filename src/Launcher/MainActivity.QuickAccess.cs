@@ -25,7 +25,7 @@ public partial class MainActivity
         var ordered = available.OrderBy(app => AppOrganization.DisplayName(state, app), StringComparer.CurrentCultureIgnoreCase).ToArray();
         EditText search = null!;
         TextView count = null!;
-        Sheet("Quick access", (list, dialog) =>
+        Sheet(Localize(Resource.String.ui_quick_access), (list, dialog) =>
         {
             void RefreshChoices()
             {
@@ -33,7 +33,7 @@ public partial class MainActivity
                 string query = search.Text?.Trim() ?? "";
                 var matches = ordered.Where(app => AppOrganization.DisplayName(state, app).Contains(query, StringComparison.CurrentCultureIgnoreCase)).ToArray();
                 if (matches.Length == 0)
-                    Paragraph(query.Length == 0 ? "No apps are available." : "No matching apps.", list);
+                    Paragraph(query.Length == 0 ? Localize(Resource.String.ui_no_apps_are_available) : Localize(Resource.String.ui_no_matching_apps), list);
                 foreach (var app in matches)
                 {
                     var toggle = new Switch(this)
@@ -55,7 +55,7 @@ public partial class MainActivity
                             if (selected.Count >= 5)
                             {
                                 toggle.Checked = false;
-                                Toast("Remove an app before adding another.");
+                                Toast(Localize(Resource.String.ui_remove_an_app_before_adding_another));
                                 return;
                             }
                             selected.Add(app.Id);
@@ -64,7 +64,7 @@ public partial class MainActivity
                             return;
 
                         state.QuickAccessApps = [.. selected];
-                        count.Text = $"{selected.Count} of 5 selected";
+                        count.Text = Localize(Resource.String.ui_value_of_5_selected, selected.Count);
                         Save();
                     };
                     list.AddView(toggle, Match());
@@ -77,15 +77,15 @@ public partial class MainActivity
                 if (page == "Tiles" && !searching && !IsDestroyed)
                     RenderBody();
             };
-        }, (footer, dialog) => footer.AddView(Button("Done", dialog.Dismiss, true), Match()),
+        }, (footer, dialog) => footer.AddView(Button(Localize(Resource.String.ui_done), dialog.Dismiss, true), Match()),
         fixedHeader: (header, _) =>
         {
-            search = new EditText(this) { Hint = "Find an app", TextSize = 15, ContentDescription = "Find an app" };
+            search = new EditText(this) { Hint = Localize(Resource.String.ui_find_an_app), TextSize = 15, ContentDescription = Localize(Resource.String.ui_find_an_app) };
             search.SetSingleLine(true);
             StyleSearchEntry(search, 14, inSheet: true);
             search.SetMinimumHeight(Dp(48));
             header.AddView(search, Match());
-            count = Text($"{selected.Count} of 5 selected", 12, color: palette.Muted);
+            count = Text(Localize(Resource.String.ui_value_of_5_selected, selected.Count), 12, color: palette.Muted);
             count.AccessibilityLiveRegion = AccessibilityLiveRegion.Polite;
             header.AddView(count, Match());
         });

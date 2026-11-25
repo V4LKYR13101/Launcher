@@ -8,7 +8,7 @@ using LauncherApp.Services;
 
 namespace LauncherApp;
 
-[Activity(Name = ShareActivityName, Label = "Download with Launcher", Exported = true,
+[Activity(Name = ShareActivityName, Label = "@string/ui_download_with_launcher", Exported = true,
     ExcludeFromRecents = true, Theme = "@android:style/Theme.Material.Dialog.NoActionBar")]
 [IntentFilter([Intent.ActionSend], Categories = [Intent.CategoryDefault], DataMimeType = "text/*")]
 public sealed class ShareDownloadActivity : Activity
@@ -23,7 +23,7 @@ public sealed class ShareDownloadActivity : Activity
         base.OnCreate(savedInstanceState);
         if (!DownloadRequest.Enabled(this))
         {
-            FinishWithMessage("Downloads are off in Launcher settings.");
+            FinishWithMessage(Localize(Resource.String.ui_downloads_are_off_in_launcher_settings));
             return;
         }
         var intent = Intent;
@@ -37,7 +37,7 @@ public sealed class ShareDownloadActivity : Activity
         url = FindLink(shared);
         if (url is null)
         {
-            FinishWithMessage("Share an HTTP or HTTPS file link.");
+            FinishWithMessage(Localize(Resource.String.ui_share_an_http_or_https_file_link));
             return;
         }
 
@@ -46,10 +46,10 @@ public sealed class ShareDownloadActivity : Activity
             return;
 
         using var dialog = new AlertDialog.Builder(this);
-        confirmation = dialog.SetTitle("Download with Launcher")!
+        confirmation = dialog.SetTitle(Localize(Resource.String.ui_download_with_launcher))!
             .SetMessage(url.AbsoluteUri)!
-            .SetNegativeButton("Cancel", (_, _) => Finish())!
-            .SetPositiveButton("Download", (_, _) =>
+            .SetNegativeButton(Localize(Resource.String.ui_cancel), (_, _) => Finish())!
+            .SetPositiveButton(Localize(Resource.String.ui_download), (_, _) =>
             {
                 confirmed = true;
                 if (!DownloadRequest.RequestPermission(this))

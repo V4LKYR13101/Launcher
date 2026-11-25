@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.App.Roles;
 using Android.Appwidget;
 using Android.Content;
@@ -317,6 +317,7 @@ public partial class MainActivity : Activity
     public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
     {
         base.OnConfigurationChanged(newConfig);
+        UiText.Refresh(ApplicationContext ?? this);
         SyncSystemTheme();
         FlushNoteSaves();
         if (openSheetCount == 0)
@@ -460,7 +461,7 @@ public partial class MainActivity : Activity
         {
             if (reload)
                 catalogDirty = true;
-            Toast("Could not refresh apps. Reopen Launcher to retry.");
+            Toast(Localize(Resource.String.ui_could_not_refresh_apps_reopen_launcher_to_retry));
         }
         finally
         {
@@ -504,7 +505,7 @@ public partial class MainActivity : Activity
             SyncAutomaticTheme();
             SyncDepthMotion();
         }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { Toast("Changes are kept in this session. Could not save; check free storage."); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { Toast(Localize(Resource.String.ui_changes_are_kept_in_this_session_could_not_save)); }
     }
     private int Dp(float value) => (int)(value * Resources!.DisplayMetrics!.Density + .5f);
     private LinearLayout Stack(bool horizontal = false) => new(this) { Orientation = horizontal ? Orientation.Horizontal : Orientation.Vertical };
@@ -727,14 +728,14 @@ public partial class MainActivity : Activity
     {
         var row = Stack(true);
         row.SetGravity(GravityFlags.CenterVertical);
-        row.AddView(IconButton("back", "Back", HandleBack), new LinearLayout.LayoutParams(Dp(52), Dp(52)));
+        row.AddView(IconButton("back", Localize(Resource.String.ui_back), HandleBack), new LinearLayout.LayoutParams(Dp(52), Dp(52)));
         string label = title switch
         {
-            "Updates" => "App updates",
-            "Root settings" => "Today cards",
-            "Grayscale setup" => "App grayscale",
-            "Integrations" => "Online cards",
-            "Hidden" => "Hidden apps",
+            "Updates" => Localize(Resource.String.ui_app_updates),
+            "Root settings" => Localize(Resource.String.ui_today_cards),
+            "Grayscale setup" => Localize(Resource.String.ui_app_grayscale),
+            "Integrations" => Localize(Resource.String.ui_online_cards),
+            "Hidden" => Localize(Resource.String.ui_hidden_apps),
             _ => PageLabel(title)
         };
         var heading = Text(label, 22, true);
@@ -798,8 +799,8 @@ public partial class MainActivity : Activity
             }
             if (searchOpening)
             {
-                Title("Search");
-                Paragraph(page == "Conversations" ? "Find a notification." : page == "Root" ? "Choose a card or type a command." : "Find an app by name.");
+                Title(Localize(Resource.String.ui_search));
+                Paragraph(page == "Conversations" ? Localize(Resource.String.ui_find_a_notification) : page == "Root" ? Localize(Resource.String.ui_choose_a_card_or_type_a_command) : Localize(Resource.String.ui_find_an_app_by_name));
             }
             else
                 RenderSearchResults();
@@ -913,10 +914,10 @@ public partial class MainActivity : Activity
             AddSearchModeToggle(pill);
         if (searching)
         {
-            var close = IconButton(IsAppsSurface ? "close" : "back", "Close search", HandleBack);
+            var close = IconButton(IsAppsSurface ? "close" : "back", Localize(Resource.String.ui_close_search), HandleBack);
             if (!IsAppsSurface)
                 pill.AddView(close, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
-            var input = new EditText(this) { Text = query, Hint = SearchingDownloads ? "Paste a download URL" : SearchingFiles ? "Search files" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", TextSize = 15, Typeface = regular };
+            var input = new EditText(this) { Text = query, Hint = SearchingDownloads ? Localize(Resource.String.ui_paste_a_download_url) : SearchingFiles ? Localize(Resource.String.ui_search_files) : page == "Conversations" ? Localize(Resource.String.ui_search_notifications) : page == "Root" ? Localize(Resource.String.ui_type_a_command) : Localize(Resource.String.ui_search_apps), TextSize = 15, Typeface = regular };
             if (SearchingDownloads)
             {
                 input.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationUri;
@@ -933,7 +934,7 @@ public partial class MainActivity : Activity
             View? downloadButton = null;
             if (SearchingDownloads)
             {
-                downloadButton = IconButton("download", "Download file", DownloadSearchUrl, palette.Accent);
+                downloadButton = IconButton("download", Localize(Resource.String.ui_download_file), DownloadSearchUrl, palette.Accent);
                 UpdateDownloadButton(downloadButton);
             }
             searchInput.TextChanged += (_, _) =>
@@ -971,15 +972,15 @@ public partial class MainActivity : Activity
         {
             if (!IsAppsSurface)
             {
-                var control = IconButton("search", "Search; hold for launcher controls", StartSearch);
+                var control = IconButton("search", Localize(Resource.String.ui_search_hold_for_launcher_controls), StartSearch);
                 BindHoldHaptics(control);
                 control.LongClick += (_, _) => QuickControls();
                 pill.AddView(control, new LinearLayout.LayoutParams(Dp(44), Dp(barHeight)));
             }
-            var prompt = Text(FontScale >= 1.4f ? "Search" : page == "Conversations" ? "Search notifications" : page == "Root" ? "Type a command" : "Search apps", 15, color: palette.Muted);
+            var prompt = Text(FontScale >= 1.4f ? Localize(Resource.String.ui_search) : page == "Conversations" ? Localize(Resource.String.ui_search_notifications) : page == "Root" ? Localize(Resource.String.ui_type_a_command) : Localize(Resource.String.ui_search_apps), 15, color: palette.Muted);
             prompt.SetSingleLine(true);
             prompt.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-            prompt.ContentDescription = page == "Root" ? "Search Today or enter a command" : page == "Conversations" ? "Search notifications" : "Search apps";
+            prompt.ContentDescription = page == "Root" ? Localize(Resource.String.ui_search_today_or_enter_a_command) : page == "Conversations" ? Localize(Resource.String.ui_search_notifications) : Localize(Resource.String.ui_search_apps);
             prompt.SetPadding(Dp(4), 0, Dp(12), 0);
             prompt.Gravity = GravityFlags.CenterVertical;
             BindTapHaptics(prompt);
@@ -1055,7 +1056,7 @@ public partial class MainActivity : Activity
     {
         var rule = state.Apps[app.Id];
         if (rule.DailyGoalMinutes > 0 && usage.GetValueOrDefault(app.PackageName) >= rule.DailyGoalMinutes * 60_000L)
-            Confirm("Your daily goal", $"You have used {app.Label} for {AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName))} today. Open it intentionally?", "Open app", () => LaunchDirect(app));
+            Confirm(Localize(Resource.String.ui_your_daily_goal), Localize(Resource.String.ui_you_have_used_value_for_value_today_open_it, app.Label, AppOrganization.FormatDuration(usage.GetValueOrDefault(app.PackageName))), Localize(Resource.String.ui_open_app), () => LaunchDirect(app));
         else
             LaunchDirect(app);
     }
@@ -1071,7 +1072,7 @@ public partial class MainActivity : Activity
                 var user = ProfileCatalog.User(this, app.ProfileSerial);
                 if (launcher is null || user is null)
                 {
-                    Toast("This profile is no longer available.");
+                    Toast(Localize(Resource.String.ui_this_profile_is_no_longer_available));
                     return;
                 }
                 if (app.ShortcutId.Length > 0 && OperatingSystem.IsAndroidVersionAtLeast(25))
@@ -1084,7 +1085,7 @@ public partial class MainActivity : Activity
                 .SetComponent(new ComponentName(app.PackageName, app.ActivityName))!.AddFlags(ActivityFlags.NewTask | ActivityFlags.ResetTaskIfNeeded);
             StartActivity(intent);
         }
-        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast("This app is no longer available."); RefreshApps(true); }
+        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast(Localize(Resource.String.ui_this_app_is_no_longer_available)); RefreshApps(true); }
     }
     private void OpenIntent(Intent intent)
     {
@@ -1092,7 +1093,7 @@ public partial class MainActivity : Activity
         {
             StartActivity(intent);
         }
-        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast("No app is available for this action."); }
+        catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { Toast(Localize(Resource.String.ui_no_app_is_available_for_this_action)); }
     }
     private void OpenUrl(string url) => OpenIntent(new Intent(Intent.ActionView, Uri.Parse(url)));
     private bool ApplyQuickPanelBottomInset(int inset)

@@ -81,8 +81,8 @@ public partial class MainActivity
             {
                 card.ProgressText.Text = value;
                 card.Card.ContentDescription = transfer.Percent is { } amount
-                    ? $"{transfer.Name}, {amount}% downloaded"
-                    : $"{transfer.Name}, downloading, {value}";
+                    ? Localize(Resource.String.ui_value_value_downloaded, transfer.Name, amount)
+                    : Localize(Resource.String.ui_value_downloading_value, transfer.Name, value);
             }
             if (card.Progress.Indeterminate != (transfer.Percent is null))
                 card.Progress.Indeterminate = transfer.Percent is null;

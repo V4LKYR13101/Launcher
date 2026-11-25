@@ -1,4 +1,4 @@
-﻿using LauncherApp.Services;
+using LauncherApp.Services;
 using Android.App;
 using Android.Content.Res;
 using Android.Graphics;
@@ -64,7 +64,7 @@ public partial class MainActivity
                     activity.Send();
                     return;
                 }
-                Toast("This player does not expose an app screen.");
+                Toast(Localize(Resource.String.ui_this_player_does_not_expose_an_app_screen));
             }
             catch (PendingIntent.CanceledException)
             {
@@ -75,7 +75,7 @@ public partial class MainActivity
         }
         BindTapHaptics(card);
         card.Click += (_, _) => OpenPlayer();
-        card.ContentDescription = "Now playing · open " + app;
+        card.ContentDescription = Localize(Resource.String.ui_now_playing_open) + app;
         var art = metadata?.GetBitmap(MediaMetadata.MetadataKeyAlbumArt) ?? metadata?.GetBitmap(MediaMetadata.MetadataKeyArt) ?? metadata?.GetBitmap(MediaMetadata.MetadataKeyDisplayIcon);
         if (art is not null)
         {
@@ -95,19 +95,19 @@ public partial class MainActivity
         void SelectPlayer()
         {
             var players = media.Candidates.DistinctBy(c => c.PackageName).ToArray();
-            Choose("Media player", players.Select(c => PackageLabel(c.PackageName!)).ToArray(), i => media.SelectPackage(players[i].PackageName!), Array.FindIndex(players, c => c.PackageName == controller.PackageName));
+            Choose(Resource.String.ui_media_player, players.Select(c => PackageLabel(c.PackageName!)).ToArray(), i => media.SelectPackage(players[i].PackageName!), Array.FindIndex(players, c => c.PackageName == controller.PackageName));
         }
         var actions = controller.PlaybackState?.CustomActions ?? [];
         PlaybackState.CustomAction? Custom(params string[] names) => actions.FirstOrDefault(a => names.Any(n => ((a.Name?.ToString() ?? "") + " " + a.Action).Contains(n, StringComparison.OrdinalIgnoreCase)));
         View Control(string glyph, string label, Action? action, bool circle = false, int size = 48)
         {
-            var button = new FrameLayout(this) { ContentDescription = action is null ? label + " unavailable for this player" : label, Alpha = action is null ? .32f : 1, Clickable = true, Enabled = action is not null };
+            var button = new FrameLayout(this) { ContentDescription = action is null ? label + Localize(Resource.String.ui_unavailable_for_this_player) : label, Alpha = action is null ? .32f : 1, Clickable = true, Enabled = action is not null };
             if (circle)
                 button.Background = Background(new Color(255, 255, 255, 24), 30);
             button.AddView(new GlyphView(this, glyph, Color.White), new FrameLayout.LayoutParams(Dp(23), Dp(23), GravityFlags.Center));
             button.LayoutParameters = new LinearLayout.LayoutParams(Dp(size), Dp(size));
             TouchFeedback(button, 24, action is null ? HapticCue.None : HapticCue.Tap);
-            button.Click += (_, _) => { if (action is null) return; try { action(); } catch (Java.Lang.SecurityException) { Toast("Playback control is unavailable."); } };
+            button.Click += (_, _) => { if (action is null) return; try { action(); } catch (Java.Lang.SecurityException) { Toast(Localize(Resource.String.ui_playback_control_is_unavailable)); } };
             return button;
         }
         int routeHeight = (int)Math.Max(48, 11 * FontScale * 1.3f), trackHeight = (int)Math.Max(30, 13 * FontScale * 1.3f), timeHeight = (int)Math.Max(20, 10 * FontScale * 1.3f);
@@ -116,13 +116,13 @@ public partial class MainActivity
         var output = Text(connections.AudioDeviceName() ?? app, 10, true, new Color(230, 230, 230));
         output.SetSingleLine(true);
         output.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-        output.ContentDescription = "Choose media player";
+        output.ContentDescription = Localize(Resource.String.ui_choose_media_player);
         TouchFeedback(output);
         output.Click += (_, _) => SelectPlayer();
         route.AddView(output, new LinearLayout.LayoutParams(0, Dp(routeHeight), 1));
         var repeat = Custom("repeat");
         if (repeat is not null)
-            route.AddView(Control("repeat", "Repeat", () => transport?.SendCustomAction(repeat, null)));
+            route.AddView(Control("repeat", Localize(Resource.String.ui_repeat), () => transport?.SendCustomAction(repeat, null)));
         content.AddView(route, Match(Dp(routeHeight)));
         var track = Text(title + (string.IsNullOrEmpty(artist) ? "" : "  ·  " + artist), 13, true, Color.White);
         track.SetSingleLine(true);
@@ -142,24 +142,24 @@ public partial class MainActivity
         mediaProgress.StartTrackingTouch += (_, _) => mediaSeeking = true;
         mediaProgress.StopTrackingTouch += (_, _) => { if (mediaDuration > 0) transport?.SeekTo(mediaDuration * mediaProgress.Progress / 1000); mediaSeeking = false; Haptic(mediaProgress, HapticCue.Selection); };
         mediaProgress.ProgressChanged += (_, e) => { if (e.FromUser && mediaTime is not null) mediaTime.Text = TrackTime(mediaDuration * e.Progress / 1000); };
-        mediaProgress.ContentDescription = "Playback position";
+        mediaProgress.ContentDescription = Localize(Resource.String.ui_playback_position);
         content.AddView(mediaProgress, Match(Dp(48)));
         var times = Stack(true);
         mediaTime = Text("00:00", 9, color: new Color(190, 190, 190));
         times.AddView(mediaTime, new LinearLayout.LayoutParams(0, -2, 1));
-        times.AddView(Text(mediaDuration > 0 ? TrackTime(mediaDuration) : "Live", 9, color: new Color(190, 190, 190)));
+        times.AddView(Text(mediaDuration > 0 ? TrackTime(mediaDuration) : Localize(Resource.String.ui_live), 9, color: new Color(190, 190, 190)));
         content.AddView(times, Match(Dp(timeHeight)));
         var controls = Stack(true);
         controls.SetGravity(GravityFlags.Center);
         var previous = new LinearLayout.LayoutParams(Dp(48), Dp(48));
         previous.SetMargins(Dp(9), 0, Dp(9), 0);
-        controls.AddView(Control("previous", "Previous track", (supported & PlaybackState.ActionSkipToPrevious) != 0 ? () => transport?.SkipToPrevious() : null, true), previous);
+        controls.AddView(Control("previous", Localize(Resource.String.ui_previous_track), (supported & PlaybackState.ActionSkipToPrevious) != 0 ? () => transport?.SkipToPrevious() : null, true), previous);
         bool canPlay = (supported & (media.Playing ? PlaybackState.ActionPause : PlaybackState.ActionPlay) | supported & PlaybackState.ActionPlayPause) != 0;
-        controls.AddView(Control(media.Playing ? "pause" : "play", media.Playing ? "Pause playback" : "Resume playback", canPlay ? () => { if (media.Playing) transport?.Pause(); else transport?.Play(); }
+        controls.AddView(Control(media.Playing ? "pause" : "play", media.Playing ? Localize(Resource.String.ui_pause_playback) : Localize(Resource.String.ui_resume_playback), canPlay ? () => { if (media.Playing) transport?.Pause(); else transport?.Play(); }
         : null, true), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         var next = new LinearLayout.LayoutParams(Dp(48), Dp(48));
         next.SetMargins(Dp(9), 0, Dp(9), 0);
-        controls.AddView(Control("next", "Next track", (supported & PlaybackState.ActionSkipToNext) != 0 ? () => transport?.SkipToNext() : null, true), next);
+        controls.AddView(Control("next", Localize(Resource.String.ui_next_track), (supported & PlaybackState.ActionSkipToNext) != 0 ? () => transport?.SkipToNext() : null, true), next);
         content.AddView(controls, Match(Dp(52)));
         UpdateMediaProgress();
         var lp = Match(Dp(routeHeight + trackHeight + timeHeight + 115));

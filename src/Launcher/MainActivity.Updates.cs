@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using Android.Content.PM;
 using Android.Views;
 using Android.Widget;
@@ -22,8 +22,8 @@ public partial class MainActivity
 
     private void RenderUpdates()
     {
-        Title("App updates");
-        Paragraph("Launcher " + InstalledPackage().VersionName + " · build " + InstalledBuild);
+        Title(Localize(Resource.String.ui_app_updates));
+        Paragraph(Localize(Resource.String.ui_launcher_2) + InstalledPackage().VersionName + Localize(Resource.String.ui_build) + InstalledBuild);
         updateStatusView = Text(updateStatus, 15);
         updateStatusView.SetPadding(0, Dp(12), 0, Dp(20));
         body.AddView(updateStatusView, Match());
@@ -36,11 +36,11 @@ public partial class MainActivity
         };
         body.AddView(updateProgressView, Match(Dp(5)));
         Gap(body, 16);
-        updateActionView = Button(updateBusy ? "Working…" : "Check for updates", () => _ = CheckForUpdatesAsync(), true);
+        updateActionView = Button(updateBusy ? Localize(Resource.String.ui_working) : Localize(Resource.String.ui_check_for_updates), () => _ = CheckForUpdatesAsync(), true);
         updateActionView.Enabled = !updateBusy;
         body.AddView(updateActionView, Match());
         Gap(body, 14);
-        Paragraph("Updates keep your drawers, settings and widgets. Android asks you to approve installation.");
+        Paragraph(Localize(Resource.String.ui_updates_keep_your_drawers_settings_and_widgets_android_asks));
     }
 
     private void UpdateMessage(string message)
@@ -57,7 +57,7 @@ public partial class MainActivity
         if (updateActionView is not null)
         {
             updateActionView.Enabled = !busy;
-            updateActionView.Text = busy ? "Working…" : "Check for updates";
+            updateActionView.Text = busy ? Localize(Resource.String.ui_working) : Localize(Resource.String.ui_check_for_updates);
         }
         if (updateProgressView is not null)
             updateProgressView.Visibility = busy ? ViewStates.Visible : ViewStates.Gone;
@@ -67,7 +67,7 @@ public partial class MainActivity
         if (updateBusy)
             return;
         UpdateBusy(true);
-        UpdateMessage("Checking for updates…");
+        UpdateMessage(Localize(Resource.String.ui_checking_for_updates));
         try
         {
             availableUpdate = await AppUpdates.CheckAsync(updateLifetime.Token);
@@ -75,18 +75,18 @@ public partial class MainActivity
                 return;
             if (availableUpdate.Build <= InstalledBuild)
             {
-                UpdateMessage("Launcher " + InstalledPackage().VersionName + " is up to date.");
+                UpdateMessage(Localize(Resource.String.ui_launcher_2) + InstalledPackage().VersionName + Localize(Resource.String.ui_is_up_to_date));
                 return;
             }
-            UpdateMessage("Version " + availableUpdate.Version + " is available.");
+            UpdateMessage(Localize(Resource.String.ui_version) + availableUpdate.Version + Localize(Resource.String.ui_is_available));
             var release = availableUpdate;
-            Confirm("Launcher update", $"Download version {release.Version} ({release.Bytes / 1048576d:0.0} MB)? Your layout and settings are kept.",
-                "Download and install", () => _ = DownloadUpdateAsync(release));
+            Confirm(Localize(Resource.String.ui_launcher_update), Localize(Resource.String.ui_download_version_value_value_mb_your_layout_and_settings, release.Version, release.Bytes / 1048576d),
+                Localize(Resource.String.ui_download_and_install), () => _ = DownloadUpdateAsync(release));
         }
-        catch (OperationCanceledException) { if (!IsDestroyed) UpdateMessage("Update check cancelled."); }
+        catch (OperationCanceledException) { if (!IsDestroyed) UpdateMessage(Localize(Resource.String.ui_update_check_cancelled)); }
         catch (Exception e) when (e is HttpRequestException or IOException or System.Text.Json.JsonException)
         {
-            UpdateMessage("Could not check for updates. Check your connection and try again.");
+            UpdateMessage(Localize(Resource.String.ui_could_not_check_for_updates_check_your_connection_and));
         }
         finally { if (!IsDestroyed) UpdateBusy(false); }
     }
@@ -103,7 +103,7 @@ public partial class MainActivity
                 if (IsDestroyed)
                     return;
                 updatePercent = percent;
-                UpdateMessage($"Downloading update… {percent}%");
+                UpdateMessage(Localize(Resource.String.ui_downloading_update_value, percent));
                 if (page == "Updates" && updateProgressView is not null)
                     updateProgressView.Progress = percent;
             }), updateLifetime.Token);
@@ -113,16 +113,16 @@ public partial class MainActivity
             if (OperatingSystem.IsAndroidVersionAtLeast(26) && !PackageManager!.CanRequestPackageInstalls())
             {
                 awaitingUpdatePermission = true;
-                UpdateMessage("Allow Launcher to install updates, then return here.");
+                UpdateMessage(Localize(Resource.String.ui_allow_launcher_to_install_updates_then_return_here));
                 StartActivity(new Intent(Android.Provider.Settings.ActionManageUnknownAppSources, Android.Net.Uri.Parse("package:" + PackageName)));
             }
             else
                 InstallUpdate();
         }
-        catch (OperationCanceledException) { if (!IsDestroyed) UpdateMessage("Update download cancelled."); }
+        catch (OperationCanceledException) { if (!IsDestroyed) UpdateMessage(Localize(Resource.String.ui_update_download_cancelled)); }
         catch (Exception e) when (e is HttpRequestException or IOException or Java.Lang.RuntimeException)
         {
-            UpdateMessage("Could not install the update. " + e.Message);
+            UpdateMessage(Localize(Resource.String.ui_could_not_install_the_update) + e.Message);
         }
         finally { if (!IsDestroyed) UpdateBusy(false); }
     }
@@ -147,7 +147,7 @@ public partial class MainActivity
         awaitingUpdatePermission = false;
         if (OperatingSystem.IsAndroidVersionAtLeast(26) && !PackageManager!.CanRequestPackageInstalls())
         {
-            UpdateMessage("Installation permission was not granted. Check for updates to try again.");
+            UpdateMessage(Localize(Resource.String.ui_installation_permission_was_not_granted_check_for_updates_to));
             return;
         }
         try
@@ -158,7 +158,7 @@ public partial class MainActivity
                 InstallUpdate();
             }
         }
-        catch (Exception e) when (e is IOException or Java.Lang.RuntimeException) { UpdateMessage("Could not open the update. " + e.Message); }
+        catch (Exception e) when (e is IOException or Java.Lang.RuntimeException) { UpdateMessage(Localize(Resource.String.ui_could_not_open_the_update) + e.Message); }
     }
     private void InstallUpdate()
     {
@@ -168,6 +168,6 @@ public partial class MainActivity
         intent.ClipData = ClipData.NewRawUri("Launcher update", uri);
         intent.AddFlags(ActivityFlags.GrantReadUriPermission);
         StartActivity(intent);
-        UpdateMessage("Complete the update in Android’s installer.");
+        UpdateMessage(Localize(Resource.String.ui_complete_the_update_in_androids_installer));
     }
 }
