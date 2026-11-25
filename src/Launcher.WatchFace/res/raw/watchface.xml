@@ -1,245 +1,492 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <WatchFace width="450" height="450">
-    <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
-    <Metadata key="PREVIEW_TIME" value="16:57:00"/>
-    <Scene backgroundColor="#06080B">
-        <ComplicationSlot slotId="1" supportedTypes="SMALL_IMAGE EMPTY" x="118" y="141" width="214" height="214" displayName="@string/accent_slot">
-            <BoundingBox x="0" y="0" width="214" height="214"/>
-            <DefaultProviderPolicy primaryProvider="com.launcher.home/com.launcher.wear.AccentComplicationService" primaryProviderType="SMALL_IMAGE" defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY"/>
-            <Complication type="SMALL_IMAGE">
-                <PartImage x="0" y="0" width="214" height="214" alpha="177">
-                    <Variant mode="AMBIENT" target="alpha" value="0"/>
-                    <Image resource="[COMPLICATION.SMALL_IMAGE]"/>
-                </PartImage>
-            </Complication>
-            <Complication type="EMPTY">
-                <PartImage x="0" y="0" width="214" height="214" alpha="177">
-                    <Variant mode="AMBIENT" target="alpha" value="0"/>
-                    <Image resource="default_accent"/>
-                </PartImage>
-            </Complication>
-        </ComplicationSlot>
-        <!-- Center columns show the time. Outer columns step down and fade. -->
-        <PartText x="26" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="25" color="#7D8C97">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 21) % 24) : ((([HOUR_1_12] + 8) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="16:57:00"/>
+  <UserConfigurations>
+    <ListConfiguration id="roll_layout" displayName="@string/layout_label" defaultValue="daily">
+      <ListOption id="daily" displayName="@string/daily_label"/>
+      <ListOption id="pure" displayName="@string/pure_label"/>
+    </ListConfiguration>
+    <BooleanConfiguration id="roll_date" displayName="@string/date_label" defaultValue="TRUE"/>
+    <BooleanConfiguration id="roll_ambient_date" displayName="@string/ambient_date_label" defaultValue="FALSE"/>
+  </UserConfigurations>
+  <Scene backgroundColor="#06080B">
+    <ComplicationSlot slotId="1" supportedTypes="SMALL_IMAGE EMPTY" x="118" y="141" width="214" height="214" displayName="@string/accent_slot" isCustomizable="FALSE">
+      <BoundingBox x="19" y="203" width="176" height="11"/>
+      <DefaultProviderPolicy primaryProvider="com.launcher.home/com.launcher.wear.AccentComplicationService" primaryProviderType="SMALL_IMAGE" defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY"/>
+      <Complication type="SMALL_IMAGE">
+        <PartImage x="0" y="0" width="214" height="214" alpha="177">
+          <Variant mode="AMBIENT" target="alpha" value="0"/>
+          <Image resource="[COMPLICATION.SMALL_IMAGE]"/>
+        </PartImage>
+      </Complication>
+      <Complication type="EMPTY">
+        <PartImage x="0" y="0" width="214" height="214" alpha="177">
+          <Variant mode="AMBIENT" target="alpha" value="0"/>
+          <Image resource="default_accent"/>
+        </PartImage>
+      </Complication>
+    </ComplicationSlot>
+    <ComplicationSlot slotId="2" supportedTypes="SHORT_TEXT LONG_TEXT EMPTY" x="79" y="353" width="186" height="46" displayName="@string/weather_slot">
+      <BoundingBox x="0" y="0" width="186" height="46"/>
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY"/>
+      <Complication type="SHORT_TEXT">
+        <PartText x="0" y="3" width="186" height="40">
+          <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="17" color="#C4CCD6">
+              <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/></Template>
+            </Font>
+          </Text>
         </PartText>
-        <PartText x="77" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 22) % 24) : ((([HOUR_1_12] + 9) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
+      </Complication>
+      <Complication type="LONG_TEXT">
+        <PartText x="0" y="3" width="186" height="40">
+          <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="17" color="#C4CCD6">
+              <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/></Template>
+            </Font>
+          </Text>
         </PartText>
-        <PartText x="127" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 23) % 24) : ((([HOUR_1_12] + 10) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="277" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 25) % 24) : ((([HOUR_1_12] + 12) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="327" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 26) % 24) : ((([HOUR_1_12] + 13) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="378" y="192" width="46" height="38">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="25" color="#7D8C97">
-                    <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 27) % 24) : ((([HOUR_1_12] + 14) % 12) + 1)"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="33" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="14" color="#55636E">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 56) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="72" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 57) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="110" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 58) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="146" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 59) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="272" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 61) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="308" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 62) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="346" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 63) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="385" y="237" width="32" height="30">
-            <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="14" color="#55636E">
-                    <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 64) % 60"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="147" y="126" width="156" height="120">
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="100" color="#F4F8FC" weight="LIGHT">
-                    <Template><![CDATA[%d]]><Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23] : [HOUR_1_12]"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-        <PartText x="156" y="219" width="138" height="90">
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="74" color="#F4F8FC" weight="LIGHT">
-                    <Template><![CDATA[%02d]]><Parameter expression="[MINUTE]"/>
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
+      </Complication>
+      <Complication type="EMPTY">
         <Condition>
-            <Expressions>
-                <Expression name="twelveHour">![IS_24_HOUR_MODE]</Expression>
-            </Expressions>
-            <Compare expression="twelveHour">
-                <PartText x="195" y="119" width="60" height="22">
-                    <Variant mode="AMBIENT" target="alpha" value="0"/>
-                    <Text align="CENTER">
-                        <Font family="SYNC_TO_DEVICE" size="18" color="#AEBCC6">
-							<Upper>
-                                <Template><![CDATA[%s]]><Parameter expression="[AMPM_STRING]"/>
-                                </Template>
-							</Upper>
-                        </Font>
-                    </Text>
-                </PartText>
-            </Compare>
-        </Condition>
-        <PartText x="95" y="310" width="260" height="34">
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="23" color="#E7EFF5">
-                    <Template><![CDATA[%s · %d %s]]><Parameter expression="[DAY_OF_WEEK_S]"/>
-                        <Parameter expression="[DAY]"/>
-                        <Parameter expression="[MONTH_S]"/>
-                    </Template>
+          <Expressions>
+            <Expression name="weatherReady">[WEATHER.IS_AVAILABLE]</Expression>
+          </Expressions>
+          <Compare expression="weatherReady">
+            <PartText x="0" y="3" width="186" height="40">
+              <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                <Font family="SYNC_TO_DEVICE" size="17" color="#C4CCD6">
+                  <Template><![CDATA[%d°  %s]]><Parameter expression="[WEATHER.TEMPERATURE]"/><Parameter expression="[WEATHER.CONDITION_NAME]"/></Template>
                 </Font>
-            </Text>
+              </Text>
+            </PartText>
+          </Compare>
+        </Condition>
+      </Complication>
+    </ComplicationSlot>
+    <ComplicationSlot slotId="3" supportedTypes="SHORT_TEXT LONG_TEXT EMPTY" x="265" y="353" width="97" height="46" displayName="@string/utility_slot">
+      <BoundingBox x="0" y="0" width="97" height="46"/>
+      <Variant mode="AMBIENT" target="alpha" value="0"/>
+      <DefaultProviderPolicy primaryProvider="com.launcher.home/com.launcher.wear.RollActivityService" primaryProviderType="SHORT_TEXT" defaultSystemProvider="WATCH_BATTERY" defaultSystemProviderType="SHORT_TEXT"/>
+      <Complication type="SHORT_TEXT">
+        <PartText x="0" y="3" width="97" height="40">
+          <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="19" color="#D7D9E0">
+              <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/></Template>
+            </Font>
+          </Text>
         </PartText>
-		<!-- The built-in divider sits underneath the companion's colored image. -->
-        <ComplicationSlot slotId="2" supportedTypes="SHORT_TEXT LONG_TEXT EMPTY" x="95" y="355" width="260" height="32" displayName="@string/weather_slot">
-            <BoundingBox x="0" y="0" width="260" height="32"/>
+      </Complication>
+      <Complication type="LONG_TEXT">
+        <PartText x="0" y="3" width="97" height="40">
+          <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="19" color="#D7D9E0">
+              <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/></Template>
+            </Font>
+          </Text>
+        </PartText>
+      </Complication>
+      <Complication type="EMPTY"/>
+    </ComplicationSlot>
+    <ComplicationSlot slotId="4" supportedTypes="SHORT_TEXT EMPTY" x="0" y="0" width="450" height="450" isCustomizable="FALSE">
+      <BoundingBox x="0" y="0" width="1" height="1"/>
+      <DefaultProviderPolicy primaryProvider="com.launcher.home/com.launcher.wear.RollStyleService" primaryProviderType="SHORT_TEXT" defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY"/>
+      <Complication type="SHORT_TEXT">
+        <Condition>
+          <Expressions>
+            <Expression name="isPure"><![CDATA[(subText([COMPLICATION.TEXT], 1, 2) == "p" || (subText([COMPLICATION.TEXT], 1, 2) != "d" && ([CONFIGURATION.roll_layout] == "pure")))]]></Expression>
+          </Expressions>
+          <Compare expression="isPure">
+            <PartDraw x="59" y="344" width="332" height="62">
+              <Rectangle x="0" y="0" width="332" height="62">
+                <Fill color="#06080B"/>
+              </Rectangle>
+            </PartDraw>
+          </Compare>
+        </Condition>
+        <Group name="Clock" x="0" y="0" width="450" height="450">
+          <Transform target="y" value="((subText([COMPLICATION.TEXT], 1, 2) == &quot;p&quot; || (subText([COMPLICATION.TEXT], 1, 2) != &quot;d&quot; &amp;&amp; ([CONFIGURATION.roll_layout] == &quot;pure&quot;)))) ? 16 : 0"/>
+          <Group name="Interactive details" x="0" y="0" width="450" height="450">
             <Variant mode="AMBIENT" target="alpha" value="0"/>
-            <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY"/>
-            <Complication type="SHORT_TEXT">
-                <PartText x="0" y="0" width="260" height="32">
-                    <Text align="CENTER" maxLines="1" ellipsis="TRUE">
-                        <Font family="SYNC_TO_DEVICE" size="20" color="#C4CCD6">
-                            <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/>
-                            </Template>
-                        </Font>
-                    </Text>
+            <Condition>
+              <Expressions>
+                <Expression name="twelveHour"><![CDATA[!((subText([COMPLICATION.TEXT], 0, 1) == "2" || (subText([COMPLICATION.TEXT], 0, 1) != "1" && ([IS_24_HOUR_MODE]))))]]></Expression>
+              </Expressions>
+              <Compare expression="twelveHour">
+                <PartText x="195" y="119" width="60" height="22">
+                  <Variant mode="AMBIENT" target="alpha" value="0"/>
+                  <Text align="CENTER">
+                    <Font family="SYNC_TO_DEVICE" size="18" color="#AEBCC6">
+                      <Upper>
+                        <Template><![CDATA[%s]]><Parameter expression="[AMPM_STRING]"/></Template>
+                      </Upper>
+                    </Font>
+                  </Text>
                 </PartText>
-            </Complication>
-            <Complication type="LONG_TEXT">
-                <PartText x="0" y="0" width="260" height="32">
-                    <Text align="CENTER" maxLines="1" ellipsis="TRUE">
-                        <Font family="SYNC_TO_DEVICE" size="20" color="#C4CCD6">
-                            <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]"/>
-                            </Template>
-                        </Font>
-                    </Text>
+              </Compare>
+            </Condition>
+          </Group>
+          <PartText x="26" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="25" color="#62717C">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 21) % 24) : ((([HOUR_1_12] + 8) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="77" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 22) % 24) : ((([HOUR_1_12] + 9) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="127" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 23) % 24) : ((([HOUR_1_12] + 10) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="277" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 25) % 24) : ((([HOUR_1_12] + 12) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="327" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 26) % 24) : ((([HOUR_1_12] + 13) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="378" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="25" color="#62717C">
+                <Template><![CDATA[%02d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? (([HOUR_0_23] + 27) % 24) : ((([HOUR_1_12] + 14) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="33" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="14" color="#54636E">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 56) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="72" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 57) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="110" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 58) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="146" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 59) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="272" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 61) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="308" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 62) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="346" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 63) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="385" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="14" color="#54636E">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 64) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="147" y="126" width="156" height="120">
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="100" color="#FBF8F0" weight="NORMAL">
+                <Template><![CDATA[%d]]><Parameter expression="(subText([COMPLICATION.TEXT], 0, 1) == &quot;2&quot; || (subText([COMPLICATION.TEXT], 0, 1) != &quot;1&quot; &amp;&amp; ([IS_24_HOUR_MODE]))) ? [HOUR_0_23] : [HOUR_1_12]"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="156" y="219" width="138" height="90">
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="74" color="#FBF8F0" weight="NORMAL">
+                <Template><![CDATA[%02d]]><Parameter expression="[MINUTE]"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <Condition>
+            <Expressions>
+              <Expression name="showDate"><![CDATA[(subText([COMPLICATION.TEXT], 2, 3) == "y" || (subText([COMPLICATION.TEXT], 2, 3) != "n" && ([CONFIGURATION.roll_date] == "TRUE")))]]></Expression>
+            </Expressions>
+            <Compare expression="showDate">
+              <Group name="Interactive date" x="0" y="0" width="450" height="450">
+                <Variant mode="AMBIENT" target="alpha" value="0"/>
+                <PartText x="95" y="310" width="260" height="34">
+                  <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="23" color="#E7EFF5">
+                      <Template><![CDATA[%s · %d %s]]><Parameter expression="[DAY_OF_WEEK_S]"/><Parameter expression="[DAY]"/><Parameter expression="[MONTH_S]"/></Template>
+                    </Font>
+                  </Text>
                 </PartText>
-            </Complication>
-            <Complication type="EMPTY">
-                <Condition>
-                    <Expressions>
-                        <Expression name="weatherReady">[WEATHER.IS_AVAILABLE]</Expression>
-                    </Expressions>
-                    <Compare expression="weatherReady">
-                        <PartText x="0" y="0" width="260" height="32">
-                            <Text align="CENTER" maxLines="1" ellipsis="TRUE">
-                                <Font family="SYNC_TO_DEVICE" size="20" color="#C4CCD6">
-                                    <Template><![CDATA[%d°  %s]]><Parameter expression="[WEATHER.TEMPERATURE]"/>
-                                        <Parameter expression="[WEATHER.CONDITION_NAME]"/>
-                                    </Template>
-                                </Font>
-                            </Text>
-                        </PartText>
-                    </Compare>
-                    <Default>
-                        <PartText x="0" y="0" width="260" height="32">
-                            <Text align="CENTER" maxLines="1" ellipsis="TRUE">
-                                <Font family="SYNC_TO_DEVICE" size="17" color="#C4CCD6">@string/weather_select</Font>
-                            </Text>
-                        </PartText>
-                    </Default>
-                </Condition>
-            </Complication>
-        </ComplicationSlot>
-    </Scene>
+              </Group>
+              <Condition>
+                <Expressions>
+                  <Expression name="ambientDate"><![CDATA[(subText([COMPLICATION.TEXT], 3, 4) == "y" || (subText([COMPLICATION.TEXT], 3, 4) != "n" && ([CONFIGURATION.roll_ambient_date] == "TRUE")))]]></Expression>
+                </Expressions>
+                <Compare expression="ambientDate">
+                  <Group name="Ambient date" x="0" y="0" width="450" height="450" alpha="0">
+                    <Variant mode="AMBIENT" target="alpha" value="255"/>
+                    <PartText x="95" y="310" width="260" height="34">
+                      <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="23" color="#E7EFF5">
+                          <Template><![CDATA[%s · %d %s]]><Parameter expression="[DAY_OF_WEEK_S]"/><Parameter expression="[DAY]"/><Parameter expression="[MONTH_S]"/></Template>
+                        </Font>
+                      </Text>
+                    </PartText>
+                  </Group>
+                </Compare>
+              </Condition>
+            </Compare>
+          </Condition>
+        </Group>
+      </Complication>
+      <Complication type="EMPTY">
+        <Condition>
+          <Expressions>
+            <Expression name="isPure"><![CDATA[[CONFIGURATION.roll_layout] == "pure"]]></Expression>
+          </Expressions>
+          <Compare expression="isPure">
+            <PartDraw x="59" y="344" width="332" height="62">
+              <Rectangle x="0" y="0" width="332" height="62">
+                <Fill color="#06080B"/>
+              </Rectangle>
+            </PartDraw>
+          </Compare>
+        </Condition>
+        <Group name="Clock" x="0" y="0" width="450" height="450">
+          <Transform target="y" value="([CONFIGURATION.roll_layout] == &quot;pure&quot;) ? 16 : 0"/>
+          <Group name="Interactive details" x="0" y="0" width="450" height="450">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Condition>
+              <Expressions>
+                <Expression name="twelveHour"><![CDATA[!([IS_24_HOUR_MODE])]]></Expression>
+              </Expressions>
+              <Compare expression="twelveHour">
+                <PartText x="195" y="119" width="60" height="22">
+                  <Variant mode="AMBIENT" target="alpha" value="0"/>
+                  <Text align="CENTER">
+                    <Font family="SYNC_TO_DEVICE" size="18" color="#AEBCC6">
+                      <Upper>
+                        <Template><![CDATA[%s]]><Parameter expression="[AMPM_STRING]"/></Template>
+                      </Upper>
+                    </Font>
+                  </Text>
+                </PartText>
+              </Compare>
+            </Condition>
+          </Group>
+          <PartText x="26" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="25" color="#62717C">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 21) % 24) : ((([HOUR_1_12] + 8) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="77" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 22) % 24) : ((([HOUR_1_12] + 9) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="127" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 23) % 24) : ((([HOUR_1_12] + 10) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="277" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="32" color="#DFE9F0">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 25) % 24) : ((([HOUR_1_12] + 12) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="327" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="29" color="#B2C0CB">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 26) % 24) : ((([HOUR_1_12] + 13) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="378" y="192" width="46" height="38">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="25" color="#62717C">
+                <Template><![CDATA[%02d]]><Parameter expression="[IS_24_HOUR_MODE] ? (([HOUR_0_23] + 27) % 24) : ((([HOUR_1_12] + 14) % 12) + 1)"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="33" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="14" color="#54636E">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 56) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="72" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 57) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="110" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 58) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="146" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 59) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="272" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="21" color="#D3E1EA">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 61) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="308" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="19" color="#A8B9C4">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 62) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="346" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="16" color="#7D8C97">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 63) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="385" y="237" width="32" height="30">
+            <Variant mode="AMBIENT" target="alpha" value="0"/>
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="14" color="#54636E">
+                <Template><![CDATA[%02d]]><Parameter expression="([MINUTE] + 64) % 60"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="147" y="126" width="156" height="120">
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="100" color="#FBF8F0" weight="NORMAL">
+                <Template><![CDATA[%d]]><Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23] : [HOUR_1_12]"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <PartText x="156" y="219" width="138" height="90">
+            <Text align="CENTER" maxLines="1">
+              <Font family="SYNC_TO_DEVICE" size="74" color="#FBF8F0" weight="NORMAL">
+                <Template><![CDATA[%02d]]><Parameter expression="[MINUTE]"/></Template>
+              </Font>
+            </Text>
+          </PartText>
+          <Condition>
+            <Expressions>
+              <Expression name="showDate"><![CDATA[[CONFIGURATION.roll_date] == "TRUE"]]></Expression>
+            </Expressions>
+            <Compare expression="showDate">
+              <Group name="Interactive date" x="0" y="0" width="450" height="450">
+                <Variant mode="AMBIENT" target="alpha" value="0"/>
+                <PartText x="95" y="310" width="260" height="34">
+                  <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="23" color="#E7EFF5">
+                      <Template><![CDATA[%s · %d %s]]><Parameter expression="[DAY_OF_WEEK_S]"/><Parameter expression="[DAY]"/><Parameter expression="[MONTH_S]"/></Template>
+                    </Font>
+                  </Text>
+                </PartText>
+              </Group>
+              <Condition>
+                <Expressions>
+                  <Expression name="ambientDate"><![CDATA[[CONFIGURATION.roll_ambient_date] == "TRUE"]]></Expression>
+                </Expressions>
+                <Compare expression="ambientDate">
+                  <Group name="Ambient date" x="0" y="0" width="450" height="450" alpha="0">
+                    <Variant mode="AMBIENT" target="alpha" value="255"/>
+                    <PartText x="95" y="310" width="260" height="34">
+                      <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="23" color="#E7EFF5">
+                          <Template><![CDATA[%s · %d %s]]><Parameter expression="[DAY_OF_WEEK_S]"/><Parameter expression="[DAY]"/><Parameter expression="[MONTH_S]"/></Template>
+                        </Font>
+                      </Text>
+                    </PartText>
+                  </Group>
+                </Compare>
+              </Condition>
+            </Compare>
+          </Condition>
+        </Group>
+      </Complication>
+    </ComplicationSlot>
+  </Scene>
 </WatchFace>

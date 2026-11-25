@@ -177,7 +177,8 @@ public partial class MainActivity : Activity
     protected override void OnResume()
     {
         base.OnResume();
-        WearAccentPublisher.Publish(this, state.Accent);
+        WearAccentPublisher.Publish(this, WearRollPublisher.AccentFor(this, state.Accent));
+        WearRollPublisher.Start(this, state.Timers);
         string previousTheme = state.Theme;
         SyncSystemTheme();
         if (previousTheme != state.Theme)
@@ -499,7 +500,8 @@ public partial class MainActivity : Activity
         try
         {
             store.Save(state);
-            WearAccentPublisher.Publish(this, state.Accent);
+            WearAccentPublisher.Publish(this, WearRollPublisher.AccentFor(this, state.Accent));
+            WearRollPublisher.Start(this, state.Timers);
             SystemPanelService.Refresh();
             GrayscaleService.RulesChanged();
             SyncAutomaticTheme();

@@ -95,6 +95,7 @@ public partial class MainActivity
                     store.Save(restored, false);
                     state = restored;
                     TimerAlerts.Reconcile(this, oldTimers, state.Timers);
+                    WearRollPublisher.Start(this, state.Timers);
                     ReminderAlerts.Reconcile(this, oldReminders, state.Reminders);
                     SystemPanelService.Refresh();
                     GrayscaleService.RulesChanged();

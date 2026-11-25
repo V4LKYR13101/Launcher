@@ -4,6 +4,8 @@ using Android.Runtime;
 using Android.Util;
 using Android.Widget;
 using Launcher.Core;
+using LauncherApp.Services;
+using LauncherWear;
 using System.Buffers.Binary;
 using System.Globalization;
 using System.Text;
@@ -36,6 +38,57 @@ public partial class MainActivity
         wearStatusView = Text(wearStatus, 15);
         wearStatusView.AccessibilityLiveRegion = Android.Views.AccessibilityLiveRegion.Polite;
         body.AddView(wearStatusView, Match());
+        Gap(body, 16);
+        RenderRollControls();
+    }
+
+    private void RenderRollControls()
+    {
+        Title("Watch face settings");
+        Paragraph("Your choices sync to Launcher Roll on a paired watch with the latest Launcher for Wear OS. Follow watch leaves that choice to the watch.");
+        var prefs = WearRollPublisher.Settings(this);
+        void Changed()
+        {
+            WearRollPublisher.Start(this, state.Timers);
+            WearAccentPublisher.Publish(this, WearRollPublisher.AccentFor(this, state.Accent));
+            RenderBody();
+        }
+        void Choice(string key, string title, params (string Value, string Label)[] options)
+        {
+            string? current = prefs.GetString(key, "watch");
+            string label = options.FirstOrDefault(o => o.Value == current).Label ?? options[0].Label;
+            SettingRow(body, title, label, () => Sheet(title, (panel, dialog) =>
+            {
+                foreach (var option in options)
+                    SettingRow(panel, option.Label, option.Value == current ? "Selected" : "", () =>
+                    {
+                        prefs.Edit()!.PutString(key, option.Value)!.Apply();
+                        dialog.Dismiss();
+                        Changed();
+                    });
+            }));
+        }
+        Choice(RollSync.Clock, "Time format", ("watch", "Follow watch"), ("12", "12-hour"), ("24", "24-hour"));
+        Choice(RollSync.Layout, "Layout", ("watch", "Follow watch"), ("daily", "Daily"), ("pure", "Pure"));
+        Choice(RollSync.Date, "Show date", ("watch", "Follow watch"), ("on", "On"), ("off", "Off"));
+        Choice(RollSync.AmbientDate, "Show date in always-on", ("watch", "Follow watch"), ("on", "On"), ("off", "Off"));
+        ToggleRow(body, "Match Launcher accent", prefs.GetBoolean(RollSync.Accent, true), enabled =>
+        {
+            prefs.Edit()!.PutBoolean(RollSync.Accent, enabled)!.Apply();
+            Changed();
+        });
+        ToggleRow(body, "Show phone downloads and timers", prefs.GetBoolean(RollSync.Activity, false), enabled =>
+        {
+            prefs.Edit()!.PutBoolean(RollSync.Activity, enabled)!.Apply();
+            Changed();
+        });
+        body.AddView(Button("Sync watch face settings", () =>
+        {
+            WearRollPublisher.SyncNow(this, state.Timers);
+            WearAccentPublisher.Publish(this, WearRollPublisher.AccentFor(this, state.Accent));
+            Toast("Watch face settings queued for sync.");
+        }), Match());
+        Paragraph("If your watch kept a previous utility choice, choose Launcher Activity in the watch’s complication picker. Weather and other complication providers are chosen on the watch.");
     }
 
     private void WearMessage(string message)

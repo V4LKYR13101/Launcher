@@ -10,15 +10,18 @@ internal static class ActiveDownloads
     private static readonly object sync = new();
     private static readonly Dictionary<long, Transfer> active = new();
     private static long nextId;
+    internal static event Action? Changed;
 
     internal static Transfer Start(string name, long? total = null)
     {
+        Transfer transfer;
         lock (sync)
         {
-            var transfer = new Transfer(new(++nextId, name, 0, total));
+            transfer = new Transfer(new(++nextId, name, 0, total));
             active.Add(transfer.Current.Id, transfer);
-            return transfer;
         }
+        Changed?.Invoke();
+        return transfer;
     }
 
     internal static Status[] Snapshot()
@@ -42,12 +45,14 @@ internal static class ActiveDownloads
         {
             lock (sync)
                 current = current with { Bytes = bytes == 0 ? 0 : Math.Max(current.Bytes, bytes), Total = total };
+            Changed?.Invoke();
         }
 
         public void Dispose()
         {
             lock (sync)
-                active.Remove(current.Id);
+                if (!active.Remove(current.Id)) return;
+            Changed?.Invoke();
         }
     }
 }
