@@ -1,6 +1,8 @@
 # Launcher Roll
 
-Launcher Roll is a Watch Face Format 2 face. The rolling hour and minute rows respect the watch's time format. Weather comes from Wear OS. Launcher for Wear OS supplies the divider color through the paired phone's Launcher accent.
+Launcher Roll is a Watch Face Format 2 face. The rolling hour and minute rows respect the watch's time format. Daily keeps compact weather and a utility complication; Pure hides both. The date is optional in interactive and always-on modes. Launcher for Wear OS supplies the divider color from the phone.
+
+With Launcher 2.0.4 and Launcher for Wear OS 1.0.4, **Settings → Wear OS → Watch face settings** can apply Follow watch / 12-hour / 24-hour, the layout, date and always-on date, Launcher accent, and optional phone activity. The clock itself runs locally. With activity enabled, Launcher Activity shows downloads ahead of timers and returns to watch battery when idle. The phone transfers only activity count, percentage and timer deadline, not filenames or timer names. Tap a running activity to see fresher detail; Wear OS controls complication refresh timing. If an existing utility choice is preserved during the upgrade, assign **Launcher Activity** in the watch's face editor.
 
 ## Package and release
 
