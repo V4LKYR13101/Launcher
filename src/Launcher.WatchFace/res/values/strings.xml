@@ -9,4 +9,8 @@
     <string name="date_label">Show date</string>
     <string name="ambient_date_label">Show date in always-on</string>
     <string name="utility_slot">Utility</string>
+    <string name="clock_label">Time format</string>
+    <string name="clock_watch">Follow watch</string>
+    <string name="clock_12">12-hour</string>
+    <string name="clock_24">24-hour</string>
 </resources>
