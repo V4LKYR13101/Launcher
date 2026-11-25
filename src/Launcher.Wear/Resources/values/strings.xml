@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="downloading" formatted="false">Downloading.</string>
+    <string name="downloaded_percent" formatted="false">{0}% downloaded</string>
+    <string name="download_count" formatted="false">{0} downloads</string>
+    <string name="download_progress" formatted="false">{0} downloads · {1}% first</string>
+    <string name="download_short" formatted="false">DL.</string>
+    <string name="roll_appearance" formatted="false">Launcher Roll appearance</string>
+    <string name="phone_download" formatted="false">Phone download</string>
+    <string name="phone_timer" formatted="false">Phone timer</string>
+    <string name="watch_battery" formatted="false">Watch battery</string>
+    <string name="no_phone_activity" formatted="false">No active phone downloads or timers</string>
+    <string name="setup_install" formatted="false">On your phone, open Launcher → Settings → Wear OS → Install Launcher Roll.</string>
+    <string name="setup_requires_wear_six" formatted="false">Installing faces from Launcher requires Wear OS 6 or later.</string>
+</resources>

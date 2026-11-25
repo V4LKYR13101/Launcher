@@ -10,7 +10,7 @@ namespace LauncherApp.Services;
 internal static class WearRollPublisher
 {
     private sealed record Snapshot(string Clock, string Layout, string Date, string AmbientDate,
-                                   bool Activity, int Count, int Percent, long Deadline);
+                                   string Language, bool Activity, int Count, int Percent, long Deadline);
     private static Context? context;
     private static Handler? main;
     private static long deadline;
@@ -49,6 +49,8 @@ internal static class WearRollPublisher
     internal static string AccentFor(Context c, string accent) =>
         Settings(c).GetBoolean(RollSync.Accent, true) ? accent : "#E4FF00";
 
+    internal static void LanguageChanged() => Changed();
+
     private static void Changed()
     {
         if (main is null || Interlocked.Exchange(ref publishPosted, 1) != 0) return;
@@ -72,7 +74,7 @@ internal static class WearRollPublisher
             prefs.GetString(RollSync.Layout, "watch") ?? "watch",
             prefs.GetString(RollSync.Date, "watch") ?? "watch",
             prefs.GetString(RollSync.AmbientDate, "watch") ?? "watch",
-            show, transfers.Length, percent, show && deadline > now ? deadline : 0);
+            UiText.EffectiveLanguage, show, transfers.Length, percent, show && deadline > now ? deadline : 0);
         bool forced = force;
         bool progressOnly = !forced && sent is not null && (sent with { Percent = snapshot.Percent }) == snapshot;
         long age = SystemClock.ElapsedRealtime() - sentAt;
@@ -98,6 +100,7 @@ internal static class WearRollPublisher
             map.PutString(RollSync.Layout, snapshot.Layout);
             map.PutString(RollSync.Date, snapshot.Date);
             map.PutString(RollSync.AmbientDate, snapshot.AmbientDate);
+            map.PutString(RollSync.Language, snapshot.Language);
             map.PutBoolean(RollSync.Activity, snapshot.Activity);
             map.PutInt(RollSync.DownloadCount, snapshot.Count);
             map.PutInt(RollSync.DownloadPercent, snapshot.Percent);

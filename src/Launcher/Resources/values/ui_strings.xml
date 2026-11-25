@@ -1471,4 +1471,25 @@
     <string name="ui_feed_images_off" formatted="false">" · images off"</string>
     <string name="ui_watch_install" formatted="false">"Install"</string>
     <string name="ui_watch_update_to" formatted="false">"Update to"</string>
+    <string name="ui_roll_settings" formatted="false">"Watch face settings"</string>
+    <string name="ui_roll_sync_description" formatted="false">"Your choices sync to Launcher Roll on a paired watch with the latest Launcher for Wear OS. Follow watch leaves that choice to the watch."</string>
+    <string name="ui_roll_selected" formatted="false">"Selected"</string>
+    <string name="ui_roll_time_format" formatted="false">"Time format"</string>
+    <string name="ui_roll_follow_watch" formatted="false">"Follow watch"</string>
+    <string name="ui_roll_12_hour" formatted="false">"12-hour"</string>
+    <string name="ui_roll_24_hour" formatted="false">"24-hour"</string>
+    <string name="ui_roll_daily_layout" formatted="false">"Daily"</string>
+    <string name="ui_roll_pure_layout" formatted="false">"Pure"</string>
+    <string name="ui_roll_show_date" formatted="false">"Show date"</string>
+    <string name="ui_roll_show_ambient_date" formatted="false">"Show date in always-on"</string>
+    <string name="ui_roll_match_accent" formatted="false">"Match Launcher accent"</string>
+    <string name="ui_roll_show_phone_activity" formatted="false">"Show phone downloads and timers"</string>
+    <string name="ui_roll_sync_settings" formatted="false">"Sync watch face settings"</string>
+    <string name="ui_roll_sync_queued" formatted="false">"Watch face settings queued for sync."</string>
+    <string name="ui_roll_complication_help" formatted="false">"If your watch kept a previous utility choice, choose Launcher Activity in the watch’s complication picker. Weather and other complication providers are chosen on the watch."</string>
+    <string name="ui_check_kevlog_for_new_version" formatted="false">"Check for a new version from kevlog.co.za."</string>
+    <string name="ui_release_notes" formatted="false">"Release notes"</string>
+    <string name="ui_roll_release_notes" formatted="false">"Launcher Roll release notes"</string>
+    <string name="ui_companion_release_notes" formatted="false">"Wear companion release notes"</string>
+    <string name="ui_release_notes_unavailable" formatted="false">"Release notes are unavailable."</string>
 </resources>

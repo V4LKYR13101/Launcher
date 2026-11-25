@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="downloading" formatted="false">Descargando.</string>
+    <string name="downloaded_percent" formatted="false">{0}% descargado</string>
+    <string name="download_count" formatted="false">{0} descargas</string>
+    <string name="download_progress" formatted="false">{0} descargas · {1}% de la primera</string>
+    <string name="download_short" formatted="false">Desc.</string>
+    <string name="roll_appearance" formatted="false">Apariencia de Launcher Roll</string>
+    <string name="phone_download" formatted="false">Descarga del teléfono</string>
+    <string name="phone_timer" formatted="false">Temporizador del teléfono</string>
+    <string name="watch_battery" formatted="false">Batería del reloj</string>
+    <string name="no_phone_activity" formatted="false">Sin descargas ni temporizadores activos en el teléfono</string>
+    <string name="setup_install" formatted="false">En el teléfono, abre Launcher → Ajustes → Wear OS → Instalar Launcher Roll.</string>
+    <string name="setup_requires_wear_six" formatted="false">Para instalar esferas desde Launcher necesitas Wear OS 6 o posterior.</string>
+</resources>

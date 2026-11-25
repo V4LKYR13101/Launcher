@@ -9,6 +9,7 @@ internal static class RollSync
     internal const string Date = "date";
     internal const string AmbientDate = "ambient_date";
     internal const string Accent = "accent";
+    internal const string Language = "language";
     internal const string Activity = "activity";
     internal const string DownloadCount = "download_count";
     internal const string DownloadPercent = "download_percent";

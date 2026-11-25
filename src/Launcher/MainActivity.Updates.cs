@@ -10,9 +10,9 @@ namespace LauncherApp;
 public partial class MainActivity
 {
     private readonly CancellationTokenSource updateLifetime = new();
-    private TextView? updateStatusView, updateActionView;
+    private TextView? updateStatusView, updateActionView, updateNotesView;
     private ProgressBar? updateProgressView;
-    private string updateStatus = "Check for a new version from kevlog.co.za.";
+    private string? updateStatus;
     private bool updateBusy, awaitingUpdatePermission;
     private int updatePercent;
     private AppRelease? availableUpdate;
@@ -24,7 +24,7 @@ public partial class MainActivity
     {
         Title(Localize(Resource.String.ui_app_updates));
         Paragraph(Localize(Resource.String.ui_launcher_2) + InstalledPackage().VersionName + Localize(Resource.String.ui_build) + InstalledBuild);
-        updateStatusView = Text(updateStatus, 15);
+        updateStatusView = Text(updateStatus ?? Localize(Resource.String.ui_check_kevlog_for_new_version), 15);
         updateStatusView.SetPadding(0, Dp(12), 0, Dp(20));
         body.AddView(updateStatusView, Match());
         updateProgressView = new ProgressBar(this, null, Android.Resource.Attribute.ProgressBarStyleHorizontal)
@@ -39,8 +39,21 @@ public partial class MainActivity
         updateActionView = Button(updateBusy ? Localize(Resource.String.ui_working) : Localize(Resource.String.ui_check_for_updates), () => _ = CheckForUpdatesAsync(), true);
         updateActionView.Enabled = !updateBusy;
         body.AddView(updateActionView, Match());
+        updateNotesView = Button(Localize(Resource.String.ui_release_notes), () =>
+        {
+            if (AppUpdates.NotesUri(availableUpdate) is { } notes)
+                OpenUrl(notes.AbsoluteUri);
+        });
+        UpdateNotesVisibility();
+        body.AddView(updateNotesView, Match());
         Gap(body, 14);
         Paragraph(Localize(Resource.String.ui_updates_keep_your_drawers_settings_and_widgets_android_asks));
+    }
+
+    private void UpdateNotesVisibility()
+    {
+        if (updateNotesView is not null)
+            updateNotesView.Visibility = AppUpdates.NotesUri(availableUpdate) is null ? ViewStates.Gone : ViewStates.Visible;
     }
 
     private void UpdateMessage(string message)
@@ -73,6 +86,7 @@ public partial class MainActivity
             availableUpdate = await AppUpdates.CheckAsync(updateLifetime.Token);
             if (IsDestroyed)
                 return;
+            UpdateNotesVisibility();
             if (availableUpdate.Build <= InstalledBuild)
             {
                 UpdateMessage(Localize(Resource.String.ui_launcher_2) + InstalledPackage().VersionName + Localize(Resource.String.ui_is_up_to_date));
@@ -81,7 +95,7 @@ public partial class MainActivity
             UpdateMessage(Localize(Resource.String.ui_version) + availableUpdate.Version + Localize(Resource.String.ui_is_available));
             var release = availableUpdate;
             Confirm(Localize(Resource.String.ui_launcher_update), Localize(Resource.String.ui_download_version_value_value_mb_your_layout_and_settings, release.Version, release.Bytes / 1048576d),
-                Localize(Resource.String.ui_download_and_install), () => _ = DownloadUpdateAsync(release));
+                Localize(Resource.String.ui_download_and_install), () => _ = DownloadUpdateAsync(release), AppUpdates.NotesUri(release));
         }
         catch (OperationCanceledException) { if (!IsDestroyed) UpdateMessage(Localize(Resource.String.ui_update_check_cancelled)); }
         catch (Exception e) when (e is HttpRequestException or IOException or System.Text.Json.JsonException)

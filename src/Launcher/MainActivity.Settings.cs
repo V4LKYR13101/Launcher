@@ -233,7 +233,13 @@ public partial class MainActivity
         return text.Length == 0 ? Localize(Resource.String.ui_enter_a_value_before_saving) : "";
     }
 
-    private void Confirm(string title, string message, string actionLabel, Action action) => Sheet(title, (panel, dialog) => Paragraph(message, panel), (footer, dialog) =>
+    private void Confirm(string title, string message, string actionLabel, Action action, System.Uri? notes = null) =>
+        Sheet(title, (panel, dialog) =>
+        {
+            Paragraph(message, panel);
+            if (notes is not null)
+                panel.AddView(Button(Localize(Resource.String.ui_release_notes), () => OpenUrl(notes.AbsoluteUri)), Match());
+        }, (footer, dialog) =>
     {
         DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (actionLabel, () => { dialog.Dismiss(); action(); }
         ));

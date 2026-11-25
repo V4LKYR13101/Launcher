@@ -35,6 +35,8 @@ public partial class MainActivity
         body.AddView(Button(Localize(Resource.String.ui_get_launcher_for_wear_os),
             () => OpenUrl("https://kevlog.co.za/projects/launcher/")), Match());
         Gap(body, 12);
+        body.AddView(Button(Localize(Resource.String.ui_roll_release_notes), () => _ = OpenWearReleaseNotesAsync(false)), Match());
+        body.AddView(Button(Localize(Resource.String.ui_companion_release_notes), () => _ = OpenWearReleaseNotesAsync(true)), Match());
         wearStatusView = Text(wearStatus, 15);
         wearStatusView.AccessibilityLiveRegion = Android.Views.AccessibilityLiveRegion.Polite;
         body.AddView(wearStatusView, Match());
@@ -42,10 +44,32 @@ public partial class MainActivity
         RenderRollControls();
     }
 
+    private async Task OpenWearReleaseNotesAsync(bool companion)
+    {
+        try
+        {
+            var release = companion
+                ? await AppUpdates.CheckWearCompanionAsync(updateLifetime.Token)
+                : (await AppUpdates.CheckWatchFaceAsync(updateLifetime.Token))?.Release;
+            if (IsDestroyed)
+                return;
+            if (AppUpdates.NotesUri(release) is { } notes)
+                OpenUrl(notes.AbsoluteUri);
+            else
+                Toast(Localize(Resource.String.ui_release_notes_unavailable));
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception e) when (e is HttpRequestException or IOException or System.Text.Json.JsonException)
+        {
+            if (!IsDestroyed)
+                Toast(Localize(Resource.String.ui_release_notes_unavailable));
+        }
+    }
+
     private void RenderRollControls()
     {
-        Title("Watch face settings");
-        Paragraph("Your choices sync to Launcher Roll on a paired watch with the latest Launcher for Wear OS. Follow watch leaves that choice to the watch.");
+        SectionCaption(body, Localize(Resource.String.ui_roll_settings));
+        Paragraph(Localize(Resource.String.ui_roll_sync_description));
         var prefs = WearRollPublisher.Settings(this);
         void Changed()
         {
@@ -60,7 +84,7 @@ public partial class MainActivity
             SettingRow(body, title, label, () => Sheet(title, (panel, dialog) =>
             {
                 foreach (var option in options)
-                    SettingRow(panel, option.Label, option.Value == current ? "Selected" : "", () =>
+                    SettingRow(panel, option.Label, option.Value == current ? Localize(Resource.String.ui_roll_selected) : "", () =>
                     {
                         prefs.Edit()!.PutString(key, option.Value)!.Apply();
                         dialog.Dismiss();
@@ -68,27 +92,27 @@ public partial class MainActivity
                     });
             }));
         }
-        Choice(RollSync.Clock, "Time format", ("watch", "Follow watch"), ("12", "12-hour"), ("24", "24-hour"));
-        Choice(RollSync.Layout, "Layout", ("watch", "Follow watch"), ("daily", "Daily"), ("pure", "Pure"));
-        Choice(RollSync.Date, "Show date", ("watch", "Follow watch"), ("on", "On"), ("off", "Off"));
-        Choice(RollSync.AmbientDate, "Show date in always-on", ("watch", "Follow watch"), ("on", "On"), ("off", "Off"));
-        ToggleRow(body, "Match Launcher accent", prefs.GetBoolean(RollSync.Accent, true), enabled =>
+        Choice(RollSync.Clock, Localize(Resource.String.ui_roll_time_format), ("watch", Localize(Resource.String.ui_roll_follow_watch)), ("12", Localize(Resource.String.ui_roll_12_hour)), ("24", Localize(Resource.String.ui_roll_24_hour)));
+        Choice(RollSync.Layout, Localize(Resource.String.ui_layout), ("watch", Localize(Resource.String.ui_roll_follow_watch)), ("daily", Localize(Resource.String.ui_roll_daily_layout)), ("pure", Localize(Resource.String.ui_roll_pure_layout)));
+        Choice(RollSync.Date, Localize(Resource.String.ui_roll_show_date), ("watch", Localize(Resource.String.ui_roll_follow_watch)), ("on", Localize(Resource.String.ui_on)), ("off", Localize(Resource.String.ui_off)));
+        Choice(RollSync.AmbientDate, Localize(Resource.String.ui_roll_show_ambient_date), ("watch", Localize(Resource.String.ui_roll_follow_watch)), ("on", Localize(Resource.String.ui_on)), ("off", Localize(Resource.String.ui_off)));
+        ToggleRow(body, Localize(Resource.String.ui_roll_match_accent), prefs.GetBoolean(RollSync.Accent, true), enabled =>
         {
             prefs.Edit()!.PutBoolean(RollSync.Accent, enabled)!.Apply();
             Changed();
         });
-        ToggleRow(body, "Show phone downloads and timers", prefs.GetBoolean(RollSync.Activity, false), enabled =>
+        ToggleRow(body, Localize(Resource.String.ui_roll_show_phone_activity), prefs.GetBoolean(RollSync.Activity, false), enabled =>
         {
             prefs.Edit()!.PutBoolean(RollSync.Activity, enabled)!.Apply();
             Changed();
         });
-        body.AddView(Button("Sync watch face settings", () =>
+        body.AddView(Button(Localize(Resource.String.ui_roll_sync_settings), () =>
         {
             WearRollPublisher.SyncNow(this, state.Timers);
             WearAccentPublisher.Publish(this, WearRollPublisher.AccentFor(this, state.Accent));
-            Toast("Watch face settings queued for sync.");
+            Toast(Localize(Resource.String.ui_roll_sync_queued));
         }), Match());
-        Paragraph("If your watch kept a previous utility choice, choose Launcher Activity in the watch’s complication picker. Weather and other complication providers are chosen on the watch.");
+        Paragraph(Localize(Resource.String.ui_roll_complication_help));
     }
 
     private void WearMessage(string message)
@@ -159,7 +183,7 @@ public partial class MainActivity
                 Confirm(firstInstall ? Localize(Resource.String.ui_install_launcher_roll) : Localize(Resource.String.ui_update_launcher_roll),
                     Localize(Resource.String.ui_value_version_value_on_value, Localize(firstInstall ? Resource.String.ui_watch_install : Resource.String.ui_watch_update_to), update.Release.Version, node.DisplayName),
                     firstInstall ? Localize(Resource.String.ui_download_and_install) : Localize(Resource.String.ui_download_and_update),
-                    () => _ = InstallWatchFaceAsync(nodeId, update));
+                    () => _ = InstallWatchFaceAsync(nodeId, update), AppUpdates.NotesUri(update.Release));
                 return;
             }
             if (manual) WearMessage((firstInstall, foundInstalledFace, foundEmptyWatch, unsupported) switch

@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 
@@ -6,7 +6,7 @@ namespace Launcher.Core;
 
 public sealed record AppRelease(string Version, long Build, string Url, string Sha256, long Bytes, string? Notes = null);
 public sealed record WatchFaceRelease(AppRelease Release, string ValidationToken);
-public sealed record AppReleases(AppRelease Android, AppRelease? AndroidProduction = null, WatchFaceRelease? WatchFace = null);
+public sealed record AppReleases(AppRelease Android, AppRelease? AndroidProduction = null, WatchFaceRelease? WatchFace = null, AppRelease? WearCompanion = null);
 
 [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(AppReleases))]
@@ -41,6 +41,20 @@ public static class AppUpdates
         Validate(release);
         return release;
     }
+
+    public static async Task<AppRelease?> CheckWearCompanionAsync(CancellationToken token = default)
+    {
+        var release = (await ReadFeedAsync(token, null))?.WearCompanion;
+        if (release is not null)
+            Validate(release);
+        return release;
+    }
+
+    public static Uri? NotesUri(AppRelease? release) =>
+        Uri.TryCreate(release?.Notes, UriKind.Absolute, out var uri) && uri.Scheme == "https" &&
+        uri.Host == "kevlog.co.za" && uri.IsDefaultPort && uri.UserInfo.Length == 0 &&
+        uri.AbsolutePath == "/projects/launcher/" && uri.Fragment.StartsWith("#release-", StringComparison.Ordinal)
+            ? uri : null;
 
     public static async Task<WatchFaceRelease?> CheckWatchFaceAsync(CancellationToken token = default)
     {

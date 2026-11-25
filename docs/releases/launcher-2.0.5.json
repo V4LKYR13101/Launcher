@@ -1,0 +1,41 @@
+{
+  "androidProduction": {
+    "version": "2.0.5",
+    "build": 50,
+    "title": "Launcher in Spanish",
+    "platforms": "Android 7+",
+    "summary": "Launcher follows your Android language preferences, with English and Spanish overrides.",
+    "paragraphs": [
+      "Launcher 2.0.5 (build 50) adds Spanish settings, search, dialogs, and accessibility labels. In Settings → Language, choose System default, English, or Español. System default uses the first supported language in Android’s list and falls back to English.",
+      "App names come from Android, and custom drawer names and notification text stay as written.",
+      "Launcher sends its effective language to Launcher for Wear OS 1.0.5. Update both apps before updating Launcher Roll from Settings → Wear OS. The language applies to the companion’s instructions and Launcher-provided activity text. Changing language leaves the native clock, the existing time-format settings, and Wear OS UI as configured.",
+      "Launcher 2.0.5 (compilación 50) añade el español. En Ajustes → Idioma, elige Idioma del sistema, English o Español. Si ningún idioma preferido de Android es compatible, Launcher usa el inglés."
+    ]
+  },
+  "watchFace": {
+    "version": "1.1.2",
+    "build": 13,
+    "title": "Launcher Roll language and clock update",
+    "platforms": "Wear OS 6+ for installation from Launcher",
+    "summary": "Launcher Roll displays the clock independently and uses localized activity text supplied by the companion.",
+    "paragraphs": [
+      "Launcher Roll 1.1.2 (build 13) includes the independent clock rendering fix so the time remains available without phone data. The face retains its watch-side settings and follows Wear OS for native time, system screens, and data supplied by other complication providers.",
+      "With Launcher 2.0.5 on the phone and Launcher for Wear OS 1.0.5 on the watch, Launcher Activity text and its accessibility descriptions follow the phone Launcher’s effective English or Spanish setting. The companion keeps the last received language when disconnected.",
+      "Update Launcher for Wear OS and open it on the watch. On the paired phone, update Launcher, then open Settings → Wear OS → Check for watch face updates. For a first installation, choose Install Launcher Roll instead.",
+      "Launcher Roll 1.1.2 (compilación 13) muestra la hora sin depender del teléfono. El texto de Actividad de Launcher sigue el idioma de Launcher en el teléfono con la aplicación complementaria actualizada."
+    ]
+  },
+  "wearCompanion": {
+    "version": "1.0.5",
+    "build": 6,
+    "title": "Launcher for Wear OS follows the phone’s Launcher language",
+    "platforms": "Wear OS 5+",
+    "summary": "The companion localizes its setup instructions and activity text using the phone’s Launcher language.",
+    "paragraphs": [
+      "Launcher for Wear OS 1.0.5 (build 6) receives the effective language from Launcher 2.0.5. It localizes its setup instructions, download and timer details, and Launcher complication accessibility descriptions in English or Spanish.",
+      "Until the phone sends a preference, the companion uses the watch’s language where supported. Once synced, it keeps the last received language while disconnected. The watch face’s native clock and Wear OS settings retain their watch-side behavior.",
+      "Install and open this companion on the watch. Update Launcher on the phone before using its Wear OS menu to update Launcher Roll. Phone-driven face installation requires Wear OS 6 or later.",
+      "Launcher para Wear OS 1.0.5 (compilación 6) sigue el idioma de Launcher en el teléfono para las instrucciones y el texto de actividad, y conserva el último idioma sincronizado sin conexión."
+    ]
+  }
+}

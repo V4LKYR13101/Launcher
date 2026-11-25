@@ -168,7 +168,7 @@
     <string name="ui_brightness_upper" formatted="false">"BRILLANTE"</string>
     <string name="ui_browse_and_name_detected_face_groups" formatted="false">"Buscar y nombrar grupos faciales detectados"</string>
     <string name="ui_browse_icon_libraries" formatted="false">"Explorar bibliotecas de iconos"</string>
-    <string name="ui_build" formatted="false">" · construcción "</string>
+    <string name="ui_build" formatted="false">" · compilación "</string>
     <string name="ui_built_by_kevin" formatted="false">"\nConstruido por *Kevin*."</string>
     <string name="ui_built_in_libraries" formatted="false">"Bibliotecas integradas"</string>
     <string name="ui_calculator" formatted="false">"Calculadora"</string>
@@ -195,7 +195,7 @@
     <string name="ui_check_download_and_install_from_kevlog" formatted="false">"Compruebe, descargar e instalar desde Kevlog"</string>
     <string name="ui_check_for_a_new_launcher_version" formatted="false">"Busca una nueva versión de Launcher"</string>
     <string name="ui_check_for_updates" formatted="false">"Buscar actualizaciones"</string>
-    <string name="ui_check_for_watch_face_updates" formatted="false">"Comprobación para actualizaciones de la cara del reloj"</string>
+    <string name="ui_check_for_watch_face_updates" formatted="false">"Buscar actualizaciones de Launcher Roll"</string>
     <string name="ui_check_that_launcher_accessibility_is_connected" formatted="false">"Comprueba que la accesibilidad de Launcher está conectada."</string>
     <string name="ui_check_your_connection_and_the_link_then_try_again" formatted="false">"Comprueba tu conexión y el enlace, y luego vuelve a intentarlo."</string>
     <string name="ui_checking_for_updates" formatted="false">"Comprobando actualizaciones..."</string>
@@ -856,7 +856,7 @@
     <string name="ui_page_tabs_off" formatted="false">"Pestañas de página apagadas"</string>
     <string name="ui_page_tabs_on" formatted="false">"Fichas de página en"</string>
     <string name="ui_page_transitions" formatted="false">"Transiciones de páginas"</string>
-    <string name="ui_pair_a_wear_os_6_or_later_watch_with" formatted="false">"Par a Wear OS 6 o posterior reloj con este teléfono. Instalar y abrir el lanzador para Wear OS en el reloj, luego enviar la cara desde aquí."</string>
+    <string name="ui_pair_a_wear_os_6_or_later_watch_with" formatted="false">"Vincula un reloj con Wear OS 6 o posterior. Instala y abre Launcher para Wear OS en el reloj y luego envía la esfera desde aquí."</string>
     <string name="ui_pairing_code" formatted="false">"Código de vinculación"</string>
     <string name="ui_pairing_code_upper" formatted="false">"CÓDIGO DE UNIÓN"</string>
     <string name="ui_pairing_failed_check_the_code_and_desktop_connection" formatted="false">"El emparejamiento falló. Compruebe el código y la conexión de escritorio."</string>
@@ -1471,4 +1471,25 @@
     <string name="ui_feed_images_off" formatted="false">" · imágenes desactivadas"</string>
     <string name="ui_watch_install" formatted="false">"Instalar"</string>
     <string name="ui_watch_update_to" formatted="false">"Actualizar a"</string>
+    <string name="ui_roll_settings" formatted="false">"Ajustes de la esfera"</string>
+    <string name="ui_roll_sync_description" formatted="false">"Tus preferencias se sincronizan con Launcher Roll en un reloj vinculado con la última versión de Launcher para Wear OS. Elige «Seguir reloj» para usar el ajuste del reloj."</string>
+    <string name="ui_roll_selected" formatted="false">"Seleccionado"</string>
+    <string name="ui_roll_time_format" formatted="false">"Formato de hora"</string>
+    <string name="ui_roll_follow_watch" formatted="false">"Seguir reloj"</string>
+    <string name="ui_roll_12_hour" formatted="false">"12 horas"</string>
+    <string name="ui_roll_24_hour" formatted="false">"24 horas"</string>
+    <string name="ui_roll_daily_layout" formatted="false">"Diario"</string>
+    <string name="ui_roll_pure_layout" formatted="false">"Minimalista"</string>
+    <string name="ui_roll_show_date" formatted="false">"Mostrar fecha"</string>
+    <string name="ui_roll_show_ambient_date" formatted="false">"Mostrar la fecha en la pantalla siempre activa"</string>
+    <string name="ui_roll_match_accent" formatted="false">"Usar el color de acento de Launcher"</string>
+    <string name="ui_roll_show_phone_activity" formatted="false">"Mostrar descargas y temporizadores del teléfono"</string>
+    <string name="ui_roll_sync_settings" formatted="false">"Sincronizar los ajustes de la esfera"</string>
+    <string name="ui_roll_sync_queued" formatted="false">"Los ajustes de la esfera están pendientes de sincronizar."</string>
+    <string name="ui_roll_complication_help" formatted="false">"Si el reloj conserva una opción anterior, elige Launcher Activity en el selector de complicaciones del reloj. El tiempo y los demás proveedores de complicaciones se configuran en el reloj."</string>
+    <string name="ui_check_kevlog_for_new_version" formatted="false">"Busca una versión nueva en kevlog.co.za."</string>
+    <string name="ui_release_notes" formatted="false">"Notas de la versión"</string>
+    <string name="ui_roll_release_notes" formatted="false">"Notas de la versión de Launcher Roll"</string>
+    <string name="ui_companion_release_notes" formatted="false">"Notas de la versión de la aplicación para Wear OS"</string>
+    <string name="ui_release_notes_unavailable" formatted="false">"Las notas de la versión no están disponibles."</string>
 </resources>

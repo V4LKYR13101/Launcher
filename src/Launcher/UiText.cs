@@ -40,6 +40,7 @@ internal static class UiText
     private sealed record Translation(Context Context, CultureInfo Culture);
 
     internal static IReadOnlyList<Language> Languages => languages;
+    internal static string EffectiveLanguage => UiCulture.Name;
     internal static CultureInfo UiCulture => (current ?? throw new InvalidOperationException()).Culture;
 
     internal static string Localize(int id) =>
@@ -88,7 +89,10 @@ internal static class UiText
         // Scope the override to Launcher strings. The Activity and PackageManager keep the system locale.
         using var configuration = new Configuration(context.Resources!.Configuration);
         configuration.Locales = LocaleList.ForLanguageTags(selection);
+        bool languageChanged = current?.Culture.Name != selection;
         current = new(context.CreateConfigurationContext(configuration)!, CultureInfo.GetCultureInfo(selection));
+        if (languageChanged)
+            Services.WearRollPublisher.LanguageChanged();
     }
 
     private static string? MatchLanguage(string tag)
