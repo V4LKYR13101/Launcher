@@ -40,6 +40,11 @@ public partial class MainActivity
     }
     private void ShowSystemPanelSettings()
     {
+        if (LauncherDistribution.IsPlay)
+        {
+            Toast(Localize(Resource.String.ui_play_optional_services_unavailable));
+            return;
+        }
         if (systemPanelSettings?.IsShowing == true)
             return;
         systemPanelSettings = Sheet(Localize(Resource.String.ui_system_panel), (panel, dialog) =>

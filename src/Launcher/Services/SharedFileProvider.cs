@@ -6,10 +6,10 @@ using Uri = Android.Net.Uri;
 
 namespace LauncherApp.Services;
 
-[ContentProvider(["com.launcher.home.searchfiles"], Exported = false, GrantUriPermissions = true)]
+[ContentProvider([LauncherDistribution.FileAuthority], Exported = false, GrantUriPermissions = true)]
 internal sealed class SharedFileProvider : ContentProvider
 {
-    private const string Authority = "com.launcher.home.searchfiles";
+    private const string Authority = LauncherDistribution.FileAuthority;
 
     public static Uri UriFor(string path)
     {

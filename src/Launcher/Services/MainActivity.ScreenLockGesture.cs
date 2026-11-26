@@ -38,6 +38,7 @@ public partial class MainActivity
 
     private void HandleBackgroundTap()
     {
+        if (LauncherDistribution.IsPlay) return;
         if (!state.DoubleTapToLock ||
             searching ||
             openSheetCount > 0 ||

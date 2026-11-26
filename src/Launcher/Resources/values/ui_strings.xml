@@ -1498,4 +1498,14 @@
     <string name="ui_rss_reader">RSS reader</string>
     <string name="ui_discover_rss_still_available">Google Discover opens when you swipe right from Today. Your RSS sources remain available.</string>
     <string name="ui_google_discover_rss_available">Google Discover · RSS sources available</string>
+    <string name="ui_play_manages_updates">Google Play manages updates for this edition.</string>
+    <string name="ui_play_storage_scope">Search Launcher downloads or use Android’s file picker to open a file elsewhere. This edition does not scan all device files.</string>
+    <string name="ui_play_browse_files">Browse device files</string>
+    <string name="ui_play_wear_unavailable">Launcher Roll is not included in this phone-only Play edition.</string>
+    <string name="ui_play_optional_services_unavailable">This feature needs an optional service that is not included in the Play edition.</string>
+    <string name="ui_play_privacy_policy">Privacy policy</string>
+    <string name="ui_play_privacy_summary">How Launcher uses your data and permissions</string>
+    <string name="ui_play_privacy_device">Launcher uses your installed app list to build your home screen and drawers. Your layout, notes and preferences are stored in the app on your device. Optional notification access lets Launcher display and manage notifications you choose to use in its interface.</string>
+    <string name="ui_play_privacy_network">If you use weather, news, downloads or optional model packs, Launcher connects to the selected service or download source. An external service receives the information needed for that request, such as a weather location, feed URL or download address. Opening Google Discover uses the Google app.</string>
+    <string name="ui_play_privacy_choices">You can revoke optional permissions in Android settings. You choose where to keep exported layouts or files. Clearing Launcher storage removes its local data; it does not delete copies you exported or files you saved elsewhere. For questions, use the developer contact on the Google Play listing.</string>
 </resources>

@@ -7,6 +7,11 @@ public partial class MainActivity
 {
     private void RenderGrayscaleSetup()
     {
+        if (LauncherDistribution.IsPlay)
+        {
+            Paragraph(Localize(Resource.String.ui_play_optional_services_unavailable));
+            return;
+        }
         Title(Localize(Resource.String.ui_app_grayscale));
         ToggleRow(body, Localize(Resource.String.ui_grayscale_whole_display), GrayscaleService.Global(this), value =>
         {

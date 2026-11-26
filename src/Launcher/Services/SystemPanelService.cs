@@ -19,9 +19,11 @@ using Uri = Android.Net.Uri;
 namespace LauncherApp.Services;
 
 // A separate, opt-in service. It never reads view hierarchies or intercepts global gestures.
+#if !LAUNCHER_PLAY
 [Service(Name = "com.launcher.home.SystemPanelService", Label = "@string/ui_launcher_system_panel", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
 [IntentFilter(["android.accessibilityservice.AccessibilityService"])]
 [MetaData("android.accessibilityservice", Resource = "@xml/system_panel_service")]
+#endif
 public sealed class SystemPanelService : AccessibilityService
 {
     private static SystemPanelService? current;

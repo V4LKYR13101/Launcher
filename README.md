@@ -1,11 +1,11 @@
-﻿# Launcher
+# Launcher
 
 A native Android home screen written in C# and .NET 11 for Android. The app is
-named **Launcher**, package `com.launcher.home`. It uses native Android views
+named **Launcher**. The default Google Play bundle is `com.kevlog.launcher`; the Kevlog APK is `com.launcher.home`. It uses native Android views
 and requires no Launcher account. Optional features use the network for weather,
 feeds, speech-model downloads and app updates.
 
-Android version in this source tree is **1.6.0 (build 43)**. The Windows
+Android version in this source tree is **2.0.5 (build 50)**. The Windows
 companion is **1.2.0**. Published APKs are listed in
 [GitHub Releases](https://github.com/V4LKYR13101/Launcher/releases).
 **Settings → App updates** checks
@@ -34,7 +34,9 @@ This workspace pins SDK `11.0.100`. Builds need Android SDK platform 37 and JDK
 `-p:JavaSdkDirectory="C:\path\to\jdk-21"`. The current machine uses
 `C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot`.
 
-A local Release build produces the development-signed APK at
+The default Release build produces an Android App Bundle. See [Google Play setup](docs/GOOGLE-PLAY.md) for signing and internal testing.
+
+Use `-p:LauncherDistribution=Kevlog` to build the development-signed Kevlog APK at
 `src/Launcher/bin/Release/net11.0-android/com.launcher.home-Signed.apk`.
 To build an update for an existing production installation, run
 `tools/Build-LauncherRelease.ps1` on the signing workstation. It uses the
@@ -44,7 +46,7 @@ and alignment, and writes the APK and SHA-256 metadata to
 
 ```powershell
 adb devices -l
-adb -s YOUR_SERIAL install -r artifacts/release-1.6.0-build-43/Launcher-1.6.0.apk
+adb -s YOUR_SERIAL install -r artifacts/release-2.0.5-build-50/Launcher-2.0.5.apk
 adb -s YOUR_SERIAL shell am start -n com.launcher.home/com.launcher.home.MainActivity
 ```
 

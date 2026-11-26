@@ -7,9 +7,9 @@ namespace LauncherApp.Services;
 
 internal static class SharedStorage
 {
-    public static bool CanRead(Context context) => OperatingSystem.IsAndroidVersionAtLeast(30)
+    public static bool CanRead(Context context) => LauncherDistribution.IsPlay || (OperatingSystem.IsAndroidVersionAtLeast(30)
         ? StorageEnvironment.IsExternalStorageManager
-        : context.CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage) == Permission.Granted;
+        : context.CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage) == Permission.Granted);
 
     public static IEnumerable<(string Root, string Label)> MountedVolumes(Context context)
     {
@@ -54,6 +54,14 @@ internal static class SharedStorage
 
     private static IEnumerable<(string Root, string Label)> StorageRoots(Context context)
     {
+        if (LauncherDistribution.IsPlay)
+        {
+            if (context.GetExternalFilesDir(StorageEnvironment.DirectoryDownloads)?.AbsolutePath is { } downloads)
+                yield return (downloads, "Launcher downloads");
+            if (context.FilesDir?.AbsolutePath is { } files && Directory.Exists(Path.Combine(files, "Downloads")))
+                yield return (Path.Combine(files, "Downloads"), "Launcher downloads");
+            yield break;
+        }
         if (OperatingSystem.IsAndroidVersionAtLeast(30) && context.GetSystemService(Context.StorageService) is StorageManager manager)
         {
             foreach (var volume in manager.StorageVolumes)

@@ -28,6 +28,7 @@ internal static class WearRollPublisher
     // Subscribe once for the process. The app's downloader can keep working while its activity is stopped.
     internal static void Start(Context c, IEnumerable<WorkspaceTimer> timers)
     {
+        if (LauncherDistribution.IsPlay) return;
         if (context is null)
         {
             context = c.ApplicationContext!;

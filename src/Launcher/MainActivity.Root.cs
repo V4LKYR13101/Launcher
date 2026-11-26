@@ -307,6 +307,12 @@ public partial class MainActivity
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
     {
         base.OnActivityResult(requestCode, resultCode, data);
+        if (requestCode == OpenPlayFileRequest)
+        {
+            if (resultCode == Result.Ok && data?.Data is { } uri)
+                ViewPlayFile(uri);
+            return;
+        }
         if (requestCode == 811)
         {
             CompleteCredentialAuthentication(resultCode);

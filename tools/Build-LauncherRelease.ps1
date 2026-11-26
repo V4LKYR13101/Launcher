@@ -92,6 +92,7 @@ try {
         }
         & $launcherRtk dotnet build $project `
             -c Release `
+            "-p:LauncherDistribution=Kevlog" `
             "-p:JavaSdkDirectory=$javaDirectory" `
             "-p:ApplicationDisplayVersion=$version" `
             "-p:ApplicationVersion=$buildNumber"

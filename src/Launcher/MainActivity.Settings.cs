@@ -318,22 +318,27 @@ public partial class MainActivity
         AddSpeechSettingsLink(features);
 
         var device = AddSettingsCard(Localize(Resource.String.ui_device_data));
-        AddWearSettingsLink(device);
+        if (!LauncherDistribution.IsPlay) AddWearSettingsLink(device);
         SettingRow(device, Localize(Resource.String.ui_setup_permissions), IsDefaultHome() ? Localize(Resource.String.ui_default_home_set_device_access) : Localize(Resource.String.ui_set_default_home_device_access),
             () => ShowSettingsCategory(Localize(Resource.String.ui_setup_permissions), AddDeviceSettings), "phone");
         SettingRow(device, Localize(Resource.String.ui_privacy), Localize(Resource.String.ui_protected_previews_and_message_history), ShowPrivacyRecovery, "lock");
         SettingRow(device, Localize(Resource.String.ui_backup_restore), Localize(Resource.String.ui_export_or_restore_your_layout), () => ShowSettingsCategory(Localize(Resource.String.ui_backup_restore), AddBackupSettings), "file");
-        SettingRow(device, Localize(Resource.String.ui_app_updates), Localize(Resource.String.ui_check_for_a_new_launcher_version), () => Navigate("Updates"), "down");
+        SettingRow(device, Localize(Resource.String.ui_app_updates), Localize(LauncherDistribution.IsPlay ? Resource.String.ui_play_manages_updates : Resource.String.ui_check_for_a_new_launcher_version), () => Navigate("Updates"), "down");
 
         var support = AddSettingsCard(Localize(Resource.String.ui_help));
+        if (LauncherDistribution.IsPlay)
+            SettingRow(support, Localize(Resource.String.ui_play_privacy_policy), Localize(Resource.String.ui_play_privacy_summary), ShowPlayPrivacy, "lock");
         SettingRow(support, Localize(Resource.String.ui_how_to_use_launcher), Localize(Resource.String.ui_gestures_drawers_and_customisation), ShowGuide, "note");
         Gap(body);
         Paragraph(Localize(Resource.String.ui_launcher_3) + InstalledPackage().VersionName + Localize(Resource.String.ui_built_by_kevin), null, TextAlignment.Center);
     }
 
-    private void AddGestureSetting(LinearLayout parent) =>
+    private void AddGestureSetting(LinearLayout parent)
+    {
+        if (LauncherDistribution.IsPlay) return;
         SettingRow(parent, Localize(Resource.String.ui_gestures), Localize(Resource.String.ui_double_tap_to_lock) + (state.DoubleTapToLock ? Localize(Resource.String.ui_on_2) : Localize(Resource.String.ui_off_2)),
             ShowGestureSetup, "phone", Localize(Resource.String.ui_screen_lock_tap_double_tap_accessibility));
+    }
 
     private void AddWearSettingsLink(LinearLayout parent) =>
         SettingRow(parent, Localize(Resource.String.ui_wear_os), Localize(Resource.String.ui_set_up_and_install_launcher_roll_on_your_watch),
@@ -487,7 +492,7 @@ public partial class MainActivity
     {
         SettingRow(parent, Localize(Resource.String.ui_privacy_recovery), Localize(Resource.String.ui_protected_previews_backups_and_data),
             () => go(ShowPrivacyRecovery), "lock");
-        SettingRow(parent, Localize(Resource.String.ui_app_updates), Localize(Resource.String.ui_check_download_and_install_from_kevlog),
+        SettingRow(parent, Localize(Resource.String.ui_app_updates), Localize(LauncherDistribution.IsPlay ? Resource.String.ui_play_manages_updates : Resource.String.ui_check_download_and_install_from_kevlog),
             () => go(() => Navigate("Updates")), "down");
         AddBackupSettings(parent, go);
         SettingRow(parent, Localize(Resource.String.ui_how_to_use_launcher), Localize(Resource.String.ui_gestures_drawers_tiles_and_privacy),

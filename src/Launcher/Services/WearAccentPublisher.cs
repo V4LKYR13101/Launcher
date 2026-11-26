@@ -16,6 +16,7 @@ internal static class WearAccentPublisher
     // All callers run on the main thread. Keep at most one Data Layer write in flight.
     public static async void Publish(Context context, string hex)
     {
+        if (LauncherDistribution.IsPlay) return;
         if (hex.Length != 7 || hex[0] != '#' ||
             !int.TryParse(hex.AsSpan(1), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out int rgb))
             return;

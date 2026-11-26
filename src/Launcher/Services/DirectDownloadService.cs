@@ -206,9 +206,11 @@ public sealed class DirectDownloadService : Service
         }
     }
 
-    private static async Task<string> PublishLegacy(string path, string name, CancellationToken token)
+    private async Task<string> PublishLegacy(string path, string name, CancellationToken token)
     {
-        string directory = StorageEnvironment.GetExternalStoragePublicDirectory(StorageEnvironment.DirectoryDownloads)!.AbsolutePath;
+        string directory = LauncherDistribution.IsPlay
+            ? GetExternalFilesDir(StorageEnvironment.DirectoryDownloads)?.AbsolutePath ?? Path.Combine(FilesDir!.AbsolutePath, "Downloads")
+            : StorageEnvironment.GetExternalStoragePublicDirectory(StorageEnvironment.DirectoryDownloads)!.AbsolutePath;
         Directory.CreateDirectory(directory);
         string staged = Path.Combine(directory, $".launcher-{Guid.NewGuid():N}.part");
         try

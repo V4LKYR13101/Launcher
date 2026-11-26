@@ -46,6 +46,11 @@ public partial class MainActivity
     private void RequestFileSearchAccess()
     {
         HideKeyboard();
+        if (LauncherDistribution.IsPlay)
+        {
+            Toast(Localize(Resource.String.ui_play_storage_scope));
+            return;
+        }
         if (!OperatingSystem.IsAndroidVersionAtLeast(30))
         {
             RequestPermissions([Android.Manifest.Permission.ReadExternalStorage], FileSearchStoragePermission);

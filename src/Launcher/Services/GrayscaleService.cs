@@ -1,4 +1,4 @@
-﻿using Android.AccessibilityServices;
+using Android.AccessibilityServices;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -7,9 +7,11 @@ using Android.Views.Accessibility;
 
 namespace LauncherApp.Services;
 
+#if !LAUNCHER_PLAY
 [Service(Name = "com.launcher.home.GrayscaleService", Label = "@string/ui_launcher_app_grayscale", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
 [IntentFilter(["android.accessibilityservice.AccessibilityService"])]
 [MetaData("android.accessibilityservice", Resource = "@xml/grayscale_service")]
+#endif
 public sealed class GrayscaleService : AccessibilityService
 {
     private const string EnabledKey = "accessibility_display_daltonizer_enabled", ModeKey = "accessibility_display_daltonizer";

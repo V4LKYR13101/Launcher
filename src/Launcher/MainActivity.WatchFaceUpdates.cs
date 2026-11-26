@@ -27,6 +27,11 @@ public partial class MainActivity
     private void RenderWearSettings()
     {
         Title(WearSettingsPage);
+        if (LauncherDistribution.IsPlay)
+        {
+            Paragraph(Localize(Resource.String.ui_play_wear_unavailable));
+            return;
+        }
         Paragraph(Localize(Resource.String.ui_pair_a_wear_os_6_or_later_watch_with));
         body.AddView(Button(Localize(Resource.String.ui_install_launcher_roll), () => _ = CheckWatchFaceUpdateAsync(WatchFaceAction.FirstInstall), true), Match());
         Gap(body, 12);
@@ -126,6 +131,7 @@ public partial class MainActivity
 
     private async Task CheckWatchFaceUpdateAsync(WatchFaceAction action = WatchFaceAction.AutomaticUpdate)
     {
+        if (LauncherDistribution.IsPlay) return;
         bool manual = action != WatchFaceAction.AutomaticUpdate;
         bool firstInstall = action == WatchFaceAction.FirstInstall;
         if (watchUpdateBusy)

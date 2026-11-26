@@ -5,7 +5,9 @@
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationId>com.launcher.home</ApplicationId>
+    <LauncherDistribution Condition="'$(LauncherDistribution)' == ''">Play</LauncherDistribution>
+    <ApplicationId>com.kevlog.launcher</ApplicationId>
+    <ApplicationId Condition="'$(LauncherDistribution)' == 'Kevlog'">com.launcher.home</ApplicationId>
     <ApplicationVersion>50</ApplicationVersion>
     <ApplicationDisplayVersion>2.0.5</ApplicationDisplayVersion>
     <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
@@ -14,7 +16,10 @@
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
     -->
     <TrimMode>partial</TrimMode>
-    <AndroidPackageFormats>apk</AndroidPackageFormats>
+    <AndroidPackageFormats>aab</AndroidPackageFormats>
+    <AndroidPackageFormats Condition="'$(LauncherDistribution)' == 'Kevlog'">apk</AndroidPackageFormats>
+    <AndroidManifest Condition="'$(LauncherDistribution)' == 'Play'">AndroidManifest.Play.xml</AndroidManifest>
+    <DefineConstants Condition="'$(LauncherDistribution)' == 'Play'">$(DefineConstants);LAUNCHER_PLAY</DefineConstants>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
@@ -37,6 +42,12 @@
         <PackageReference Include="PdfPig" Version="0.1.16" />
         <PackageReference Include="SharpCompress" Version="0.50.10" />
     </ItemGroup>
+  <ItemGroup Condition="'$(LauncherDistribution)' == 'Play'">
+    <Compile Remove="Services/UpdateProvider.cs" />
+  </ItemGroup>
+  <Target Name="ValidateLauncherDistribution" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(LauncherDistribution)' != 'Play' And '$(LauncherDistribution)' != 'Kevlog'" Text="LauncherDistribution must be Play or Kevlog." />
+  </Target>
   <Target Name="RequireProductionSigning" BeforeTargets="SignAndroidPackage" Condition="'$(LauncherProductionRelease)' == 'true'">
     <Error Condition="'$(AndroidKeyStore)' != 'true'" Text="A production release requires an explicit dedicated signing key. Use tools/Build-LauncherRelease.ps1 for the legacy-key migration packages." />
   </Target>

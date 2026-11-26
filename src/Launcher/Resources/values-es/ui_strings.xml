@@ -1498,4 +1498,14 @@
     <string name="ui_rss_reader">Lector RSS</string>
     <string name="ui_discover_rss_still_available">Google Discover se abre al deslizar a la derecha desde Hoy. Tus fuentes RSS siguen disponibles.</string>
     <string name="ui_google_discover_rss_available">Google Discover · fuentes RSS disponibles</string>
+    <string name="ui_play_manages_updates">Google Play administra las actualizaciones de esta edición.</string>
+    <string name="ui_play_storage_scope">Busca descargas de Launcher o usa el selector de archivos de Android para abrir un archivo de otra ubicación. Esta edición no examina todos los archivos del dispositivo.</string>
+    <string name="ui_play_browse_files">Explorar archivos del dispositivo</string>
+    <string name="ui_play_wear_unavailable">Launcher Roll no está incluido en esta edición para teléfonos de Google Play.</string>
+    <string name="ui_play_optional_services_unavailable">Esta función requiere un servicio opcional que no está incluido en la edición de Google Play.</string>
+    <string name="ui_play_privacy_policy">Política de privacidad</string>
+    <string name="ui_play_privacy_summary">Cómo usa Launcher tus datos y permisos</string>
+    <string name="ui_play_privacy_device">Launcher usa la lista de apps instaladas para crear la pantalla de inicio y los cajones. El diseño, las notas y las preferencias se guardan en tu dispositivo. El acceso opcional a notificaciones permite mostrar y gestionar las notificaciones en Launcher.</string>
+    <string name="ui_play_privacy_network">Si usas el tiempo, las noticias, las descargas o los modelos opcionales, Launcher se conecta al servicio o a la fuente de descarga elegida. El proveedor recibe los datos necesarios para responder, como la ubicación del tiempo, la dirección de la fuente o el enlace de descarga. Google Discover usa la aplicación de Google.</string>
+    <string name="ui_play_privacy_choices">Puedes revocar los permisos opcionales en los ajustes de Android. Tú eliges dónde guardar los diseños exportados y los archivos. Borrar el almacenamiento de Launcher elimina sus datos locales, no las copias exportadas ni los archivos guardados en otro lugar. Para consultas, usa el contacto del desarrollador en Google Play.</string>
 </resources>

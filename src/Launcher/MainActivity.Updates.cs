@@ -1,3 +1,4 @@
+#if !LAUNCHER_PLAY
 using Android.Content;
 using Android.Content.PM;
 using Android.Views;
@@ -185,3 +186,4 @@ public partial class MainActivity
         UpdateMessage(Localize(Resource.String.ui_complete_the_update_in_androids_installer));
     }
 }
+#endif

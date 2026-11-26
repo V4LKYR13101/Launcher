@@ -42,6 +42,11 @@ public partial class MainActivity
             header.AddView(IconButton("settings", Localize(Resource.String.ui_search_settings), () => Navigate(SearchSettingsPage), palette.Muted),
                 new LinearLayout.LayoutParams(Dp(48), Dp(48)));
             body.AddView(header, Match());
+            if (LauncherDistribution.IsPlay)
+            {
+                Paragraph(Localize(Resource.String.ui_play_storage_scope), body);
+                body.AddView(Button(Localize(Resource.String.ui_play_browse_files), OpenPlayFile), Match());
+            }
             AddFileTypeFilters();
         }
         else

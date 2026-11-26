@@ -20,7 +20,7 @@ internal static class DownloadRequest
             enabled ? ComponentEnabledState.Enabled : ComponentEnabledState.Disabled, ComponentEnableOption.DontKillApp);
     }
 
-    internal static bool HasStorageAccess(Context context) => OperatingSystem.IsAndroidVersionAtLeast(29) ||
+    internal static bool HasStorageAccess(Context context) => LauncherDistribution.IsPlay || OperatingSystem.IsAndroidVersionAtLeast(29) ||
         context.CheckSelfPermission(Android.Manifest.Permission.WriteExternalStorage) == Permission.Granted;
 
     internal static bool RequestPermission(Activity activity)
