@@ -51,6 +51,26 @@ public partial class MainActivity
         var dialog = Sheet(Localize(Resource.String.ui_news_feeds), (panel, sheet) =>
         {
             SectionCaption(panel, Localize(Resource.String.ui_reading_preferences));
+            SettingRow(panel, Localize(Resource.String.ui_feed_provider), Localize(state.LeftFeedProvider switch
+            {
+                "Google" => Resource.String.ui_google_discover_from_today,
+                "Off" => Resource.String.ui_extra_feed_disabled,
+                _ => Resource.String.ui_rss_reader
+            }), () =>
+            {
+                sheet.Dismiss();
+                Choose(Resource.String.ui_feed_provider,
+                    [Localize(Resource.String.ui_rss_reader), GoogleDiscover, Localize(Resource.String.ui_extra_feed_disabled)],
+                    index =>
+                    {
+                        state.LeftFeedProvider = index switch { 1 => "Google", 2 => "Off", _ => "RSS" };
+                        Save();
+                        SyncGoogleDiscover();
+                        ManageFeeds();
+                    },
+                    state.LeftFeedProvider switch { "Google" => 1, "Off" => 2, _ => 0 });
+            }, "rss");
+            Paragraph(Localize(Resource.String.ui_discover_rss_still_available), panel);
             SettingRow(panel, Localize(Resource.String.ui_saved_stories), Counted(state.SavedArticles.Count, Resource.Plurals.saved_story), () => { sheet.Dismiss(); ShowSavedArticles(); }, "rss");
             ToggleRow(panel, Localize(Resource.String.ui_unread_stories_only), state.FeedUnreadOnly, value => { state.FeedUnreadOnly = value; Save(); feedRows.Clear(); });
             SettingRow(panel, Localize(Resource.String.ui_articles_to_display), Localize(Resource.String.ui_value_initially_show_more_when_you_want, state.FeedArticleCount), () =>

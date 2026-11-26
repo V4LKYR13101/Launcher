@@ -391,7 +391,7 @@ public partial class MainActivity
     {
         SettingRow(parent, Localize(Resource.String.ui_home_cards_widgets), Localize(Resource.String.ui_notes_cards_and_android_widgets),
             () => go(() => Navigate("Root settings")), "root");
-        SettingRow(parent, Localize(Resource.String.ui_news_feeds), Counted(Sources.Count(s => s.Enabled), Resource.Plurals.source) + " · " +
+        SettingRow(parent, Localize(Resource.String.ui_news_feeds), (GoogleDiscoverEnabled ? Localize(Resource.String.ui_google_discover_rss_available) + " · " : "") + Counted(Sources.Count(s => s.Enabled), Resource.Plurals.source) + " · " +
             Counted(state.FeedArticleCount, Resource.Plurals.story) + Localize(state.FeedImages ? Resource.String.ui_feed_images_on : Resource.String.ui_feed_images_off),
             () => go(ManageFeeds), "rss");
         SettingRow(parent, Localize(Resource.String.ui_saved_stories), Counted(state.SavedArticles.Count, Resource.Plurals.saved_story),

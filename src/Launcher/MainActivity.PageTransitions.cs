@@ -235,6 +235,8 @@ public partial class MainActivity
         if (Math.Abs(dx) > Math.Abs(dy) * 1.3f)
         {
             int direction = dx < 0 ? 1 : -1;
+            if (page == "Root" && direction < 0 && GoogleDiscoverEnabled)
+                return new(GoogleDiscover, true, -1);
             if (page == "Tiles" && direction < 0 && state.SwipeRightOpensDiscover)
                 return new(GoogleDiscover, true, -1);
             if (swipeInFilter && conversationFilterScroll?.CanScrollHorizontally(direction) == true)
@@ -339,6 +341,14 @@ public partial class MainActivity
 
     private void OpenGoogleDiscover() => WithAppUnlock(GoogleAppPackage, () =>
     {
+        if (page == "Root" && GoogleDiscoverEnabled)
+            OpenNativeGoogleDiscover();
+        else
+            OpenGoogleApplicationFallback();
+    });
+
+    private void OpenGoogleApplicationFallback()
+    {
         try
         {
             using var launch = PackageManager?.GetLaunchIntentForPackage(GoogleAppPackage);
@@ -351,5 +361,5 @@ public partial class MainActivity
         catch (Exception e) when (e is ActivityNotFoundException or Java.Lang.SecurityException) { }
         Toast(Localize(Resource.String.ui_the_google_app_is_unavailable_opening_today));
         Navigate("Root");
-    });
+    }
 }

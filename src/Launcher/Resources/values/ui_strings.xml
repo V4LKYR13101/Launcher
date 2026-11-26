@@ -1492,4 +1492,10 @@
     <string name="ui_roll_release_notes" formatted="false">"Launcher Roll release notes"</string>
     <string name="ui_companion_release_notes" formatted="false">"Wear companion release notes"</string>
     <string name="ui_release_notes_unavailable" formatted="false">"Release notes are unavailable."</string>
+    <string name="ui_feed_provider">Feed provider</string>
+    <string name="ui_google_discover_from_today">Google Discover · swipe right from Today</string>
+    <string name="ui_extra_feed_disabled">Additional feed disabled</string>
+    <string name="ui_rss_reader">RSS reader</string>
+    <string name="ui_discover_rss_still_available">Google Discover opens when you swipe right from Today. Your RSS sources remain available.</string>
+    <string name="ui_google_discover_rss_available">Google Discover · RSS sources available</string>
 </resources>

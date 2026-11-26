@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Launcher.Core;
@@ -119,6 +119,7 @@ public sealed class LauncherState
     public bool ShowHomeNavigation { get; set; }
     public List<string> HomeNavigationPages { get; set; } = ["Root", "Tiles", "Conversations"];
     public bool SwipeRightOpensDiscover { get; set; }
+    public string LeftFeedProvider { get; set; } = "RSS";
     public List<string>? QuickAccessApps { get; set; }
     public bool ShowPrivateSpace { get; set; } = true;
     public bool HidePrivateSpaceWhenLocked

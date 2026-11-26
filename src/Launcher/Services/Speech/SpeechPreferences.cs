@@ -42,6 +42,8 @@ public static class SpeechPreferences
             return;
 
         using var editor = preferences.Edit();
+        if (editor is null)
+            return;
 
         editor.PutInt("voice", options.VoiceId);
         editor.PutFloat("speed", options.Speed);

@@ -18,6 +18,9 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
+    <TransformFile Include="Java/DiscoverBindings.xml" />
+    <AndroidJavaSource Include="Java/com/google/android/libraries/launcherclient/*.java" Bind="true" />
+    <AndroidJavaSource Include="Java/com/kevlog/launcher/discover/DiscoverClient.java" Bind="true" />
     <Compile Include="../Launcher.Wear/AccentData.cs" Link="Services/AccentData.cs" />
     <Compile Include="../Launcher.Wear/RollSync.cs" Link="Services/RollSync.cs" />
     <ProjectReference Include="../Launcher.Core/Launcher.Core.csproj" />

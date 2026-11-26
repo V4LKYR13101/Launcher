@@ -524,6 +524,8 @@ public sealed class KokoroSpeechService
         int bufferSize = Math.Max(
             minBuffer, sampleRate * 2);
 
+        // Keep the same streaming AudioTrack setup on all supported Android versions.
+#pragma warning disable CA1422
         return new AudioTrack(
             Android.Media.Stream.Music,
             sampleRate,
@@ -531,6 +533,7 @@ public sealed class KokoroSpeechService
             Android.Media.Encoding.Pcm16bit,
             bufferSize,
             AudioTrackMode.Stream);
+#pragma warning restore CA1422
     }
 
     private readonly record struct WriteResult(

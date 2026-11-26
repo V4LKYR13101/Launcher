@@ -240,12 +240,10 @@ public static class KokoroReaderDialog
 
         scroll.AddView(layout);
 
-        new AlertDialog.Builder(activity)
-            .SetTitle(Localize(Resource.String.ui_kokoro_speech))
-            .SetView(scroll)
-            .SetNegativeButton(
-                Localize(Resource.String.ui_close),
-                (_, _) => { })
-            .Show();
+        using var builder = new AlertDialog.Builder(activity);
+        builder.SetTitle(Localize(Resource.String.ui_kokoro_speech));
+        builder.SetView(scroll);
+        builder.SetNegativeButton(Localize(Resource.String.ui_close), (_, _) => { });
+        builder.Show();
     }
 }

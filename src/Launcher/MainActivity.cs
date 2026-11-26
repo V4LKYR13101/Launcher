@@ -258,9 +258,11 @@ public partial class MainActivity : Activity
             pendingAppInspect = null;
             handler.Post(inspect);
         }
+        SyncGoogleDiscover();
     }
     protected override void OnPause()
     {
+        PauseGoogleDiscover();
         DownloadHistory.Changed -= RefreshDownloadHistory;
         touchGlow?.Clear();
         EndPageSlideForInterruption();
@@ -285,6 +287,7 @@ public partial class MainActivity : Activity
     }
     protected override void OnDestroy()
     {
+        DisposeGoogleDiscover();
         FlushNoteSaves();
         ResetFileSearch();
         StopPageSlide();

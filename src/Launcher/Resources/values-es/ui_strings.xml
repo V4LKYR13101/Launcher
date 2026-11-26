@@ -1492,4 +1492,10 @@
     <string name="ui_roll_release_notes" formatted="false">"Notas de la versión de Launcher Roll"</string>
     <string name="ui_companion_release_notes" formatted="false">"Notas de la versión de la aplicación para Wear OS"</string>
     <string name="ui_release_notes_unavailable" formatted="false">"Las notas de la versión no están disponibles."</string>
+    <string name="ui_feed_provider">Proveedor de noticias</string>
+    <string name="ui_google_discover_from_today">Google Discover · desliza a la derecha desde Hoy</string>
+    <string name="ui_extra_feed_disabled">Feed adicional desactivado</string>
+    <string name="ui_rss_reader">Lector RSS</string>
+    <string name="ui_discover_rss_still_available">Google Discover se abre al deslizar a la derecha desde Hoy. Tus fuentes RSS siguen disponibles.</string>
+    <string name="ui_google_discover_rss_available">Google Discover · fuentes RSS disponibles</string>
 </resources>
