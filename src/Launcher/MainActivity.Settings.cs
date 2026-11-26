@@ -309,6 +309,7 @@ public partial class MainActivity
         AddSpeechSettingsLink(features);
 
         var device = AddSettingsCard("Device & data");
+        AddWearSettingsLink(device);
         SettingRow(device, "Setup & permissions", IsDefaultHome() ? "Default Home set · device access" : "Set default Home · device access",
             () => ShowSettingsCategory("Setup & permissions", AddDeviceSettings), "phone");
         SettingRow(device, "Privacy", "Protected previews and message history", ShowPrivacyRecovery, "lock");
@@ -324,6 +325,10 @@ public partial class MainActivity
     private void AddGestureSetting(LinearLayout parent) =>
         SettingRow(parent, "Gestures", "Double-tap to lock " + (state.DoubleTapToLock ? "on" : "off"),
             ShowGestureSetup, "phone", "screen lock tap double tap accessibility");
+
+    private void AddWearSettingsLink(LinearLayout parent) =>
+        SettingRow(parent, "Wear OS", "Set up and install Launcher Roll on your watch",
+            () => Navigate(WearSettingsPage), "clock", "watch watchface watch face companion install");
 
     // Dismiss category sheets before opening a second screen or dialog.
     // Switches remain in place so several related choices can be changed together.
@@ -508,6 +513,7 @@ public partial class MainActivity
         AddDownloadsSettingsLink(body);
         RenderNotificationSettings(body);
         AddDeviceSettings(body, open);
+        AddWearSettingsLink(body);
         AddMaintenanceSettings(body, open);
 
         if (matchingSettings == 0)

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net11.0-android</TargetFramework>
     <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationId>com.launcher.home</ApplicationId>
-    <ApplicationVersion>45</ApplicationVersion>
-    <ApplicationDisplayVersion>2.0.0</ApplicationDisplayVersion>
+    <ApplicationVersion>49</ApplicationVersion>
+    <ApplicationDisplayVersion>2.0.4</ApplicationDisplayVersion>
     <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
     <!--
       Enables trim analyzers and full trimming during Release mode.
@@ -18,8 +18,11 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../Launcher.Wear/AccentData.cs" Link="Services/AccentData.cs" />
+    <Compile Include="../Launcher.Wear/RollSync.cs" Link="Services/RollSync.cs" />
     <ProjectReference Include="../Launcher.Core/Launcher.Core.csproj" />
     <PackageReference Include="QRCoder" Version="1.8.1" />
+    <PackageReference Include="Xamarin.GooglePlayServices.Wearable" Version="120.0.1.1" />
   </ItemGroup>
     <ItemGroup>
         <PackageReference Include="org.k2fsa.sherpa.onnx" Version="1.13.8" />

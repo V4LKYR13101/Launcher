@@ -1,8 +1,14 @@
+param(
+    [switch] $Wear,
+    [switch] $SkipBuild
+)
 
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
-$project = Join-Path $root "src\Launcher\Launcher.csproj"
+$projectName = if ($Wear) { "Launcher.Wear" } else { "Launcher" }
+$productName = if ($Wear) { "Launcher-for-Wear" } else { "Launcher" }
+$project = Join-Path $root "src\$projectName\$projectName.csproj"
 [xml]$projectSettings = Get-Content -LiteralPath $project -Raw
 $version = $projectSettings.Project.PropertyGroup.ApplicationDisplayVersion
 $buildNumber = $projectSettings.Project.PropertyGroup.ApplicationVersion
@@ -13,13 +19,14 @@ $javaDirectory = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot"
 
 $buildTools = "C:\Program Files (x86)\Android\android-sdk\build-tools\37.0.0"
 
-$outputDirectory = Join-Path $root "artifacts\release-$version-build-$buildNumber"
+$releaseFolder = if ($Wear) { "wear-release" } else { "release" }
+$outputDirectory = Join-Path $root "artifacts\$releaseFolder-$version-build-$buildNumber"
 
-$unsignedApk = Join-Path $root "src\Launcher\bin\Release\net11.0-android\com.launcher.home.apk"
+$unsignedApk = Join-Path $root "src\$projectName\bin\Release\net11.0-android\com.launcher.home.apk"
 
-$alignedApk = Join-Path $outputDirectory "Launcher-aligned.apk"
+$alignedApk = Join-Path $outputDirectory "$productName-aligned.apk"
 
-$releaseApk = Join-Path $outputDirectory "Launcher-$version.apk"
+$releaseApk = Join-Path $outputDirectory "$productName-$version.apk"
 
 $legacyKey = Join-Path $keyDirectory "launcher-legacy.keystore"
 
@@ -76,24 +83,31 @@ try {
     # Existing legacy key password.
     $env:LAUNCHER_LEGACY_STOREPASS = "android"
 
-    Write-Host "Building Launcher $version..." -ForegroundColor Cyan
+    if (-not $SkipBuild) {
+        Write-Host "Building $productName $version..." -ForegroundColor Cyan
 
-    $launcherRtk = (Get-Command rtk -ErrorAction SilentlyContinue).Source
-    if (-not $launcherRtk) {
-        $launcherRtk = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\rtk.exe'
-    }
-    & $launcherRtk dotnet build $project `
-        -c Release `
-        "-p:JavaSdkDirectory=$javaDirectory" `
-        "-p:ApplicationDisplayVersion=$version" `
-        "-p:ApplicationVersion=$buildNumber"
+        $launcherRtk = (Get-Command rtk -ErrorAction SilentlyContinue).Source
+        if (-not $launcherRtk) {
+            $launcherRtk = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\rtk.exe'
+        }
+        & $launcherRtk dotnet build $project `
+            -c Release `
+            "-p:JavaSdkDirectory=$javaDirectory" `
+            "-p:ApplicationDisplayVersion=$version" `
+            "-p:ApplicationVersion=$buildNumber"
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "Release build failed."
+        if ($LASTEXITCODE -ne 0) {
+            throw "Release build failed."
+        }
     }
 
     if (-not (Test-Path -LiteralPath $unsignedApk)) {
         throw "Unsigned APK not found: $unsignedApk"
+    }
+
+    $badging = & (Join-Path $buildTools "aapt2.exe") dump badging $unsignedApk
+    if ($LASTEXITCODE -ne 0 -or $badging[0] -notmatch "versionCode='$buildNumber' versionName='$([regex]::Escape($version))'") {
+        throw "The unsigned APK version does not match $productName $version (build $buildNumber)."
     }
 
     Write-Host "Aligning APK..." -ForegroundColor Cyan
@@ -161,10 +175,10 @@ try {
     $releaseInfo = @{
         version = $version
         build = $buildNumber
-        file = "Launcher-$version.apk"
+        file = "$productName-$version.apk"
         bytes = $size
         sha256 = $hash
-        minimumSdk = 24
+        minimumSdk = [int]$projectSettings.Project.PropertyGroup.SupportedOSPlatformVersion
     }
 
     $releaseInfo |

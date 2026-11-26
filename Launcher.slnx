@@ -2,6 +2,19 @@
   <Folder Name="/src/">
     <Project Path="src/Launcher/Launcher.csproj" />
     <Project Path="src/Launcher.Core/Launcher.Core.csproj" />
+    <Project Path="src/Launcher.Wear/Launcher.Wear.csproj" />
+  </Folder>
+  <Folder Name="/src/Launcher.WatchFace/">
+    <File Path="src/Launcher.WatchFace/AndroidManifest.xml" />
+    <File Path="src/Launcher.WatchFace/README.md" />
+    <File Path="src/Launcher.WatchFace/res/drawable-nodpi/preview.png" />
+    <File Path="src/Launcher.WatchFace/res/drawable-nodpi/default_accent.png" />
+    <File Path="src/Launcher.WatchFace/res/raw/watchface.xml" />
+    <File Path="src/Launcher.WatchFace/res/values/strings.xml" />
+    <File Path="src/Launcher.WatchFace/res/xml/watch_face_info.xml" />
+    <File Path="tools/Build-LauncherWatchFace.ps1" />
+    <File Path="tools/publish_launcher_wear.py" />
+    <File Path="tools/prune_launcher_apks.py" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Launcher.Core.Tests/Launcher.Core.Tests.csproj" />

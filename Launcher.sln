@@ -13,6 +13,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher.Companion", "src\Launcher.Companion\Launcher.Companion.csproj", "{69A4273F-1E1D-4F16-9128-69611D42E690}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher.Wear", "src\Launcher.Wear\Launcher.Wear.csproj", "{1245344D-AB65-4F46-9CE6-6553861A5C69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Launcher.WatchFace", "Launcher.WatchFace", "{FBA672C1-8C66-46D1-9E00-62D1DF54329E}"
+	ProjectSection(SolutionItems) = preProject
+		src\Launcher.WatchFace\AndroidManifest.xml = src\Launcher.WatchFace\AndroidManifest.xml
+		src\Launcher.WatchFace\README.md = src\Launcher.WatchFace\README.md
+		src\Launcher.WatchFace\res\drawable-nodpi\preview.png = src\Launcher.WatchFace\res\drawable-nodpi\preview.png
+		src\Launcher.WatchFace\res\drawable-nodpi\default_accent.png = src\Launcher.WatchFace\res\drawable-nodpi\default_accent.png
+		src\Launcher.WatchFace\res\raw\watchface.xml = src\Launcher.WatchFace\res\raw\watchface.xml
+		src\Launcher.WatchFace\res\values\strings.xml = src\Launcher.WatchFace\res\values\strings.xml
+		src\Launcher.WatchFace\res\xml\watch_face_info.xml = src\Launcher.WatchFace\res\xml\watch_face_info.xml
+		tools\Build-LauncherWatchFace.ps1 = tools\Build-LauncherWatchFace.ps1
+		tools\publish_launcher_wear.py = tools\publish_launcher_wear.py
+		tools\prune_launcher_apks.py = tools\prune_launcher_apks.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +39,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|x64.Build.0 = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Debug|x86.Build.0 = Debug|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|x64.ActiveCfg = Release|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|x64.Build.0 = Release|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|x86.ActiveCfg = Release|Any CPU
+		{1245344D-AB65-4F46-9CE6-6553861A5C69}.Release|x86.Build.0 = Release|Any CPU
 		{B414C174-5BB7-58AD-BB24-9E453A5B248C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B414C174-5BB7-58AD-BB24-9E453A5B248C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B414C174-5BB7-58AD-BB24-9E453A5B248C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -78,6 +106,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{1245344D-AB65-4F46-9CE6-6553861A5C69} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{FBA672C1-8C66-46D1-9E00-62D1DF54329E} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{69A4273F-1E1D-4F16-9128-69611D42E690} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
