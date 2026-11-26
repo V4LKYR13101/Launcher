@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
@@ -34,7 +34,7 @@ public partial class MainActivity
         if (force.HasValue && wasExpanded != drawer.Expanded)
             Haptic(heading, HapticCue.Commit);
         bool expanding = drawer.Expanded;
-        heading.ContentDescription = drawer.Name + (expanding ? ", expanded" : ", collapsed");
+        heading.ContentDescription = DrawerName(drawer) + (expanding ? Localize(Resource.String.ui_expanded) : Localize(Resource.String.ui_collapsed));
         if (content.ChildCount == 0)
             populate();
         content.Visibility = ViewStates.Visible;
@@ -96,7 +96,7 @@ public partial class MainActivity
         AddMediaCard();
         if (state.Focus)
         {
-            var focus = Button("Ⅱ  Focus is on", () => { state.Focus = false; state.FocusEndsAt = 0; Save(); Render(); });
+            var focus = Button(Localize(Resource.String.ui_ii_focus_is_on), () => { state.Focus = false; state.FocusEndsAt = 0; Save(); Render(); });
             body.AddView(focus, Match());
             Gap(body, 12);
         }
@@ -104,7 +104,7 @@ public partial class MainActivity
         body.AddView(new Space(this), new LinearLayout.LayoutParams(-1, 0, 1));
         var visible = AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile).ToArray();
         AddHomeDock(QuickAccessEntries(visible));
-        var open = IconButton("up", "Open app drawer", () => Navigate(lastDrawerPage));
+        var open = IconButton("up", Localize(Resource.String.ui_open_app_drawer), () => Navigate(lastDrawerPage));
         BindHoldHaptics(open);
         open.LongClick += (_, _) => ShowQuickAccess();
         homeDrawerMarker = open;
@@ -131,7 +131,7 @@ public partial class MainActivity
 
         if (apps.Count == 0)
         {
-            Paragraph(loading ? "Finding your apps…" : "Installed apps will appear here.");
+            Paragraph(loading ? Localize(Resource.String.ui_finding_your_apps) : Localize(Resource.String.ui_installed_apps_will_appear_here));
             return;
         }
         var visible = AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile).ToArray();
@@ -140,7 +140,7 @@ public partial class MainActivity
         else
             AddGroupedApps(visible);
         if (visible.Length == 0)
-            Paragraph("No apps are visible. Restore hidden apps in Settings.");
+            Paragraph(Localize(Resource.String.ui_no_apps_are_visible_restore_hidden_apps_in_settings));
         RenderPrivateSpace();
     }
 
@@ -152,9 +152,9 @@ public partial class MainActivity
             var contents = visible.Where(a => state.Apps[a.Id].DrawerId == drawer.Id).ToArray();
             if (contents.Length == 0)
                 continue;
-            var heading = new FrameLayout(this) { ContentDescription = drawer.Name + (drawer.Expanded ? ", expanded" : ", collapsed") };
+            var heading = new FrameLayout(this) { ContentDescription = DrawerName(drawer) + (drawer.Expanded ? Localize(Resource.String.ui_expanded) : Localize(Resource.String.ui_collapsed)) };
             int detailWidth = (int)(54 + Math.Max(0, FontScale - 1) * 24), headingInset = FontScale > 1.15f ? detailWidth + 8 : 40;
-            var name = Text(drawer.Name, state.CenterHeadings ? 21 : 23, true);
+            var name = Text(DrawerName(drawer), state.CenterHeadings ? 21 : 23, true);
             name.Gravity = state.CenterHeadings ? GravityFlags.Center : GravityFlags.CenterVertical;
             name.SetPadding(state.CenterHeadings ? Dp(headingInset) : Dp(32), 0, state.CenterHeadings ? Dp(headingInset) : Dp(detailWidth + 8), 0);
             name.SetSingleLine(true);
@@ -164,7 +164,7 @@ public partial class MainActivity
             heading.AddView(DrawerIconView(drawer), new FrameLayout.LayoutParams(Dp(19), Dp(19), GravityFlags.Left | GravityFlags.CenterVertical));
             bool showDuration = hasUsage && state.ShowUsage;
             var detail = Text(showDuration ? AppOrganization.FormatDuration(contents.Select(a => a.PackageName).Distinct().Sum(p => usage.GetValueOrDefault(p))) : contents.Length.ToString(), 9, true, palette.Muted);
-            detail.ContentDescription = showDuration ? "Drawer usage " + detail.Text : Counted(contents.Length, "app");
+            detail.ContentDescription = showDuration ? Localize(Resource.String.ui_drawer_usage) + detail.Text : Counted(contents.Length, Resource.Plurals.app);
             if (!showDuration)
             {
                 detail.Background = Surface(palette.Card, 10);
@@ -245,7 +245,7 @@ public partial class MainActivity
             {
                 var icon = new FrameLayout(this)
                 {
-                    ContentDescription = AppOrganization.DisplayName(state, app) + (state.Apps[app.Id].Pinned ? ", pinned" : ""),
+                    ContentDescription = AppOrganization.DisplayName(state, app) + (state.Apps[app.Id].Pinned ? Localize(Resource.String.ui_pinned) : ""),
                     Tag = "app-tile:" + app.Id
                 };
                 var tile = new FrameLayout(this);
@@ -419,8 +419,8 @@ public partial class MainActivity
 
         tile.ContentDescription =
             AppOrganization.DisplayName(state, app)
-            + (locked ? ", locked" : "")
-            + (state.LayeredInterface ? ", hold for app actions" : ", hold to customize");
+            + (locked ? Localize(Resource.String.ui_locked) : "")
+            + (state.LayeredInterface ? Localize(Resource.String.ui_hold_for_app_actions) : Localize(Resource.String.ui_hold_to_customize));
         if (rule.Wide)
         {
             var top = Stack(true);
@@ -551,7 +551,7 @@ public partial class MainActivity
         bool muted = state.Apps.Any(p => p.Key.StartsWith(package + "/", StringComparison.Ordinal) && p.Value.MuteBadge);
         badge.Visibility = state.ShowNotificationBadges && !muted && count > 0 ? ViewStates.Visible : ViewStates.Gone;
         badge.Text = NotificationBadges.Label(count);
-        badge.ContentDescription = $"{count} unread notifications";
+        badge.ContentDescription = Localize(Resource.String.ui_value_unread_notifications, count);
     }
 
     private void RenderSearchResults()
@@ -588,7 +588,7 @@ public partial class MainActivity
         if (LayerMotionEnabled)
             container.Elevation = Dp(8);
         container.SetPadding(Dp(20), 0, Dp(20), Dp(16));
-        var handle = new FrameLayout(this) { ContentDescription = "Drag down to close sheet" };
+        var handle = new FrameLayout(this) { ContentDescription = Localize(Resource.String.ui_drag_down_to_close_sheet) };
         var line = new View(this) { Background = Background(palette.Muted, 4) };
         handle.AddView(line, new FrameLayout.LayoutParams(Dp(38), Dp(4), GravityFlags.Center));
         handle.SetOnTouchListener(new SheetDragListener(container, dialog, Dp(100), view => Haptic(view, HapticCue.Commit)));
@@ -604,7 +604,7 @@ public partial class MainActivity
             heading.AccessibilityHeading = true;
         heading.SetOnTouchListener(new SheetDragListener(container, dialog, Dp(100), view => Haptic(view, HapticCue.Commit)));
         titleRow.AddView(heading, new LinearLayout.LayoutParams(0, -2, 1));
-        titleRow.AddView(IconButton("close", "Close " + title, dialog.Dismiss), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+        titleRow.AddView(IconButton("close", Localize(Resource.String.ui_close_2) + title, dialog.Dismiss), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         container.AddView(titleRow, Match());
         if (fixedHeader is not null)
         {
@@ -684,9 +684,9 @@ public partial class MainActivity
                 var card = Stack();
                 card.SetPadding(Dp(16), Dp(14), Dp(16), Dp(14));
                 card.Background = Background(palette.Panel);
-                card.AddView(Text("TODAY", 10, true, palette.Muted), Match());
+                card.AddView(Text(Localize(Resource.String.ui_today_upper), 10, true, palette.Muted), Match());
                 card.AddView(Text(AppOrganization.FormatDuration(used), 32, true), Match());
-                Paragraph(rule.DailyGoalMinutes > 0 ? $"Daily goal · {rule.DailyGoalMinutes} minutes" : "Set a daily goal below for a mindful launch reminder.", card);
+                Paragraph(rule.DailyGoalMinutes > 0 ? Localize(Resource.String.ui_daily_goal_value_minutes, rule.DailyGoalMinutes) : Localize(Resource.String.ui_set_a_daily_goal_below_for_a_mindful_launch), card);
                 panel.AddView(card, Match());
                 Gap(panel);
             }
@@ -697,21 +697,21 @@ public partial class MainActivity
                 dialog.Dismiss();
                 Render();
             }
-            SectionCaption(panel, "Appearance");
-            SettingRow(panel, "App icon", rule.UseOriginalIcon ? "App’s own icon" : rule.IconPackage.Length > 0 ? rule.IconResource.Replace('_', ' ').Replace('-', ' ') : "Follow the global selection", () => { dialog.Dismiss(); PickIconPack(app); }, "photo");
-            SettingRow(panel, "Tile appearance", rule.TileStyle, () => PickTileStyle(app, () => { dialog.Dismiss(); Render(); }), "photo");
-            SectionCaption(panel, "Notifications");
-            ToggleRow(panel, "Mute notification badge", rule.MuteBadge, v => Change(() => { foreach (var p in state.Apps.Where(p => p.Key.StartsWith(app.PackageName + "/", StringComparison.Ordinal))) p.Value.MuteBadge = v; }));
-            SettingRow(panel, "App dashboard", "Usage charts, version, storage & data", () => { dialog.Dismiss(); ShowAppDashboard(app); }, "clock");
-            SectionCaption(panel, "App behaviour");
-            SettingRow(panel, "Biometric lock", PackageLocked(app.PackageName) ? "On · authenticate to open" : "Off", () =>
+            SectionCaption(panel, Localize(Resource.String.ui_appearance));
+            SettingRow(panel, Localize(Resource.String.ui_app_icon), rule.UseOriginalIcon ? Localize(Resource.String.ui_apps_own_icon) : rule.IconPackage.Length > 0 ? rule.IconResource.Replace('_', ' ').Replace('-', ' ') : Localize(Resource.String.ui_follow_the_global_selection), () => { dialog.Dismiss(); PickIconPack(app); }, "photo");
+            SettingRow(panel, Localize(Resource.String.ui_tile_appearance), rule.TileStyle, () => PickTileStyle(app, () => { dialog.Dismiss(); Render(); }), "photo");
+            SectionCaption(panel, Localize(Resource.String.ui_notifications));
+            ToggleRow(panel, Localize(Resource.String.ui_mute_notification_badge), rule.MuteBadge, v => Change(() => { foreach (var p in state.Apps.Where(p => p.Key.StartsWith(app.PackageName + "/", StringComparison.Ordinal))) p.Value.MuteBadge = v; }));
+            SettingRow(panel, Localize(Resource.String.ui_app_dashboard), Localize(Resource.String.ui_usage_charts_version_storage_data), () => { dialog.Dismiss(); ShowAppDashboard(app); }, "clock");
+            SectionCaption(panel, Localize(Resource.String.ui_app_behaviour));
+            SettingRow(panel, Localize(Resource.String.ui_biometric_lock), PackageLocked(app.PackageName) ? Localize(Resource.String.ui_on_authenticate_to_open) : Localize(Resource.String.ui_off), () =>
             {
                 dialog.Dismiss();
                 SetAppLock(app, !PackageLocked(app.PackageName));
             }, "lock");
-            SettingRow(panel, "Open app in grayscale", rule.OpenInGrayscale ? "On · app display, not icon colour" : "Off · keep app colours", () =>
+            SettingRow(panel, Localize(Resource.String.ui_open_app_in_grayscale), rule.OpenInGrayscale ? Localize(Resource.String.ui_on_app_display_not_icon_colour) : Localize(Resource.String.ui_off_keep_app_colours), () =>
             {
-                Choose("App display colour", ["Colour", "Grayscale", "Grayscale setup"], i =>
+                Choose(Resource.String.ui_app_display_colour, [Localize(Resource.String.ui_colour), Localize(Resource.String.ui_grayscale), Localize(Resource.String.ui_grayscale_setup)], i =>
                 {
                     if (i == 2)
                     {
@@ -724,28 +724,28 @@ public partial class MainActivity
                         Navigate("Grayscale setup");
                 }, rule.OpenInGrayscale ? 1 : 0);
             }, "photo");
-            Paragraph("App lock protects launches and app editing through Launcher. Android notifications, Recents and other launchers remain controlled by Android.", panel);
-            SectionCaption(panel, "Layout");
-            SettingRow(panel, "Drawer", state.Drawers.First(d => d.Id == rule.DrawerId).Name, () =>
-                Choose("Move to drawer", state.Drawers.Select(d => d.Name).ToArray(), i => Change(() => rule.DrawerId = state.Drawers[i].Id), state.Drawers.FindIndex(d => d.Id == rule.DrawerId)));
-            SettingRow(panel, "Rename", rule.Label ?? app.Label, () => Prompt("App name", rule.Label ?? app.Label, s => Change(() => rule.Label = LauncherState.CleanName(s, app.Label))));
-            SettingRow(panel, "Search aliases", rule.SearchAliases.Length == 0 ? "Find this app using your own words" : rule.SearchAliases, () => Prompt("Search aliases", rule.SearchAliases, s => Change(() => rule.SearchAliases = s.Trim()[..Math.Min(s.Trim().Length, 240)])));
-            ToggleRow(panel, "Expanded tile", rule.Wide, v => Change(() => rule.Wide = v));
-            ToggleRow(panel, "Pin to favorites", rule.Pinned, v => Change(() => rule.Pinned = v));
-            SettingRow(panel, "Daily usage goal", rule.DailyGoalMinutes == 0 ? "Off" : rule.DailyGoalMinutes + " min", () =>
-                Choose("Daily goal", ["Off", "15 minutes", "30 minutes", "45 minutes", "60 minutes", "90 minutes", "120 minutes"], i => Change(() => rule.DailyGoalMinutes = new[] { 0, 15, 30, 45, 60, 90, 120 }[i]), Array.IndexOf(new[] { 0, 15, 30, 45, 60, 90, 120 }, rule.DailyGoalMinutes)));
+            Paragraph(Localize(Resource.String.ui_app_lock_protects_launches_and_app_editing_through_launcher), panel);
+            SectionCaption(panel, Localize(Resource.String.ui_layout));
+            SettingRow(panel, Localize(Resource.String.ui_drawer), state.Drawers.First(d => d.Id == rule.DrawerId).Name, () =>
+                Choose(Resource.String.ui_move_to_drawer, state.Drawers.Select(DrawerName).ToArray(), i => Change(() => rule.DrawerId = state.Drawers[i].Id), state.Drawers.FindIndex(d => d.Id == rule.DrawerId)));
+            SettingRow(panel, Localize(Resource.String.ui_rename), rule.Label ?? app.Label, () => Prompt(Resource.String.ui_app_name, rule.Label ?? app.Label, s => Change(() => rule.Label = LauncherState.CleanName(s, app.Label))));
+            SettingRow(panel, Localize(Resource.String.ui_search_aliases), rule.SearchAliases.Length == 0 ? Localize(Resource.String.ui_find_this_app_using_your_own_words) : rule.SearchAliases, () => Prompt(Resource.String.ui_search_aliases, rule.SearchAliases, s => Change(() => rule.SearchAliases = s.Trim()[..Math.Min(s.Trim().Length, 240)])));
+            ToggleRow(panel, Localize(Resource.String.ui_expanded_tile), rule.Wide, v => Change(() => rule.Wide = v));
+            ToggleRow(panel, Localize(Resource.String.ui_pin_to_favorites), rule.Pinned, v => Change(() => rule.Pinned = v));
+            SettingRow(panel, Localize(Resource.String.ui_daily_usage_goal), rule.DailyGoalMinutes == 0 ? Localize(Resource.String.ui_off) : rule.DailyGoalMinutes + Localize(Resource.String.ui_min), () =>
+                Choose(Resource.String.ui_daily_goal, [Localize(Resource.String.ui_off), Localize(Resource.String.ui_15_minutes), Localize(Resource.String.ui_30_minutes), Localize(Resource.String.ui_45_minutes), Localize(Resource.String.ui_60_minutes), Localize(Resource.String.ui_90_minutes), Localize(Resource.String.ui_120_minutes)], i => Change(() => rule.DailyGoalMinutes = new[] { 0, 15, 30, 45, 60, 90, 120 }[i]), Array.IndexOf(new[] { 0, 15, 30, 45, 60, 90, 120 }, rule.DailyGoalMinutes)));
             var move = Stack(true);
-            RootActions(panel, ("Move earlier", () => Change(() => MoveApp(app, -1))), ("Move later", () => Change(() => MoveApp(app, 1))));
-            panel.AddView(Button(rule.Hidden ? "Show app" : "Hide from Launcher", () => Change(() => rule.Hidden = !rule.Hidden)), Match());
+            RootActions(panel, (Localize(Resource.String.ui_move_earlier), () => Change(() => MoveApp(app, -1))), (Localize(Resource.String.ui_move_later), () => Change(() => MoveApp(app, 1))));
+            panel.AddView(Button(rule.Hidden ? Localize(Resource.String.ui_show_app) : Localize(Resource.String.ui_hide_from_launcher), () => Change(() => rule.Hidden = !rule.Hidden)), Match());
             Gap(panel);
-            panel.AddView(Button("Android app info", () => { dialog.Dismiss(); AppInfo(app); }), Match());
+            panel.AddView(Button(Localize(Resource.String.ui_android_app_info), () => { dialog.Dismiss(); AppInfo(app); }), Match());
             Gap(panel);
             if (app.ShortcutId.Length > 0)
             {
-                panel.AddView(Button("Remove shortcut", () => Confirm("Remove shortcut?", "Remove this shortcut from Launcher? The app stays installed.", "Remove shortcut", () => { RemovePinnedShortcut(app); dialog.Dismiss(); })), Match());
+                panel.AddView(Button(Localize(Resource.String.ui_remove_shortcut), () => Confirm(Localize(Resource.String.ui_remove_shortcut_2), Localize(Resource.String.ui_remove_this_shortcut_from_launcher_the_app_stays_installed), Localize(Resource.String.ui_remove_shortcut), () => { RemovePinnedShortcut(app); dialog.Dismiss(); })), Match());
                 Gap(panel);
             }
-            panel.AddView(Button("Done", () => dialog.Dismiss(), true), Match());
+            panel.AddView(Button(Localize(Resource.String.ui_done), () => dialog.Dismiss(), true), Match());
         });
     }
 

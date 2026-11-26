@@ -1,4 +1,4 @@
-﻿
+
 using Android.Views;
 using Android.Widget;
 using LauncherApp.Services;
@@ -27,16 +27,16 @@ public partial class MainActivity
             .OrderBy(a => a.Name)
             .ToArray();
 
-        Sheet("Notification whispers", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_notification_whispers), (panel, dialog) =>
         {
             Paragraph(
-                "Use a quiet Kokoro voice for notifications from " +
-                "*selected apps*. Message contents are never read aloud.",
+                Localize(Resource.String.ui_use_a_quiet_kokoro_voice_for_notifications_from) +
+                Localize(Resource.String.ui_selected_apps_message_contents_are_never_read_aloud),
                 panel);
 
             ToggleRow(
                 panel,
-                "Enable notification whispers",
+                Localize(Resource.String.ui_enable_notification_whispers),
                 NotificationWhisperPreferences.Enabled(this),
                 value =>
                 {
@@ -47,7 +47,7 @@ public partial class MainActivity
 
             ToggleRow(
                 panel,
-                "Messages only",
+                Localize(Resource.String.ui_messages_only),
                 NotificationWhisperPreferences.MessagesOnly(this),
                 value =>
                     NotificationWhisperPreferences.SetMessagesOnly(
@@ -56,13 +56,13 @@ public partial class MainActivity
             Gap(panel, 8);
 
             Paragraph(
-                "Select apps below. Optionally add a sender or title " +
-                "filter so only matching notifications are whispered.",
+                Localize(Resource.String.ui_select_apps_below_optionally_add_a_sender_or_title) +
+                Localize(Resource.String.ui_filter_so_only_matching_notifications_are_whispered),
                 panel);
 
             var search = new EditText(this)
             {
-                Hint = "Search apps",
+                Hint = Localize(Resource.String.ui_search_apps),
                 TextSize = 15,
                 Typeface = regular,
                 Background = Background(palette.Panel, 14)
@@ -130,11 +130,11 @@ public partial class MainActivity
                             .GetTitleFilter(this, package);
 
                     string description = filter.Length == 0
-                        ? "Any sender or title"
-                        : "Title contains: " + filter;
+                        ? Localize(Resource.String.ui_any_sender_or_title)
+                        : Localize(Resource.String.ui_title_contains) + filter;
 
                     var filterButton = Text(
-                        description + "  ·  Edit",
+                        description + Localize(Resource.String.ui_edit_2),
                         12,
                         color: palette.Muted);
 
@@ -167,7 +167,7 @@ public partial class MainActivity
         {
             footer.AddView(
                 Button(
-                    "Done",
+                    Localize(Resource.String.ui_done),
                     () =>
                     {
                         dialog.Dismiss();
@@ -185,19 +185,19 @@ public partial class MainActivity
     {
         EditText? input = null;
 
-        Sheet("Whisper filter · " + appName, (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_whisper_filter) + appName, (panel, dialog) =>
         {
             Paragraph(
-                "Only whisper notifications when the sender or " +
-                "notification title contains this text. " +
-                "Leave blank to allow all notifications from this app.",
+                Localize(Resource.String.ui_only_whisper_notifications_when_the_sender_or) +
+                Localize(Resource.String.ui_notification_title_contains_this_text) +
+                Localize(Resource.String.ui_leave_blank_to_allow_all_notifications_from_this_app),
                 panel);
 
             input = new EditText(this)
             {
                 Text = NotificationWhisperPreferences
                     .GetTitleFilter(this, package),
-                Hint = "e.g. Danielle",
+                Hint = Localize(Resource.String.ui_e_g_danielle),
                 TextSize = 16,
                 Typeface = regular,
                 Background = Background(palette.Card, 12)
@@ -216,8 +216,8 @@ public partial class MainActivity
         {
             DialogActions(
                 footer,
-                ("Cancel", dialog.Dismiss),
-                ("Save", () =>
+                (Localize(Resource.String.ui_cancel), dialog.Dismiss),
+                (Localize(Resource.String.ui_save), () =>
                 {
                     NotificationWhisperPreferences.SetTitleFilter(
                         this,

@@ -35,7 +35,7 @@ public partial class MainActivity
     {
         if (layoutUndo.Count == 0)
         {
-            Toast("There are no layout changes to undo in this session.");
+            Toast(Localize(Resource.String.ui_there_are_no_layout_changes_to_undo_in_this));
             return;
         }
         var old = LauncherState.Deserialize(layoutUndo.Pop());
@@ -50,10 +50,10 @@ public partial class MainActivity
         Save();
         DismissSheets();
         Render();
-        Toast("Layout change undone.");
+        Toast(Localize(Resource.String.ui_layout_change_undone));
     });
-    private string CardLabel(string id) => id.StartsWith("widget:") && int.TryParse(id[7..], out int widget) ? WidgetLabel(widget) : id.StartsWith("note:") ? state.Notes.FirstOrDefault(n => "note:" + n.Id == id)?.Title ?? "Note" : state.ExtraCards.FirstOrDefault(c => c.Id == id)?.Title ?? id switch { "overview" => "At a glance", "calendar" => "Agenda", "media" => "Now playing", "feeds" => "News & feeds", "resources" => "Phone resources", _ => char.ToUpperInvariant(id[0]) + id[1..] };
-    private void ShowLayoutEditor() => Choose("Edit your layout", ["Arrange app drawers", "Arrange Today cards", "Move apps in bulk", "Undo last layout change", "Arrange favorites"], i =>
+    private string CardLabel(string id) => id.StartsWith("widget:") && int.TryParse(id[7..], out int widget) ? WidgetLabel(widget) : id.StartsWith("note:") ? state.Notes.FirstOrDefault(n => "note:" + n.Id == id)?.Title ?? Localize(Resource.String.ui_note) : state.ExtraCards.FirstOrDefault(c => c.Id == id)?.Title ?? id switch { "overview" => Localize(Resource.String.ui_at_a_glance), "calendar" => Localize(Resource.String.ui_agenda), "media" => Localize(Resource.String.ui_now_playing), "feeds" => Localize(Resource.String.ui_news_feeds), "resources" => Localize(Resource.String.ui_phone_resources), _ => char.ToUpperInvariant(id[0]) + id[1..] };
+    private void ShowLayoutEditor() => Choose(Resource.String.ui_edit_your_layout, [Localize(Resource.String.ui_arrange_app_drawers), Localize(Resource.String.ui_arrange_today_cards), Localize(Resource.String.ui_move_apps_in_bulk), Localize(Resource.String.ui_undo_last_layout_change), Localize(Resource.String.ui_arrange_favorites)], i =>
     {
         if (i == 1)
         {
@@ -72,13 +72,13 @@ public partial class MainActivity
         }
         bool drawers = i == 0;
         var order = drawers ? state.Drawers.Select(d => d.Id).ToList() : AppOrganization.Visible(state, apps).Where(a => !a.PrivateProfile && state.Apps[a.Id].Pinned).Select(a => a.Id).ToList();
-        Sheet(drawers ? "Arrange drawers" : "Arrange favorites", (panel, dialog) =>
+        Sheet(drawers ? Localize(Resource.String.ui_arrange_drawers) : Localize(Resource.String.ui_arrange_favorites), (panel, dialog) =>
         {
-            Paragraph("Hold a grip and drag a row into place. The arrow buttons offer the same controls. Changes apply when you save.", panel);
+            Paragraph(Localize(Resource.String.ui_hold_a_grip_and_drag_a_row_into_place), panel);
             var rows = Stack();
             panel.AddView(rows, Match());
             if (!drawers)
-                Paragraph(order.Count == 0 ? "Hold an app and choose Pin to favorites to add it here." : "The first five visible favorites appear in the dock. Pinning also brings apps to the top of their drawer.", panel);
+                Paragraph(order.Count == 0 ? Localize(Resource.String.ui_hold_an_app_and_choose_pin_to_favorites_to) : Localize(Resource.String.ui_the_first_five_visible_favorites_appear_in_the_dock), panel);
             void Reorder(string source, string target)
             {
                 int from = order.IndexOf(source), to = order.IndexOf(target);
@@ -93,12 +93,12 @@ public partial class MainActivity
                 rows.RemoveAllViews();
                 foreach (string id in order.ToArray())
                 {
-                    string label = drawers ? state.Drawers.First(d => d.Id == id).Name : apps.FirstOrDefault(a => a.Id == id) is { } app ? AppOrganization.DisplayName(state, app) : "Unavailable app";
+                    string label = drawers ? state.Drawers.First(d => d.Id == id).Name : apps.FirstOrDefault(a => a.Id == id) is { } app ? AppOrganization.DisplayName(state, app) : Localize(Resource.String.ui_unavailable_app);
                     var row = Stack(true);
                     row.SetGravity(GravityFlags.CenterVertical);
                     row.Background = Surface(palette.Card, 14);
                     row.SetPadding(Dp(4), Dp(4), Dp(4), Dp(4));
-                    var grip = IconButton("more", "Drag " + label, () => Toast("Hold the grip to drag, or use the arrows."));
+                    var grip = IconButton("more", Localize(Resource.String.ui_drag) + label, () => Toast(Localize(Resource.String.ui_hold_the_grip_to_drag_or_use_the_arrows)));
                     grip.LongClick += (_, _) => grip.StartDragAndDrop(ClipData.NewPlainText("Launcher layout", id), new View.DragShadowBuilder(row), null, 0);
                     row.AddView(grip, new LinearLayout.LayoutParams(Dp(48), Dp(48)));
                     var title = Text(label, 14, true);
@@ -107,7 +107,7 @@ public partial class MainActivity
                     foreach (var (glyph, direction) in new[] { ("up", -1), ("down", 1) })
                     {
                         int next = order.IndexOf(id) + direction;
-                        var button = IconButton(glyph, (direction < 0 ? "Move earlier: " : "Move later: ") + label, () => { if (next >= 0 && next < order.Count) Reorder(id, order[next]); });
+                        var button = IconButton(glyph, (direction < 0 ? Localize(Resource.String.ui_move_earlier_2) : Localize(Resource.String.ui_move_later_2)) + label, () => { if (next >= 0 && next < order.Count) Reorder(id, order[next]); });
                         button.Enabled = next >= 0 && next < order.Count;
                         button.Alpha = button.Enabled ? 1 : .25f;
                         row.AddView(button, new LinearLayout.LayoutParams(Dp(48), Dp(48)));
@@ -119,7 +119,7 @@ public partial class MainActivity
                 }
             }
             Rebuild();
-        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save layout", () => { RememberLayout(); if (drawers) state.Drawers = order.Select(id => state.Drawers.First(d => d.Id == id)).ToList(); else { for (int index = 0; index < order.Count; index++) if (state.Apps.TryGetValue(order[index], out var rule)) rule.Order = index; } Save(); dialog.Dismiss(); RenderBody(); Toast("Layout saved. Undo is available in Edit layout."); })));
+        }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_save_layout), () => { RememberLayout(); if (drawers) state.Drawers = order.Select(id => state.Drawers.First(d => d.Id == id)).ToList(); else { for (int index = 0; index < order.Count; index++) if (state.Apps.TryGetValue(order[index], out var rule)) rule.Order = index; } Save(); dialog.Dismiss(); RenderBody(); Toast(Localize(Resource.String.ui_layout_saved_undo_is_available_in_edit_layout)); })));
     });
     private sealed class LayoutDrop(string target, Action<string, string> drop, Action entered, Action exited) : Java.Lang.Object, View.IOnDragListener
     {
@@ -147,9 +147,9 @@ public partial class MainActivity
     {
         var selected = new HashSet<string>();
         string filter = "";
-        Sheet("Move apps together", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_move_apps_together), (panel, dialog) =>
         {
-            var search = FormField(panel, "Find apps", "", "App name or package", search: true);
+            var search = FormField(panel, Localize(Resource.String.ui_find_apps), "", Localize(Resource.String.ui_app_name_or_package), search: true);
             var rows = Stack();
             panel.AddView(rows, Match());
             void Rebuild()
@@ -167,14 +167,14 @@ public partial class MainActivity
             }
             search.TextChanged += (_, _) => { filter = search.Text ?? ""; Rebuild(); };
             Rebuild();
-        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Move selected", () =>
+        }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_move_selected), () =>
         {
             if (selected.Count == 0)
             {
-                Toast("Select at least one app.");
+                Toast(Localize(Resource.String.ui_select_at_least_one_app));
                 return;
             }
-            WithProtectedSettings(() => Choose("Destination drawer", state.Drawers.Select(d => d.Name).ToArray(), index => { RememberLayout(); foreach (string id in selected) state.Apps[id].DrawerId = state.Drawers[index].Id; Save(); DismissSheets(); RenderBody(); Toast(Counted(selected.Count, "app") + " moved."); }));
+            WithProtectedSettings(() => Choose(Resource.String.ui_destination_drawer, state.Drawers.Select(DrawerName).ToArray(), index => { RememberLayout(); foreach (string id in selected) state.Apps[id].DrawerId = state.Drawers[index].Id; Save(); DismissSheets(); RenderBody(); Toast(Counted(selected.Count, Resource.Plurals.app) + Localize(Resource.String.ui_moved)); }));
         }
         )));
     }

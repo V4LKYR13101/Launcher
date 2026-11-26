@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.Graphics;
@@ -33,7 +33,7 @@ public partial class MainActivity
         }
         var header = Stack(true);
         header.SetGravity(GravityFlags.CenterVertical);
-        header.ContentDescription = title + (collapsed ? ", collapsed" : ", expanded");
+        header.ContentDescription = title + (collapsed ? Localize(Resource.String.ui_collapsed) : Localize(Resource.String.ui_expanded));
         header.AddView(new GlyphView(this, glyph, palette.Muted), new LinearLayout.LayoutParams(Dp(16), Dp(16)));
         bool note = id.StartsWith("note:");
         var name = Text(note ? title : title.ToUpperInvariant(), note ? 15 : 11, true, note ? palette.Text : palette.Muted);
@@ -79,9 +79,9 @@ public partial class MainActivity
                         control.Alpha = control.Enabled ? 1 : .32f;
                         actions.AddView(control, new LinearLayout.LayoutParams(Dp(48), Dp(48)));
                     }
-                    Control("previous", "Previous track", PlaybackState.ActionSkipToPrevious, () => transport?.SkipToPrevious());
-                    Control(media.Playing ? "pause" : "play", media.Playing ? "Pause" : "Play", media.Playing ? PlaybackState.ActionPause | PlaybackState.ActionPlayPause : PlaybackState.ActionPlay | PlaybackState.ActionPlayPause, () => { if (media.Playing) transport?.Pause(); else transport?.Play(); });
-                    Control("next", "Next track", PlaybackState.ActionSkipToNext, () => transport?.SkipToNext());
+                    Control("previous", Localize(Resource.String.ui_previous_track), PlaybackState.ActionSkipToPrevious, () => transport?.SkipToPrevious());
+                    Control(media.Playing ? "pause" : "play", media.Playing ? Localize(Resource.String.ui_pause) : Localize(Resource.String.ui_play), media.Playing ? PlaybackState.ActionPause | PlaybackState.ActionPlayPause : PlaybackState.ActionPlay | PlaybackState.ActionPlayPause, () => { if (media.Playing) transport?.Pause(); else transport?.Play(); });
+                    Control("next", Localize(Resource.String.ui_next_track), PlaybackState.ActionSkipToNext, () => transport?.SkipToNext());
                     inner.AddView(actions, Match());
                 }
                 if (id == "timers")
@@ -92,7 +92,7 @@ public partial class MainActivity
                     var value = Text(TimerDisplay(timer), 21, true, palette.Accent);
                     workspaceTimerViews.Add((timer, value));
                     row.AddView(value, new LinearLayout.LayoutParams(0, -2, 1));
-                    row.AddView(IconButton(timer.EndsAt > 0 ? "pause" : "play", timer.EndsAt > 0 ? "Pause timer" : "Start timer", () => ToggleTimer(timer)));
+                    row.AddView(IconButton(timer.EndsAt > 0 ? "pause" : "play", timer.EndsAt > 0 ? Localize(Resource.String.ui_pause_timer) : Localize(Resource.String.ui_start_timer), () => ToggleTimer(timer)));
                     inner.AddView(row, Match());
                 }
             }
@@ -109,7 +109,7 @@ public partial class MainActivity
                 RefreshBodyInPlace();
                 return;
             }
-            header.ContentDescription = title + (folded ? ", collapsed" : ", expanded");
+            header.ContentDescription = title + (folded ? Localize(Resource.String.ui_collapsed) : Localize(Resource.String.ui_expanded));
             header.RemoveViewAt(header.ChildCount - 1);
             header.AddView(new GlyphView(this, folded ? "down" : "up", palette.Muted), new LinearLayout.LayoutParams(Dp(14), Dp(14)));
             if (folded && id == "feeds")
@@ -139,27 +139,27 @@ public partial class MainActivity
 
     private void RenderRootSettings()
     {
-        Title("Root cards");
-        ToggleRow(body, "Calendar card", state.CalendarVisible, v => { state.CalendarVisible = v; Save(); });
-        ToggleRow(body, "Focus card", state.FocusCardVisible, v => { state.FocusCardVisible = v; Save(); });
-        ToggleRow(body, "Notes card", state.NotesVisible, v => { state.NotesVisible = v; Save(); });
-        ToggleRow(body, "Phone resources card", state.ResourcesVisible, v => { state.ResourcesVisible = v; if (v) state.RootHidden.Remove("resources"); Save(); });
-        ToggleRow(body, "Calculator card", state.CalculatorVisible, v => { state.CalculatorVisible = v; Save(); });
-        SettingRow(body, "Manage cards", "Restore hidden cards", ManageRootCards, "grid");
+        Title(Localize(Resource.String.ui_root_cards));
+        ToggleRow(body, Localize(Resource.String.ui_calendar_card), state.CalendarVisible, v => { state.CalendarVisible = v; Save(); });
+        ToggleRow(body, Localize(Resource.String.ui_focus_card), state.FocusCardVisible, v => { state.FocusCardVisible = v; Save(); });
+        ToggleRow(body, Localize(Resource.String.ui_notes_card), state.NotesVisible, v => { state.NotesVisible = v; Save(); });
+        ToggleRow(body, Localize(Resource.String.ui_phone_resources_card), state.ResourcesVisible, v => { state.ResourcesVisible = v; if (v) state.RootHidden.Remove("resources"); Save(); });
+        ToggleRow(body, Localize(Resource.String.ui_calculator_card), state.CalculatorVisible, v => { state.CalculatorVisible = v; Save(); });
+        SettingRow(body, Localize(Resource.String.ui_manage_cards), Localize(Resource.String.ui_restore_hidden_cards), ManageRootCards, "grid");
         Gap(body);
-        body.AddView(Button("+  Add Android widget", AddWidget, true), Match());
+        body.AddView(Button(Localize(Resource.String.ui_add_android_widget_action), AddWidget, true), Match());
         Gap(body);
-        Paragraph("Your installed apps provide Android widgets. Tap a widget header to collapse it; hold the header to resize or remove it. Provider setup may open a separate screen.");
+        Paragraph(Localize(Resource.String.ui_your_installed_apps_provide_android_widgets_tap_a_widget));
         foreach (var slot in state.Widgets.ToArray())
-            SettingRow(body, WidgetLabel(slot.Id), slot.Height + " dp", () => WidgetOptions(slot));
+            SettingRow(body, WidgetLabel(slot.Id), slot.Height + Localize(Resource.String.ui_dp), () => WidgetOptions(slot));
     }
 
-    private string WidgetLabel(int id) => AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(id)?.LoadLabel(PackageManager) ?? "Android widget";
+    private string WidgetLabel(int id) => AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(id)?.LoadLabel(PackageManager) ?? Localize(Resource.String.ui_android_widget);
     private void AddWidget()
     {
         if (state.Widgets.Count >= 20)
         {
-            Toast("You can add up to 20 widgets.");
+            Toast(Localize(Resource.String.ui_you_can_add_up_to_20_widgets));
             return;
         }
         pendingWidget = widgetHost.AllocateAppWidgetId();
@@ -169,7 +169,7 @@ public partial class MainActivity
             intent.PutExtra(AppWidgetManager.ExtraAppwidgetId, pendingWidget);
             StartActivityForResult(intent, 801);
         }
-        catch (ActivityNotFoundException) { widgetHost.DeleteAppWidgetId(pendingWidget); pendingWidget = -1; Toast("Widget picker is unavailable on this device."); }
+        catch (ActivityNotFoundException) { widgetHost.DeleteAppWidgetId(pendingWidget); pendingWidget = -1; Toast(Localize(Resource.String.ui_widget_picker_is_unavailable_on_this_device)); }
     }
     private void RenderWidget(WidgetSlot slot)
     {
@@ -183,11 +183,11 @@ public partial class MainActivity
         card.SetPadding(inset, glass ? Dp(4) : 0, inset, Dp(slot.Collapsed ? glass ? 4 : 0 : 8));
         var header = Stack(true);
         header.SetGravity(GravityFlags.CenterVertical);
-        header.ContentDescription = WidgetLabel(slot.Id) + (slot.Collapsed ? ", collapsed" : ", expanded");
+        header.ContentDescription = WidgetLabel(slot.Id) + (slot.Collapsed ? Localize(Resource.String.ui_collapsed) : Localize(Resource.String.ui_expanded));
         header.SetPadding(0, 0, 0, 0);
         var providerApp = apps.FirstOrDefault(a => a.PackageName == info.Provider?.PackageName);
         header.AddView(providerApp is not null ? AppIcon(providerApp, palette.Text) : new GlyphView(this, "grid", palette.Muted), new LinearLayout.LayoutParams(Dp(19), Dp(19)));
-        var label = Text(info.LoadLabel(PackageManager) ?? "Widget", 15, true);
+        var label = Text(info.LoadLabel(PackageManager) ?? Localize(Resource.String.ui_widget), 15, true);
         label.Gravity = GravityFlags.CenterVertical;
         label.SetPadding(Dp(10), 0, Dp(8), 0);
         label.SetSingleLine(true);
@@ -218,13 +218,13 @@ public partial class MainActivity
                 }
                 card.AddView(view, Match(Dp(height)));
             }
-            catch (Java.Lang.RuntimeException) { Paragraph("This widget is unavailable. Hold its header to remove it.", card); }
+            catch (Java.Lang.RuntimeException) { Paragraph(Localize(Resource.String.ui_this_widget_is_unavailable_hold_its_header_to_remove), card); }
         }
         var lp = Match();
         lp.SetMargins(0, 0, 0, Dp(14));
         body.AddView(card, lp);
     }
-    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id), ["Fit widget automatically", "Compact · 72 dp", "Small · 140 dp", "Medium · 220 dp", "Large · 320 dp", "Tall · 440 dp", "Move up", "Move down", "Remove widget"], i =>
+    private void WidgetOptions(WidgetSlot slot) => Choose(WidgetLabel(slot.Id), [Localize(Resource.String.ui_fit_widget_automatically), Localize(Resource.String.ui_compact_72_dp), Localize(Resource.String.ui_small_140_dp), Localize(Resource.String.ui_medium_220_dp), Localize(Resource.String.ui_large_320_dp), Localize(Resource.String.ui_tall_440_dp), Localize(Resource.String.ui_move_up), Localize(Resource.String.ui_move_down), Localize(Resource.String.ui_remove_widget)], i =>
     {
         if (i == 0)
             slot.AutoHeight = true;
@@ -253,33 +253,33 @@ public partial class MainActivity
     {
         var conversationHeader = Stack(true);
         conversationHeader.SetGravity(GravityFlags.CenterVertical);
-        var heading = Text("Notifications", 27, true);
+        var heading = Text(Localize(Resource.String.ui_notifications), 27, true);
         heading.Gravity = GravityFlags.CenterVertical;
         heading.SetMinimumHeight(Math.Max(Dp(52), Dp(27 * FontScale * 1.25f + 12)));
         if (OperatingSystem.IsAndroidVersionAtLeast(28))
             heading.AccessibilityHeading = true;
         conversationHeader.AddView(heading, new LinearLayout.LayoutParams(0, -2, 1));
-        conversationHeader.AddView(IconButton("settings", "Launcher Settings", () => Navigate("Settings"), palette.Accent), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
-        conversationHeader.AddView(IconButton("filter", "Filter notification apps", PickConversationSources), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+        conversationHeader.AddView(IconButton("settings", Localize(Resource.String.ui_launcher_settings), () => Navigate("Settings"), palette.Accent), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+        conversationHeader.AddView(IconButton("filter", Localize(Resource.String.ui_filter_notification_apps), PickConversationSources), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         body.AddView(conversationHeader, Match());
         if (!ConversationService.Enabled(this))
         {
-            Paragraph("Your messages, in one quiet place. Connect Android notifications to see current conversations from your messaging apps.");
-            body.AddView(Button("Enable notification access", OpenNotificationAccessSettings, true), Match());
+            Paragraph(Localize(Resource.String.ui_your_messages_in_one_quiet_place_connect_android_notifications));
+            body.AddView(Button(Localize(Resource.String.ui_enable_notification_access), OpenNotificationAccessSettings, true), Match());
             Gap(body);
-            Paragraph("Launcher displays current notifications. Optional local history can save new message notifications after you enable it.");
+            Paragraph(Localize(Resource.String.ui_launcher_displays_current_notifications_optional_local_history_can_save));
             return;
         }
         var keyguard = (KeyguardManager?)GetSystemService(KeyguardService);
         if (keyguard?.IsDeviceLocked == true)
         {
-            Paragraph("Unlock your phone to view message previews.");
+            Paragraph(Localize(Resource.String.ui_unlock_your_phone_to_view_message_previews));
             return;
         }
         var messages = (state.ConversationMessagesOnly ? ConversationService.Snapshot() : ConversationService.NotificationSnapshot())
             .Where(m => !state.ConversationExcludedApps.Contains(m.Package)).ToArray();
         if (state.ConversationMessagesOnly)
-            Paragraph("Messages only");
+            Paragraph(Localize(Resource.String.ui_messages_only));
         if (conversationFilter != "All" && !messages.Any(m => m.Package == conversationFilter))
             conversationFilter = "All";
         var filters = Stack(true);
@@ -287,7 +287,7 @@ public partial class MainActivity
         filterScroll.AddView(filters);
         foreach (var package in new[] { "All" }.Concat(messages.Select(m => m.Package).Distinct()))
         {
-            string label = package == "All" ? "All" : PackageLabel(package);
+            string label = package == "All" ? Localize(Resource.String.ui_all) : PackageLabel(package);
             var chip = RootAction(label, () => { conversationFilter = package; RenderBody(); });
             chip.SetTextColor(conversationFilter == package ? palette.OnAccent : palette.Text);
             chip.Background = Background(conversationFilter == package ? palette.Accent : Color.Transparent, 20, conversationFilter == package ? null : palette.Divider);
@@ -300,7 +300,7 @@ public partial class MainActivity
         var visible = messages.Where(m => (conversationFilter == "All" || m.Package == conversationFilter)
             && (ConcealPreview(m.Package) ? PackageLabel(m.Package).Contains(query, StringComparison.CurrentCultureIgnoreCase) : m.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase) || m.Text.Contains(query, StringComparison.CurrentCultureIgnoreCase))).ToArray();
         if (visible.Length == 0)
-            Paragraph(query.Trim().Length > 0 ? "No notifications match your search." : "No notifications from the selected apps. Use the filter icon to choose which apps appear here.");
+            Paragraph(query.Trim().Length > 0 ? Localize(Resource.String.ui_no_notifications_match_your_search) : Localize(Resource.String.ui_no_notifications_from_the_selected_apps_use_the_filter));
         AddNotificationGroups(body, visible, actions: true);
     }
 
@@ -324,7 +324,7 @@ public partial class MainActivity
                         companion.Start();
                     RenderBody();
                 }
-                catch (Java.Lang.SecurityException) { Toast("Folder access was not granted."); }
+                catch (Java.Lang.SecurityException) { Toast(Localize(Resource.String.ui_folder_access_was_not_granted)); }
             }
             return;
         }
@@ -356,7 +356,7 @@ public partial class MainActivity
             int id = data?.GetIntExtra(AppWidgetManager.ExtraAppwidgetId, pendingWidget) ?? pendingWidget;
             if (id <= 0 || id != pendingWidget)
             {
-                Toast("Could not add this widget.");
+                Toast(Localize(Resource.String.ui_could_not_add_this_widget));
                 return;
             }
             var info = AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(id);
@@ -370,7 +370,7 @@ public partial class MainActivity
                     StartActivityForResult(config, 802);
                     return;
                 }
-                catch (ActivityNotFoundException) { widgetHost.DeleteAppWidgetId(id); pendingWidget = -1; Toast("Widget setup is unavailable."); return; }
+                catch (ActivityNotFoundException) { widgetHost.DeleteAppWidgetId(id); pendingWidget = -1; Toast(Localize(Resource.String.ui_widget_setup_is_unavailable)); return; }
             }
             if (info is not null)
                 state.Widgets.Add(new()
@@ -394,7 +394,7 @@ public partial class MainActivity
                 using var stream = ContentResolver!.OpenOutputStream(data.Data)!;
                 using var writer = new StreamWriter(stream);
                 writer.Write(state.Serialize());
-                Toast("Layout saved.");
+                Toast(Localize(Resource.String.ui_layout_saved));
             }
             if (requestCode == 702)
             {
@@ -415,7 +415,7 @@ public partial class MainActivity
         }
         catch (Exception e) when (e is IOException or System.Text.Json.JsonException or InvalidDataException or Java.Lang.RuntimeException or UnauthorizedAccessException)
         {
-            Toast("Could not read or write this backup. Choose a valid Launcher JSON file.");
+            Toast(Localize(Resource.String.ui_could_not_read_or_write_this_backup_choose_a));
         }
     }
 }

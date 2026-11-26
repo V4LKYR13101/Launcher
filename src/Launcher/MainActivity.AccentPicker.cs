@@ -34,7 +34,7 @@ public partial class MainActivity
         }
 
         var glow = new AccentGlowDrawable(Color.ParseColor(state.Accent), (byte)(palette.Light ? 46 : 86));
-        Sheet("Accent", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_accent), (panel, dialog) =>
         {
             int slotWidth = Dp(68);
             var preview = Stack();
@@ -147,10 +147,10 @@ public partial class MainActivity
             PaintSwatches(selected);
 
             Gap(panel, 8);
-            panel.AddView(Button("Custom hex color", () =>
+            panel.AddView(Button(Localize(Resource.String.ui_custom_hex_color), () =>
             {
                 dialog.Dismiss();
-                Prompt("Accent · #RRGGBB", state.Accent, value => ApplyAccent(value.Trim()));
+                Prompt(Resource.String.ui_accent_rrggbb, state.Accent, value => ApplyAccent(value.Trim()));
             }), Match());
 
             dialog.DismissEvent += (_, _) =>

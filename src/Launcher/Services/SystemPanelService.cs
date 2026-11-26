@@ -1,4 +1,4 @@
-﻿using Android.AccessibilityServices;
+using Android.AccessibilityServices;
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
@@ -19,7 +19,7 @@ using Uri = Android.Net.Uri;
 namespace LauncherApp.Services;
 
 // A separate, opt-in service. It never reads view hierarchies or intercepts global gestures.
-[Service(Name = "com.launcher.home.SystemPanelService", Label = "Launcher system panel", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
+[Service(Name = "com.launcher.home.SystemPanelService", Label = "@string/ui_launcher_system_panel", Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Exported = true)]
 [IntentFilter(["android.accessibilityservice.AccessibilityService"])]
 [MetaData("android.accessibilityservice", Resource = "@xml/system_panel_service")]
 public sealed class SystemPanelService : AccessibilityService
@@ -321,7 +321,7 @@ public sealed class SystemPanelService : AccessibilityService
         }
         if (handle is null)
         {
-            var area = new FrameLayout(this) { ContentDescription = "Open Launcher system panel" };
+            var area = new FrameLayout(this) { ContentDescription = Localize(Resource.String.ui_open_launcher_system_panel) };
             var line = new View(this) { Background = Bg(palette.Accent, 3) };
             area.AddView(line, new FrameLayout.LayoutParams(D(32), D(3), GravityFlags.Center));
             var p = WindowParams(D(68), D(24), true);
@@ -343,18 +343,18 @@ public sealed class SystemPanelService : AccessibilityService
             foreach (var pair in new[] { ("wifi", connections?.Wifi().Active == true), ("bluetooth", connections?.Bluetooth().Active == true) })
             if (pair.Item2)
             {
-                var glyph = new GlyphView(this, pair.Item1, palette.Muted) { ContentDescription = pair.Item1 + " on" };
+                var glyph = new GlyphView(this, pair.Item1, palette.Muted) { ContentDescription = pair.Item1 + Localize(Resource.String.ui_on_3) };
                 var lp = new LinearLayout.LayoutParams(D(16), D(16));
                 lp.SetMargins(0, 0, D(5), 0);
                 indicators.AddView(glyph, lp);
             }
         }
         if (panelClock is not null)
-            panelClock.Text = DateTime.Now.ToString("HH:mm");
+            panelClock.Text = DateTime.Now.ToString("HH:mm", UiCulture);
         if (panelDate is not null)
-            panelDate.Text = DateTime.Now.ToString("dddd, d MMMM") + "  ·  " + percent + "%" + (charging ? " · charging" : "");
+            panelDate.Text = DateTime.Now.ToString("dddd, d MMMM", UiCulture) + "  ·  " + percent + "%" + (charging ? Localize(Resource.String.ui_charging_2) : "");
         if (clock is not null)
-            clock.Text = DateTime.Now.ToString("HH:mm  ·  ddd, d MMM");
+            clock.Text = DateTime.Now.ToString("HH:mm  ·  ddd, d MMM", UiCulture);
         if (batteryLabel is not null)
             batteryLabel.Text = percent + "%";
         battery?.SetState(percent, charging);
@@ -369,7 +369,7 @@ public sealed class SystemPanelService : AccessibilityService
         GrayscaleService.SetPanelVisible(true);
         Remove(ref strip);
         Remove(ref handle);
-        shade = new FrameLayout(this) { FocusableInTouchMode = true, ContentDescription = "Launcher system panel" };
+        shade = new FrameLayout(this) { FocusableInTouchMode = true, ContentDescription = Localize(Resource.String.ui_launcher_system_panel) };
         shade.SetBackgroundColor(new Color(0, 0, 0, 90));
         panel = new LinearLayout(this) { Orientation = Orientation.Vertical };
         panel.SetPadding(D(18), D(8), D(18), D(12) + NavigationBottom);
@@ -385,19 +385,19 @@ public sealed class SystemPanelService : AccessibilityService
             panel.Background = panelBackground;
         shade.AddView(panel, new FrameLayout.LayoutParams(-1, -1));
         var head = Row();
-        var title = Text(DateTime.Now.ToString("HH:mm"), 32, true);
+        var title = Text(DateTime.Now.ToString("HH:mm", UiCulture), 32, true);
         panelClock = title;
         head.AddView(title, new LinearLayout.LayoutParams(0, -2, 1));
-        head.AddView(Action("Android", () => { Close(); PerformGlobalAction(GlobalAction.Notifications); }, false));
-        head.AddView(Action("Close", Close, false));
+        head.AddView(Action(Localize(Resource.String.ui_android), () => { Close(); PerformGlobalAction(GlobalAction.Notifications); }, false));
+        head.AddView(Action(Localize(Resource.String.ui_close), Close, false));
         panel.AddView(head);
-        var date = Text(DateTime.Now.ToString("dddd, d MMMM") + "  ·  " + percent + "%" + (charging ? " · charging" : ""), 12, false, palette.Muted);
+        var date = Text(DateTime.Now.ToString("dddd, d MMMM", UiCulture) + "  ·  " + percent + "%" + (charging ? Localize(Resource.String.ui_charging_2) : ""), 12, false, palette.Muted);
         panelDate = date;
         date.SetPadding(0, D(4), 0, D(10));
         panel.AddView(date);
         var grab = Text("⌃", 22, true, palette.Muted);
         grab.Gravity = GravityFlags.Center;
-        grab.ContentDescription = "Swipe up to close system panel";
+        grab.ContentDescription = Localize(Resource.String.ui_swipe_up_to_close_system_panel);
         grab.SetMinimumHeight(D(28));
         grab.Click += (_, _) => Close();
         grab.SetOnTouchListener(new CloseTouch(this));
@@ -414,14 +414,14 @@ public sealed class SystemPanelService : AccessibilityService
         contents.AddView(mediaHost);
         var heading = Row();
         heading.SetPadding(0, D(14), 0, D(8));
-        heading.AddView(Text("NOTIFICATIONS", 11, true, palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
-        heading.AddView(Action("Clear", () => { foreach (var n in ConversationService.NotificationSnapshot().Where(n => n.Dismissible)) ConversationService.Dismiss(n.Key); }, false));
+        heading.AddView(Text(Localize(Resource.String.ui_notifications_upper), 11, true, palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
+        heading.AddView(Action(Localize(Resource.String.ui_clear), () => { foreach (var n in ConversationService.NotificationSnapshot().Where(n => n.Dismissible)) ConversationService.Dismiss(n.Key); }, false));
         contents.AddView(heading);
         feed = Column();
         contents.AddView(feed);
         var footer = Row();
-        footer.AddView(Action("Panel settings", () => { Close(); Launch(new Intent(this, typeof(MainActivity)).PutExtra("open_system_panel_settings", true)); }, false), new LinearLayout.LayoutParams(0, -2, 1));
-        footer.AddView(Action("Disable", () => { var s = new StateStore(this).Load(); s.SystemPanelEnabled = false; new StateStore(this).Save(s); StateStore.NotifyWorkspaceChanged(); Apply(); }, false));
+        footer.AddView(Action(Localize(Resource.String.ui_panel_settings), () => { Close(); Launch(new Intent(this, typeof(MainActivity)).PutExtra("open_system_panel_settings", true)); }, false), new LinearLayout.LayoutParams(0, -2, 1));
+        footer.AddView(Action(Localize(Resource.String.ui_disable), () => { var s = new StateStore(this).Load(); s.SystemPanelEnabled = false; new StateStore(this).Save(s); StateStore.NotifyWorkspaceChanged(); Apply(); }, false));
         panel.AddView(footer);
         shade.KeyPress += (_, e) => { if (e.KeyCode == Keycode.Back) { if (e.Event?.Action == KeyEventActions.Up) Close(); e.Handled = true; } };
         var window = WindowParams(-1, Math.Max(D(120), Resources!.DisplayMetrics!.HeightPixels - NativeTop), true, true);
@@ -541,8 +541,8 @@ public sealed class SystemPanelService : AccessibilityService
         var audio = (AudioManager?)GetSystemService(AudioService);
         if (audio is not null)
         {
-            parent.AddView(Text("MEDIA VOLUME", 10, true, palette.Muted));
-            var volume = new SeekBar(this) { Max = audio.GetStreamMaxVolume(Android.Media.Stream.Music), Progress = audio.GetStreamVolume(Android.Media.Stream.Music), ContentDescription = "Media volume" };
+            parent.AddView(Text(Localize(Resource.String.ui_media_volume_upper), 10, true, palette.Muted));
+            var volume = new SeekBar(this) { Max = audio.GetStreamMaxVolume(Android.Media.Stream.Music), Progress = audio.GetStreamVolume(Android.Media.Stream.Music), ContentDescription = Localize(Resource.String.ui_media_volume) };
             volumeSlider = volume;
             Tint(volume);
             parent.AddView(volume, new LinearLayout.LayoutParams(-1, D(44)));
@@ -550,12 +550,12 @@ public sealed class SystemPanelService : AccessibilityService
             volume.ProgressChanged += (_, e) => { if (e.FromUser) try { audio.SetStreamVolume(Android.Media.Stream.Music, e.Progress, VolumeNotificationFlags.RemoveSoundAndVibrate); } catch (Java.Lang.SecurityException) { } };
         }
         var brightness = Row();
-        brightness.AddView(Text("BRIGHTNESS", 10, true, palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
+        brightness.AddView(Text(Localize(Resource.String.ui_brightness_upper), 10, true, palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
         bool allowed = Settings.System.CanWrite(this);
         bool adaptive = Settings.System.GetInt(ContentResolver, Settings.System.ScreenBrightnessMode, 0) == 1;
-        brightness.AddView(Action(allowed ? adaptive ? "Adaptive · settings" : "Display settings" : "Allow", () => { Close(); Launch(new Intent(allowed ? Settings.ActionDisplaySettings : Settings.ActionManageWriteSettings, allowed ? null : Uri.Parse("package:" + PackageName))); }, false));
+        brightness.AddView(Action(allowed ? adaptive ? Localize(Resource.String.ui_adaptive_settings) : Localize(Resource.String.ui_display_settings) : Localize(Resource.String.ui_allow), () => { Close(); Launch(new Intent(allowed ? Settings.ActionDisplaySettings : Settings.ActionManageWriteSettings, allowed ? null : Uri.Parse("package:" + PackageName))); }, false));
         parent.AddView(brightness);
-        var slider = new SeekBar(this) { Max = 255, Progress = Settings.System.GetInt(ContentResolver, Settings.System.ScreenBrightness, 128), Enabled = allowed && !adaptive, ContentDescription = "Screen brightness" };
+        var slider = new SeekBar(this) { Max = 255, Progress = Settings.System.GetInt(ContentResolver, Settings.System.ScreenBrightness, 128), Enabled = allowed && !adaptive, ContentDescription = Localize(Resource.String.ui_screen_brightness) };
         Tint(slider);
         parent.AddView(slider, new LinearLayout.LayoutParams(-1, D(44)));
         slider.StopTrackingTouch += (_, _) => { if (Settings.System.CanWrite(this)) try { Settings.System.PutInt(ContentResolver, Settings.System.ScreenBrightness, Math.Max(1, slider.Progress)); Pulse(slider); } catch (Java.Lang.SecurityException) { } };
@@ -569,13 +569,13 @@ public sealed class SystemPanelService : AccessibilityService
             liquidGlass?.ClearPanels();
         if (!ConversationService.Enabled(this))
         {
-            feed.AddView(Text("Enable notification access in Launcher Settings to show notifications here.", 14, false, palette.Muted));
+            feed.AddView(Text(Localize(Resource.String.ui_enable_notification_access_in_launcher_settings_to_show_notifications), 14, false, palette.Muted));
             return;
         }
         var notifications = ConversationService.NotificationSnapshot();
         if (notifications.Count == 0)
         {
-            feed.AddView(Text("All caught up", 16, true));
+            feed.AddView(Text(Localize(Resource.String.ui_all_caught_up), 16, true));
             return;
         }
         var groups = notifications.GroupBy(n => n.Package).ToArray();
@@ -627,7 +627,7 @@ public sealed class SystemPanelService : AccessibilityService
             feed.AddView(section, new LinearLayout.LayoutParams(-1, -2) { BottomMargin = D(12) });
         }
         if (groups.Length > notificationAppLimit)
-            feed.AddView(Action("Show more", () => { notificationAppLimit += 20; RenderNotifications(); }, false));
+            feed.AddView(Action(Localize(Resource.String.ui_show_more), () => { notificationAppLimit += 20; RenderNotifications(); }, false));
     }
     private View NotificationRow(Conversation item, bool concealed)
     {
@@ -636,17 +636,17 @@ public sealed class SystemPanelService : AccessibilityService
         card.SetPaddingRelative(D(38), D(4), D(4), D(7));
         card.Foreground = Ripple(Color.Transparent, 12);
         var title = Row();
-        var subject = Text(concealed ? "Protected notification" : item.Title, 15, true);
+        var subject = Text(concealed ? Localize(Resource.String.ui_protected_notification) : item.Title, 15, true);
         subject.SetMaxLines(2);
         subject.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
         title.AddView(subject, new LinearLayout.LayoutParams(0, -2, 1));
         var posted = DateTimeOffset.FromUnixTimeMilliseconds(item.Time).ToLocalTime();
         var time = Text(posted.ToString(posted.Date == DateTime.Today ? "HH:mm" : "d MMM"), 11, false, palette.Muted);
         time.SetPaddingRelative(D(8), 0, 0, 0);
-        time.ContentDescription = posted.ToString("f");
+        time.ContentDescription = posted.ToString("f", UiCulture);
         title.AddView(time);
         card.AddView(title);
-        var text = Text(concealed ? "Unlock in Launcher to open." : item.Text, 13, false, palette.Muted);
+        var text = Text(concealed ? Localize(Resource.String.ui_unlock_in_launcher_to_open) : item.Text, 13, false, palette.Muted);
         text.SetMaxLines(expanded.Contains(item.Key) ? 30 : 3);
         text.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
         text.SetPadding(0, D(3), 0, D(3));
@@ -655,14 +655,14 @@ public sealed class SystemPanelService : AccessibilityService
         card.Click += (_, _) => OpenNotification(item);
         var actions = Row();
         if (!concealed && (item.Text.Length > 140 || item.Text.Contains('\n')))
-            actions.AddView(Action("Expand text", () => { expanded.Add(item.Key); text.SetMaxLines(30); }, false));
+            actions.AddView(Action(Localize(Resource.String.ui_expand_text), () => { expanded.Add(item.Key); text.SetMaxLines(30); }, false));
         if (ConversationService.CanReply(item.Key))
-            actions.AddView(Action("Reply", () => Reply(card, item), false));
+            actions.AddView(Action(Localize(Resource.String.ui_reply), () => Reply(card, item), false));
         if (item.Dismissible)
-            actions.AddView(Action("Dismiss", () => ConversationService.Dismiss(item.Key), false));
+            actions.AddView(Action(Localize(Resource.String.ui_dismiss), () => ConversationService.Dismiss(item.Key), false));
         if (actions.ChildCount > 0)
             card.AddView(actions);
-        card.SetOnTouchListener(new NotificationSwipeListener(D(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Notice("This notification stays until its app clears it"), (v, _) => Pulse(v)));
+        card.SetOnTouchListener(new NotificationSwipeListener(D(90), item.Dismissible, () => ConversationService.Dismiss(item.Key), () => Notice(Localize(Resource.String.ui_this_notification_stays_until_its_app_clears_it)), (v, _) => Pulse(v)));
         return card;
     }
     private bool PackageLocked(string package) => new StateStore(this).Load().Apps.Any(p => p.Key.StartsWith(package + "/", StringComparison.Ordinal) && p.Value.BiometricLocked);
@@ -679,12 +679,12 @@ public sealed class SystemPanelService : AccessibilityService
         replying = true;
         var row = Row();
         row.Tag = "reply";
-        var input = new EditText(this) { Hint = "Reply", TextSize = 14, Typeface = regular, ContentDescription = "Reply to " + item.Title };
+        var input = new EditText(this) { Hint = Localize(Resource.String.ui_reply), TextSize = 14, Typeface = regular, ContentDescription = Localize(Resource.String.ui_reply_to) + item.Title };
         input.SetTextColor(palette.Text);
         input.SetHintTextColor(palette.Muted);
         row.AddView(input, new LinearLayout.LayoutParams(0, -2, 1));
-        row.AddView(Action("Send", () => { if (Locked) return; string text = input.Text?.Trim() ?? ""; if (text.Length == 0) return; if (ConversationService.Reply(this, item, text)) { replying = false; card.RemoveView(row); ((Android.Views.InputMethods.InputMethodManager?)GetSystemService(InputMethodService))?.HideSoftInputFromWindow(input.WindowToken, 0); Notice("Reply sent"); } else Notice("Reply unavailable. Open the app to continue."); }, false));
-        row.AddView(Action("Cancel", () => { replying = false; card.RemoveView(row); RenderNotifications(); }, false));
+        row.AddView(Action(Localize(Resource.String.ui_send), () => { if (Locked) return; string text = input.Text?.Trim() ?? ""; if (text.Length == 0) return; if (ConversationService.Reply(this, item, text)) { replying = false; card.RemoveView(row); ((Android.Views.InputMethods.InputMethodManager?)GetSystemService(InputMethodService))?.HideSoftInputFromWindow(input.WindowToken, 0); Notice(Localize(Resource.String.ui_reply_sent)); } else Notice(Localize(Resource.String.ui_reply_unavailable_open_the_app_to_continue)); }, false));
+        row.AddView(Action(Localize(Resource.String.ui_cancel), () => { replying = false; card.RemoveView(row); RenderNotifications(); }, false));
         card.AddView(row);
         input.RequestFocus();
         ((Android.Views.InputMethods.InputMethodManager?)GetSystemService(InputMethodService))?.ShowSoftInput(input, Android.Views.InputMethods.ShowFlags.Implicit);
@@ -707,7 +707,7 @@ public sealed class SystemPanelService : AccessibilityService
         if (intent is not null)
             Launch(intent);
         else
-            Notice("This app cannot be opened");
+            Notice(Localize(Resource.String.ui_this_app_cannot_be_opened));
     }
     private sealed class Back(System.Action close) : Java.Lang.Object, Android.Window.IOnBackInvokedCallback
     {
@@ -752,7 +752,7 @@ public sealed class SystemPanelService : AccessibilityService
         top.AddView(labels, new LinearLayout.LayoutParams(0, -2, 1));
         card.AddView(top);
         card.Click += (_, _) => { Close(); if (PackageLocked(controller.PackageName ?? "")) { Launch(new Intent(this, typeof(MainActivity)).PutExtra("system_panel_player", controller.PackageName)); return; } try { if (controller.SessionActivity is { } activity) { activity.Send(); return; } } catch (PendingIntent.CanceledException) { } var launch = PackageManager?.GetLaunchIntentForPackage(controller.PackageName ?? ""); if (launch is not null) Launch(launch); };
-        progress = new SeekBar(this) { Max = 1000, ContentDescription = "Playback position" };
+        progress = new SeekBar(this) { Max = 1000, ContentDescription = Localize(Resource.String.ui_playback_position) };
         Tint(progress);
         progress.ProgressTintList = ColorStateList.ValueOf(mediaAccent);
         progress.ThumbTintList = ColorStateList.ValueOf(mediaAccent);
@@ -767,9 +767,9 @@ public sealed class SystemPanelService : AccessibilityService
         {
             long required = entry.Item3 == 0 ? PlaybackState.ActionSkipToPrevious : entry.Item3 == 2 ? PlaybackState.ActionSkipToNext : media.Playing ? PlaybackState.ActionPause | PlaybackState.ActionPlayPause : PlaybackState.ActionPlay | PlaybackState.ActionPlayPause;
             bool available = ((controller.PlaybackState?.Actions ?? 0) & required) != 0;
-            var control = new FrameLayout(this) { ContentDescription = entry.Item2 + (available ? "" : " unavailable for this player"), Enabled = available, Alpha = available ? 1 : .32f, Background = Ripple(new Color(255, 255, 255, 24), 24) };
+            var control = new FrameLayout(this) { ContentDescription = entry.Item2 + (available ? "" : Localize(Resource.String.ui_unavailable_for_this_player)), Enabled = available, Alpha = available ? 1 : .32f, Background = Ripple(new Color(255, 255, 255, 24), 24) };
             control.AddView(new GlyphView(this, entry.Item1, Color.White), new FrameLayout.LayoutParams(D(23), D(23), GravityFlags.Center));
-            control.Click += (_, _) => { Pulse(control); try { var transport = controller.GetTransportControls(); if (entry.Item3 == 0) transport?.SkipToPrevious(); else if (entry.Item3 == 2) transport?.SkipToNext(); else if (media.Playing) transport?.Pause(); else transport?.Play(); } catch (Java.Lang.SecurityException) { Notice("Playback control unavailable"); } };
+            control.Click += (_, _) => { Pulse(control); try { var transport = controller.GetTransportControls(); if (entry.Item3 == 0) transport?.SkipToPrevious(); else if (entry.Item3 == 2) transport?.SkipToNext(); else if (media.Playing) transport?.Pause(); else transport?.Play(); } catch (Java.Lang.SecurityException) { Notice(Localize(Resource.String.ui_playback_control_unavailable)); } };
             var lp = new LinearLayout.LayoutParams(D(48), D(48));
             lp.SetMargins(D(8), 0, D(8), 0);
             actions.AddView(control, lp);
@@ -808,8 +808,8 @@ public sealed class SystemPanelService : AccessibilityService
             intent.AddFlags(ActivityFlags.NewTask);
             StartActivity(intent);
         }
-        catch (ActivityNotFoundException) { Notice("This control is unavailable on this device"); }
-        catch (Java.Lang.SecurityException) { Notice("Android has restricted this control"); }
+        catch (ActivityNotFoundException) { Notice(Localize(Resource.String.ui_this_control_is_unavailable_on_this_device)); }
+        catch (Java.Lang.SecurityException) { Notice(Localize(Resource.String.ui_android_has_restricted_this_control)); }
     }
     private string AppName(string package)
     {

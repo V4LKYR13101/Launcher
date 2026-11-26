@@ -50,7 +50,7 @@ internal static class NotificationGroup
 
         void UpdateHeader()
         {
-            header.ContentDescription = $"{appName}, {items.Count} notifications, {(expanded ? "expanded" : "collapsed")}";
+            header.ContentDescription = Localize(Resource.String.ui_value_value_notifications_value, appName, items.Count, Localize(expanded ? Resource.String.ui_expanded : Resource.String.ui_collapsed));
             front?.SetCollapsed(!expanded);
             older.ImportantForAccessibility = expanded
                 ? ImportantForAccessibility.Auto : ImportantForAccessibility.NoHideDescendants;

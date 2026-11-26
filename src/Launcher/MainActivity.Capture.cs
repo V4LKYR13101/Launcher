@@ -10,7 +10,7 @@ public partial class MainActivity
     {
         if (state.Notes.Count >= 200)
         {
-            Toast("The note limit is 200. Export or remove a note first.");
+            Toast(Localize(Resource.String.ui_the_note_limit_is_200_export_or_remove_a));
             return;
         }
         string value = text.Trim();
@@ -33,7 +33,7 @@ public partial class MainActivity
         intent.SetAction(Intent.ActionMain);
         if (text.Length == 0)
         {
-            Toast("Share text or a link to capture it in Launcher.");
+            Toast(Localize(Resource.String.ui_share_text_or_a_link_to_capture_it_in));
             return;
         }
         text = text[..Math.Min(20000, text.Length)];
@@ -41,17 +41,17 @@ public partial class MainActivity
         handler.Post(() =>
         {
             EditText? title = null, content = null;
-            Sheet("Capture in Launcher", (panel, dialog) =>
+            Sheet(Localize(Resource.String.ui_capture_in_launcher), (panel, dialog) =>
             {
-                title = FormField(panel, "Title", LauncherState.CleanName(subject.Length > 0 ? subject : captured.Split('\n')[0], "Captured note"));
-                content = FormField(panel, "Content", captured, multiline: true);
+                title = FormField(panel, Localize(Resource.String.ui_title), LauncherState.CleanName(subject.Length > 0 ? subject : captured.Split('\n')[0], "Captured note"));
+                content = FormField(panel, Localize(Resource.String.ui_content), captured, multiline: true);
                 content.SetFilters([new Android.Text.InputFilterLengthFilter(20000)]);
-                Paragraph("Saved locally as a note. Nothing is uploaded.", panel);
-            }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save note", () =>
+                Paragraph(Localize(Resource.String.ui_saved_locally_as_a_note_nothing_is_uploaded), panel);
+            }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_save_note), () =>
             {
                 if (state.Notes.Count >= 200)
                 {
-                    Toast("The note limit is 200.");
+                    Toast(Localize(Resource.String.ui_the_note_limit_is_200));
                     return;
                 }
                 var note = new WorkspaceNote { Title = LauncherState.CleanName(title?.Text, "Captured note"), Text = content?.Text ?? "" };

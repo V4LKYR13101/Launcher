@@ -1,32 +1,32 @@
-﻿using Android.Views;
+using Android.Views;
 using Android.Widget;
 using LauncherApp.UI;
 namespace LauncherApp;
 
 public partial class MainActivity
 {
-    private void ShowAddCard() => Sheet("Add a card", (panel, dialog) =>
+    private void ShowAddCard() => Sheet(Localize(Resource.String.ui_add_a_card), (panel, dialog) =>
     {
-        Paragraph("Choose what belongs in your workspace.", panel);
+        Paragraph(Localize(Resource.String.ui_choose_what_belongs_in_your_workspace), panel);
         CardChoices(panel, dialog.Dismiss);
     });
     private void CardChoices(LinearLayout panel, Action beforePick)
     {
         var choices = new (string Title, string Detail, string Glyph, Action Pick)[]
         {
-            ("Note","Write something down","note",()=>CreateNote("")),
-            ("Checklist","Keep track of small tasks","note",()=>EditChecklist()),
-            ("Reminder","Set a date and time","clock",()=>EditReminder()),
-            ("At a glance","Your date and active items","calendar",()=>RestoreBuiltInCard("overview")),
-            ("Agenda","Your selected calendars","calendar",()=>{state.CalendarVisible=true;RestoreBuiltInCard("calendar");}),
-            ("Timer","Set a duration","clock",()=>Prompt("Timer duration","10 min",CreateTimer)),
-            ("Weather","Your city & forecast","cloud",()=>ExecuteRootCommand("weather")),
-            ("Now playing","Playback controls","music",()=>ExecuteRootCommand("music")),
-            ("Phone resources","Battery, memory & storage","resources",AddResourcesCard),
-            ("News & feeds","RSS sources in one card","rss",ManageFeeds),
-            ("Web search","Find something online","search",()=>Prompt("Web query","",q=>ExecuteRootCommand("web "+q))),
-            ("YouTube","Videos & channels","rectangle",()=>Prompt("YouTube query","",q=>ExecuteRootCommand("youtube "+q))),
-            ("Journey","Keep a ticket handy","file",()=>ExecuteRootCommand("ticket"))
+            (Localize(Resource.String.ui_note),Localize(Resource.String.ui_write_something_down),"note",()=>CreateNote("")),
+            (Localize(Resource.String.ui_checklist),Localize(Resource.String.ui_keep_track_of_small_tasks),"note",()=>EditChecklist()),
+            (Localize(Resource.String.ui_reminder),Localize(Resource.String.ui_set_a_date_and_time),"clock",()=>EditReminder()),
+            (Localize(Resource.String.ui_at_a_glance),Localize(Resource.String.ui_your_date_and_active_items),"calendar",()=>RestoreBuiltInCard("overview")),
+            (Localize(Resource.String.ui_agenda),Localize(Resource.String.ui_your_selected_calendars),"calendar",()=>{state.CalendarVisible=true;RestoreBuiltInCard("calendar");}),
+            (Localize(Resource.String.ui_timer),Localize(Resource.String.ui_set_a_duration),"clock",()=>Prompt(Resource.String.ui_timer_duration,"10 min",CreateTimer)),
+            (Localize(Resource.String.ui_weather),Localize(Resource.String.ui_your_city_forecast),"cloud",()=>ExecuteRootCommand("weather")),
+            (Localize(Resource.String.ui_now_playing),Localize(Resource.String.ui_playback_controls),"music",()=>ExecuteRootCommand("music")),
+            (Localize(Resource.String.ui_phone_resources),Localize(Resource.String.ui_battery_memory_storage),"resources",AddResourcesCard),
+            (Localize(Resource.String.ui_news_feeds),Localize(Resource.String.ui_rss_sources_in_one_card),"rss",ManageFeeds),
+            (Localize(Resource.String.ui_web_search),Localize(Resource.String.ui_find_something_online),"search",()=>Prompt(Resource.String.ui_web_query,"",q=>ExecuteRootCommand("web "+q))),
+            (Localize(Resource.String.ui_youtube),Localize(Resource.String.ui_videos_channels),"rectangle",()=>Prompt(Resource.String.ui_youtube_query,"",q=>ExecuteRootCommand("youtube "+q))),
+            (Localize(Resource.String.ui_journey),Localize(Resource.String.ui_keep_a_ticket_handy),"file",()=>ExecuteRootCommand("ticket"))
         };
         LinearLayout? row = null;
         for (int i = 0; i < choices.Length; i++)

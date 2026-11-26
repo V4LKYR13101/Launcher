@@ -1,4 +1,4 @@
-﻿using Android.Animation;
+using Android.Animation;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
@@ -21,7 +21,7 @@ public sealed class BatteryView(Context context, Color accent, Color outline) : 
             fillAnimation.Update += (_, e) => { level = ((Java.Lang.Float)e.Animation!.AnimatedValue!).FloatValue(); Invalidate(); };
             fillAnimation.Start();
         }
-        ContentDescription = $"Battery {percent} percent" + (isCharging ? ", charging" : "");
+        ContentDescription = Localize(Resource.String.ui_battery_value_percent, percent) + (isCharging ? Localize(Resource.String.ui_charging) : "");
         if (charging != isCharging)
         {
             charging = isCharging;

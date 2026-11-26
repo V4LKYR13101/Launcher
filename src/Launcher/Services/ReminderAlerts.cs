@@ -85,9 +85,9 @@ public sealed class ReminderReceiver : BroadcastReceiver
             ReminderAlerts.Schedule(context, item);
         var manager = (NotificationManager)context.GetSystemService(Context.NotificationService)!;
         if (OperatingSystem.IsAndroidVersionAtLeast(26))
-            manager.CreateNotificationChannel(new NotificationChannel("reminders", "Reminders", NotificationImportance.High));
+            manager.CreateNotificationChannel(new NotificationChannel("reminders", Localize(Resource.String.ui_reminders), NotificationImportance.High));
         var notification = OperatingSystem.IsAndroidVersionAtLeast(26) ? new Notification.Builder(context, "reminders") : new Notification.Builder(context);
-        notification.SetSmallIcon(global::Launcher.Resource.Drawable.launcher_icon)!.SetContentTitle(item.Title)!.SetContentText("Your Launcher reminder")!.SetAutoCancel(true)!.SetVisibility(NotificationVisibility.Private)!.SetContentIntent(PendingIntent.GetActivity(context, 0, new Intent(context, typeof(MainActivity)).PutExtra("open_root", true), PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable));
+        notification.SetSmallIcon(global::Launcher.Resource.Drawable.launcher_icon)!.SetContentTitle(item.Title)!.SetContentText(Localize(Resource.String.ui_your_launcher_reminder))!.SetAutoCancel(true)!.SetVisibility(NotificationVisibility.Private)!.SetContentIntent(PendingIntent.GetActivity(context, 0, new Intent(context, typeof(MainActivity)).PutExtra("open_root", true), PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable));
         try
         {
             manager.Notify("reminder:" + item.Id, 0, notification.Build());

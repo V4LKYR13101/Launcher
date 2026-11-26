@@ -1,4 +1,4 @@
-﻿
+
 using System.Threading.Channels;
 using Android.Content;
 using Android.Media;
@@ -91,7 +91,7 @@ public sealed class KokoroSpeechService
                     _epoch));
         }
 
-        Notify($"Queued: {source}");
+        Notify(Localize(Resource.String.ui_queued_value, source));
     }
 
     public void Pause()
@@ -110,7 +110,7 @@ public sealed class KokoroSpeechService
             }
         }
 
-        Notify("Speech paused");
+        Notify(Localize(Resource.String.ui_speech_paused));
     }
 
     public void Resume()
@@ -129,13 +129,13 @@ public sealed class KokoroSpeechService
             }
         }
 
-        Notify("Speech resumed");
+        Notify(Localize(Resource.String.ui_speech_resumed));
     }
 
     public void Skip()
     {
         Interlocked.Exchange(ref _skipRequested, 1);
-        Notify("Skipping current chunk");
+        Notify(Localize(Resource.String.ui_skipping_current_chunk));
     }
 
     public void Stop()
@@ -165,7 +165,7 @@ public sealed class KokoroSpeechService
             }
         }
 
-        Notify("Speech stopped");
+        Notify(Localize(Resource.String.ui_speech_stopped));
     }
 
     private async Task ProcessQueueAsync()
@@ -192,12 +192,12 @@ public sealed class KokoroSpeechService
             catch (OperationCanceledException)
                 when (cts.IsCancellationRequested)
             {
-                Notify("Reading cancelled");
+                Notify(Localize(Resource.String.ui_reading_cancelled));
             }
             catch (Exception ex)
             {
                 Log.Error("LauncherKokoro", ex.ToString());
-                Notify($"Speech error: {ex.Message}");
+                Notify(Localize(Resource.String.ui_speech_error_value, ex.Message));
             }
             finally
             {
@@ -252,7 +252,7 @@ public sealed class KokoroSpeechService
         if (!Directory.Exists(dataDir))
             throw new DirectoryNotFoundException(dataDir);
 
-        Notify("Loading Kokoro model...");
+        Notify(Localize(Resource.String.ui_loading_kokoro_model));
 
         var config = new OfflineTtsConfig();
 
@@ -282,7 +282,7 @@ public sealed class KokoroSpeechService
         _tts = engine;
 
         Notify(
-            $"Kokoro ready: {_tts.NumSpeakers} voices");
+            Localize(Resource.String.ui_kokoro_ready_value_voices, _tts.NumSpeakers));
 
         return _tts;
     }
@@ -297,7 +297,7 @@ public sealed class KokoroSpeechService
             return;
 
         Notify(
-            $"Reading {request.Source}: {chunks.Count} chunks");
+            Localize(Resource.String.ui_reading_value_value_chunks, request.Source, chunks.Count));
 
         var ready = Channel.CreateBounded<PcmChunk>(
             new BoundedChannelOptions(2)
@@ -368,7 +368,7 @@ public sealed class KokoroSpeechService
                     track, submittedFrames, ct);
             }
 
-            Notify($"Finished: {request.Source}");
+            Notify(Localize(Resource.String.ui_finished_value, request.Source));
         }
         finally
         {
@@ -471,7 +471,7 @@ public sealed class KokoroSpeechService
                     token);
 
                 Notify(
-                    $"Generated {index + 1}/{chunks.Count}");
+                    Localize(Resource.String.ui_generated_value_value, index + 1, chunks.Count));
             }
 
             writer.TryComplete();

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="grayscale_description">Aplica el ajuste de escala de grises que elegiste al abrir una aplicación y restaura los ajustes de pantalla al salir. Solo detecta cambios de ventana. No lee el texto de la pantalla ni envía datos de actividad.</string>
+    <string name="system_panel_description">Muestra la fila de estado y el panel rápido opcionales de Launcher sobre otras aplicaciones. Detecta cambios de ventana para ocultarse en la pantalla de bloqueo y en las pantallas de permisos del sistema. No lee el texto de la pantalla, no registra gestos fuera del tirador ni envía datos de actividad. Desactiva Panel del sistema en los ajustes de Launcher para quitarlo.</string>
+</resources>

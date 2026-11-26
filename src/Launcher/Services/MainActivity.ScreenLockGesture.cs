@@ -1,4 +1,4 @@
-﻿
+
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -97,8 +97,8 @@ public partial class MainActivity
         if (!SystemPanelService.IsEnabled(this))
         {
             Toast(
-                "Enable Launcher system panel in Android " +
-                "Accessibility settings to lock the screen.");
+                Localize(Resource.String.ui_enable_launcher_system_panel_in_android) +
+                Localize(Resource.String.ui_accessibility_settings_to_lock_the_screen));
             return;
         }
 
@@ -107,8 +107,8 @@ public partial class MainActivity
         if (!SystemPanelService.TryLockScreen())
         {
             Toast(
-                "Android could not lock the screen. " +
-                "Check that Launcher accessibility is connected.");
+                Localize(Resource.String.ui_android_could_not_lock_the_screen) +
+                Localize(Resource.String.ui_check_that_launcher_accessibility_is_connected));
         }
     }
 }

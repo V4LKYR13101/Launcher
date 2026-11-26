@@ -52,6 +52,21 @@ Choose **Launcher → Settings → Permissions → Default home app** to make it
 home screen. Android's chooser requires the user's selection. Switch back through
 Android **Settings → Apps → Default apps → Home app**.
 
+## Language
+
+Launcher follows the first supported language in Android’s preferred language
+list and falls back to English. Open **Settings → Language** to choose
+**System default**, **English**, or **Español**.
+
+To add a translation, copy the identifiers from
+[src/Launcher/Resources/values/ui_strings.xml](src/Launcher/Resources/values/ui_strings.xml)
+into the new Android `values-<language>` resource folder, along with the
+service descriptions from `values/strings.xml`. Keep numbered
+placeholders such as `{0}` and translate the plural forms for that language.
+Add the language tag to
+[src/Launcher/Resources/xml/launcher_locales.xml](src/Launcher/Resources/xml/launcher_locales.xml)
+to expose it in the language picker. English supplies any missing strings.
+
 ## Controls
 
 - Tap drawer headings to expand or collapse. Hold a heading to rename, select

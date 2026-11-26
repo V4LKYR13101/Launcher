@@ -1,4 +1,4 @@
-﻿using Android.Widget;
+using Android.Widget;
 using Android.Views;
 using Android.Content.Res;
 namespace LauncherApp;
@@ -17,13 +17,13 @@ public partial class MainActivity
         {
             if (value is null)
                 return;
-            value.Text = selected + "%" + (selected == 100 ? " · default" : "");
+            value.Text = selected + "%" + (selected == 100 ? Localize(Resource.String.ui_default) : "");
             foreach (var resize in previewSizes)
                 resize(RequestedTileIconSize(selected));
         }
-        Sheet("Tile icon size", (panel, dialog) =>
+        Sheet(Localize(Resource.String.ui_tile_icon_size), (panel, dialog) =>
         {
-            Paragraph("Resize app icons inside standard and expanded tiles. Icons fit the available space; tile dimensions and grid spacing stay the same.", panel);
+            Paragraph(Localize(Resource.String.ui_resize_app_icons_inside_standard_and_expanded_tiles_icons), panel);
             value = Text("", 22, true, palette.Accent);
             value.Gravity = GravityFlags.Center;
             panel.AddView(value, Match());
@@ -57,7 +57,7 @@ public partial class MainActivity
                 lp.SetMargins(Dp(4), 0, Dp(4), 0);
                 preview.AddView(card, lp);
             }
-            slider = new SeekBar(this) { Max = 90, Progress = selected - 60, ContentDescription = "Tile icon size" };
+            slider = new SeekBar(this) { Max = 90, Progress = selected - 60, ContentDescription = Localize(Resource.String.ui_tile_icon_size) };
             slider.ProgressTintList = ColorStateList.ValueOf(palette.Accent);
             slider.ThumbTintList = ColorStateList.ValueOf(palette.Accent);
             slider.HapticFeedbackEnabled = false;
@@ -68,13 +68,13 @@ public partial class MainActivity
             limits.AddView(Text("60%", 11, color: palette.Muted), new LinearLayout.LayoutParams(0, -2, 1));
             limits.AddView(Text("150%", 11, color: palette.Muted));
             panel.AddView(limits, Match());
-            var reset = Text("Reset to default", 13, true, palette.Accent);
+            var reset = Text(Localize(Resource.String.ui_reset_to_default), 13, true, palette.Accent);
             reset.Gravity = GravityFlags.Center;
             reset.SetMinimumHeight(Dp(48));
             TouchFeedback(reset);
             reset.Click += (_, _) => { slider.Progress = 40; };
             panel.AddView(reset, Match());
             Preview();
-        }, (footer, dialog) => DialogActions(footer, ("Cancel", dialog.Dismiss), ("Save", () => { state.TileIconScale = selected; Save(); dialog.Dismiss(); Render(); })));
+        }, (footer, dialog) => DialogActions(footer, (Localize(Resource.String.ui_cancel), dialog.Dismiss), (Localize(Resource.String.ui_save), () => { state.TileIconScale = selected; Save(); dialog.Dismiss(); Render(); })));
     }
 }

@@ -1,0 +1,1495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_10_seconds" formatted="false">"10 seconds"</string>
+    <string name="ui_120_minutes" formatted="false">"120 minutes"</string>
+    <string name="ui_15_minutes" formatted="false">"15 minutes"</string>
+    <string name="ui_1_foreground_app_detection" formatted="false">"1. Foreground app detection"</string>
+    <string name="ui_1_hour" formatted="false">"1 hour"</string>
+    <string name="ui_20_seconds" formatted="false">"20 seconds"</string>
+    <string name="ui_2_display_permission" formatted="false">"2. Display permission"</string>
+    <string name="ui_30_minutes" formatted="false">"30 minutes"</string>
+    <string name="ui_3_hours" formatted="false">"3 hours"</string>
+    <string name="ui_3_seconds" formatted="false">"3 seconds"</string>
+    <string name="ui_3d_perspective_card_reveal_parallax_animations" formatted="false">"3d perspective card reveal parallax animations"</string>
+    <string name="ui_45_minutes" formatted="false">"45 minutes"</string>
+    <string name="ui_5_seconds" formatted="false">"5 seconds"</string>
+    <string name="ui_60_minutes" formatted="false">"60 minutes"</string>
+    <string name="ui_64_bit_android_build_access_and_device_capabilities_are" formatted="false">" · 64-bit Android build. Access and device capabilities are checked again when Launcher resumes."</string>
+    <string name="ui_6_hours" formatted="false">"6 hours"</string>
+    <string name="ui_90_minutes" formatted="false">"90 minutes"</string>
+    <string name="ui_a_matching_status_strip_and_quick_panel_across_your" formatted="false">"A matching status strip and quick panel across your apps. Swipe down on the small edge handle to open it. The native Android panel remains available."</string>
+    <string name="ui_a_recovery_copy_is_retained_on_this_phone" formatted="false">"A recovery copy is retained on this phone"</string>
+    <string name="ui_a_recovery_point_is_created_after_saving" formatted="false">"A recovery point is created after saving"</string>
+    <string name="ui_accent" formatted="false">"Accent"</string>
+    <string name="ui_accent_color_colour_finger_tap_ripple" formatted="false">"accent color colour finger tap ripple"</string>
+    <string name="ui_accent_color_colour_theme_columns_page_tabs_navigation_icons" formatted="false">"accent color colour theme columns page tabs navigation icons wallpaper typography corners motion"</string>
+    <string name="ui_accent_rrggbb" formatted="false">"Accent · #RRGGBB"</string>
+    <string name="ui_access_denied" formatted="false">"Access denied."</string>
+    <string name="ui_access_is_optional_and_used_by_the_features_you" formatted="false">"Access is optional and used by the features you enable. App grayscale uses an accessibility service and a one-time display permission. File sharing uses a folder you select. Connection names may require nearby-device and location access; weather uses the city you enter. Work profiles and Android 15+ Private Space require Launcher as the default home. Android controls which profiles are accessible."</string>
+    <string name="ui_accessibility_access" formatted="false">"Accessibility access"</string>
+    <string name="ui_accessibility_settings_to_lock_the_screen" formatted="false">"Accessibility settings to lock the screen."</string>
+    <string name="ui_activity_recorded_by_android_hourly_bars_and_today_s" formatted="false">"Activity recorded by Android. Hourly bars and today\'s total use the same activity timeline. Android may retain less event history than its aggregate usage records."</string>
+    <string name="ui_adaptive_settings" formatted="false">"Adaptive · settings"</string>
+    <string name="ui_adb_shell_pm_grant_com_launcher_home_android_permission" formatted="false">"adb shell pm grant com.launcher.home android.permission.WRITE_SECURE_SETTINGS"</string>
+    <string name="ui_add_a_card" formatted="false">"Add a card"</string>
+    <string name="ui_add_android_widget" formatted="false">"Add Android widget?"</string>
+    <string name="ui_add_android_widget_action" formatted="false">"+  Add Android widget"</string>
+    <string name="ui_add_card_action" formatted="false">"+ Add card"</string>
+    <string name="ui_add_drawer" formatted="false">"Add drawer"</string>
+    <string name="ui_add_feed_action" formatted="false">"+ Add feed"</string>
+    <string name="ui_add_journey_action" formatted="false">"+ Add journey"</string>
+    <string name="ui_add_rss_feed" formatted="false">"Add RSS feed"</string>
+    <string name="ui_add_rss_feed_action" formatted="false">"+ Add RSS feed"</string>
+    <string name="ui_add_shortcut" formatted="false">"Add shortcut"</string>
+    <string name="ui_add_to_your_home" formatted="false">"Add to your home?"</string>
+    <string name="ui_add_widget" formatted="false">"Add widget"</string>
+    <string name="ui_add_widget_action" formatted="false">"+ Add widget"</string>
+    <string name="ui_added_to_kokoro_speech_queue" formatted="false">"Added to Kokoro speech queue."</string>
+    <string name="ui_added_to_speech_queue" formatted="false">"Added to speech queue"</string>
+    <string name="ui_address_upper" formatted="false">"ADDRESS"</string>
+    <string name="ui_agenda" formatted="false">"Agenda"</string>
+    <string name="ui_ai_semantic_files_photos_ocr_faces_embedding_clip_model" formatted="false">"AI semantic files photos OCR faces embedding CLIP model download storage"</string>
+    <string name="ui_alerts" formatted="false">"Alerts"</string>
+    <string name="ui_alerts_are_ready" formatted="false">"Alerts are ready."</string>
+    <string name="ui_alerts_enabled_exact_timing_needs_access" formatted="false">"Alerts enabled · exact timing needs access"</string>
+    <string name="ui_all" formatted="false">"All"</string>
+    <string name="ui_all_apps" formatted="false">"All apps"</string>
+    <string name="ui_all_apps_grid" formatted="false">"All apps grid"</string>
+    <string name="ui_all_caught_up" formatted="false">"All caught up"</string>
+    <string name="ui_all_notification_types_choose_apps" formatted="false">"All notification types · choose apps"</string>
+    <string name="ui_allow" formatted="false">"Allow"</string>
+    <string name="ui_allow_access_to_search_your_devices_shared_storage" formatted="false">"Allow access to search your device’s shared storage."</string>
+    <string name="ui_allow_desktop_uploads" formatted="false">"Allow desktop uploads"</string>
+    <string name="ui_allow_file_access" formatted="false">"Allow file access"</string>
+    <string name="ui_allow_launcher_to_install_updates_then_return_here" formatted="false">"Allow Launcher to install updates, then return here."</string>
+    <string name="ui_allow_launcher_to_show_current_notifications_and_message_previews" formatted="false">"Allow Launcher to show current notifications and message previews. Message history is optional and stored on this phone."</string>
+    <string name="ui_allow_nearby_device_access_to_display_connected_bluetooth_devices" formatted="false">"Allow nearby-device access to display connected Bluetooth devices, and precise location access to display your Wi-Fi network name. Launcher does not scan for your location or upload these details."</string>
+    <string name="ui_allowed" formatted="false">"Allowed"</string>
+    <string name="ui_ambient_theme" formatted="false">"Ambient theme"</string>
+    <string name="ui_an_unreadable_state_copy_is_preserved_in_launcher_s" formatted="false">"An unreadable-state copy is preserved in Launcher\'s private storage. Export your current recovered content before making further changes."</string>
+    <string name="ui_android" formatted="false">"Android"</string>
+    <string name="ui_android_2" formatted="false">"Android "</string>
+    <string name="ui_android_app_info" formatted="false">"Android app info"</string>
+    <string name="ui_android_app_information" formatted="false">"Android app information"</string>
+    <string name="ui_android_can_reclaim_cached_memory_when_apps_need_it" formatted="false">"Android can reclaim cached memory when apps need it. A high used percentage does not by itself mean the phone is struggling. The total excludes memory reserved by the device."</string>
+    <string name="ui_android_colour_correction" formatted="false">"Android colour correction"</string>
+    <string name="ui_android_could_not_add_this_widget" formatted="false">"Android could not add this widget."</string>
+    <string name="ui_android_could_not_change_this_profile_check_that_launcher" formatted="false">"Android could not change this profile. Check that Launcher is your default home."</string>
+    <string name="ui_android_could_not_list_calendars" formatted="false">"Android could not list calendars."</string>
+    <string name="ui_android_could_not_lock_the_screen" formatted="false">"Android could not lock the screen. "</string>
+    <string name="ui_android_could_not_pin_this_shortcut" formatted="false">"Android could not pin this shortcut."</string>
+    <string name="ui_android_could_not_remove_this_shortcut_try_again" formatted="false">"Android could not remove this shortcut. Try again."</string>
+    <string name="ui_android_could_not_snooze_this_notification" formatted="false">"Android could not snooze this notification."</string>
+    <string name="ui_android_has_restricted_this_control" formatted="false">"Android has restricted this control"</string>
+    <string name="ui_android_is_set_to_hide_this_space_while_locked" formatted="false">"Android is set to hide this space while locked. Change that preference in Android\'s Private Space settings."</string>
+    <string name="ui_android_keeps_this_notification_while_its_service_is_active" formatted="false">"Android keeps this notification while its service is active."</string>
+    <string name="ui_android_may_delay_this_alert_until_exact_alarm_access" formatted="false">"Android may delay this alert until exact-alarm access is enabled."</string>
+    <string name="ui_android_notifications_and_exact_alarm_access" formatted="false">"Android notifications and exact alarm access"</string>
+    <string name="ui_android_requires_accessibility_access_to_lock_the_screen" formatted="false">"Android requires accessibility access to lock the screen. "</string>
+    <string name="ui_android_widget" formatted="false">"Android widget"</string>
+    <string name="ui_android_widgets_permissions_message_history_consent_and_system_panel" formatted="false">"Android widgets, permissions, message-history consent and system-panel access remain on this device."</string>
+    <string name="ui_animation_switching_pages" formatted="false">"animation switching pages"</string>
+    <string name="ui_announce_sender_only" formatted="false">"Announce sender only"</string>
+    <string name="ui_any_sender_or_title" formatted="false">"Any sender or title"</string>
+    <string name="ui_api_key_upper" formatted="false">"API KEY"</string>
+    <string name="ui_app" formatted="false">"App"</string>
+    <string name="ui_app_2" formatted="false">"app"</string>
+    <string name="ui_app_behaviour" formatted="false">"App behaviour"</string>
+    <string name="ui_app_box" formatted="false">"App box"</string>
+    <string name="ui_app_controls" formatted="false">"App controls"</string>
+    <string name="ui_app_dashboard" formatted="false">"App dashboard"</string>
+    <string name="ui_app_display_colour" formatted="false">"App display colour"</string>
+    <string name="ui_app_drawer" formatted="false">"App drawer"</string>
+    <string name="ui_app_grayscale" formatted="false">"App grayscale"</string>
+    <string name="ui_app_icon" formatted="false">"App icon"</string>
+    <string name="ui_app_information_is_unavailable_open_android_app_information_instead" formatted="false">"App information is unavailable. Open Android app information instead."</string>
+    <string name="ui_app_labels" formatted="false">"App labels"</string>
+    <string name="ui_app_lock_protects_launches_and_app_editing_through_launcher" formatted="false">"App lock protects launches and app editing through Launcher. Android notifications, Recents and other launchers remain controlled by Android."</string>
+    <string name="ui_app_name" formatted="false">"App name"</string>
+    <string name="ui_app_name_or_package" formatted="false">"App name or package"</string>
+    <string name="ui_app_organisation" formatted="false">"App organisation"</string>
+    <string name="ui_app_protection" formatted="false">"App protection"</string>
+    <string name="ui_app_qr_code" formatted="false">"App QR code"</string>
+    <string name="ui_app_updates" formatted="false">"App updates"</string>
+    <string name="ui_appearance" formatted="false">"Appearance"</string>
+    <string name="ui_appearance_presets" formatted="false">"Appearance presets"</string>
+    <string name="ui_apply_filters" formatted="false">"Apply filters"</string>
+    <string name="ui_apply_preset" formatted="false">"Apply preset"</string>
+    <string name="ui_apply_value_preset" formatted="false">"Apply {0} preset?"</string>
+    <string name="ui_apps" formatted="false">"Apps"</string>
+    <string name="ui_apps_drawers" formatted="false">"Apps &amp; drawers"</string>
+    <string name="ui_apps_move_to_app_box" formatted="false">"Apps move to App box"</string>
+    <string name="ui_apps_own_icon" formatted="false">"App’s own icon"</string>
+    <string name="ui_apps_own_icons" formatted="false">"Apps’ own icons"</string>
+    <string name="ui_arrange" formatted="false">"Arrange"</string>
+    <string name="ui_arrange_app_drawers" formatted="false">"Arrange app drawers"</string>
+    <string name="ui_arrange_drawers" formatted="false">"Arrange drawers"</string>
+    <string name="ui_arrange_favorites" formatted="false">"Arrange favorites"</string>
+    <string name="ui_arrange_tiles_and_cards_undo_changes" formatted="false">"Arrange tiles and cards · undo changes"</string>
+    <string name="ui_arrange_today" formatted="false">"Arrange Today"</string>
+    <string name="ui_arrange_today_cards" formatted="false">"Arrange Today cards"</string>
+    <string name="ui_article_image" formatted="false">"Article image"</string>
+    <string name="ui_articles_to_display" formatted="false">"Articles to display"</string>
+    <string name="ui_at_a_glance" formatted="false">"At a glance"</string>
+    <string name="ui_at_or_above_value_lux" formatted="false">"At or above {0:0.#} lux"</string>
+    <string name="ui_at_or_below_value_lux" formatted="false">"At or below {0:0.#} lux"</string>
+    <string name="ui_attach_boarding_pass" formatted="false">"Attach boarding pass"</string>
+    <string name="ui_authenticate_to_continue_in_launcher" formatted="false">"Authenticate to continue in Launcher."</string>
+    <string name="ui_automatic_light_dark" formatted="false">"Automatic light / dark"</string>
+    <string name="ui_automatic_refresh" formatted="false">"Automatic refresh"</string>
+    <string name="ui_automatic_theme" formatted="false">"Automatic theme"</string>
+    <string name="ui_available" formatted="false">"Available"</string>
+    <string name="ui_available_2" formatted="false">" available"</string>
+    <string name="ui_available_tap_to_lock_or_pause" formatted="false">"Available · tap to lock or pause"</string>
+    <string name="ui_available_to_apps" formatted="false">"Available to apps"</string>
+    <string name="ui_back" formatted="false">"Back"</string>
+    <string name="ui_back_up_layout" formatted="false">"Back up layout"</string>
+    <string name="ui_backup" formatted="false">"backup"</string>
+    <string name="ui_backup_restore" formatted="false">"Backup &amp; restore"</string>
+    <string name="ui_balanced_100" formatted="false">"Balanced · 100"</string>
+    <string name="ui_balanced_50" formatted="false">"Balanced · 50%"</string>
+    <string name="ui_battery" formatted="false">"% battery"</string>
+    <string name="ui_battery_2" formatted="false">"Battery"</string>
+    <string name="ui_battery_memory_storage" formatted="false">"Battery, memory &amp; storage"</string>
+    <string name="ui_battery_percentage_indicator" formatted="false">"battery percentage indicator"</string>
+    <string name="ui_battery_remaining" formatted="false">"Battery remaining: "</string>
+    <string name="ui_battery_temperature" formatted="false">"Battery temperature"</string>
+    <string name="ui_battery_value_percent" formatted="false">"Battery {0} percent"</string>
+    <string name="ui_battery_valuec" formatted="false">"Battery {0:0.#}°C · "</string>
+    <string name="ui_below_camera_cutout" formatted="false">"Below camera cutout"</string>
+    <string name="ui_biometric_lock" formatted="false">"Biometric lock"</string>
+    <string name="ui_bluetooth" formatted="false">"Bluetooth"</string>
+    <string name="ui_booking_reference" formatted="false">"Booking reference"</string>
+    <string name="ui_both_setup_steps_are_needed_before_a_saved_grayscale" formatted="false">"Both setup steps are needed before a saved grayscale choice can affect the display."</string>
+    <string name="ui_bottom" formatted="false">"Bottom"</string>
+    <string name="ui_brave_api_account" formatted="false">"Brave API account"</string>
+    <string name="ui_brave_search_api_key" formatted="false">"Brave Search API key"</string>
+    <string name="ui_brightness_access" formatted="false">"Brightness access"</string>
+    <string name="ui_brightness_upper" formatted="false">"BRIGHTNESS"</string>
+    <string name="ui_browse_and_name_detected_face_groups" formatted="false">"Browse and name detected face groups"</string>
+    <string name="ui_browse_icon_libraries" formatted="false">"Browse icon libraries"</string>
+    <string name="ui_build" formatted="false">" · build "</string>
+    <string name="ui_built_by_kevin" formatted="false">"\nBuilt by *Kevin*."</string>
+    <string name="ui_built_in_libraries" formatted="false">"Built-in libraries"</string>
+    <string name="ui_calculator" formatted="false">"Calculator"</string>
+    <string name="ui_calculator_card" formatted="false">"Calculator card"</string>
+    <string name="ui_calendar_card" formatted="false">"Calendar card"</string>
+    <string name="ui_calendar_is_unavailable_check_calendar_access_and_try_again" formatted="false">"Calendar is unavailable. Check calendar access and try again."</string>
+    <string name="ui_calendars" formatted="false">"Calendars"</string>
+    <string name="ui_calendars_in_your_agenda" formatted="false">"Calendars in your agenda"</string>
+    <string name="ui_cancel" formatted="false">"Cancel"</string>
+    <string name="ui_cancel_download" formatted="false">"Cancel download"</string>
+    <string name="ui_capture_action" formatted="false">"+ Capture"</string>
+    <string name="ui_capture_in_launcher" formatted="false">"Capture in Launcher"</string>
+    <string name="ui_capture_something" formatted="false">"Capture something"</string>
+    <string name="ui_cards_feeds_weather" formatted="false">"Cards, feeds &amp; weather"</string>
+    <string name="ui_cards_journeys_and_timers" formatted="false">"Cards, journeys and timers"</string>
+    <string name="ui_celsius_c" formatted="false">"Celsius · °C"</string>
+    <string name="ui_center" formatted="false">"Center"</string>
+    <string name="ui_centered_drawer_headings" formatted="false">"Centered drawer headings"</string>
+    <string name="ui_changes_are_kept_in_this_session_could_not_save" formatted="false">"Changes are kept in this session. Could not save; check free storage."</string>
+    <string name="ui_charging" formatted="false">", charging"</string>
+    <string name="ui_charging_2" formatted="false">" · charging"</string>
+    <string name="ui_check_access_compatibility_and_recovery" formatted="false">"Check access, compatibility and recovery"</string>
+    <string name="ui_check_available_storage_and_try_again" formatted="false">"Check available storage and try again."</string>
+    <string name="ui_check_download_and_install_from_kevlog" formatted="false">"Check, download and install from Kevlog"</string>
+    <string name="ui_check_for_a_new_launcher_version" formatted="false">"Check for a new Launcher version"</string>
+    <string name="ui_check_for_updates" formatted="false">"Check for updates"</string>
+    <string name="ui_check_for_watch_face_updates" formatted="false">"Check for watch face updates"</string>
+    <string name="ui_check_that_launcher_accessibility_is_connected" formatted="false">"Check that Launcher accessibility is connected."</string>
+    <string name="ui_check_your_connection_and_the_link_then_try_again" formatted="false">"Check your connection and the link, then try again."</string>
+    <string name="ui_checking_for_updates" formatted="false">"Checking for updates…"</string>
+    <string name="ui_checking_kevlog_for_launcher_roll" formatted="false">"Checking Kevlog for Launcher Roll…"</string>
+    <string name="ui_checking_your_watch_try_again_in_a_moment" formatted="false">"Checking your watch. Try again in a moment."</string>
+    <string name="ui_checklist" formatted="false">"Checklist"</string>
+    <string name="ui_choose_a_card_or_type_a_command" formatted="false">"Choose a card or type a command."</string>
+    <string name="ui_choose_a_card_or_type_a_command_below" formatted="false">"Choose a card, or type a command below."</string>
+    <string name="ui_choose_a_city" formatted="false">"Choose a city"</string>
+    <string name="ui_choose_a_city_to_show_the_forecast" formatted="false">"Choose a city to show the forecast."</string>
+    <string name="ui_choose_a_date_within_the_next_ten_years" formatted="false">"Choose a date within the next ten years."</string>
+    <string name="ui_choose_a_future_time" formatted="false">"Choose a future time."</string>
+    <string name="ui_choose_a_number_from_1_to_50" formatted="false">"Choose a number from 1 to 50."</string>
+    <string name="ui_choose_a_surface_for_this_app_focus_and_sun" formatted="false">"Choose a surface for this app. Focus and Sun can apply their outlined treatment."</string>
+    <string name="ui_choose_a_symbol_for_this_drawer" formatted="false">"Choose a symbol for this drawer."</string>
+    <string name="ui_choose_an_apps_display_colour_by_holding_its_tile" formatted="false">"Choose an app’s display colour by holding its tile. This changes the opened app, independently of its icon."</string>
+    <string name="ui_choose_an_icon_from_any_library_or_installed_pack" formatted="false">"Choose an icon from any library or installed pack. Your selection applies only to this app."</string>
+    <string name="ui_choose_any_city_launcher_sends_the_city_search_and" formatted="false">"Choose any city. Launcher sends the city search and selected coordinates to Open-Meteo for weather; it does not use GPS or track your location."</string>
+    <string name="ui_choose_any_glyph_for_this_drawer" formatted="false">"Choose any glyph for this drawer."</string>
+    <string name="ui_choose_apps" formatted="false">"Choose apps"</string>
+    <string name="ui_choose_at_least_one_category" formatted="false">"Choose at least one category."</string>
+    <string name="ui_choose_city_and_units" formatted="false">"Choose city and units"</string>
+    <string name="ui_choose_how_launcher_feels_when_you_tap_controls_switch" formatted="false">"Choose how Launcher feels when you tap controls, switch pages, fold drawers or dismiss items. Your phone controls the vibration strength."</string>
+    <string name="ui_choose_how_many_stories_appear_initially_from_1_to" formatted="false">"Choose how many stories appear initially, from 1 to 50."</string>
+    <string name="ui_choose_launcher_in_android_settings" formatted="false">"Choose Launcher in Android settings"</string>
+    <string name="ui_choose_launcher_in_androids_chooser" formatted="false">"Choose Launcher in Android’s chooser"</string>
+    <string name="ui_choose_media_player" formatted="false">"Choose media player"</string>
+    <string name="ui_choose_one_folder_for_photos_and_files" formatted="false">"Choose one folder for photos and files"</string>
+    <string name="ui_choose_the_apps_for_this_drawer" formatted="false">"Choose the apps for this drawer."</string>
+    <string name="ui_choose_the_apps_on_your_home_screen" formatted="false">"Choose the apps on your home screen"</string>
+    <string name="ui_choose_the_calendars_to_show_clearing_every_selection_returns" formatted="false">"Choose the calendars to show. Clearing every selection returns to all visible calendars."</string>
+    <string name="ui_choose_up_to_five_apps_for_the_home_dock" formatted="false">"Choose up to five apps for the Home dock"</string>
+    <string name="ui_choose_what_belongs_in_your_workspace" formatted="false">"Choose what belongs in your workspace."</string>
+    <string name="ui_choose_which_apps_appear_in_conversations_this_doesnt_change" formatted="false">"Choose which apps appear in Conversations. This doesn’t change Android’s notification settings."</string>
+    <string name="ui_choose_which_buttons_appear_below_home_swipe_between_pages" formatted="false">"Choose which buttons appear below home. Swipe between pages or use the Launcher menu to reach a page whose button is hidden."</string>
+    <string name="ui_choose_your_sources_in_settings_news_feeds" formatted="false">"Choose your sources in Settings · News &amp; feeds."</string>
+    <string name="ui_city_upper" formatted="false">"CITY"</string>
+    <string name="ui_classic" formatted="false">"Classic"</string>
+    <string name="ui_classic_112" formatted="false">"Classic · 112"</string>
+    <string name="ui_classic_and_studio_theme_and_layout" formatted="false">"Classic and Studio · theme and layout"</string>
+    <string name="ui_clear" formatted="false">"Clear"</string>
+    <string name="ui_clear_history" formatted="false">"Clear history"</string>
+    <string name="ui_clear_saved_history" formatted="false">"Clear saved history"</string>
+    <string name="ui_clear_saved_history_2" formatted="false">"Clear saved history?"</string>
+    <string name="ui_clock_battery_status" formatted="false">"clock battery status"</string>
+    <string name="ui_close" formatted="false">"Close"</string>
+    <string name="ui_close_2" formatted="false">"Close "</string>
+    <string name="ui_close_app_actions" formatted="false">"Close app actions"</string>
+    <string name="ui_close_app_drawer" formatted="false">"Close app drawer"</string>
+    <string name="ui_close_search" formatted="false">"Close search"</string>
+    <string name="ui_collapsed" formatted="false">", collapsed"</string>
+    <string name="ui_collecting_30_days_or_5_000_messages" formatted="false">"Collecting · 30 days or 5,000 messages"</string>
+    <string name="ui_colour" formatted="false">"Colour"</string>
+    <string name="ui_colour_correction_applies_to_the_whole_display_while_the" formatted="false">"Colour correction applies to the whole display while the selected app is in front. Split-screen windows share that colour state. Launcher restores the previous setting when you leave. Your Samsung’s display behaviour still needs your testing."</string>
+    <string name="ui_columns" formatted="false">"Columns"</string>
+    <string name="ui_command_copied" formatted="false">"Command copied."</string>
+    <string name="ui_common_choices_first" formatted="false">" · common choices first"</string>
+    <string name="ui_compact_72_dp" formatted="false">"Compact · 72 dp"</string>
+    <string name="ui_compact_88" formatted="false">"Compact · 88"</string>
+    <string name="ui_compare_fingerprints" formatted="false">"Compare fingerprints"</string>
+    <string name="ui_complete_both_setup_steps_first" formatted="false">"Complete both setup steps first."</string>
+    <string name="ui_complete_the_android_unlock_screen_to_continue" formatted="false">"Complete the Android unlock screen to continue."</string>
+    <string name="ui_complete_the_update_in_androids_installer" formatted="false">"Complete the update in Android’s installer."</string>
+    <string name="ui_completed" formatted="false">"Completed"</string>
+    <string name="ui_completed_2" formatted="false">" completed"</string>
+    <string name="ui_computer_paired" formatted="false">"Computer paired."</string>
+    <string name="ui_configure_how_launcher_responds_to_gestures_on_your_home" formatted="false">"Configure how Launcher responds to gestures on your home screen. "</string>
+    <string name="ui_configure_your_api_key_for_inline_results_or_open" formatted="false">"Configure your API key for inline results, or open this search in your browser."</string>
+    <string name="ui_configured" formatted="false">"Configured"</string>
+    <string name="ui_confirm_your_screen_lock_to_continue" formatted="false">"Confirm your screen lock to continue."</string>
+    <string name="ui_connect_calendar" formatted="false">"Connect calendar"</string>
+    <string name="ui_connect_notification_access_to_show_your_current_notifications_here" formatted="false">"Connect notification access to show your current notifications here."</string>
+    <string name="ui_connect_the_phone_to_your_computer_with_usb_debugging" formatted="false">"Connect the phone to your computer with USB debugging enabled. Run this command once:"</string>
+    <string name="ui_connected" formatted="false">"Connected"</string>
+    <string name="ui_connected_choose_calendars" formatted="false">"Connected · choose calendars"</string>
+    <string name="ui_connected_screen_locking_available" formatted="false">"Connected · screen locking available"</string>
+    <string name="ui_connected_while_launcher_is_open" formatted="false">"Connected while Launcher is open"</string>
+    <string name="ui_connecting_to_your_watch" formatted="false">"Connecting to your watch…"</string>
+    <string name="ui_connection" formatted="false">"Connection"</string>
+    <string name="ui_connection_details" formatted="false">"Connection details"</string>
+    <string name="ui_connection_names" formatted="false">"Connection names"</string>
+    <string name="ui_connection_stopped_check_the_desktop_address_and_reconnect" formatted="false">"Connection stopped. Check the desktop address and reconnect."</string>
+    <string name="ui_connection_timed_out_stop_and_connect_again" formatted="false">"Connection timed out. Stop and connect again."</string>
+    <string name="ui_connections_first" formatted="false">"Connections first"</string>
+    <string name="ui_content" formatted="false">"Content"</string>
+    <string name="ui_continue" formatted="false">"Continue"</string>
+    <string name="ui_continue_to_speech" formatted="false">"Continue to speech"</string>
+    <string name="ui_control_order" formatted="false">"Control order"</string>
+    <string name="ui_conversation_history" formatted="false">"Conversation history"</string>
+    <string name="ui_conversations_messages_filters" formatted="false">"conversations messages filters"</string>
+    <string name="ui_copy_command" formatted="false">"Copy command"</string>
+    <string name="ui_core_launching_works_without_optional_access_enable_only_the" formatted="false">"Core launching works without optional access. Enable only the features you want. Unavailable hardware and battery-saving restrictions turn off depth effects automatically."</string>
+    <string name="ui_could_not_add_this_widget" formatted="false">"Could not add this widget."</string>
+    <string name="ui_could_not_check_for_updates_check_your_connection_and" formatted="false">"Could not check for updates. Check your connection and try again."</string>
+    <string name="ui_could_not_connect_check_the_address_wi_fi_and" formatted="false">"Could not connect. Check the address, Wi-Fi and Windows firewall."</string>
+    <string name="ui_could_not_connect_to_the_watch_or_check_kevlog" formatted="false">"Could not connect to the watch or check Kevlog. Try again."</string>
+    <string name="ui_could_not_follow_this_feed_address" formatted="false">"Could not follow this feed address."</string>
+    <string name="ui_could_not_install_the_update" formatted="false">"Could not install the update. "</string>
+    <string name="ui_could_not_open_the_update" formatted="false">"Could not open the update. "</string>
+    <string name="ui_could_not_read_or_write_this_backup_choose_a" formatted="false">"Could not read or write this backup. Choose a valid Launcher JSON file."</string>
+    <string name="ui_could_not_refresh_apps_reopen_launcher_to_retry" formatted="false">"Could not refresh apps. Reopen Launcher to retry."</string>
+    <string name="ui_could_not_restore_your_current_content_is_kept" formatted="false">"Could not restore. Your current content is kept."</string>
+    <string name="ui_couldn_t_load_face_groups_reopen_people_to_retry" formatted="false">"Couldn\'t load face groups. Reopen People to retry."</string>
+    <string name="ui_couldn_t_remove_the_document_search_files_try_again" formatted="false">"Couldn\'t remove the document search files. Try again."</string>
+    <string name="ui_couldn_t_remove_the_image_search_data_try_again" formatted="false">"Couldn\'t remove the image search data. Try again."</string>
+    <string name="ui_couldn_t_remove_the_model_files_try_again" formatted="false">"Couldn\'t remove the model files. Try again."</string>
+    <string name="ui_couldn_t_save_this_name_try_again" formatted="false">"Couldn\'t save this name. Try again."</string>
+    <string name="ui_couldnt_read_shared_storage_try_reopening_file_search" formatted="false">"Couldn’t read shared storage. Try reopening file search."</string>
+    <string name="ui_couldnt_search_locations_check_your_connection_and_try_again" formatted="false">"Couldn’t search locations. Check your connection and try again."</string>
+    <string name="ui_create_drawer" formatted="false">"Create drawer"</string>
+    <string name="ui_create_rename_or_reorder" formatted="false">" · create, rename or reorder"</string>
+    <string name="ui_creativity" formatted="false">"Creativity"</string>
+    <string name="ui_current_light_value_lux" formatted="false">"Current light · {0:0.#} lux"</string>
+    <string name="ui_custom_hex_color" formatted="false">"Custom hex color"</string>
+    <string name="ui_customise" formatted="false">"Customise"</string>
+    <string name="ui_daily" formatted="false">"Daily"</string>
+    <string name="ui_daily_2" formatted="false">" · daily"</string>
+    <string name="ui_daily_goal" formatted="false">"Daily goal"</string>
+    <string name="ui_daily_goal_2" formatted="false">"Daily goal · "</string>
+    <string name="ui_daily_goal_value_minutes" formatted="false">"Daily goal · {0} minutes"</string>
+    <string name="ui_daily_usage_goal" formatted="false">"Daily usage goal"</string>
+    <string name="ui_dark" formatted="false">"Dark"</string>
+    <string name="ui_dark_theme" formatted="false">"Dark theme"</string>
+    <string name="ui_dark_threshold_lux" formatted="false">"Dark threshold (lux)"</string>
+    <string name="ui_data_volume_total" formatted="false">"Data volume total"</string>
+    <string name="ui_date" formatted="false">"Date"</string>
+    <string name="ui_date_2" formatted="false">"Date · "</string>
+    <string name="ui_date_departure" formatted="false">"Date / departure"</string>
+    <string name="ui_deep_65" formatted="false">"Deep · 65%"</string>
+    <string name="ui_default" formatted="false">" · default"</string>
+    <string name="ui_default_100" formatted="false">"Default · 100%"</string>
+    <string name="ui_default_home" formatted="false">"Default home"</string>
+    <string name="ui_default_home_app" formatted="false">"Default home app"</string>
+    <string name="ui_default_home_set_device_access" formatted="false">"Default Home set · device access"</string>
+    <string name="ui_default_home_usage_and_notification_access" formatted="false">"Default home, usage and notification access"</string>
+    <string name="ui_delete" formatted="false">"Delete"</string>
+    <string name="ui_delete_all_messages_saved_by_launcher_messages_in_the" formatted="false">"Delete all messages saved by Launcher? Messages in the original apps are unchanged."</string>
+    <string name="ui_delete_reminder" formatted="false">"Delete reminder"</string>
+    <string name="ui_delete_reminder_2" formatted="false">"Delete reminder?"</string>
+    <string name="ui_depth_motion" formatted="false">"Depth &amp; motion"</string>
+    <string name="ui_desktop" formatted="false">"Desktop"</string>
+    <string name="ui_desktop_can_read_files_inside_the_selected_folder_and" formatted="false">"Desktop can read files inside the selected folder and edit notes. Uploads create new files. It cannot delete your files. Pairing resets when you close and restart the desktop program."</string>
+    <string name="ui_desktop_companion" formatted="false">"Desktop companion"</string>
+    <string name="ui_desktop_companion_address" formatted="false">"Desktop companion address"</string>
+    <string name="ui_destination_drawer" formatted="false">"Destination drawer"</string>
+    <string name="ui_details" formatted="false">"Details"</string>
+    <string name="ui_device_data" formatted="false">"Device &amp; data"</string>
+    <string name="ui_disable" formatted="false">"Disable"</string>
+    <string name="ui_disable_accessibility_service" formatted="false">"Disable accessibility service"</string>
+    <string name="ui_disconnected" formatted="false">"Disconnected"</string>
+    <string name="ui_dismiss" formatted="false">"Dismiss"</string>
+    <string name="ui_dismiss_layout_confirmation" formatted="false">"Dismiss layout confirmation"</string>
+    <string name="ui_display_first" formatted="false">"Display first"</string>
+    <string name="ui_display_permission" formatted="false">"Display permission"</string>
+    <string name="ui_display_permission_and_foreground_detection" formatted="false">"Display permission and foreground detection"</string>
+    <string name="ui_display_settings" formatted="false">"Display settings"</string>
+    <string name="ui_document_indexing_failed_try_indexing_again" formatted="false">"Document indexing failed. Try indexing again."</string>
+    <string name="ui_document_search" formatted="false">"Document search"</string>
+    <string name="ui_documents" formatted="false">"Documents"</string>
+    <string name="ui_documents_semantic_embeddings_embeddinggemma_files_pdf_docx_txt_model" formatted="false">"documents semantic embeddings EmbeddingGemma files PDF DOCX TXT model"</string>
+    <string name="ui_done" formatted="false">"Done"</string>
+    <string name="ui_double_tap_an_empty_area_on_the_today_or" formatted="false">"Double-tap an *empty area* on the Today or Apps screen to lock your phone. "</string>
+    <string name="ui_double_tap_to_lock" formatted="false">"Double-tap to lock "</string>
+    <string name="ui_double_tap_to_lock_screen" formatted="false">"Double-tap to lock screen"</string>
+    <string name="ui_download" formatted="false">"Download"</string>
+    <string name="ui_download_and_install" formatted="false">"Download and install"</string>
+    <string name="ui_download_and_update" formatted="false">"Download and update"</string>
+    <string name="ui_download_canceled" formatted="false">"Download canceled"</string>
+    <string name="ui_download_cancelled" formatted="false">"Download cancelled."</string>
+    <string name="ui_download_enable" formatted="false">"Download &amp; enable"</string>
+    <string name="ui_download_failed" formatted="false">"Download failed"</string>
+    <string name="ui_download_failed_check_your_connection_and_available_storage_then" formatted="false">"Download failed. Check your connection and available storage, then retry."</string>
+    <string name="ui_download_failed_check_your_connection_and_free_storage_then" formatted="false">"Download failed. Check your connection and free storage, then retry."</string>
+    <string name="ui_download_file" formatted="false">"Download file"</string>
+    <string name="ui_download_history" formatted="false">"Download history"</string>
+    <string name="ui_download_image_search_model" formatted="false">"Download image search model?"</string>
+    <string name="ui_download_it_again_to_use_kokoro_offline_speech" formatted="false">"Download it again to use Kokoro offline speech."</string>
+    <string name="ui_download_model" formatted="false">"Download model"</string>
+    <string name="ui_download_model_files" formatted="false">"Download model files"</string>
+    <string name="ui_download_started" formatted="false">"Download started."</string>
+    <string name="ui_download_the_document_search_model" formatted="false">"Download the document search model?"</string>
+    <string name="ui_download_value_models" formatted="false">"Download {0} models?"</string>
+    <string name="ui_download_version_value_value_mb_your_layout_and_settings" formatted="false">"Download version {0} ({1:0.0} MB)? Your layout and settings are kept."</string>
+    <string name="ui_download_with_launcher" formatted="false">"Download with Launcher"</string>
+    <string name="ui_downloading_embeddinggemma_2_value" formatted="false">"Downloading EmbeddingGemma 2 · {0}%"</string>
+    <string name="ui_downloading_launcher_roll" formatted="false">"Downloading Launcher Roll…"</string>
+    <string name="ui_downloading_openclip_fast_value" formatted="false">"Downloading OpenCLIP Fast · {0}%"</string>
+    <string name="ui_downloading_to_downloads" formatted="false">"Downloading to Downloads"</string>
+    <string name="ui_downloading_update_value" formatted="false">"Downloading update… {0}%"</string>
+    <string name="ui_downloads" formatted="false">"Downloads"</string>
+    <string name="ui_downloads_are_off_in_launcher_settings" formatted="false">"Downloads are off in Launcher settings."</string>
+    <string name="ui_dp" formatted="false">" dp"</string>
+    <string name="ui_dp_below_androids_status_bar" formatted="false">" dp below Android’s status bar"</string>
+    <string name="ui_drag" formatted="false">"Drag "</string>
+    <string name="ui_drag_down_to_close_sheet" formatted="false">"Drag down to close sheet"</string>
+    <string name="ui_drag_headings_to_fold" formatted="false">"Drag headings to fold"</string>
+    <string name="ui_drawer" formatted="false">"Drawer"</string>
+    <string name="ui_drawer_alignment" formatted="false">"Drawer alignment"</string>
+    <string name="ui_drawer_icon" formatted="false">"Drawer icon"</string>
+    <string name="ui_drawer_name" formatted="false">"Drawer name"</string>
+    <string name="ui_drawer_symbol" formatted="false">"Drawer symbol "</string>
+    <string name="ui_drawer_title_placement" formatted="false">"drawer title placement"</string>
+    <string name="ui_drawer_usage" formatted="false">"Drawer usage "</string>
+    <string name="ui_drawers" formatted="false">"Drawers"</string>
+    <string name="ui_duration_upper" formatted="false">"DURATION"</string>
+    <string name="ui_e_g_18_nov_14_30" formatted="false">"e.g. 18 Nov, 14:30"</string>
+    <string name="ui_e_g_cape_town_south_africa" formatted="false">"e.g. Cape Town, South Africa"</string>
+    <string name="ui_e_g_collect_the_parcel" formatted="false">"e.g. Collect the parcel"</string>
+    <string name="ui_e_g_daily_essentials" formatted="false">"e.g. Daily essentials"</string>
+    <string name="ui_e_g_danielle" formatted="false">"e.g. Danielle"</string>
+    <string name="ui_e_g_flight_home" formatted="false">"e.g. Flight home"</string>
+    <string name="ui_e_g_johannesburg_to_cape_town" formatted="false">"e.g. Johannesburg to Cape Town"</string>
+    <string name="ui_edit" formatted="false">"Edit"</string>
+    <string name="ui_edit_2" formatted="false">"  ·  Edit"</string>
+    <string name="ui_edit_3" formatted="false">"Edit "</string>
+    <string name="ui_edit_checklist" formatted="false">"Edit checklist"</string>
+    <string name="ui_edit_home_layout" formatted="false">"Edit home layout"</string>
+    <string name="ui_edit_reminder" formatted="false">"Edit reminder"</string>
+    <string name="ui_edit_rss_feed" formatted="false">"Edit RSS feed"</string>
+    <string name="ui_edit_your_layout" formatted="false">"Edit your layout"</string>
+    <string name="ui_embeddinggemma_2_about_165_mb" formatted="false">"EmbeddingGemma 2 · about 165 MB"</string>
+    <string name="ui_embeddinggemma_2_needs_about_165_mb_launcher_reads_and" formatted="false">"EmbeddingGemma 2 needs about 165 MB. Launcher reads and indexes passages on this device."</string>
+    <string name="ui_enable" formatted="false">"Enable "</string>
+    <string name="ui_enable_downloads" formatted="false">"Enable downloads"</string>
+    <string name="ui_enable_launcher_accessibility_access_to_use_screen_locking" formatted="false">"Enable Launcher accessibility access to use screen locking."</string>
+    <string name="ui_enable_launcher_app_grayscale_in_android_accessibility_settings" formatted="false">"Enable Launcher app grayscale in Android accessibility settings"</string>
+    <string name="ui_enable_launcher_system_panel_in_android" formatted="false">"Enable Launcher system panel in Android "</string>
+    <string name="ui_enable_local_message_history" formatted="false">"Enable local message history"</string>
+    <string name="ui_enable_notification_access" formatted="false">"Enable notification access"</string>
+    <string name="ui_enable_notification_access_in_launcher_settings_to_show_notifications" formatted="false">"Enable notification access in Launcher Settings to show notifications here."</string>
+    <string name="ui_enable_notification_whispers" formatted="false">"Enable notification whispers"</string>
+    <string name="ui_enable_system_panel" formatted="false">"Enable system panel"</string>
+    <string name="ui_enable_system_panel_and_its_accessibility_access_first" formatted="false">"Enable System panel and its accessibility access first"</string>
+    <string name="ui_enable_usage_access" formatted="false">"Enable usage access"</string>
+    <string name="ui_enabled" formatted="false">"Enabled"</string>
+    <string name="ui_enabled_light_sensor" formatted="false">"Enabled · light sensor"</string>
+    <string name="ui_enabled_sources_appear_together_in_one_root_card_newest" formatted="false">"Enabled sources appear together in one Root card, newest first. Undated items appear last. No API key is needed."</string>
+    <string name="ui_end_focus" formatted="false">"End focus"</string>
+    <string name="ui_enter_a_city_or_town_name" formatted="false">"Enter a city or town name."</string>
+    <string name="ui_enter_a_full_http_or_https_link" formatted="false">"Enter a full http:// or https:// link."</string>
+    <string name="ui_enter_a_light_level_from_0_to_200000_lux" formatted="false">"Enter a light level from 0 to 200000 lux."</string>
+    <string name="ui_enter_a_name_below" formatted="false">"Enter a name below."</string>
+    <string name="ui_enter_a_reminder" formatted="false">"Enter a reminder."</string>
+    <string name="ui_enter_a_value_before_saving" formatted="false">"Enter a value before saving."</string>
+    <string name="ui_enter_at_least_two_characters" formatted="false">"Enter at least two characters."</string>
+    <string name="ui_enter_some_text_to_speak" formatted="false">"Enter some text to speak."</string>
+    <string name="ui_enter_text_to_speak" formatted="false">"Enter text to speak..."</string>
+    <string name="ui_enter_the_address_shown_by_launcher_companion" formatted="false">"Enter the address shown by Launcher Companion."</string>
+    <string name="ui_enter_the_eight_digit_code_shown_on_the_computer" formatted="false">"Enter the eight-digit code shown on the computer."</string>
+    <string name="ui_enter_the_eight_digit_code_shown_on_your_computer" formatted="false">"Enter the eight-digit code shown on your computer."</string>
+    <string name="ui_enter_the_search_or_value_for_this_card" formatted="false">"Enter the search or value for this card."</string>
+    <string name="ui_enter_the_sensor_level_in_lux_the_light_threshold" formatted="false">"Enter the sensor level in lux. The Light threshold must be higher than the Dark threshold."</string>
+    <string name="ui_entertainment" formatted="false">"Entertainment"</string>
+    <string name="ui_essentials" formatted="false">"Essentials"</string>
+    <string name="ui_every_value_minutes_while_launcher_is_open" formatted="false">"Every {0} minutes while Launcher is open"</string>
+    <string name="ui_expand_text" formatted="false">"Expand text"</string>
+    <string name="ui_expanded" formatted="false">", expanded"</string>
+    <string name="ui_expanded_2" formatted="false">"Expanded"</string>
+    <string name="ui_expanded_tile" formatted="false">"Expanded tile"</string>
+    <string name="ui_export_a_backup" formatted="false">"Export a backup"</string>
+    <string name="ui_export_or_restore_your_layout" formatted="false">"Export or restore your layout"</string>
+    <string name="ui_export_settings_as_a_json_file" formatted="false">"Export settings as a JSON file"</string>
+    <string name="ui_fahrenheit_f" formatted="false">"Fahrenheit · °F"</string>
+    <string name="ui_favorites_favourites_pinned_apps" formatted="false">"favorites favourites pinned apps"</string>
+    <string name="ui_feed_address_upper" formatted="false">"FEED ADDRESS"</string>
+    <string name="ui_fetching_your_first_stories" formatted="false">"Fetching your first stories…"</string>
+    <string name="ui_file_downloads" formatted="false">"File downloads"</string>
+    <string name="ui_files" formatted="false">"Files"</string>
+    <string name="ui_files_downloaded_with_launcher_will_appear_here" formatted="false">"Files downloaded with Launcher will appear here."</string>
+    <string name="ui_files_image_search_and_document_search" formatted="false">"Files, image search and document search"</string>
+    <string name="ui_filter_apps" formatted="false">"Filter apps"</string>
+    <string name="ui_filter_notification_apps" formatted="false">"Filter notification apps"</string>
+    <string name="ui_filter_so_only_matching_notifications_are_whispered" formatted="false">"filter so only matching notifications are whispered."</string>
+    <string name="ui_finance" formatted="false">"Finance"</string>
+    <string name="ui_find_a_notification" formatted="false">"Find a notification."</string>
+    <string name="ui_find_an_app" formatted="false">"Find an app"</string>
+    <string name="ui_find_an_app_by_name" formatted="false">"Find an app by name."</string>
+    <string name="ui_find_apps" formatted="false">"Find apps"</string>
+    <string name="ui_find_people_in_shared_photos" formatted="false">"Find people in shared photos"</string>
+    <string name="ui_find_photos_by_description_text_or_people" formatted="false">"Find photos by description, text or people"</string>
+    <string name="ui_find_something_online" formatted="false">"Find something online"</string>
+    <string name="ui_find_this_app_using_your_own_words" formatted="false">"Find this app using your own words"</string>
+    <string name="ui_find_words_in_screenshots_receipts_and_other_photos_from" formatted="false">"Find words in screenshots, receipts and other photos from Files. Use quotes for a phrase."</string>
+    <string name="ui_finding_your_apps" formatted="false">"Finding your apps…"</string>
+    <string name="ui_finished_value" formatted="false">"Finished: {0}"</string>
+    <string name="ui_fit_widget_automatically" formatted="false">"Fit widget automatically"</string>
+    <string name="ui_focus" formatted="false">"Focus"</string>
+    <string name="ui_focus_card" formatted="false">"Focus card"</string>
+    <string name="ui_focus_gives_your_app_tiles_a_quieter_outlined_look" formatted="false">"Focus gives your app tiles a quieter outlined look."</string>
+    <string name="ui_focus_mode" formatted="false">"Focus mode"</string>
+    <string name="ui_folder_access_was_not_granted" formatted="false">"Folder access was not granted."</string>
+    <string name="ui_follow_android" formatted="false">"Follow Android"</string>
+    <string name="ui_follow_launcher" formatted="false">"Follow Launcher"</string>
+    <string name="ui_follow_the_global_selection" formatted="false">"Follow the global selection"</string>
+    <string name="ui_follow_the_light" formatted="false">"Follow the light."</string>
+    <string name="ui_follows_android_touch_vibration" formatted="false">" · follows Android touch vibration"</string>
+    <string name="ui_forecast_and_location_data_attribution" formatted="false">"Forecast and location data · attribution"</string>
+    <string name="ui_foreground_app_detection" formatted="false">"Foreground app detection"</string>
+    <string name="ui_forget_computer" formatted="false">"Forget computer"</string>
+    <string name="ui_free_document_search_storage" formatted="false">"Free document search storage"</string>
+    <string name="ui_free_model_and_index_storage" formatted="false">"Free model and index storage"</string>
+    <string name="ui_free_offline_speech_storage" formatted="false">"Free offline speech storage"</string>
+    <string name="ui_free_text_model_and_index_storage" formatted="false">"Free text model and index storage"</string>
+    <string name="ui_from_your_sources" formatted="false">" from your sources?"</string>
+    <string name="ui_generated_value_value" formatted="false">"Generated {0}/{1}"</string>
+    <string name="ui_gestures" formatted="false">"Gestures"</string>
+    <string name="ui_gestures_drawers_and_customisation" formatted="false">"Gestures, drawers and customisation"</string>
+    <string name="ui_gestures_drawers_tiles_and_privacy" formatted="false">"Gestures, drawers, tiles and privacy"</string>
+    <string name="ui_gestures_only_work_within_launcher_and_do_not_interfere" formatted="false">"Gestures only work within Launcher and do not interfere with Android\'s system gestures."</string>
+    <string name="ui_get_launcher_for_wear_os" formatted="false">"Get Launcher for Wear OS"</string>
+    <string name="ui_google_discover_feed_today_root_gestures" formatted="false">"Google Discover feed Today root gestures"</string>
+    <string name="ui_google_news_south_africa_is_enabled_initially_the_other" formatted="false">"Google News South Africa is enabled initially. The other presets are optional. You can edit, remove or add sources."</string>
+    <string name="ui_got_it" formatted="false">"Got it"</string>
+    <string name="ui_granted" formatted="false">"Granted"</string>
+    <string name="ui_grayscale" formatted="false">"Grayscale"</string>
+    <string name="ui_grayscale_setup" formatted="false">"Grayscale setup"</string>
+    <string name="ui_grayscale_whole_display" formatted="false">"Grayscale whole display"</string>
+    <string name="ui_group_similar_faces_on_this_device_name_a_group" formatted="false">"Group similar faces on this device. Name a group to find its photos in Files."</string>
+    <string name="ui_grouped_apps" formatted="false">"Grouped apps"</string>
+    <string name="ui_gyroscope_rotation_sensor_motion" formatted="false">"gyroscope rotation sensor motion"</string>
+    <string name="ui_handle_distance" formatted="false">"Handle distance"</string>
+    <string name="ui_handle_position" formatted="false">"Handle position"</string>
+    <string name="ui_haptic_feedback" formatted="false">"Haptic feedback"</string>
+    <string name="ui_help" formatted="false">"Help"</string>
+    <string name="ui_hex_colour_upper" formatted="false">"HEX COLOUR"</string>
+    <string name="ui_hidden" formatted="false">"Hidden"</string>
+    <string name="ui_hidden_2" formatted="false">" (hidden)"</string>
+    <string name="ui_hidden_apps" formatted="false">"Hidden apps"</string>
+    <string name="ui_hidden_apps_are_removed_from_launcher_tiles_and_search" formatted="false">"Hidden apps are removed from Launcher tiles and search. This does not secure or disable them."</string>
+    <string name="ui_hidden_restore_visibility" formatted="false">" hidden · restore visibility"</string>
+    <string name="ui_hidden_spaces_can_be_opened_here_through_setup_feature" formatted="false">"Hidden spaces can be opened here through Setup &amp; feature health. Private apps remain outside global drawers and search."</string>
+    <string name="ui_hide_card" formatted="false">"Hide card"</string>
+    <string name="ui_hide_from_launcher" formatted="false">"Hide from Launcher"</string>
+    <string name="ui_hide_private_space_when_locked" formatted="false">"Hide Private Space when locked"</string>
+    <string name="ui_hide_protected_app_previews" formatted="false">"Hide protected app previews"</string>
+    <string name="ui_high" formatted="false">"High "</string>
+    <string name="ui_high_contrast_outdoors" formatted="false">"High contrast, outdoors"</string>
+    <string name="ui_high_value_low_value" formatted="false">"High {0}  ·  Low {1}"</string>
+    <string name="ui_history" formatted="false">"History"</string>
+    <string name="ui_hold_a_drawer_heading_on_the_home_screen_to" formatted="false">"Hold a drawer heading on the home screen to edit it. Apps in a removed drawer return to App box."</string>
+    <string name="ui_hold_a_grip_and_drag_a_row_into_place" formatted="false">"Hold a grip and drag a row into place. The arrow buttons offer the same controls. Changes apply when you save."</string>
+    <string name="ui_hold_a_grip_to_drag_a_card_or_use" formatted="false">"Hold a grip to drag a card, or use the arrows. Pinned cards stay at the top."</string>
+    <string name="ui_hold_a_story_in_news_feeds_and_choose_save" formatted="false">"Hold a story in News &amp; feeds and choose Save for later. Saved titles and links stay on this device."</string>
+    <string name="ui_hold_an_app_and_choose_pin_to_favorites_to" formatted="false">"Hold an app and choose Pin to favorites to add it here."</string>
+    <string name="ui_hold_any_card_header_to_pin_move_hide_or" formatted="false">"Hold any card header to pin, move, hide or remove it. Restore hidden cards below."</string>
+    <string name="ui_hold_for_app_actions" formatted="false">", hold for app actions"</string>
+    <string name="ui_hold_the_grip_to_drag_or_use_the_arrows" formatted="false">"Hold the grip to drag, or use the arrows."</string>
+    <string name="ui_hold_the_grip_to_drag_this_card" formatted="false">"Hold the grip to drag this card."</string>
+    <string name="ui_hold_the_search_icon_or_tap_the_three_dots" formatted="false">"Hold the search icon, or tap the three dots, for theme and focus controls. Focus gives app tiles a quiet outlined appearance."</string>
+    <string name="ui_hold_to_customize" formatted="false">", hold to customize"</string>
+    <string name="ui_hold_to_drag" formatted="false">"Hold to drag "</string>
+    <string name="ui_home_accent_glow" formatted="false">"Home accent glow"</string>
+    <string name="ui_home_cards_widgets" formatted="false">"Home cards &amp; widgets"</string>
+    <string name="ui_home_navigation_buttons" formatted="false">"home navigation buttons"</string>
+    <string name="ui_how_to_use_launcher" formatted="false">"How to use Launcher"</string>
+    <string name="ui_icon_pack" formatted="false">"Icon pack"</string>
+    <string name="ui_icon_style" formatted="false">"Icon style"</string>
+    <string name="ui_icons" formatted="false">" icons"</string>
+    <string name="ui_icons_common_choices_first" formatted="false">" icons · common choices first"</string>
+    <string name="ui_if_android_blocks_access_for_an_apk_installed_through" formatted="false">"If Android blocks access for an APK installed through your browser, open Launcher’s App info and allow restricted settings, then return here."</string>
+    <string name="ui_if_you_feel_nothing_check_android_s_touch_vibration" formatted="false">"If you feel nothing, check Android\'s touch-vibration setting. Some devices provide limited haptic effects. Launcher never overrides the system setting."</string>
+    <string name="ui_ii_focus_is_on" formatted="false">"Ⅱ  Focus is on"</string>
+    <string name="ui_image_indexing_failed_try_indexing_again" formatted="false">"Image indexing failed. Try indexing again."</string>
+    <string name="ui_image_search" formatted="false">"Image search"</string>
+    <string name="ui_images" formatted="false">"Images"</string>
+    <string name="ui_images_appear_when_supplied_by_the_publisher_stories_without" formatted="false">"Images appear when supplied by the publisher. Stories without an image use the full width. Turning images off stops thumbnail downloads."</string>
+    <string name="ui_import_a_previously_saved_layout" formatted="false">"Import a previously saved layout"</string>
+    <string name="ui_includes_notes_and_journeys_as_readable_json_keep_it" formatted="false">"Includes notes and journeys as readable JSON. Keep it somewhere private."</string>
+    <string name="ui_index_documents_now" formatted="false">"Index documents now"</string>
+    <string name="ui_index_images_now" formatted="false">"Index images now"</string>
+    <string name="ui_indexing_documents_value_of_value" formatted="false">"Indexing documents · {0:N0} of {1:N0}"</string>
+    <string name="ui_indexing_images_value_of_value_processed" formatted="false">"Indexing images · {0:N0} of {1:N0} processed"</string>
+    <string name="ui_install_launcher_roll" formatted="false">"Install Launcher Roll"</string>
+    <string name="ui_installation_failed" formatted="false">"Installation failed. "</string>
+    <string name="ui_installation_permission_was_not_granted_check_for_updates_to" formatted="false">"Installation permission was not granted. Check for updates to try again."</string>
+    <string name="ui_installed_adw_nova_or_go_compatible_packs_appear_here" formatted="false">"Installed ADW, Nova or Go-compatible packs appear here. Reopen this picker after installing a pack."</string>
+    <string name="ui_installed_apps_will_appear_here" formatted="false">"Installed apps will appear here."</string>
+    <string name="ui_installed_icon_packs" formatted="false">"Installed icon packs"</string>
+    <string name="ui_installing_from_launcher_requires_wear_os_6_or_later" formatted="false">"Installing from Launcher requires Wear OS 6 or later."</string>
+    <string name="ui_integrations" formatted="false">"Integrations"</string>
+    <string name="ui_is_available" formatted="false">" is available."</string>
+    <string name="ui_is_up_to_date" formatted="false">" is up to date."</string>
+    <string name="ui_items_one_per_line" formatted="false">"Items · one per line"</string>
+    <string name="ui_its_apps_will_move_to_app_box" formatted="false">"Its apps will move to App box."</string>
+    <string name="ui_journey" formatted="false">"Journey"</string>
+    <string name="ui_keep_a_journey_and_its_boarding_pass_together_tickets" formatted="false">"Keep a journey and its boarding pass together. Tickets are entered here; Launcher does not read your email or booking accounts."</string>
+    <string name="ui_keep_a_ticket_handy" formatted="false">"Keep a ticket handy"</string>
+    <string name="ui_keep_completed_model_files" formatted="false">"Keep completed model files"</string>
+    <string name="ui_keep_launcher_visible_while_using_the_companion_the_connection" formatted="false">"Keep Launcher visible while using the companion. The connection pauses whenever you leave Launcher. Transfers are limited to 16 MB per file."</string>
+    <string name="ui_keep_messages_made_available_by_notifications_on_this_phone" formatted="false">"Keep messages made available by notifications on this phone. History is private to Launcher, retained for 30 days or 5,000 messages, and excluded from layout backups. It cannot import earlier private conversations from another app."</string>
+    <string name="ui_keep_track_of_small_tasks" formatted="false">"Keep track of small tasks"</string>
+    <string name="ui_keys_enable_inline_search_results_rss_feeds_do_not" formatted="false">"Keys enable inline search results. RSS feeds do not need a key. Keys stay on this phone and are excluded from layout backups."</string>
+    <string name="ui_kokoro_model_files" formatted="false">"Kokoro model files"</string>
+    <string name="ui_kokoro_model_files_voice_speech_download_storage" formatted="false">"Kokoro model files voice speech download storage"</string>
+    <string name="ui_kokoro_multilingual_about_350_mb" formatted="false">"Kokoro multilingual · about 350 MB"</string>
+    <string name="ui_kokoro_reads_articles_notifications_and_other_text_aloud_on" formatted="false">"Kokoro reads articles, notifications and other text aloud on this device."</string>
+    <string name="ui_kokoro_ready_value_voices" formatted="false">"Kokoro ready: {0} voices"</string>
+    <string name="ui_kokoro_speech" formatted="false">"Kokoro Speech"</string>
+    <string name="ui_kokoro_speech_2" formatted="false">"Kokoro speech"</string>
+    <string name="ui_language" formatted="false">"Language"</string>
+    <string name="ui_language_search_terms" formatted="false">"language translation locale"</string>
+    <string name="ui_large_152" formatted="false">"Large · 152"</string>
+    <string name="ui_large_320_dp" formatted="false">"Large · 320 dp"</string>
+    <string name="ui_last_7_days" formatted="false">"Last 7 days"</string>
+    <string name="ui_last_seven_days_upper" formatted="false">"LAST SEVEN DAYS"</string>
+    <string name="ui_launcher" formatted="false">"Launcher"</string>
+    <string name="ui_launcher_2" formatted="false">"Launcher "</string>
+    <string name="ui_launcher_3" formatted="false">"Launcher · "</string>
+    <string name="ui_launcher_accessibility" formatted="false">"Launcher accessibility"</string>
+    <string name="ui_launcher_can_request_android_to_lock_the_screen_using" formatted="false">"Launcher can request Android to lock the screen using its existing accessibility service."</string>
+    <string name="ui_launcher_couldn_t_reach_its_watch_companion_install_or" formatted="false">"Launcher couldn\'t reach its watch companion. Install or update Launcher for Wear OS, open it on your watch, then try again."</string>
+    <string name="ui_launcher_couldn_t_send_the_watch_face_reconnect_your" formatted="false">"Launcher couldn\'t send the watch face. Reconnect your watch and try again."</string>
+    <string name="ui_launcher_displays_current_notifications_optional_local_history_can_save" formatted="false">"Launcher displays current notifications. Optional local history can save new message notifications after you enable it."</string>
+    <string name="ui_launcher_features" formatted="false">"Launcher features"</string>
+    <string name="ui_launcher_is_your_home" formatted="false">"Launcher is your home"</string>
+    <string name="ui_launcher_roll_installed_select_it_in_your_watch_face" formatted="false">"Launcher Roll installed. Select it in your watch face picker."</string>
+    <string name="ui_launcher_roll_is_already_installed_select_it_in_your" formatted="false">"Launcher Roll is already installed. Select it in your watch face picker."</string>
+    <string name="ui_launcher_roll_is_already_up_to_date" formatted="false">"Launcher Roll is already up to date."</string>
+    <string name="ui_launcher_roll_is_available_for_first_time_setup_tap" formatted="false">"Launcher Roll is available for first-time setup. Tap Install Launcher Roll."</string>
+    <string name="ui_launcher_roll_is_up_to_date" formatted="false">"Launcher Roll is up to date."</string>
+    <string name="ui_launcher_roll_updated_on_your_watch" formatted="false">"Launcher Roll updated on your watch."</string>
+    <string name="ui_launcher_roll_value_is_available_for_value" formatted="false">"Launcher Roll {0} is available for {1}."</string>
+    <string name="ui_launcher_settings" formatted="false">"Launcher Settings"</string>
+    <string name="ui_launcher_system_panel" formatted="false">"Launcher system panel"</string>
+    <string name="ui_launcher_update" formatted="false">"Launcher update"</string>
+    <string name="ui_launcher_uses_window_change_events_to_identify_the_app" formatted="false">"Launcher uses window-change events to identify the app in front. It does not read screen content, record your activity or upload this information."</string>
+    <string name="ui_launcher_works_without_optional_permissions_enable_only_the_features" formatted="false">"Launcher works without optional permissions. Enable only the features you want."</string>
+    <string name="ui_layered_interface" formatted="false">"Layered interface"</string>
+    <string name="ui_layered_interface_off" formatted="false">"Layered interface off"</string>
+    <string name="ui_layered_interface_on" formatted="false">"Layered interface on"</string>
+    <string name="ui_layout" formatted="false">"Layout"</string>
+    <string name="ui_layout_change_undone" formatted="false">"Layout change undone."</string>
+    <string name="ui_layout_restore" formatted="false">"layout restore"</string>
+    <string name="ui_layout_saved" formatted="false">"Layout saved."</string>
+    <string name="ui_layout_saved_undo_is_available_in_edit_layout" formatted="false">"Layout saved. Undo is available in Edit layout."</string>
+    <string name="ui_leave_blank_to_allow_all_notifications_from_this_app" formatted="false">"Leave blank to allow all notifications from this app."</string>
+    <string name="ui_left" formatted="false">"Left"</string>
+    <string name="ui_left_2" formatted="false">"left"</string>
+    <string name="ui_libraries_use_recognised_app_matches_unmatched_apps_keep_their" formatted="false">"Libraries use recognised app matches. Unmatched apps keep their own icon; hold a tile to choose a specific icon."</string>
+    <string name="ui_lifestyle" formatted="false">"Lifestyle"</string>
+    <string name="ui_light" formatted="false">"Light"</string>
+    <string name="ui_light_level_lux_upper" formatted="false">"LIGHT LEVEL (LUX)"</string>
+    <string name="ui_light_sensor_available" formatted="false">"Light sensor available"</string>
+    <string name="ui_light_thin_regular_bold_fill" formatted="false">"Light, thin, regular, bold &amp; fill"</string>
+    <string name="ui_light_threshold_lux" formatted="false">"Light threshold (lux)"</string>
+    <string name="ui_link" formatted="false">"Link"</string>
+    <string name="ui_liquid_glass_cards" formatted="false">"Liquid glass cards"</string>
+    <string name="ui_listen_to_latest_news" formatted="false">"Listen to latest news"</string>
+    <string name="ui_live" formatted="false">"Live"</string>
+    <string name="ui_loading" formatted="false">"Loading…"</string>
+    <string name="ui_loading_faces" formatted="false">"Loading faces…"</string>
+    <string name="ui_loading_kokoro_model" formatted="false">"Loading Kokoro model..."</string>
+    <string name="ui_location" formatted="false">"Location"</string>
+    <string name="ui_lock_private_space" formatted="false">"Lock private space"</string>
+    <string name="ui_locked" formatted="false">", locked"</string>
+    <string name="ui_locked_2" formatted="false">"Locked"</string>
+    <string name="ui_locked_or_paused_tap_to_unlock" formatted="false">"Locked or paused · tap to unlock"</string>
+    <string name="ui_locked_private_apps_stay_out_of_drawers_and_search" formatted="false">"Locked. Private apps stay out of drawers and search."</string>
+    <string name="ui_looking_for_new_and_changed_documents" formatted="false">"Looking for new and changed documents…"</string>
+    <string name="ui_looking_for_new_and_changed_images" formatted="false">"Looking for new and changed images…"</string>
+    <string name="ui_low" formatted="false">"  /  Low "</string>
+    <string name="ui_lower_80_dp" formatted="false">"Lower · 80 dp"</string>
+    <string name="ui_make_it_yours" formatted="false">"Make it yours"</string>
+    <string name="ui_make_launcher_your_own" formatted="false">"Make Launcher your own"</string>
+    <string name="ui_manage_cards" formatted="false">"Manage cards"</string>
+    <string name="ui_manage_drawers" formatted="false">"Manage drawers"</string>
+    <string name="ui_manage_this_profile_in_android_settings" formatted="false">"Manage this profile in Android settings."</string>
+    <string name="ui_manual_only" formatted="false">"Manual only"</string>
+    <string name="ui_mark_read" formatted="false">"Mark read"</string>
+    <string name="ui_mark_unread" formatted="false">"Mark unread"</string>
+    <string name="ui_master_switch_for_app_expansion_page_and_drawer_transitions" formatted="false">"Master switch for app expansion, page and drawer transitions, scrolling effects and device tilt."</string>
+    <string name="ui_matches" formatted="false">"Matches"</string>
+    <string name="ui_matching_your_search" formatted="false">" · matching your search"</string>
+    <string name="ui_media_playback_card" formatted="false">"Media playback card"</string>
+    <string name="ui_media_player" formatted="false">"Media player"</string>
+    <string name="ui_media_volume" formatted="false">"Media volume"</string>
+    <string name="ui_media_volume_upper" formatted="false">"MEDIA VOLUME"</string>
+    <string name="ui_medium_220_dp" formatted="false">"Medium · 220 dp"</string>
+    <string name="ui_memory" formatted="false">"Memory"</string>
+    <string name="ui_memory_information_is_unavailable_on_this_device" formatted="false">"Memory information is unavailable on this device."</string>
+    <string name="ui_memory_used" formatted="false">"Memory used: "</string>
+    <string name="ui_message" formatted="false">"Message"</string>
+    <string name="ui_message_history" formatted="false">"Message history"</string>
+    <string name="ui_messages_only" formatted="false">"Messages only"</string>
+    <string name="ui_messages_only_choose_apps" formatted="false">"Messages only · choose apps"</string>
+    <string name="ui_messaging" formatted="false">"Messaging"</string>
+    <string name="ui_middle_48_dp" formatted="false">"Middle · 48 dp"</string>
+    <string name="ui_min" formatted="false">" min"</string>
+    <string name="ui_minimal_status_bar" formatted="false">"Minimal status bar"</string>
+    <string name="ui_model_and_index" formatted="false">"Model and index"</string>
+    <string name="ui_model_download_required_about_165_mb" formatted="false">"Model download required · about 165 MB"</string>
+    <string name="ui_model_download_required_about_238_mb" formatted="false">"Model download required · about 238 MB"</string>
+    <string name="ui_model_download_required_about_350_mb" formatted="false">"Model download required · about 350 MB"</string>
+    <string name="ui_model_download_required_value" formatted="false">"Model download required · {0}"</string>
+    <string name="ui_model_ready_offline_speech_available" formatted="false">"Model ready · offline speech available"</string>
+    <string name="ui_model_ready_waiting_to_index_documents" formatted="false">"Model ready · waiting to index documents"</string>
+    <string name="ui_model_ready_waiting_to_index_images" formatted="false">"Model ready · waiting to index images"</string>
+    <string name="ui_monochrome" formatted="false">"Monochrome"</string>
+    <string name="ui_monochrome_uses_themed_app_icons_where_supported_other_app" formatted="false">"Monochrome uses themed app icons where supported; other app icons remain recognisable in grayscale."</string>
+    <string name="ui_more_faces" formatted="false">"More faces"</string>
+    <string name="ui_motion_depth" formatted="false">"Motion &amp; depth"</string>
+    <string name="ui_move_apps_in_bulk" formatted="false">"Move apps in bulk"</string>
+    <string name="ui_move_apps_together" formatted="false">"Move apps together"</string>
+    <string name="ui_move_down" formatted="false">"Move down"</string>
+    <string name="ui_move_earlier" formatted="false">"Move earlier"</string>
+    <string name="ui_move_earlier_2" formatted="false">"Move earlier: "</string>
+    <string name="ui_move_later" formatted="false">"Move later"</string>
+    <string name="ui_move_later_2" formatted="false">"Move later: "</string>
+    <string name="ui_move_selected" formatted="false">"Move selected"</string>
+    <string name="ui_move_to_drawer" formatted="false">"Move to drawer"</string>
+    <string name="ui_move_up" formatted="false">"Move up"</string>
+    <string name="ui_moved" formatted="false">" moved."</string>
+    <string name="ui_music_now_playing" formatted="false">"music now playing"</string>
+    <string name="ui_mute_notification_badge" formatted="false">"Mute notification badge"</string>
+    <string name="ui_name_people" formatted="false">"Name people"</string>
+    <string name="ui_name_person" formatted="false">"Name person"</string>
+    <string name="ui_name_upper" formatted="false">"NAME"</string>
+    <string name="ui_navigation_status" formatted="false">"Navigation &amp; status"</string>
+    <string name="ui_near_32_dp" formatted="false">"Near · 32 dp"</string>
+    <string name="ui_new_and_changed_images_only_automatic_indexing_while_charging" formatted="false">"New and changed images only · automatic indexing while charging"</string>
+    <string name="ui_new_checklist" formatted="false">"New checklist"</string>
+    <string name="ui_new_drawer" formatted="false">"New drawer"</string>
+    <string name="ui_new_drawer_action" formatted="false">"+  New drawer"</string>
+    <string name="ui_new_journey" formatted="false">"New journey"</string>
+    <string name="ui_new_note_action" formatted="false">"+ New note"</string>
+    <string name="ui_new_reminder" formatted="false">"New reminder"</string>
+    <string name="ui_new_timer_action" formatted="false">"+ New timer"</string>
+    <string name="ui_newest_first" formatted="false">" · newest first"</string>
+    <string name="ui_news_feeds" formatted="false">"News &amp; feeds"</string>
+    <string name="ui_next_track" formatted="false">"Next track"</string>
+    <string name="ui_no_active_player" formatted="false">"No active player"</string>
+    <string name="ui_no_additional_accessible_profiles_android_exposes_work_profiles_and" formatted="false">"No additional accessible profiles. Android exposes work profiles and supported Private Space when Launcher is your default home."</string>
+    <string name="ui_no_ambient_light_sensor_is_available_on_this_phone" formatted="false">"No ambient-light sensor is available on this phone."</string>
+    <string name="ui_no_app_is_available_for_this_action" formatted="false">"No app is available for this action."</string>
+    <string name="ui_no_apps_are_available" formatted="false">"No apps are available."</string>
+    <string name="ui_no_apps_are_visible_restore_hidden_apps_in_settings" formatted="false">"No apps are visible. Restore hidden apps in Settings."</string>
+    <string name="ui_no_connected_watch_found_pair_your_watch_with_this" formatted="false">"No connected watch found. Pair your watch with this phone and check that it\'s connected."</string>
+    <string name="ui_no_current_notifications" formatted="false">"No current notifications."</string>
+    <string name="ui_no_extension" formatted="false">"No extension"</string>
+    <string name="ui_no_face_groups_on_this_page_yet_index_images" formatted="false">"No face groups on this page yet. Index images from Image Search to find people."</string>
+    <string name="ui_no_files_found_in_shared_storage" formatted="false">"No files found in shared storage."</string>
+    <string name="ui_no_hidden_apps_hold_an_app_tile_to_hide" formatted="false">"No hidden apps. Hold an app tile to hide it."</string>
+    <string name="ui_no_icons_match_try_a_shorter_name" formatted="false">"No icons match. Try a shorter name."</string>
+    <string name="ui_no_launcher_roll_release_is_available_yet" formatted="false">"No Launcher Roll release is available yet."</string>
+    <string name="ui_no_matches_hidden_apps_can_be_restored_in_settings" formatted="false">"No matches. Hidden apps can be restored in Settings."</string>
+    <string name="ui_no_matches_yet_checking_for_changes" formatted="false">"No matches yet · checking for changes…"</string>
+    <string name="ui_no_matching_apps" formatted="false">"No matching apps."</string>
+    <string name="ui_no_matching_filenames_image_index_pending" formatted="false">"No matching filenames · image index pending."</string>
+    <string name="ui_no_matching_files" formatted="false">"No matching files."</string>
+    <string name="ui_no_matching_locations_try_adding_a_country" formatted="false">"No matching locations. Try adding a country."</string>
+    <string name="ui_no_notifications_from_the_selected_apps_use_the_filter" formatted="false">"No notifications from the selected apps. Use the filter icon to choose which apps appear here."</string>
+    <string name="ui_no_notifications_match_your_search" formatted="false">"No notifications match your search."</string>
+    <string name="ui_no_results_returned" formatted="false">"No results returned."</string>
+    <string name="ui_no_rss_or_atom_feed_was_found_on_this" formatted="false">"No RSS or Atom feed was found on this page. Use the site\'s feed address."</string>
+    <string name="ui_no_rss_stories_are_available_refresh_your_feeds_first" formatted="false">"No RSS stories are available. Refresh your feeds first."</string>
+    <string name="ui_no_saved_content_matches_search_apps_to_include_installed" formatted="false">"No saved content matches. Search Apps to include installed apps."</string>
+    <string name="ui_no_saved_messages_yet_enable_history_then_allow_new" formatted="false">"No saved messages yet. Enable history, then allow new message notifications to arrive."</string>
+    <string name="ui_no_settings_match_value_try_theme_icon_voice_permissions" formatted="false">"No settings match “{0}”. Try theme, icon, voice, permissions or privacy."</string>
+    <string name="ui_no_stories_saved_yet_refresh_to_check_your_sources" formatted="false">"No stories saved yet. Refresh to check your sources."</string>
+    <string name="ui_no_upcoming_events_in_the_next_seven_days" formatted="false">"No upcoming events in the next seven days."</string>
+    <string name="ui_none_shown" formatted="false">"None shown"</string>
+    <string name="ui_not_collecting" formatted="false">"Not collecting"</string>
+    <string name="ui_not_configured" formatted="false">"Not configured"</string>
+    <string name="ui_not_connected_required_for_screen_locking" formatted="false">"Not connected · required for screen locking"</string>
+    <string name="ui_not_paired" formatted="false">"Not paired"</string>
+    <string name="ui_note" formatted="false">"Note"</string>
+    <string name="ui_note_title" formatted="false">"Note title"</string>
+    <string name="ui_notes" formatted="false">"Notes"</string>
+    <string name="ui_notes_card" formatted="false">"Notes card"</string>
+    <string name="ui_notes_cards_and_android_widgets" formatted="false">"Notes, cards and Android widgets"</string>
+    <string name="ui_notification_access" formatted="false">"Notification access"</string>
+    <string name="ui_notification_access_is_off_enable_timer_alerts_in_setup" formatted="false">"Notification access is off. Enable Timer alerts in Setup &amp; feature health to receive alerts."</string>
+    <string name="ui_notification_access_off" formatted="false">"Notification access off"</string>
+    <string name="ui_notification_access_on" formatted="false">"Notification access on"</string>
+    <string name="ui_notification_count_badges" formatted="false">"Notification count badges"</string>
+    <string name="ui_notification_permission_required" formatted="false">"Notification permission required"</string>
+    <string name="ui_notification_sources" formatted="false">"Notification sources"</string>
+    <string name="ui_notification_title_contains_this_text" formatted="false">"notification title contains this text. "</string>
+    <string name="ui_notification_whispers" formatted="false">"Notification whispers"</string>
+    <string name="ui_notifications" formatted="false">"Notifications"</string>
+    <string name="ui_notifications_and_exact_alarms_ready" formatted="false">"Notifications and exact alarms ready"</string>
+    <string name="ui_notifications_media" formatted="false">"Notifications &amp; media"</string>
+    <string name="ui_notifications_panels" formatted="false">"Notifications &amp; panels"</string>
+    <string name="ui_notifications_today_root_app_tiles_search_translucent_refraction_wallpaper" formatted="false">"notifications today root app tiles search translucent refraction wallpaper"</string>
+    <string name="ui_notifications_upper" formatted="false">"NOTIFICATIONS"</string>
+    <string name="ui_now_playing" formatted="false">"Now playing"</string>
+    <string name="ui_now_playing_open" formatted="false">"Now playing · open "</string>
+    <string name="ui_of" formatted="false">" of "</string>
+    <string name="ui_off" formatted="false">"Off"</string>
+    <string name="ui_off_2" formatted="false">"off"</string>
+    <string name="ui_off_choose_apps_and_senders" formatted="false">"Off · choose apps and senders"</string>
+    <string name="ui_off_controls_across_apps" formatted="false">"Off · controls across apps"</string>
+    <string name="ui_off_enable_to_show_notifications_in_launcher" formatted="false">"Off · enable to show notifications in Launcher"</string>
+    <string name="ui_off_find_files_by_what_they_say" formatted="false">"Off · find files by what they say"</string>
+    <string name="ui_off_in_appearance" formatted="false">"Off in Appearance"</string>
+    <string name="ui_off_keep_app_colours" formatted="false">"Off · keep app colours"</string>
+    <string name="ui_off_low_memory_device" formatted="false">"Off · low-memory device"</string>
+    <string name="ui_off_manual_or_system_theme" formatted="false">"Off · manual or system theme"</string>
+    <string name="ui_off_optional_local_history" formatted="false">"Off · optional local history"</string>
+    <string name="ui_off_view_download_history" formatted="false">"Off · view download history"</string>
+    <string name="ui_off_while_battery_saver_is_active" formatted="false">"Off while battery saver is active"</string>
+    <string name="ui_offline_voice_ready_playback_and_news" formatted="false">"Offline voice ready · playback and news"</string>
+    <string name="ui_on" formatted="false">"On"</string>
+    <string name="ui_on_2" formatted="false">"on"</string>
+    <string name="ui_on_3" formatted="false">" on"</string>
+    <string name="ui_on_app_display_not_icon_colour" formatted="false">"On · app display, not icon colour"</string>
+    <string name="ui_on_authenticate_to_open" formatted="false">"On · authenticate to open"</string>
+    <string name="ui_on_available_across_apps" formatted="false">"On · available across apps"</string>
+    <string name="ui_on_download_files_and_view_history" formatted="false">"On · download files and view history"</string>
+    <string name="ui_on_enable_accessibility_access" formatted="false">"On · enable accessibility access"</string>
+    <string name="ui_on_manage_in_android_settings" formatted="false">"On · manage in Android settings"</string>
+    <string name="ui_on_model_indexing_and_storage" formatted="false">"On · model, indexing and storage"</string>
+    <string name="ui_on_now" formatted="false">"On now"</string>
+    <string name="ui_on_outlined_tiles" formatted="false">"On · outlined tiles"</string>
+    <string name="ui_on_quiet_spoken_announcements" formatted="false">"On · quiet spoken announcements"</string>
+    <string name="ui_on_saving_new_messages" formatted="false">"On · saving new messages"</string>
+    <string name="ui_on_tap_to_turn_off" formatted="false">"On · tap to turn off"</string>
+    <string name="ui_on_your_agenda" formatted="false">"On your agenda"</string>
+    <string name="ui_once" formatted="false">"Once"</string>
+    <string name="ui_one_time_permission_from_your_computer" formatted="false">"One-time permission from your computer"</string>
+    <string name="ui_online_card_settings" formatted="false">"Online card settings"</string>
+    <string name="ui_online_cards" formatted="false">"Online cards"</string>
+    <string name="ui_only_continue_if_this_matches_the_fingerprint_shown_on" formatted="false">"\n\nOnly continue if this matches the fingerprint shown on your own desktop."</string>
+    <string name="ui_only_whisper_notifications_when_the_sender_or" formatted="false">"Only whisper notifications when the sender or "</string>
+    <string name="ui_open" formatted="false">"Open"</string>
+    <string name="ui_open_accessibility_settings_and_enable_launcher_system_panel" formatted="false">"Open Accessibility settings and enable *Launcher system panel*. "</string>
+    <string name="ui_open_android_settings" formatted="false">"Open Android settings"</string>
+    <string name="ui_open_app" formatted="false">"Open app"</string>
+    <string name="ui_open_app_drawer" formatted="false">"Open app drawer"</string>
+    <string name="ui_open_app_in_grayscale" formatted="false">"Open app in grayscale"</string>
+    <string name="ui_open_attachment" formatted="false">"Open attachment"</string>
+    <string name="ui_open_in_calendar" formatted="false">"Open in Calendar"</string>
+    <string name="ui_open_launcher_companion_on_a_windows_computer_on_the" formatted="false">"Open Launcher Companion on a Windows computer on the same Wi-Fi. Pair with its address and code, then compare the certificate fingerprint. Notes and shared files stay on your network."</string>
+    <string name="ui_open_launcher_controls_and_current_notifications" formatted="false">"Open Launcher controls and current notifications"</string>
+    <string name="ui_open_launcher_system_panel" formatted="false">"Open Launcher system panel"</string>
+    <string name="ui_open_panel" formatted="false">"Open panel"</string>
+    <string name="ui_open_quick_panel" formatted="false">"Open quick panel"</string>
+    <string name="ui_open_saved_conversations" formatted="false">"Open saved conversations"</string>
+    <string name="ui_open_search" formatted="false">"Open search"</string>
+    <string name="ui_open_story" formatted="false">"Open story"</string>
+    <string name="ui_openclip_fast_about_238_mb" formatted="false">"OpenCLIP Fast · about 238 MB"</string>
+    <string name="ui_openclip_fast_needs_about_238_mb_photos_are_processed" formatted="false">"OpenCLIP Fast needs about 238 MB. Photos are processed on this device. Use Wi-Fi to avoid mobile data charges."</string>
+    <string name="ui_optional_access_not_connected" formatted="false">"Optional · access not connected"</string>
+    <string name="ui_optional_calendar_access_not_connected" formatted="false">"Optional · calendar access not connected"</string>
+    <string name="ui_optional_change_system_brightness" formatted="false">"Optional · change system brightness"</string>
+    <string name="ui_optional_feed_name" formatted="false">"Optional feed name"</string>
+    <string name="ui_optional_nearby_devices_and_wi_fi_name" formatted="false">"Optional · nearby devices and Wi-Fi name"</string>
+    <string name="ui_optional_real_app_usage_and_daily_goals" formatted="false">"Optional · real app usage and daily goals"</string>
+    <string name="ui_optional_vertical_drag_on_drawer_headings_leave_off_for" formatted="false">"Optional vertical drag on drawer headings. Leave off for normal page scrolling. Tap any heading to open or close its drawer."</string>
+    <string name="ui_optional_wi_fi_and_connected_bluetooth_names" formatted="false">"Optional · Wi-Fi and connected Bluetooth names"</string>
+    <string name="ui_organise_apps" formatted="false">"Organise apps"</string>
+    <string name="ui_original" formatted="false">"Original"</string>
+    <string name="ui_other_screens" formatted="false">"% · other screens"</string>
+    <string name="ui_other_screens_2" formatted="false">"other screens"</string>
+    <string name="ui_outline_filled_brand_icons" formatted="false">"Outline, filled &amp; brand icons"</string>
+    <string name="ui_outlined_rounded_filled_sharp" formatted="false">"Outlined, rounded, filled &amp; sharp"</string>
+    <string name="ui_page_tab_buttons" formatted="false">"Page tab buttons"</string>
+    <string name="ui_page_tabs_off" formatted="false">"Page tabs off"</string>
+    <string name="ui_page_tabs_on" formatted="false">"Page tabs on"</string>
+    <string name="ui_page_transitions" formatted="false">"Page transitions"</string>
+    <string name="ui_pair_a_wear_os_6_or_later_watch_with" formatted="false">"Pair a Wear OS 6 or later watch with this phone. Install and open Launcher for Wear OS on the watch, then send the face from here."</string>
+    <string name="ui_pairing_code" formatted="false">"Pairing code"</string>
+    <string name="ui_pairing_code_upper" formatted="false">"PAIRING CODE"</string>
+    <string name="ui_pairing_failed_check_the_code_and_desktop_connection" formatted="false">"Pairing failed. Check the code and desktop connection."</string>
+    <string name="ui_panel_animations" formatted="false">"Panel animations"</string>
+    <string name="ui_panel_settings" formatted="false">"Panel settings"</string>
+    <string name="ui_panel_theme" formatted="false">"Panel theme"</string>
+    <string name="ui_paste_a_download_url" formatted="false">"Paste a download URL"</string>
+    <string name="ui_paste_an_rss_or_atom_feed_address_you_can" formatted="false">"Paste an RSS or Atom feed address. You can also use a site\'s address if it publishes a feed link."</string>
+    <string name="ui_paste_your_provider_key_leave_this_blank_to_remove" formatted="false">"Paste your provider key. Leave this blank to remove it."</string>
+    <string name="ui_pause" formatted="false">"Pause"</string>
+    <string name="ui_pause_playback" formatted="false">"Pause playback"</string>
+    <string name="ui_pause_timer" formatted="false">"Pause timer"</string>
+    <string name="ui_people" formatted="false">"People"</string>
+    <string name="ui_permissions" formatted="false">"Permissions"</string>
+    <string name="ui_permissions_notification_listener_quick_panel_conversations" formatted="false">"permissions notification listener quick panel conversations"</string>
+    <string name="ui_phone_resources" formatted="false">"Phone resources"</string>
+    <string name="ui_phone_resources_card" formatted="false">"Phone resources card"</string>
+    <string name="ui_photo_descriptions" formatted="false">"Photo descriptions"</string>
+    <string name="ui_pill_28" formatted="false">"Pill · 28"</string>
+    <string name="ui_pin_to_favorites" formatted="false">"Pin to favorites"</string>
+    <string name="ui_pin_to_top" formatted="false">"Pin to top"</string>
+    <string name="ui_pinned" formatted="false">", pinned"</string>
+    <string name="ui_place_below_android_status_bar" formatted="false">"Place below Android status bar"</string>
+    <string name="ui_play" formatted="false">"Play"</string>
+    <string name="ui_playback" formatted="false">"Playback"</string>
+    <string name="ui_playback_control_is_unavailable" formatted="false">"Playback control is unavailable."</string>
+    <string name="ui_playback_control_unavailable" formatted="false">"Playback control unavailable"</string>
+    <string name="ui_playback_controls" formatted="false">"Playback controls"</string>
+    <string name="ui_playback_position" formatted="false">"Playback position"</string>
+    <string name="ui_preparing_file_catalog" formatted="false">"Preparing file catalog…"</string>
+    <string name="ui_presets" formatted="false">"Presets"</string>
+    <string name="ui_preview_after_enabling_the_switch_and_accessibility_access" formatted="false">"Preview after enabling the switch and accessibility access"</string>
+    <string name="ui_preview_and_choose_what_to_restore" formatted="false">"Preview and choose what to restore"</string>
+    <string name="ui_previous_faces" formatted="false">"Previous faces"</string>
+    <string name="ui_previous_saved_state_available" formatted="false">"Previous saved state available"</string>
+    <string name="ui_previous_track" formatted="false">"Previous track"</string>
+    <string name="ui_privacy" formatted="false">"Privacy"</string>
+    <string name="ui_privacy_recovery" formatted="false">"Privacy &amp; recovery"</string>
+    <string name="ui_private_space" formatted="false">"Private space"</string>
+    <string name="ui_process_new_and_changed_files_automatic_indexing_while_charging" formatted="false">"Process new and changed files · automatic indexing while charging"</string>
+    <string name="ui_process_new_and_changed_images" formatted="false">"Process new and changed images"</string>
+    <string name="ui_productivity" formatted="false">"Productivity"</string>
+    <string name="ui_profiles_private_space" formatted="false">"Profiles &amp; private space"</string>
+    <string name="ui_protected_conversation_unlock_to_read" formatted="false">"Protected conversation · unlock to read"</string>
+    <string name="ui_protected_notification" formatted="false">"Protected notification"</string>
+    <string name="ui_protected_notification_titles_and_text_are_hidden_across_launcher" formatted="false">"Protected notification titles and text are hidden across Launcher and its system panel. Protected apps are excluded from new message-history collection while this is enabled. Existing history opens through authentication."</string>
+    <string name="ui_protected_previews_and_message_history" formatted="false">"Protected previews and message history"</string>
+    <string name="ui_protected_previews_backups_and_data" formatted="false">"Protected previews, backups and data"</string>
+    <string name="ui_protected_settings" formatted="false">"protected settings"</string>
+    <string name="ui_pull_down_within_the_top_of_the_tiles_screen" formatted="false">"Pull down within the top of the Tiles screen for Launcher’s quick panel. Tap the minimal status row to open it too. The screen-edge notification shade belongs to Android."</string>
+    <string name="ui_qr_code_for_this_app_s_play_store_page" formatted="false">"QR code for this app\'s Play Store page"</string>
+    <string name="ui_queue_speech" formatted="false">"Queue Speech"</string>
+    <string name="ui_queued_value" formatted="false">"Queued: {0}"</string>
+    <string name="ui_quick_access" formatted="false">"Quick access"</string>
+    <string name="ui_quick_arithmetic" formatted="false">"Quick arithmetic"</string>
+    <string name="ui_quick_panel" formatted="false">"Quick panel"</string>
+    <string name="ui_quiet_dark_surfaces" formatted="false">"Quiet, dark surfaces"</string>
+    <string name="ui_quiet_outlined_tiles" formatted="false">"Quiet outlined tiles"</string>
+    <string name="ui_quiet_outlined_tiles_distraction" formatted="false">"quiet outlined tiles distraction"</string>
+    <string name="ui_read" formatted="false">", read"</string>
+    <string name="ui_read_aloud" formatted="false">"Read aloud"</string>
+    <string name="ui_read_message_content" formatted="false">"Read message content"</string>
+    <string name="ui_read_notification" formatted="false">"Read notification"</string>
+    <string name="ui_read_rss_headlines_and_summaries_aloud" formatted="false">"Read RSS headlines and summaries aloud"</string>
+    <string name="ui_reading_cancelled" formatted="false">"Reading cancelled"</string>
+    <string name="ui_reading_preferences" formatted="false">"Reading preferences"</string>
+    <string name="ui_reading_value_value_chunks" formatted="false">"Reading {0}: {1} chunks"</string>
+    <string name="ui_reading_your_calendar" formatted="false">"Reading your calendar…"</string>
+    <string name="ui_ready" formatted="false">"Ready"</string>
+    <string name="ui_ready_follows_android_animation_settings" formatted="false">"Ready · follows Android animation settings"</string>
+    <string name="ui_ready_to_use" formatted="false">"Ready to use"</string>
+    <string name="ui_recover_previous_saved_state" formatted="false">"Recover previous saved state"</string>
+    <string name="ui_recovery" formatted="false">"Recovery"</string>
+    <string name="ui_recovery_permissions_support_battery_sensor" formatted="false">"recovery permissions support battery sensor"</string>
+    <string name="ui_refresh" formatted="false">"Refresh"</string>
+    <string name="ui_refresh_feeds" formatted="false">"Refresh feeds"</string>
+    <string name="ui_refresh_weather" formatted="false">"Refresh weather"</string>
+    <string name="ui_refreshing" formatted="false">"Refreshing…"</string>
+    <string name="ui_refreshing_feeds" formatted="false">"Refreshing feeds"</string>
+    <string name="ui_refreshing_showing_saved_stories" formatted="false">"Refreshing · showing saved stories"</string>
+    <string name="ui_remaining" formatted="false">"Remaining"</string>
+    <string name="ui_reminder" formatted="false">"Reminder"</string>
+    <string name="ui_reminder_action" formatted="false">"+ Reminder"</string>
+    <string name="ui_reminders" formatted="false">"Reminders"</string>
+    <string name="ui_remove" formatted="false">"Remove"</string>
+    <string name="ui_remove_2" formatted="false">"Remove "</string>
+    <string name="ui_remove_a_card_before_adding_another" formatted="false">"Remove a card before adding another."</string>
+    <string name="ui_remove_an_app_before_adding_another" formatted="false">"Remove an app before adding another."</string>
+    <string name="ui_remove_card" formatted="false">"Remove card"</string>
+    <string name="ui_remove_data" formatted="false">"Remove data"</string>
+    <string name="ui_remove_document_search_data" formatted="false">"Remove document search data?"</string>
+    <string name="ui_remove_drawer" formatted="false">"Remove drawer"</string>
+    <string name="ui_remove_face_groups_and_names_from_launcher" formatted="false">"Remove face groups and names from Launcher"</string>
+    <string name="ui_remove_feed" formatted="false">"Remove feed"</string>
+    <string name="ui_remove_feed_2" formatted="false">"Remove feed?"</string>
+    <string name="ui_remove_from_saved" formatted="false">"Remove from saved"</string>
+    <string name="ui_remove_image_search_data" formatted="false">"Remove image search data"</string>
+    <string name="ui_remove_image_search_data_2" formatted="false">"Remove image search data?"</string>
+    <string name="ui_remove_journey" formatted="false">"Remove journey"</string>
+    <string name="ui_remove_journey_2" formatted="false">"Remove journey?"</string>
+    <string name="ui_remove_kokoro_model" formatted="false">"Remove Kokoro model?"</string>
+    <string name="ui_remove_model" formatted="false">"Remove model"</string>
+    <string name="ui_remove_model_and_index" formatted="false">"Remove model and index"</string>
+    <string name="ui_remove_model_files" formatted="false">"Remove model files"</string>
+    <string name="ui_remove_shortcut" formatted="false">"Remove shortcut"</string>
+    <string name="ui_remove_shortcut_2" formatted="false">"Remove shortcut?"</string>
+    <string name="ui_remove_the_panel_and_disconnect_its_service" formatted="false">"Remove the panel and disconnect its service"</string>
+    <string name="ui_remove_this_card_and_its_content" formatted="false">"Remove this card and its content?"</string>
+    <string name="ui_remove_this_card_the_original_attachment_stays_where_it" formatted="false">"Remove this card? The original attachment stays where it is."</string>
+    <string name="ui_remove_this_shortcut_from_launcher_the_app_stays_installed" formatted="false">"Remove this shortcut from Launcher? The app stays installed."</string>
+    <string name="ui_remove_value_data" formatted="false">"Remove {0} data?"</string>
+    <string name="ui_remove_widget" formatted="false">"Remove widget"</string>
+    <string name="ui_removing_model_and_image_index" formatted="false">"Removing model and image index…"</string>
+    <string name="ui_removing_model_and_index" formatted="false">"Removing model and index…"</string>
+    <string name="ui_removing_model_files" formatted="false">"Removing model files…"</string>
+    <string name="ui_rename" formatted="false">"Rename"</string>
+    <string name="ui_repeat" formatted="false">"Repeat"</string>
+    <string name="ui_repeat_2" formatted="false">"Repeat · "</string>
+    <string name="ui_repeat_reminder" formatted="false">"Repeat reminder"</string>
+    <string name="ui_reply" formatted="false">"Reply"</string>
+    <string name="ui_reply_passed_to_the_app" formatted="false">"Reply passed to the app."</string>
+    <string name="ui_reply_sent" formatted="false">"Reply sent"</string>
+    <string name="ui_reply_to" formatted="false">"Reply to "</string>
+    <string name="ui_reply_unavailable_open_the_app_to_continue" formatted="false">"Reply unavailable. Open the app to continue."</string>
+    <string name="ui_required_access" formatted="false">"Required access"</string>
+    <string name="ui_required_enable_launcher_system_panel" formatted="false">"Required · enable Launcher system panel"</string>
+    <string name="ui_required_for_notifications_and_media" formatted="false">"Required for notifications and media"</string>
+    <string name="ui_reset" formatted="false">"Reset"</string>
+    <string name="ui_reset_to_default" formatted="false">"Reset to default"</string>
+    <string name="ui_resize_app_icons_inside_standard_and_expanded_tiles_icons" formatted="false">"Resize app icons inside standard and expanded tiles. Icons fit the available space; tile dimensions and grid spacing stay the same."</string>
+    <string name="ui_restore" formatted="false">"Restore "</string>
+    <string name="ui_restore_a_backup" formatted="false">"Restore a backup"</string>
+    <string name="ui_restore_hidden_cards" formatted="false">"Restore hidden cards"</string>
+    <string name="ui_restore_layout" formatted="false">"Restore layout"</string>
+    <string name="ui_restore_original_icon" formatted="false">"Restore original icon"</string>
+    <string name="ui_restore_selected" formatted="false">"Restore selected"</string>
+    <string name="ui_restore_selected_content" formatted="false">"Restore selected content"</string>
+    <string name="ui_results" formatted="false">"Results"</string>
+    <string name="ui_resume" formatted="false">"Resume"</string>
+    <string name="ui_resume_playback" formatted="false">"Resume playback"</string>
+    <string name="ui_review_before_restoring" formatted="false">"Review before restoring"</string>
+    <string name="ui_right" formatted="false">"Right"</string>
+    <string name="ui_root" formatted="false">"Root"</string>
+    <string name="ui_root_cards" formatted="false">"Root cards"</string>
+    <string name="ui_root_has_editable_notes_calendar_calculator_a_focus_timer" formatted="false">"Root has editable notes, calendar, calculator, a focus timer and support for your installed Android widgets."</string>
+    <string name="ui_rotation_sensor_available" formatted="false">"Rotation sensor available"</string>
+    <string name="ui_round_20" formatted="false">"Round · 20"</string>
+    <string name="ui_route" formatted="false">"Route"</string>
+    <string name="ui_rss_feeds" formatted="false">"RSS feeds"</string>
+    <string name="ui_rss_sources_in_one_card" formatted="false">"RSS sources in one card"</string>
+    <string name="ui_rss_web_search_and_youtube" formatted="false">"RSS, web search and YouTube"</string>
+    <string name="ui_run" formatted="false">"Run: "</string>
+    <string name="ui_running_timer" formatted="false">"Running timer"</string>
+    <string name="ui_save" formatted="false">"Save"</string>
+    <string name="ui_save_a_file_from_a_direct_link_to_downloads" formatted="false">"Save a file from a direct link to Downloads."</string>
+    <string name="ui_save_a_link" formatted="false">"Save a link"</string>
+    <string name="ui_save_calendars" formatted="false">"Save calendars"</string>
+    <string name="ui_save_changes" formatted="false">"Save changes"</string>
+    <string name="ui_save_checklist" formatted="false">"Save checklist"</string>
+    <string name="ui_save_feed" formatted="false">"Save feed"</string>
+    <string name="ui_save_for_later" formatted="false">"Save for later"</string>
+    <string name="ui_save_journey" formatted="false">"Save journey"</string>
+    <string name="ui_save_layout" formatted="false">"Save layout"</string>
+    <string name="ui_save_note" formatted="false">"Save note"</string>
+    <string name="ui_save_reminder" formatted="false">"Save reminder"</string>
+    <string name="ui_saved_conversations" formatted="false">"Saved conversations"</string>
+    <string name="ui_saved_history_cleared" formatted="false">"Saved history cleared."</string>
+    <string name="ui_saved_locally_as_a_note_nothing_is_uploaded" formatted="false">"Saved locally as a note. Nothing is uploaded."</string>
+    <string name="ui_saved_stories" formatted="false">"Saved stories"</string>
+    <string name="ui_saved_to_downloads" formatted="false">"Saved to Downloads"</string>
+    <string name="ui_saves_replace_the_state_file_atomically_and_keep_a" formatted="false">"Saves replace the state file atomically and keep a previous valid copy. Layout backups exclude API keys, pairing credentials and message history."</string>
+    <string name="ui_scan_to_open_the_app_on_google_play_apps" formatted="false">"Scan to open the app on Google Play. Apps installed from other sources may not have a listing."</string>
+    <string name="ui_screen_brightness" formatted="false">"Screen brightness"</string>
+    <string name="ui_screen_gestures" formatted="false">"Screen gestures"</string>
+    <string name="ui_screen_lock_authentication_available" formatted="false">"Screen-lock authentication available"</string>
+    <string name="ui_screen_lock_authentication_is_unavailable" formatted="false">"Screen lock authentication is unavailable."</string>
+    <string name="ui_screen_lock_tap_double_tap_accessibility" formatted="false">"screen lock tap double tap accessibility"</string>
+    <string name="ui_screen_locking" formatted="false">"Screen locking"</string>
+    <string name="ui_screen_time" formatted="false">"screen time"</string>
+    <string name="ui_search" formatted="false">"Search"</string>
+    <string name="ui_search_aliases" formatted="false">"Search aliases"</string>
+    <string name="ui_search_apps" formatted="false">"Search apps"</string>
+    <string name="ui_search_by_person" formatted="false">"Search by person"</string>
+    <string name="ui_search_document_filenames_or_indexed_passages" formatted="false">"Search document filenames or indexed passages."</string>
+    <string name="ui_search_documents_by_meaning" formatted="false">"Search documents by meaning"</string>
+    <string name="ui_search_filenames_or_indexed_content" formatted="false">"Search filenames or indexed content."</string>
+    <string name="ui_search_files" formatted="false">"Search files"</string>
+    <string name="ui_search_for_a_city_or_town" formatted="false">"Search for a city or town"</string>
+    <string name="ui_search_for_a_city_or_town_2" formatted="false">"Search for a city or town."</string>
+    <string name="ui_search_hold_for_launcher_controls" formatted="false">"Search; hold for launcher controls"</string>
+    <string name="ui_search_icons_by_name" formatted="false">"Search icons by name"</string>
+    <string name="ui_search_image_filenames_or_indexed_photos" formatted="false">"Search image filenames or indexed photos."</string>
+    <string name="ui_search_in_files_using_a_description_such_as_dog" formatted="false">"Search in Files using a description such as “dog on a couch”. Model files and the image index are stored on this device."</string>
+    <string name="ui_search_in_files_using_a_description_such_as_the" formatted="false">"Search in Files using a description such as “the lease clause about pets”. Supports PDF files with selectable text, DOCX, TXT, Markdown and CSV."</string>
+    <string name="ui_search_notifications" formatted="false">"Search notifications"</string>
+    <string name="ui_search_photos_by_description" formatted="false">"Search photos by description"</string>
+    <string name="ui_search_providers_upper" formatted="false">"SEARCH PROVIDERS"</string>
+    <string name="ui_search_settings" formatted="false">"Search settings"</string>
+    <string name="ui_search_shared_storage_on_this_device" formatted="false">"Search shared storage on this device"</string>
+    <string name="ui_search_text_inside_images" formatted="false">"Search text inside images"</string>
+    <string name="ui_search_today_or_enter_a_command" formatted="false">"Search Today or enter a command"</string>
+    <string name="ui_search_your_installed_apps" formatted="false">"Search your installed apps"</string>
+    <string name="ui_search_your_workspace" formatted="false">"Search your workspace"</string>
+    <string name="ui_searching_locations" formatted="false">"Searching locations…"</string>
+    <string name="ui_seconds" formatted="false">" seconds"</string>
+    <string name="ui_see_upcoming_events_from_calendars_you_choose_calendar_data" formatted="false">"See upcoming events from calendars you choose. Calendar data stays on this device."</string>
+    <string name="ui_select_all" formatted="false">"Select all"</string>
+    <string name="ui_select_apps_below_optionally_add_a_sender_or_title" formatted="false">"Select apps below. Optionally add a sender or title "</string>
+    <string name="ui_select_at_least_one_app" formatted="false">"Select at least one app."</string>
+    <string name="ui_select_location" formatted="false">"Select location"</string>
+    <string name="ui_select_the_apps_in_this_drawer" formatted="false">"Select the apps in this drawer"</string>
+    <string name="ui_selected" formatted="false">", selected"</string>
+    <string name="ui_selected_apps_message_contents_are_never_read_aloud" formatted="false">"*selected apps*. Message contents are never read aloud."</string>
+    <string name="ui_selected_content_restored" formatted="false">"Selected content restored."</string>
+    <string name="ui_selected_tap_to_change" formatted="false">"Selected · tap to change"</string>
+    <string name="ui_send" formatted="false">"Send"</string>
+    <string name="ui_send_reply" formatted="false">"Send reply"</string>
+    <string name="ui_sending_launcher_roll_to_your_watch" formatted="false">"Sending Launcher Roll to your watch…"</string>
+    <string name="ui_sensor_available_enable_automatic_switching" formatted="false">"Sensor available · enable automatic switching"</string>
+    <string name="ui_set_a_daily_goal_below_for_a_mindful_launch" formatted="false">"Set a daily goal below for a mindful launch reminder."</string>
+    <string name="ui_set_a_date_and_time" formatted="false">"Set a date and time"</string>
+    <string name="ui_set_a_duration" formatted="false">"Set a duration"</string>
+    <string name="ui_set_default_home_device_access" formatted="false">"Set default Home · device access"</string>
+    <string name="ui_set_location" formatted="false">"Set location"</string>
+    <string name="ui_set_up_a_screen_lock_and_biometrics_in_android" formatted="false">"Set up a screen lock and biometrics in Android settings first."</string>
+    <string name="ui_set_up_and_install_launcher_roll_on_your_watch" formatted="false">"Set up and install Launcher Roll on your watch"</string>
+    <string name="ui_set_up_your_home" formatted="false">"Set up your home"</string>
+    <string name="ui_settings" formatted="false">"Settings"</string>
+    <string name="ui_setup_complete_per_app_grayscale_choices_are_ready_for" formatted="false">"Setup complete. Per-app grayscale choices are ready for you to try."</string>
+    <string name="ui_setup_feature_health" formatted="false">"Setup &amp; feature health"</string>
+    <string name="ui_setup_permissions" formatted="false">"Setup &amp; permissions"</string>
+    <string name="ui_share_an_http_or_https_file_link" formatted="false">"Share an HTTP or HTTPS file link."</string>
+    <string name="ui_share_app" formatted="false">"Share app"</string>
+    <string name="ui_share_link" formatted="false">"Share link"</string>
+    <string name="ui_share_links_transfer_file_history" formatted="false">"share links transfer file history"</string>
+    <string name="ui_share_text_or_a_link_to_capture_it_in" formatted="false">"Share text or a link to capture it in Launcher."</string>
+    <string name="ui_shared_folder" formatted="false">"Shared folder"</string>
+    <string name="ui_shortcut" formatted="false">"Shortcut"</string>
+    <string name="ui_show_app" formatted="false">"Show app"</string>
+    <string name="ui_show_article_images" formatted="false">"Show article images"</string>
+    <string name="ui_show_battery_on_home" formatted="false">"Show battery on home"</string>
+    <string name="ui_show_connected_names" formatted="false">"Show connected names"</string>
+    <string name="ui_show_more" formatted="false">"Show more"</string>
+    <string name="ui_show_more_icons" formatted="false">"Show more icons"</string>
+    <string name="ui_show_page_tabs" formatted="false">"Show page tabs"</string>
+    <string name="ui_show_private_space_in_apps" formatted="false">"Show Private Space in Apps"</string>
+    <string name="ui_show_status_strip" formatted="false">"Show status strip"</string>
+    <string name="ui_show_usage_time" formatted="false">"Show usage time"</string>
+    <string name="ui_showing_saved_stories" formatted="false">" Showing saved stories."</string>
+    <string name="ui_skip_chunk" formatted="false">"Skip Chunk"</string>
+    <string name="ui_skipping_current_chunk" formatted="false">"Skipping current chunk"</string>
+    <string name="ui_small_140_dp" formatted="false">"Small · 140 dp"</string>
+    <string name="ui_social" formatted="false">"Social"</string>
+    <string name="ui_soft_12" formatted="false">"Soft · 12"</string>
+    <string name="ui_soft_light_theme" formatted="false">"Soft light theme"</string>
+    <string name="ui_sound" formatted="false">"Sound"</string>
+    <string name="ui_sound_first" formatted="false">"Sound first"</string>
+    <string name="ui_sources" formatted="false">"Sources"</string>
+    <string name="ui_sources_panels" formatted="false">"Sources &amp; panels"</string>
+    <string name="ui_spacious_132" formatted="false">"Spacious · 132"</string>
+    <string name="ui_speaking_speed_0_5x_to_2_0x" formatted="false">"Speaking speed: 0.5x to 2.0x"</string>
+    <string name="ui_speech_audio" formatted="false">"Speech &amp; audio"</string>
+    <string name="ui_speech_error_value" formatted="false">"Speech error: {0}"</string>
+    <string name="ui_speech_paused" formatted="false">"Speech paused"</string>
+    <string name="ui_speech_resumed" formatted="false">"Speech resumed"</string>
+    <string name="ui_speech_stopped" formatted="false">"Speech stopped"</string>
+    <string name="ui_speech_voice_spoken_alerts" formatted="false">"speech voice spoken alerts"</string>
+    <string name="ui_square" formatted="false">"Square"</string>
+    <string name="ui_start" formatted="false">"Start"</string>
+    <string name="ui_start_playback_in_a_media_app_to_show_its" formatted="false">"Start playback in a media app to show its controls."</string>
+    <string name="ui_start_timer" formatted="false">"Start timer"</string>
+    <string name="ui_state" formatted="false">"State"</string>
+    <string name="ui_status_row_position" formatted="false">"Status row position"</string>
+    <string name="ui_stop_and_clear_queue" formatted="false">"Stop and Clear Queue"</string>
+    <string name="ui_stop_collecting_messages" formatted="false">"Stop collecting messages"</string>
+    <string name="ui_stop_downloading_the_model" formatted="false">"Stop downloading the model"</string>
+    <string name="ui_stop_sharing_folder" formatted="false">"Stop sharing folder"</string>
+    <string name="ui_stop_this_installation" formatted="false">"Stop this installation"</string>
+    <string name="ui_storage" formatted="false">"Storage"</string>
+    <string name="ui_storage_information_is_unavailable_on_this_device" formatted="false">"Storage information is unavailable on this device."</string>
+    <string name="ui_storage_used" formatted="false">"Storage used: "</string>
+    <string name="ui_story_count_upper" formatted="false">"STORY COUNT"</string>
+    <string name="ui_strong_80" formatted="false">"Strong · 80%"</string>
+    <string name="ui_studio" formatted="false">"Studio"</string>
+    <string name="ui_style" formatted="false">" style"</string>
+    <string name="ui_subtle_35" formatted="false">"Subtle · 35%"</string>
+    <string name="ui_subtle_6" formatted="false">"Subtle · 6"</string>
+    <string name="ui_subtle_movement_from_the_phone_rotation_sensor_it_pauses" formatted="false">"Subtle movement from the phone rotation sensor. It pauses while touching the screen."</string>
+    <string name="ui_sun" formatted="false">"Sun"</string>
+    <string name="ui_surface_opacity" formatted="false">"Surface opacity"</string>
+    <string name="ui_swipe_right_for_root_swipe_left_for_conversations_the" formatted="false">"Swipe right for Root; swipe left for Conversations. The menu inside search also opens Root, Apps and Notifications."</string>
+    <string name="ui_swipe_right_on_home" formatted="false">"Swipe right on Home"</string>
+    <string name="ui_swipe_up_to_close_system_panel" formatted="false">"Swipe up to close system panel"</string>
+    <string name="ui_switch_to_app_search" formatted="false">"Switch to app search"</string>
+    <string name="ui_switch_to_dark" formatted="false">"Switch to Dark"</string>
+    <string name="ui_switch_to_download" formatted="false">"Switch to download"</string>
+    <string name="ui_switch_to_file_search" formatted="false">"Switch to file search"</string>
+    <string name="ui_switch_to_light" formatted="false">"Switch to Light"</string>
+    <string name="ui_switching_delay" formatted="false">"Switching delay"</string>
+    <string name="ui_symbols_libraries_installed_packs" formatted="false">"Symbols, libraries &amp; installed packs"</string>
+    <string name="ui_system_default" formatted="false">"System default"</string>
+    <string name="ui_system_panel" formatted="false">"System panel"</string>
+    <string name="ui_system_total" formatted="false">"System total"</string>
+    <string name="ui_tall_440_dp" formatted="false">"Tall · 440 dp"</string>
+    <string name="ui_tap_a_drawer_heading_to_expand_it_hold_it" formatted="false">"Tap a drawer heading to expand it. Hold it to rename, reorder or choose its apps."</string>
+    <string name="ui_tap_a_face_to_name_the_person_then_use" formatted="false">"Tap a face to name the person. Then use that name in Files."</string>
+    <string name="ui_tap_an_app_to_open_it_hold_an_app" formatted="false">"Tap an app to open it. Hold an app to move, rename, pin, highlight, expand, hide or set a daily usage goal."</string>
+    <string name="ui_tap_to_show" formatted="false">"Tap to show"</string>
+    <string name="ui_tapping_app_icons_widgets_and_other_controls_will_continue" formatted="false">"Tapping app icons, widgets and other controls will continue working normally."</string>
+    <string name="ui_temperature_is_reported_by_the_battery_sensor_it_is" formatted="false">"Temperature is reported by the battery sensor. It is not a CPU temperature reading."</string>
+    <string name="ui_temperature_units" formatted="false">"Temperature units"</string>
+    <string name="ui_test_screen_lock" formatted="false">"Test screen lock"</string>
+    <string name="ui_the_feed_returned_invalid_xml_check_its_address_or" formatted="false">"The feed returned invalid XML. Check its address or try again later."</string>
+    <string name="ui_the_feed_server_returned_value_try_again_later_or" formatted="false">"The feed server returned {0}. Try again later or edit the address."</string>
+    <string name="ui_the_first_five_visible_favorites_appear_in_the_dock" formatted="false">"The first five visible favorites appear in the dock. Pinning also brings apps to the top of their drawer."</string>
+    <string name="ui_the_google_app_is_unavailable_opening_today" formatted="false">"The Google app is unavailable. Opening Today."</string>
+    <string name="ui_the_handle_uses_only_its_small_visible_area_the" formatted="false">"The handle uses only its small visible area. The strip does not accept touches. Android navigation stays available. The panel hides when the phone locks, the screen turns off or Android opens protected system controls. Samsung behaviour still needs device verification."</string>
+    <string name="ui_the_light_level_must_stay_beyond_a_threshold_for" formatted="false">"The light level must stay beyond a threshold for the chosen delay. Separate Light and Dark thresholds prevent rapid switching. Choosing a theme manually turns automatic switching off."</string>
+    <string name="ui_the_light_threshold_must_be_higher_than_the_dark" formatted="false">"The Light threshold must be higher than the Dark threshold."</string>
+    <string name="ui_the_note_limit_is_200" formatted="false">"The note limit is 200."</string>
+    <string name="ui_the_note_limit_is_200_export_or_remove_a" formatted="false">"The note limit is 200. Export or remove a note first."</string>
+    <string name="ui_the_optional_status_strip_draws_over_other_apps_below" formatted="false">"The optional status strip draws over other apps. Below-bar placement can cover app headers; turn it off if it gets in the way. Top placement leaves Android’s right-hand indicator area visible."</string>
+    <string name="ui_the_reminder_limit_is_200" formatted="false">"The reminder limit is 200."</string>
+    <string name="ui_the_saved_story_limit_is_200" formatted="false">"The saved-story limit is 200."</string>
+    <string name="ui_the_sensor_could_not_start_toggle_automatic_switching_off" formatted="false">"The sensor could not start. Toggle automatic switching off and on."</string>
+    <string name="ui_the_sensor_is_used_only_while_launcher_is_visible" formatted="false">"The sensor is used only while Launcher is visible. No camera, photos, location or background polling is used. Brightness is a light-level signal, not a reliable indoor/outdoor classification."</string>
+    <string name="ui_the_server_returned_http_value" formatted="false">"The server returned HTTP {0}."</string>
+    <string name="ui_the_shortcut_limit_is_200" formatted="false">"The shortcut limit is 200."</string>
+    <string name="ui_the_timer_limit_is_20" formatted="false">"The timer limit is 20."</string>
+    <string name="ui_the_widget_limit_is_20" formatted="false">"The widget limit is 20."</string>
+    <string name="ui_theme" formatted="false">"Theme"</string>
+    <string name="ui_theme_effects" formatted="false">"Theme &amp; effects"</string>
+    <string name="ui_theme_wallpaper" formatted="false">"Theme &amp; wallpaper"</string>
+    <string name="ui_then_return_here_android_does_not_offer_a_normal" formatted="false">"Then return here. Android does not offer a normal permission popup for changing display colours."</string>
+    <string name="ui_there_are_no_layout_changes_to_undo_in_this" formatted="false">"There are no layout changes to undo in this session."</string>
+    <string name="ui_this_address_does_not_return_a_recognised_rss_or" formatted="false">"This address does not return a recognised RSS or Atom feed."</string>
+    <string name="ui_this_address_returns_a_web_page_not_an_rss" formatted="false">"This address returns a web page, not an RSS or Atom feed. Edit the feed address."</string>
+    <string name="ui_this_app_cannot_be_opened" formatted="false">"This app cannot be opened"</string>
+    <string name="ui_this_app_is_no_longer_available" formatted="false">"This app is no longer available."</string>
+    <string name="ui_this_changes_multiple_appearance_settings" formatted="false">"This changes multiple appearance settings."</string>
+    <string name="ui_this_control_is_unavailable_on_this_device" formatted="false">"This control is unavailable on this device"</string>
+    <string name="ui_this_downloaded_file_is_no_longer_available" formatted="false">"This downloaded file is no longer available."</string>
+    <string name="ui_this_feed_exceeds_the_4_mb_size_limit" formatted="false">"This feed exceeds the 4 MB size limit."</string>
+    <string name="ui_this_feed_redirects_to_an_unencrypted_address_use_its" formatted="false">"This feed redirects to an unencrypted address. Use its HTTPS feed address."</string>
+    <string name="ui_this_feed_redirects_too_many_times_edit_its_address" formatted="false">"This feed redirects too many times. Edit its address."</string>
+    <string name="ui_this_file_is_no_longer_available" formatted="false">"This file is no longer available."</string>
+    <string name="ui_this_is_the_internal_data_volume_used_by_apps" formatted="false">"This is the internal data volume used by apps, rather than the device\'s advertised capacity. Space reserved by Android is included in the unavailable portion."</string>
+    <string name="ui_this_notification_has_no_readable_message" formatted="false">"This notification has no readable message."</string>
+    <string name="ui_this_notification_no_longer_has_an_available_app_screen" formatted="false">"This notification no longer has an available app screen."</string>
+    <string name="ui_this_notification_stays_until_its_app_clears_it" formatted="false">"This notification stays until its app clears it"</string>
+    <string name="ui_this_pack_does_not_expose_a_readable_icon_list" formatted="false">"This pack does not expose a readable icon list."</string>
+    <string name="ui_this_pack_has_no_browsable_icons_choose_another_library" formatted="false">"This pack has no browsable icons. Choose another library or pack."</string>
+    <string name="ui_this_phone_does_not_provide_a_rotation_sensor" formatted="false">"This phone does not provide a rotation sensor."</string>
+    <string name="ui_this_phone_does_not_report_an_ambient_light_sensor" formatted="false">"This phone does not report an ambient-light sensor."</string>
+    <string name="ui_this_pin_request_expired_request_it_again_from_the" formatted="false">"This pin request expired. Request it again from the source app."</string>
+    <string name="ui_this_player_does_not_expose_an_app_screen" formatted="false">"This player does not expose an app screen."</string>
+    <string name="ui_this_profile_is_no_longer_available" formatted="false">"This profile is no longer available."</string>
+    <string name="ui_this_recovery_point_could_not_be_read" formatted="false">"This recovery point could not be read."</string>
+    <string name="ui_this_removes_the_face_model_face_groups_and_saved" formatted="false">"This removes the face model, face groups and saved names from Launcher."</string>
+    <string name="ui_this_removes_the_text_model_and_recognized_text_index" formatted="false">"This removes the text model and recognized text index from Launcher."</string>
+    <string name="ui_this_reply_action_is_no_longer_available_open_the" formatted="false">"This reply action is no longer available. Open the app to reply."</string>
+    <string name="ui_this_shortcut_is_no_longer_available" formatted="false">"This shortcut is no longer available."</string>
+    <string name="ui_this_story_has_no_readable_text" formatted="false">"This story has no readable text."</string>
+    <string name="ui_this_time_is_skipped_by_daylight_saving_choose_another" formatted="false">"This time is skipped by daylight saving. Choose another time."</string>
+    <string name="ui_this_turns_off_document_search_and_removes_its_downloaded" formatted="false">"This turns off document search and removes its downloaded model and passage index."</string>
+    <string name="ui_this_turns_off_image_search_and_removes_the_downloaded" formatted="false">"This turns off image search and removes the downloaded model and index from Launcher."</string>
+    <string name="ui_this_widget_is_unavailable_hold_its_header_to_remove" formatted="false">"This widget is unavailable. Hold its header to remove it."</string>
+    <string name="ui_this_widget_request_expired" formatted="false">"This widget request expired."</string>
+    <string name="ui_tickets" formatted="false">"Tickets"</string>
+    <string name="ui_tile_appearance" formatted="false">"Tile appearance"</string>
+    <string name="ui_tile_corners" formatted="false">"Tile corners"</string>
+    <string name="ui_tile_height" formatted="false">"Tile height"</string>
+    <string name="ui_tile_icon_size" formatted="false">"Tile icon size"</string>
+    <string name="ui_tile_names_text" formatted="false">"tile names text"</string>
+    <string name="ui_tiles_icons" formatted="false">"Tiles &amp; icons"</string>
+    <string name="ui_tilt_depth" formatted="false">"Tilt depth"</string>
+    <string name="ui_tilt_depth_is_unavailable_on_this_device_other_effects" formatted="false">"Tilt depth is unavailable on this device; other effects still work."</string>
+    <string name="ui_time" formatted="false">"Time"</string>
+    <string name="ui_time_2" formatted="false">"Time · "</string>
+    <string name="ui_timer" formatted="false">"Timer"</string>
+    <string name="ui_timer_alerts" formatted="false">"Timer alerts"</string>
+    <string name="ui_timer_alerts_are_available_check_android_notification_settings_if" formatted="false">"Timer alerts are available. Check Android notification settings if alerts are silent."</string>
+    <string name="ui_timer_duration" formatted="false">"Timer duration"</string>
+    <string name="ui_timer_finished" formatted="false">"Timer finished"</string>
+    <string name="ui_timers" formatted="false">"Timers"</string>
+    <string name="ui_title" formatted="false">"Title"</string>
+    <string name="ui_title_contains" formatted="false">"Title contains: "</string>
+    <string name="ui_today" formatted="false">"Today"</string>
+    <string name="ui_today_2" formatted="false">"Today · "</string>
+    <string name="ui_today_agenda_calendar_checklists_reminders_cards_widgets" formatted="false">"today agenda calendar checklists reminders cards widgets"</string>
+    <string name="ui_today_cards" formatted="false">"Today cards"</string>
+    <string name="ui_today_cards_settings" formatted="false">"Today cards settings"</string>
+    <string name="ui_today_layout_saved" formatted="false">"Today layout saved"</string>
+    <string name="ui_today_upper" formatted="false">"TODAY"</string>
+    <string name="ui_top" formatted="false">"Top"</string>
+    <string name="ui_top_corners" formatted="false">"Top corners"</string>
+    <string name="ui_touch_glow" formatted="false">"Touch glow"</string>
+    <string name="ui_try_the_current_setting_off_disables_launchers_own_tap" formatted="false">"Try the current setting. Off disables Launcher’s own tap, touch-and-hold and selection feedback. Keyboard, widget-provider and Android system feedback are controlled separately."</string>
+    <string name="ui_turn_off_service_and_restore_colours" formatted="false">"Turn off service and restore colours"</string>
+    <string name="ui_type_a_command" formatted="false">"Type a command"</string>
+    <string name="ui_type_a_document_filename_to_search" formatted="false">"Type a document filename to search."</string>
+    <string name="ui_type_a_filename_to_search" formatted="false">"Type a filename to search."</string>
+    <string name="ui_type_an_image_filename_to_search" formatted="false">"Type an image filename to search."</string>
+    <string name="ui_unable_to_lock_the_screen_check_launcher_accessibility_access" formatted="false">"Unable to lock the screen. Check Launcher accessibility access."</string>
+    <string name="ui_unavailable" formatted="false">"Unavailable"</string>
+    <string name="ui_unavailable_2" formatted="false">"unavailable"</string>
+    <string name="ui_unavailable_app" formatted="false">"Unavailable app"</string>
+    <string name="ui_unavailable_for_this_player" formatted="false">" unavailable for this player"</string>
+    <string name="ui_unavailable_no_light_sensor" formatted="false">"Unavailable · no light sensor"</string>
+    <string name="ui_unavailable_no_rotation_sensor" formatted="false">"Unavailable · no rotation sensor"</string>
+    <string name="ui_unavailable_set_an_android_screen_lock" formatted="false">"Unavailable · set an Android screen lock"</string>
+    <string name="ui_undo" formatted="false">"Undo"</string>
+    <string name="ui_undo_last_layout_change" formatted="false">"Undo last layout change"</string>
+    <string name="ui_unlock" formatted="false">"Unlock "</string>
+    <string name="ui_unlock_in_launcher_to_open" formatted="false">"Unlock in Launcher to open."</string>
+    <string name="ui_unlock_private_space" formatted="false">"Unlock private space"</string>
+    <string name="ui_unlock_to_open_this_notification" formatted="false">"Unlock to open this notification."</string>
+    <string name="ui_unlock_your_phone_before_reading_messages" formatted="false">"Unlock your phone before reading messages."</string>
+    <string name="ui_unlock_your_phone_first" formatted="false">"Unlock your phone first."</string>
+    <string name="ui_unlock_your_phone_to_see_notifications" formatted="false">"Unlock your phone to see notifications."</string>
+    <string name="ui_unlock_your_phone_to_view_message_previews" formatted="false">"Unlock your phone to view message previews."</string>
+    <string name="ui_unlocked" formatted="false">"Unlocked"</string>
+    <string name="ui_unpin" formatted="false">"Unpin"</string>
+    <string name="ui_unread_counts_tile_dots" formatted="false">"unread counts tile dots"</string>
+    <string name="ui_unread_stories_only" formatted="false">"Unread stories only"</string>
+    <string name="ui_update_check_cancelled" formatted="false">"Update check cancelled."</string>
+    <string name="ui_update_download_cancelled" formatted="false">"Update download cancelled."</string>
+    <string name="ui_update_launcher_roll" formatted="false">"Update Launcher Roll"</string>
+    <string name="ui_updated" formatted="false">"Updated "</string>
+    <string name="ui_updates" formatted="false">"Updates"</string>
+    <string name="ui_updates_every_10s_while_open" formatted="false">"Updates every 10s while open."</string>
+    <string name="ui_updates_keep_your_drawers_settings_and_widgets_android_asks" formatted="false">"Updates keep your drawers, settings and widgets. Android asks you to approve installation."</string>
+    <string name="ui_updating" formatted="false">"Updating…"</string>
+    <string name="ui_usage_access" formatted="false">"Usage access"</string>
+    <string name="ui_usage_charts_version_storage_data" formatted="false">"Usage charts, version, storage &amp; data"</string>
+    <string name="ui_use_a_direct_file_link_instead_of_a_web" formatted="false">"Use a direct file link instead of a web page."</string>
+    <string name="ui_use_a_duration_such_as_10_min_30s_or" formatted="false">"Use a duration such as 10 min, 30s or 1h."</string>
+    <string name="ui_use_a_quiet_kokoro_voice_for_notifications_from" formatted="false">"Use a quiet Kokoro voice for notifications from "</string>
+    <string name="ui_use_a_six_digit_hex_colour_such_as_e4ff00" formatted="false">"Use a six-digit hex colour, such as #E4FF00."</string>
+    <string name="ui_use_apps_own_icons" formatted="false">"Use apps’ own icons"</string>
+    <string name="ui_use_geometric_symbol" formatted="false">"Use geometric symbol"</string>
+    <string name="ui_use_global_selection" formatted="false">"Use global selection"</string>
+    <string name="ui_use_screen_lock" formatted="false">"Use screen lock"</string>
+    <string name="ui_use_six_hex_digits_such_as_e4ff00" formatted="false">"Use six hex digits, such as #E4FF00."</string>
+    <string name="ui_use_system_wallpaper" formatted="false">"Use system wallpaper"</string>
+    <string name="ui_use_the_existing_file_search_permission" formatted="false">"Use the existing File Search permission"</string>
+    <string name="ui_use_the_existing_files_permission" formatted="false">"Use the existing Files permission"</string>
+    <string name="ui_use_the_installed_voice_model" formatted="false">"Use the installed voice model"</string>
+    <string name="ui_use_the_phone_s_ambient_light_sensor_to_switch" formatted="false">"Use the phone\'s ambient-light sensor to switch Launcher between Light and Dark. Readings are in lux. This changes Launcher only."</string>
+    <string name="ui_used" formatted="false">"Used"</string>
+    <string name="ui_used_2" formatted="false">"used"</string>
+    <string name="ui_used_3" formatted="false">" used"</string>
+    <string name="ui_uses_this_apps_current_notification_reply_action_launcher_cannot" formatted="false">"Uses this app’s current notification reply action. Launcher cannot confirm delivery to the recipient."</string>
+    <string name="ui_using_launcher" formatted="false">"Using Launcher"</string>
+    <string name="ui_value_active_notifications" formatted="false">"{0} active notifications"</string>
+    <string name="ui_value_columns" formatted="false">" · {0} columns"</string>
+    <string name="ui_value_columns_value" formatted="false">"{0} columns · {1}"</string>
+    <string name="ui_value_document_search_unavailable" formatted="false">"{0} · document search unavailable"</string>
+    <string name="ui_value_downloading_value" formatted="false">"{0}, downloading, {1}"</string>
+    <string name="ui_value_drawers_value_notes_value_timers_choose_what_to" formatted="false">"{0} drawers · {1} notes · {2} timers. Choose what to restore. Your current layout is kept as the previous saved state."</string>
+    <string name="ui_value_enabled_sources_one_news_card" formatted="false">"{0} enabled sources · one news card"</string>
+    <string name="ui_value_image_search_unavailable" formatted="false">"{0} · image search unavailable"</string>
+    <string name="ui_value_images_indexed" formatted="false">"{0:N0} images indexed"</string>
+    <string name="ui_value_images_processed" formatted="false">"{0:N0} images processed"</string>
+    <string name="ui_value_indexed_value" formatted="false">"{0} indexed · {1}"</string>
+    <string name="ui_value_initially_show_more_when_you_want" formatted="false">"{0} initially · show more when you want"</string>
+    <string name="ui_value_kb_upper" formatted="false">"{0:0.#} KB"</string>
+    <string name="ui_value_mb_upper" formatted="false">"{0:0.#} MB"</string>
+    <string name="ui_value_needs_value_processing_runs_on_this_device" formatted="false">"{0} needs {1}. Processing runs on this device."</string>
+    <string name="ui_value_news_sources_today_cards_and_widgets" formatted="false">"{0} news sources · Today cards and widgets"</string>
+    <string name="ui_value_of_5_selected" formatted="false">"{0} of 5 selected"</string>
+    <string name="ui_value_of_value_processed_indexing_resumes_while_charging" formatted="false">"{0:N0} of {1:N0} processed · indexing resumes while charging"</string>
+    <string name="ui_value_running_value_timers" formatted="false">"{0} running · {1} timers"</string>
+    <string name="ui_value_saved_journeys" formatted="false">"{0} saved journeys"</string>
+    <string name="ui_value_searching_documents" formatted="false">"{0} · searching documents…"</string>
+    <string name="ui_value_searching_images" formatted="false">"{0} · searching images…"</string>
+    <string name="ui_value_unread_notifications" formatted="false">"{0} unread notifications"</string>
+    <string name="ui_value_value_downloaded" formatted="false">"{0}, {1}% downloaded"</string>
+    <string name="ui_value_value_hidden" formatted="false">"{0} · {1} hidden"</string>
+    <string name="ui_value_value_notifications_value" formatted="false">"{0}, {1} notifications{2}"</string>
+    <string name="ui_value_version_value_on_value" formatted="false">"{0} version {1} on {2}?"</string>
+    <string name="ui_value_without_readable_text" formatted="false">" · {0:N0} without readable text"</string>
+    <string name="ui_version" formatted="false">"Version "</string>
+    <string name="ui_videos_channels" formatted="false">"Videos &amp; channels"</string>
+    <string name="ui_voice" formatted="false">"Voice"</string>
+    <string name="ui_voice_model_not_installed_download_and_playback" formatted="false">"Voice model not installed · download and playback"</string>
+    <string name="ui_voice_selection_speed_and_offline_playback" formatted="false">"Voice selection, speed and offline playback"</string>
+    <string name="ui_volume" formatted="false">"Volume"</string>
+    <string name="ui_waiting_for_a_light_reading" formatted="false">"Waiting for a light reading…"</string>
+    <string name="ui_wallpaper_dimming" formatted="false">"Wallpaper dimming"</string>
+    <string name="ui_wallpaper_off_automatic_theme_and_dimming" formatted="false">"Wallpaper off · automatic theme and dimming"</string>
+    <string name="ui_wallpaper_on_value_dimming" formatted="false">"Wallpaper on · {0}% dimming"</string>
+    <string name="ui_watch_watchface_watch_face_companion_install" formatted="false">"watch watchface watch face companion install"</string>
+    <string name="ui_wear_os" formatted="false">"Wear OS"</string>
+    <string name="ui_weather" formatted="false">"Weather"</string>
+    <string name="ui_weather_by_open_meteo" formatted="false">"Weather by Open-Meteo"</string>
+    <string name="ui_weather_contacts_open_meteo_enabled_feeds_contact_their_publishers" formatted="false">"Weather contacts Open-Meteo. Enabled feeds contact their publishers and image hosts. Online search contacts the provider you configure. The optional desktop connection shares notes and the selected folder with your paired computer."</string>
+    <string name="ui_weather_location" formatted="false">"Weather location"</string>
+    <string name="ui_weather_refresh" formatted="false">"Weather refresh"</string>
+    <string name="ui_weather_settings_value_value_valuevalue" formatted="false">"Weather settings, {0}, {1} {2}{3}"</string>
+    <string name="ui_weather_strip_on_home" formatted="false">"Weather strip on home"</string>
+    <string name="ui_web_query" formatted="false">"Web query"</string>
+    <string name="ui_web_search" formatted="false">"Web search"</string>
+    <string name="ui_weekly" formatted="false">"Weekly"</string>
+    <string name="ui_weekly_2" formatted="false">" · weekly"</string>
+    <string name="ui_what" formatted="false">"What"</string>
+    <string name="ui_whisper_filter" formatted="false">"Whisper filter · "</string>
+    <string name="ui_whole_display" formatted="false">"Whole display"</string>
+    <string name="ui_wi_fi" formatted="false">"Wi-Fi"</string>
+    <string name="ui_widget" formatted="false">"Widget"</string>
+    <string name="ui_widget_picker_is_unavailable_on_this_device" formatted="false">"Widget picker is unavailable on this device."</string>
+    <string name="ui_widget_setup_is_unavailable" formatted="false">"Widget setup is unavailable."</string>
+    <string name="ui_work_apps_and_supported_private_profiles" formatted="false">"Work apps and supported private profiles"</string>
+    <string name="ui_work_profile" formatted="false">"Work profile"</string>
+    <string name="ui_working" formatted="false">"Working…"</string>
+    <string name="ui_write_a_note" formatted="false">"Write a note…"</string>
+    <string name="ui_write_something_down" formatted="false">"Write something down"</string>
+    <string name="ui_you" formatted="false">"You"</string>
+    <string name="ui_you_can_add_up_to_20_widgets" formatted="false">"You can add up to 20 widgets."</string>
+    <string name="ui_you_can_create_up_to_40_drawers" formatted="false">"You can create up to 40 drawers."</string>
+    <string name="ui_you_can_keep_up_to_20_feed_sources" formatted="false">"You can keep up to 20 feed sources."</string>
+    <string name="ui_you_do_not_need_to_enable_the_system_panel" formatted="false">"You do not need to enable the system panel overlay."</string>
+    <string name="ui_you_have_used_value_for_value_today" formatted="false">"You have used {0} for {1} today."</string>
+    <string name="ui_you_have_used_value_for_value_today_open_it" formatted="false">"You have used {0} for {1} today. Open it intentionally?"</string>
+    <string name="ui_your_city_forecast" formatted="false">"Your city &amp; forecast"</string>
+    <string name="ui_your_daily_goal" formatted="false">"Your daily goal"</string>
+    <string name="ui_your_date_and_active_items" formatted="false">"Your date and active items"</string>
+    <string name="ui_your_draft_is_kept_open_saving_failed_check_available" formatted="false">"Your draft is kept open. Saving failed; check available storage and try again."</string>
+    <string name="ui_your_home_ready" formatted="false">"Your home, ready"</string>
+    <string name="ui_your_installed_apps_provide_android_widgets_tap_a_widget" formatted="false">"Your installed apps provide Android widgets. Tap a widget header to collapse it; hold the header to resize or remove it. Provider setup may open a separate screen."</string>
+    <string name="ui_your_launcher_reminder" formatted="false">"Your Launcher reminder"</string>
+    <string name="ui_your_messages_in_one_quiet_place_connect_android_notifications" formatted="false">"Your messages, in one quiet place. Connect Android notifications to see current conversations from your messaging apps."</string>
+    <string name="ui_your_reply" formatted="false">"Your reply"</string>
+    <string name="ui_your_selected_calendars" formatted="false">"Your selected calendars"</string>
+    <string name="ui_your_upcoming_events" formatted="false">"Your upcoming events"</string>
+    <string name="ui_your_watch_could_not_install_launcher_roll" formatted="false">"Your watch could not install Launcher Roll."</string>
+    <string name="ui_your_watch_has_no_available_launcher_watch_face_slot" formatted="false">"Your watch has no available Launcher watch face slot."</string>
+    <string name="ui_youre_in_control" formatted="false">"You’re in control."</string>
+    <string name="ui_youtube" formatted="false">"YouTube"</string>
+    <string name="ui_youtube_api_setup" formatted="false">"YouTube API setup"</string>
+    <string name="ui_youtube_data_api_key" formatted="false">"YouTube Data API key"</string>
+    <string name="ui_youtube_query" formatted="false">"YouTube query"</string>
+    <plurals name="app">
+        <item quantity="one">"{0} app"</item>
+        <item quantity="other">"{0} apps"</item>
+    </plurals>
+    <plurals name="drawer">
+        <item quantity="one">"{0} drawer"</item>
+        <item quantity="other">"{0} drawers"</item>
+    </plurals>
+    <plurals name="document">
+        <item quantity="one">"{0} document"</item>
+        <item quantity="other">"{0} documents"</item>
+    </plurals>
+    <plurals name="enabled_source">
+        <item quantity="one">"{0} enabled source"</item>
+        <item quantity="other">"{0} enabled sources"</item>
+    </plurals>
+    <plurals name="file">
+        <item quantity="one">"{0} file"</item>
+        <item quantity="other">"{0} files"</item>
+    </plurals>
+    <plurals name="passage">
+        <item quantity="one">"{0} passage"</item>
+        <item quantity="other">"{0} passages"</item>
+    </plurals>
+    <plurals name="photo">
+        <item quantity="one">"{0} photo"</item>
+        <item quantity="other">"{0} photos"</item>
+    </plurals>
+    <plurals name="saved_note">
+        <item quantity="one">"{0} saved note"</item>
+        <item quantity="other">"{0} saved notes"</item>
+    </plurals>
+    <plurals name="saved_story">
+        <item quantity="one">"{0} saved story"</item>
+        <item quantity="other">"{0} saved stories"</item>
+    </plurals>
+    <plurals name="source">
+        <item quantity="one">"{0} source"</item>
+        <item quantity="other">"{0} sources"</item>
+    </plurals>
+    <plurals name="story">
+        <item quantity="one">"{0} story"</item>
+        <item quantity="other">"{0} stories"</item>
+    </plurals>
+    <plurals name="task">
+        <item quantity="one">"{0} task"</item>
+        <item quantity="other">"{0} tasks"</item>
+    </plurals>
+    <plurals name="upcoming_reminder">
+        <item quantity="one">"{0} upcoming reminder"</item>
+        <item quantity="other">"{0} upcoming reminders"</item>
+    </plurals>
+    <string name="ui_remove_named_drawer" formatted="false">"Remove {0}?"</string>
+    <string name="ui_date_all_day" formatted="false">"{0} · all day"</string>
+    <string name="ui_connected_show_names" formatted="false">"Connected · show names"</string>
+    <string name="ui_on_not_connected" formatted="false">"On · not connected"</string>
+    <string name="ui_show_connection_details" formatted="false">"Show connection details"</string>
+    <string name="ui_allow_nearby_devices" formatted="false">"Allow nearby devices"</string>
+    <string name="ui_ringer_silent" formatted="false">"Silent"</string>
+    <string name="ui_ringer_vibrate" formatted="false">"Vibrate"</string>
+    <string name="ui_ringer_normal" formatted="false">"Normal"</string>
+    <string name="ui_use_desktop_address" formatted="false">"Use the companion address, such as https://192.168.1.10:17842."</string>
+    <string name="ui_use_private_network_address" formatted="false">"Use a private Wi-Fi network address."</string>
+    <string name="ui_launcher_notifications" formatted="false">"Launcher notifications"</string>
+    <string name="ui_launcher_app_grayscale" formatted="false">"Launcher app grayscale"</string>
+    <string name="ui_search_settings_title" formatted="false">"Search"</string>
+    <string name="ui_app_search_app_count" formatted="false">"{0} apps · apps and saved content"</string>
+    <string name="ui_app_search_result_count" formatted="false">"{0} results · apps and saved content"</string>
+    <string name="ui_feed_images_on" formatted="false">" · images on"</string>
+    <string name="ui_feed_images_off" formatted="false">" · images off"</string>
+    <string name="ui_watch_install" formatted="false">"Install"</string>
+    <string name="ui_watch_update_to" formatted="false">"Update to"</string>
+    <string name="ui_roll_settings" formatted="false">"Watch face settings"</string>
+    <string name="ui_roll_sync_description" formatted="false">"Your choices sync to Launcher Roll on a paired watch with the latest Launcher for Wear OS. Follow watch leaves that choice to the watch."</string>
+    <string name="ui_roll_selected" formatted="false">"Selected"</string>
+    <string name="ui_roll_time_format" formatted="false">"Time format"</string>
+    <string name="ui_roll_follow_watch" formatted="false">"Follow watch"</string>
+    <string name="ui_roll_12_hour" formatted="false">"12-hour"</string>
+    <string name="ui_roll_24_hour" formatted="false">"24-hour"</string>
+    <string name="ui_roll_daily_layout" formatted="false">"Daily"</string>
+    <string name="ui_roll_pure_layout" formatted="false">"Pure"</string>
+    <string name="ui_roll_show_date" formatted="false">"Show date"</string>
+    <string name="ui_roll_show_ambient_date" formatted="false">"Show date in always-on"</string>
+    <string name="ui_roll_match_accent" formatted="false">"Match Launcher accent"</string>
+    <string name="ui_roll_show_phone_activity" formatted="false">"Show phone downloads and timers"</string>
+    <string name="ui_roll_sync_settings" formatted="false">"Sync watch face settings"</string>
+    <string name="ui_roll_sync_queued" formatted="false">"Watch face settings queued for sync."</string>
+    <string name="ui_roll_complication_help" formatted="false">"If your watch kept a previous utility choice, choose Launcher Activity in the watch’s complication picker. Weather and other complication providers are chosen on the watch."</string>
+    <string name="ui_check_kevlog_for_new_version" formatted="false">"Check for a new version from kevlog.co.za."</string>
+    <string name="ui_release_notes" formatted="false">"Release notes"</string>
+    <string name="ui_roll_release_notes" formatted="false">"Launcher Roll release notes"</string>
+    <string name="ui_companion_release_notes" formatted="false">"Wear companion release notes"</string>
+    <string name="ui_release_notes_unavailable" formatted="false">"Release notes are unavailable."</string>
+</resources>

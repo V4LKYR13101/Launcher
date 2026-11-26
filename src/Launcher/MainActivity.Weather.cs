@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
@@ -35,7 +35,7 @@ public partial class MainActivity
         var indicator = Stack();
         indicator.SetGravity(GravityFlags.Center);
         indicator.SetPadding(Dp(14), Dp(4), Dp(14), Dp(5));
-        indicator.ContentDescription = $"Weather settings, {weather.City}, {temperature} {condition}{freshness}";
+        indicator.ContentDescription = Localize(Resource.String.ui_weather_settings_value_value_valuevalue, weather.City, temperature, condition, freshness);
         var icon = new GlyphView(this, hasReading ? WeatherCondition.Glyph(weather.Code) : "cloud", palette.Accent);
         indicator.AddView(icon, new LinearLayout.LayoutParams(Dp(27), Dp(27)));
         if (hasReading)
@@ -99,36 +99,36 @@ public partial class MainActivity
     }
     private void RenderWeatherSettings()
     {
-        Title("Weather");
-        ToggleRow(body, "Weather strip on home", state.Weather.Enabled, v => { state.Weather.Enabled = v; Save(); if (v) RefreshWeather(); });
-        SettingRow(body, "Location", string.IsNullOrEmpty(state.Weather.City) ? "Search for a city or town" : state.Weather.City, () =>
-            Prompt("Weather location", "", SearchWeatherCity), "map");
-        SettingRow(body, "Temperature units", state.Weather.Fahrenheit ? "Fahrenheit · °F" : "Celsius · °C", () => Choose("Temperature units", ["Celsius · °C", "Fahrenheit · °F"], i => { state.Weather.Fahrenheit = i == 1; Save(); Render(); }), "sun");
-        SettingRow(body, "Automatic refresh", state.Weather.RefreshMinutes == 0 ? "Manual only" : $"Every {state.Weather.RefreshMinutes} minutes while Launcher is open", () => Choose("Weather refresh", ["Manual only", "30 minutes", "1 hour", "3 hours", "6 hours"], i => { state.Weather.RefreshMinutes = new[] { 0, 30, 60, 180, 360 }[i]; Save(); Render(); }), "clock");
+        Title(Localize(Resource.String.ui_weather));
+        ToggleRow(body, Localize(Resource.String.ui_weather_strip_on_home), state.Weather.Enabled, v => { state.Weather.Enabled = v; Save(); if (v) RefreshWeather(); });
+        SettingRow(body, Localize(Resource.String.ui_location), string.IsNullOrEmpty(state.Weather.City) ? Localize(Resource.String.ui_search_for_a_city_or_town) : state.Weather.City, () =>
+            Prompt(Resource.String.ui_weather_location, "", SearchWeatherCity), "map");
+        SettingRow(body, Localize(Resource.String.ui_temperature_units), state.Weather.Fahrenheit ? Localize(Resource.String.ui_fahrenheit_f) : Localize(Resource.String.ui_celsius_c), () => Choose(Resource.String.ui_temperature_units, [Localize(Resource.String.ui_celsius_c), Localize(Resource.String.ui_fahrenheit_f)], i => { state.Weather.Fahrenheit = i == 1; Save(); Render(); }), "sun");
+        SettingRow(body, Localize(Resource.String.ui_automatic_refresh), state.Weather.RefreshMinutes == 0 ? Localize(Resource.String.ui_manual_only) : Localize(Resource.String.ui_every_value_minutes_while_launcher_is_open, state.Weather.RefreshMinutes), () => Choose(Resource.String.ui_weather_refresh, [Localize(Resource.String.ui_manual_only), Localize(Resource.String.ui_30_minutes), Localize(Resource.String.ui_1_hour), Localize(Resource.String.ui_3_hours), Localize(Resource.String.ui_6_hours)], i => { state.Weather.RefreshMinutes = new[] { 0, 30, 60, 180, 360 }[i]; Save(); Render(); }), "clock");
         if (state.Weather.Temperature.HasValue)
         {
             Gap(body);
             body.AddView(Text(Degrees(state.Weather.Temperature), 54, true, palette.Accent), Match());
             body.AddView(Text(WeatherCondition.Label(state.Weather.Code), 20, true, palette.Accent), Match());
             Gap(body, 8);
-            Paragraph($"High {Degrees(state.Weather.High)}  ·  Low {Degrees(state.Weather.Low)}");
-            Paragraph("Updated " + DateTimeOffset.FromUnixTimeMilliseconds(state.Weather.UpdatedAt).ToLocalTime().ToString("ddd, HH:mm"));
+            Paragraph(Localize(Resource.String.ui_high_value_low_value, Degrees(state.Weather.High), Degrees(state.Weather.Low)));
+            Paragraph(Localize(Resource.String.ui_updated) + DateTimeOffset.FromUnixTimeMilliseconds(state.Weather.UpdatedAt).ToLocalTime().ToString("ddd, HH:mm", UiCulture));
         }
         if (weatherError is not null)
             Paragraph(weatherError);
-        body.AddView(Button(weatherLoading ? "Updating…" : "Refresh weather", () => RefreshWeather(true)), Match());
+        body.AddView(Button(weatherLoading ? Localize(Resource.String.ui_updating) : Localize(Resource.String.ui_refresh_weather), () => RefreshWeather(true)), Match());
         Gap(body);
-        Paragraph("Choose any city. Launcher sends the city search and selected coordinates to Open-Meteo for weather; it does not use GPS or track your location.");
-        SettingRow(body, "Weather by Open-Meteo", "Forecast and location data · attribution", () => OpenUrl("https://open-meteo.com/"), "cloud");
+        Paragraph(Localize(Resource.String.ui_choose_any_city_launcher_sends_the_city_search_and));
+        SettingRow(body, Localize(Resource.String.ui_weather_by_open_meteo), Localize(Resource.String.ui_forecast_and_location_data_attribution), () => OpenUrl("https://open-meteo.com/"), "cloud");
     }
     private async void SearchWeatherCity(string query)
     {
         if (query.Trim().Length < 2)
         {
-            Toast("Enter a city or town name.");
+            Toast(Localize(Resource.String.ui_enter_a_city_or_town_name));
             return;
         }
-        Toast("Searching locations…");
+        Toast(Localize(Resource.String.ui_searching_locations));
         try
         {
             var places = await WeatherClient.Search(query.Trim());
@@ -136,10 +136,10 @@ public partial class MainActivity
                 return;
             if (places.Length == 0)
             {
-                Toast("No matching locations. Try adding a country.");
+                Toast(Localize(Resource.String.ui_no_matching_locations_try_adding_a_country));
                 return;
             }
-            Choose("Select location", places.Select(p => p.Label).ToArray(), i =>
+            Choose(Resource.String.ui_select_location, places.Select(p => p.Label).ToArray(), i =>
             {
                 var p = places[i];
                 state.Weather.City = p.Label;
@@ -161,7 +161,7 @@ public partial class MainActivity
         }
         catch (Exception e) when (e is HttpRequestException or IOException or TaskCanceledException or System.Text.Json.JsonException or InvalidOperationException)
         {
-            Toast("Couldn’t search locations. Check your connection and try again.");
+            Toast(Localize(Resource.String.ui_couldnt_search_locations_check_your_connection_and_try_again));
         }
     }
 }

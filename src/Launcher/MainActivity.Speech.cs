@@ -1,4 +1,4 @@
-﻿
+
 using Android.App;
 using Launcher.Core;
 using LauncherApp.Services;
@@ -23,7 +23,7 @@ public partial class MainActivity
 
         if (string.IsNullOrWhiteSpace(text))
         {
-            Toast("This story has no readable text.");
+            Toast(Localize(Resource.String.ui_this_story_has_no_readable_text));
             return;
         }
 
@@ -51,7 +51,7 @@ public partial class MainActivity
 
         if (articles.Length == 0)
         {
-            Toast("No RSS stories are available. Refresh your feeds first.");
+            Toast(Localize(Resource.String.ui_no_rss_stories_are_available_refresh_your_feeds_first));
             return;
         }
 
@@ -99,7 +99,7 @@ public partial class MainActivity
 
         if (keyguard?.IsDeviceLocked == true)
         {
-            Toast("Unlock your phone before reading messages.");
+            Toast(Localize(Resource.String.ui_unlock_your_phone_before_reading_messages));
             return;
         }
 
@@ -108,10 +108,10 @@ public partial class MainActivity
         WithAppUnlock(item.Package, () =>
         {
             Choose(
-                "Read notification",
+                Resource.String.ui_read_notification,
                 [
-                    "Announce sender only",
-                    "Read message content"
+                    Localize(Resource.String.ui_announce_sender_only),
+                    Localize(Resource.String.ui_read_message_content)
                 ],
                 selection =>
                 {
@@ -138,7 +138,7 @@ public partial class MainActivity
                     {
                         if (string.IsNullOrWhiteSpace(item.Text))
                         {
-                            Toast("This notification has no readable message.");
+                            Toast(Localize(Resource.String.ui_this_notification_has_no_readable_message));
                             return;
                         }
 
@@ -150,7 +150,7 @@ public partial class MainActivity
                         SpeechPreferences.Load(this),
                         source: $"Notification: {sender}");
 
-                    Toast("Added to Kokoro speech queue.");
+                    Toast(Localize(Resource.String.ui_added_to_kokoro_speech_queue));
                 });
         });
     }

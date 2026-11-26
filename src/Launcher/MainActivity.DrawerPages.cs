@@ -18,13 +18,13 @@ public partial class MainActivity
         var header = Stack(true);
         header.SetGravity(GravityFlags.CenterVertical);
         header.SetPadding(Dp(12), Dp(8), Dp(12), 0);
-        header.AddView(IconButton("down", "Close app drawer", () => Navigate("Tiles")), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
-        var title = Text(page == AllAppsDrawerPage ? "All apps" : "Apps", 24, true);
+        header.AddView(IconButton("down", Localize(Resource.String.ui_close_app_drawer), () => Navigate("Tiles")), new LinearLayout.LayoutParams(Dp(48), Dp(48)));
+        var title = Text(page == AllAppsDrawerPage ? Localize(Resource.String.ui_all_apps) : Localize(Resource.String.ui_apps), 24, true);
         if (OperatingSystem.IsAndroidVersionAtLeast(28))
             title.AccessibilityHeading = true;
         title.SetMaxLines(2);
         header.AddView(title, new LinearLayout.LayoutParams(0, -2, 1));
-        foreach (var (target, glyph, label) in new[] { (GroupedDrawerPage, "filter", "Grouped apps"), (AllAppsDrawerPage, "grid", "All apps grid") })
+        foreach (var (target, glyph, label) in new[] { (GroupedDrawerPage, "filter", Localize(Resource.String.ui_grouped_apps)), (AllAppsDrawerPage, "grid", Localize(Resource.String.ui_all_apps_grid)) })
         {
             var button = IconButton(glyph, label, () => { if (page != target) Navigate(target); });
             button.Selected = page == target;

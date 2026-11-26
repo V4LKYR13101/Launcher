@@ -1,5 +1,6 @@
 """Publish the signed Launcher phone, companion and watch face APKs to Kevlog."""
 from datetime import datetime, timedelta, timezone
+from html import escape
 import hashlib
 import json
 from pathlib import Path
@@ -28,6 +29,21 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def versioned_notes(notes, releases):
+    if not notes:
+        return []
+    if set(notes) != {name for name, _, _, _ in releases}:
+        raise ValueError("Release notes must cover each updated package.")
+    entries = []
+    for name, release, prefix, product in releases:
+        entry = notes[name]
+        if entry["version"] != release["version"] or entry["build"] != release["build"]:
+            raise ValueError(f"Release notes do not match {product} {release['version']}.")
+        identifier = f"{prefix}-{release['version'].replace('.', '-')}"
+        entries.append((identifier, product, release, entry))
+    return entries
+
+
 def apply_on_server(stage):
     import os
     import pwd
@@ -45,6 +61,7 @@ def apply_on_server(stage):
     owner = pwd.getpwnam("kevlog")
     previous = read_json(manifests[0])
     metadata = read_json(stage / "releases.json")
+    release_notes = metadata.pop("releaseNotes", {})
     phone = metadata["androidProduction"]
     watch = metadata["watchFace"]["release"]
     companion = metadata["wearCompanion"]
@@ -70,6 +87,17 @@ def apply_on_server(stage):
         raise ValueError("Kevlog already serves this watch face build or a later one.")
     if keep_companion and companion != previous.get("wearCompanion"):
         raise ValueError("The requested watch companion differs from the live release.")
+    if not keep_companion and previous.get("wearCompanion", {}).get("build", 0) >= companion["build"]:
+        raise ValueError("Kevlog already serves this Wear OS companion build or a later one.")
+
+    updated = []
+    if not keep_phone:
+        updated.append(("androidProduction", phone, "launcher", "Launcher"))
+    if not keep_watch:
+        updated.append(("watchFace", watch, "launcher-roll", "Launcher Roll"))
+    if not keep_companion:
+        updated.append(("wearCompanion", companion, "launcher-wear", "Launcher for Wear OS"))
+    notes_entries = versioned_notes(release_notes, updated)
 
     uploads = [] if keep_phone else [phone]
     if not keep_companion:
@@ -100,7 +128,8 @@ def apply_on_server(stage):
         project = next(project for project in projects if project["slug"] == "launcher")
         release_id = ("launcher-roll-" + watch["version"].replace(".", "-") if keep_phone else
                       "launcher-" + phone["version"].replace(".", "-"))
-        if any(release.get("id") == release_id for release in project.get("releases", [])):
+        new_ids = {entry[0] for entry in notes_entries} if notes_entries else {release_id}
+        if any(release.get("id") in new_ids for release in project.get("releases", [])):
             raise ValueError("Kevlog already has this release entry.")
 
         buttons = []
@@ -158,31 +187,43 @@ def apply_on_server(stage):
                     button["hidden"] = True
         order = {file_id: index for index, file_id in enumerate(active_ids)}
         project["buttons"].sort(key=lambda button: order.get(button.get("file_id"), len(order)))
-        published = watch if keep_phone else phone
-        published["notes"] = f"{SITE}/projects/launcher/#release-{release_id}"
-        now = datetime.now(timezone(timedelta(hours=2)))
-        project.setdefault("releases", []).append(dict(
-            id=release_id, version=f"Launcher Roll {watch['version']}" if keep_phone else phone["version"],
-            date=now.date().isoformat(),
-            status="published", kind="release", platforms="Android 7+ · Wear OS 6+ for face push",
-            title="Launcher Roll update" if keep_phone else
-                "Wear OS connection fix" if keep_companion else
-                "Wear OS setup and first install" if keep_watch else "Launcher Roll for Wear OS",
-            summary=("An updated watch face available through Launcher."
-                     if keep_phone else "Corrects how the phone handles replies from the watch companion."
-                     if keep_companion else "Install Launcher Roll from its own setup screen in Launcher settings."),
-            body=("<p>In Launcher, open <strong>Settings → Wear OS → Check for watch face updates</strong> "
-                  "to install the latest Launcher Roll.</p>" if keep_phone else
-                  "<p>This phone release fixes decoding of watch replies. The corrected install flow also requires "
-                  "Launcher for Wear OS 1.0.4 on the watch.</p>" if keep_companion else
-                 "<p>Install and open Launcher for Wear OS on the watch. On the paired Android phone, "
-                 "open Launcher and go to <strong>Settings → Wear OS → Install Launcher Roll</strong>. "
-                 "Approve the download and select Launcher Roll in the watch face picker. "
-                 "The Wear OS settings screen has a separate action for checking installed face updates. "
-                 "Phone-driven face installs and updates require Wear OS 6 or later.</p>"
-                 "<p>This release is available for device testing.</p>"),
-            created_at=now.isoformat(), updated_at=now.isoformat(),
-        ))
+        if notes_entries:
+            now = datetime.now(timezone(timedelta(hours=2)))
+            for identifier, product, release, notes in notes_entries:
+                release["notes"] = f"{SITE}/projects/launcher/#release-{identifier}"
+                project.setdefault("releases", []).append(dict(
+                    id=identifier, version=f"{product} {release['version']}", date=now.date().isoformat(),
+                    status="published", kind="release", platforms=notes["platforms"], title=notes["title"],
+                    summary=notes["summary"],
+                    body="".join(f"<p>{escape(paragraph)}</p>" for paragraph in notes["paragraphs"]),
+                    created_at=now.isoformat(), updated_at=now.isoformat(),
+                ))
+        else:
+            published = watch if keep_phone else phone
+            published["notes"] = f"{SITE}/projects/launcher/#release-{release_id}"
+            now = datetime.now(timezone(timedelta(hours=2)))
+            project.setdefault("releases", []).append(dict(
+                id=release_id, version=f"Launcher Roll {watch['version']}" if keep_phone else phone["version"],
+                date=now.date().isoformat(),
+                status="published", kind="release", platforms="Android 7+ · Wear OS 6+ for face push",
+                title="Launcher Roll update" if keep_phone else
+                    "Wear OS connection fix" if keep_companion else
+                    "Wear OS setup and first install" if keep_watch else "Launcher Roll for Wear OS",
+                summary=("An updated watch face available through Launcher."
+                         if keep_phone else "Corrects how the phone handles replies from the watch companion."
+                         if keep_companion else "Install Launcher Roll from its own setup screen in Launcher settings."),
+                body=("<p>In Launcher, open <strong>Settings → Wear OS → Check for watch face updates</strong> "
+                      "to install the latest Launcher Roll.</p>" if keep_phone else
+                      "<p>This phone release fixes decoding of watch replies. The corrected install flow also requires "
+                      "Launcher for Wear OS 1.0.4 on the watch.</p>" if keep_companion else
+                     "<p>Install and open Launcher for Wear OS on the watch. On the paired Android phone, "
+                     "open Launcher and go to <strong>Settings → Wear OS → Install Launcher Roll</strong>. "
+                     "Approve the download and select Launcher Roll in the watch face picker. "
+                     "The Wear OS settings screen has a separate action for checking installed face updates. "
+                     "Phone-driven face installs and updates require Wear OS 6 or later.</p>"
+                     "<p>This release is available for device testing.</p>"),
+                created_at=now.isoformat(), updated_at=now.isoformat(),
+            ))
         with cms.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             db.execute("UPDATE config SET value=? WHERE name=?",
@@ -230,7 +271,7 @@ def apply_on_server(stage):
         subprocess.run(["systemctl", "start", "kevlog"], check=True)
 
 
-def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=False):
+def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=False, notes_path=None, sync_local_site=True):
     import paramiko
     import xml.etree.ElementTree as et
 
@@ -272,6 +313,8 @@ def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=Fals
     else:
         companion = live["wearCompanion"]
     metadata = dict(androidProduction=phone, watchFace=face, wearCompanion=companion)
+    if notes_path is not None:
+        metadata["releaseNotes"] = read_json(notes_path)
     if has_face:
         artifacts.append((face_path, face["release"]))
     for path, release in artifacts:
@@ -299,6 +342,31 @@ def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=Fals
                 raise RuntimeError(error or output)
             return output.strip()
 
+        if notes_path is not None:
+            affected = []
+            if not face_only:
+                affected.append(("androidProduction", phone, "launcher", "Launcher"))
+            if has_face:
+                affected.append(("watchFace", face["release"], "launcher-roll", "Launcher Roll"))
+            if watch_directory and not face_only:
+                affected.append(("wearCompanion", companion, "launcher-wear", "Launcher for Wear OS"))
+            versioned_notes(metadata["releaseNotes"], affected)
+
+        transfer_bytes = sum(path.stat().st_size for path, _ in artifacts)
+        if legacy_bridge is not None:
+            transfer_bytes += legacy_bridge.stat().st_size
+        capacity = run("df -Pk /tmp /var/lib/kevlog /var/www/kevlog/backups")
+        paths = [line.split() for line in capacity.splitlines()[1:]]
+        stage_mount, download_mount, backup_mount = paths
+        backup_bytes = int(run("stat -c %s /var/lib/kevlog/portfolio.sqlite3", True))
+        required = {}
+        for mount, size in ((stage_mount, transfer_bytes), (download_mount, transfer_bytes),
+                            (backup_mount, backup_bytes)):
+            required[mount[0]] = required.get(mount[0], 0) + size
+        for mount in paths:
+            if 1024 * int(mount[3]) < required[mount[0]] + 32 * 1024 * 1024:
+                raise RuntimeError("Kevlog has insufficient space to stage this release and retain its backup.")
+
         stage = run("mktemp -d /tmp/kevlog-launcher-update-XXXXXXXX")
         names = [path.name for path, _ in artifacts] + ["publish.py", "releases.json"]
         if legacy_bridge is not None:
@@ -324,10 +392,10 @@ def publish(phone_directory, watch_directory, legacy_bridge=None, face_only=Fals
 
     receipt_directory = watch_directory if face_only else phone_directory
     write_json(receipt_directory / "kevlog-publication.json", receipt)
-    verify_publication(receipt_directory, legacy_bridge is not None)
+    verify_publication(receipt_directory, legacy_bridge is not None, sync_local_site)
 
 
-def verify_publication(phone_directory, verify_bridge):
+def verify_publication(phone_directory, verify_bridge, sync_local_site=True):
     receipt = read_json(phone_directory / "kevlog-publication.json")
     build = receipt["feed"]["androidProduction"]["build"]
     # Wait briefly for the web workers after the service restart.
@@ -355,6 +423,8 @@ def verify_publication(phone_directory, verify_bridge):
         if total != release["bytes"] or sha256.hexdigest() != release["sha256"].lower():
             raise RuntimeError("A public download differs from the signed release.")
         print(f"Verified {release['url']}", flush=True)
+    if not sync_local_site:
+        return
     local = ROOT.parent / "Kevin/site/source"
     write_json(local / FEED_PATH.lstrip("/"), live)
     projects_file = local / "projects.json"
@@ -371,6 +441,8 @@ if __name__ == "__main__":
         with Path("/run/lock/kevlog-launcher-release.lock").open("a") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
             apply_on_server(Path(sys.argv[2]))
+    elif len(sys.argv) == 5 and sys.argv[1] == "--release-notes":
+        publish(Path(sys.argv[3]), Path(sys.argv[4]), notes_path=Path(sys.argv[2]), sync_local_site=False)
     elif len(sys.argv) in (3, 4) and sys.argv[1] == "--verify":
         verify_publication(Path(sys.argv[2]), len(sys.argv) == 4 and sys.argv[3] == "--legacy")
     elif len(sys.argv) == 3 and sys.argv[1] == "--phone-only":

@@ -1,4 +1,4 @@
-﻿
+
 using Android.App;
 using Android.Widget;
 
@@ -50,7 +50,7 @@ public static class KokoroReaderDialog
 
         var textInput = new EditText(activity)
         {
-            Hint = "Enter text to speak...",
+            Hint = Localize(Resource.String.ui_enter_text_to_speak),
             Text = initialText ?? ""
         };
 
@@ -66,7 +66,7 @@ public static class KokoroReaderDialog
 
         layout.AddView(new TextView(activity)
         {
-            Text = "Voice"
+            Text = Localize(Resource.String.ui_voice)
         });
 
         var voiceSpinner = new Spinner(activity);
@@ -97,7 +97,7 @@ public static class KokoroReaderDialog
 
         layout.AddView(new TextView(activity)
         {
-            Text = "Speaking speed: 0.5x to 2.0x"
+            Text = Localize(Resource.String.ui_speaking_speed_0_5x_to_2_0x)
         });
 
         var speedBar = new SeekBar(activity)
@@ -120,7 +120,7 @@ public static class KokoroReaderDialog
 
         layout.AddView(new TextView(activity)
         {
-            Text = "Volume"
+            Text = Localize(Resource.String.ui_volume)
         });
 
         var volumeBar = new SeekBar(activity)
@@ -142,7 +142,7 @@ public static class KokoroReaderDialog
 
         var queueButton = new Button(activity)
         {
-            Text = "Queue Speech"
+            Text = Localize(Resource.String.ui_queue_speech)
         };
 
         queueButton.Click += (_, _) =>
@@ -153,7 +153,7 @@ public static class KokoroReaderDialog
             {
                 Toast.MakeText(
                     activity,
-                    "Enter some text to speak.",
+                    Localize(Resource.String.ui_enter_some_text_to_speak),
                     ToastLength.Short)?.Show();
 
                 return;
@@ -185,7 +185,7 @@ public static class KokoroReaderDialog
 
             Toast.MakeText(
                 activity,
-                "Added to speech queue",
+                Localize(Resource.String.ui_added_to_speech_queue),
                 ToastLength.Short)?.Show();
         };
 
@@ -197,7 +197,7 @@ public static class KokoroReaderDialog
 
         var pauseButton = new Button(activity)
         {
-            Text = "Pause"
+            Text = Localize(Resource.String.ui_pause)
         };
 
         pauseButton.Click += (_, _) =>
@@ -205,7 +205,7 @@ public static class KokoroReaderDialog
 
         var resumeButton = new Button(activity)
         {
-            Text = "Resume"
+            Text = Localize(Resource.String.ui_resume)
         };
 
         resumeButton.Click += (_, _) =>
@@ -213,7 +213,7 @@ public static class KokoroReaderDialog
 
         var skipButton = new Button(activity)
         {
-            Text = "Skip Chunk"
+            Text = Localize(Resource.String.ui_skip_chunk)
         };
 
         skipButton.Click += (_, _) =>
@@ -221,7 +221,7 @@ public static class KokoroReaderDialog
 
         var stopButton = new Button(activity)
         {
-            Text = "Stop and Clear Queue"
+            Text = Localize(Resource.String.ui_stop_and_clear_queue)
         };
 
         stopButton.Click += (_, _) =>
@@ -241,10 +241,10 @@ public static class KokoroReaderDialog
         scroll.AddView(layout);
 
         new AlertDialog.Builder(activity)
-            .SetTitle("Kokoro Speech")
+            .SetTitle(Localize(Resource.String.ui_kokoro_speech))
             .SetView(scroll)
             .SetNegativeButton(
-                "Close",
+                Localize(Resource.String.ui_close),
                 (_, _) => { })
             .Show();
     }

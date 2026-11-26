@@ -119,12 +119,12 @@ internal sealed class PhotoSearchPack
         }
         catch (OperationCanceledException) when (current.IsCancellationRequested)
         {
-            status = status with { Error = "Download cancelled." };
+            status = status with { Error = Localize(Resource.String.ui_download_cancelled) };
         }
         catch (Exception error) when (error is IOException or InvalidDataException or HttpRequestException or OperationCanceledException or Java.Lang.RuntimeException)
         {
             Android.Util.Log.Warn("ImageSearch", error.ToString());
-            status = status with { Error = "Download failed. Check your connection and free storage, then retry." };
+            status = status with { Error = Localize(Resource.String.ui_download_failed_check_your_connection_and_free_storage_then) };
         }
         finally
         {
@@ -165,7 +165,7 @@ internal sealed class PhotoSearchPack
         catch (Exception error) when (error is IOException or InvalidDataException or OnnxRuntimeException or TypeInitializationException or Java.Lang.RuntimeException)
         {
             Android.Util.Log.Warn("ImageSearch", error.ToString());
-            status = status with { Error = "Image indexing failed. Try indexing again." };
+            status = status with { Error = Localize(Resource.String.ui_image_indexing_failed_try_indexing_again) };
         }
         finally
         {
@@ -191,7 +191,7 @@ internal sealed class PhotoSearchPack
         }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException)
         {
-            status = status with { Error = "Couldn't remove the model files. Try again." };
+            status = status with { Error = Localize(Resource.String.ui_couldn_t_remove_the_model_files_try_again) };
         }
         finally
         {

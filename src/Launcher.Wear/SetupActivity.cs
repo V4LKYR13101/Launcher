@@ -2,6 +2,7 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using WatchResource = Launcher.Wear.Resource;
 
 namespace LauncherWear;
 
@@ -9,19 +10,43 @@ namespace LauncherWear;
     Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
 public sealed class SetupActivity : Activity
 {
+    private TextView? instructions;
+
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
         int padding = (int)(Resources!.DisplayMetrics!.Density * 28 + .5f);
-        var instructions = new TextView(this)
+        instructions = new TextView(this)
         {
-            Text = OperatingSystem.IsAndroidVersionAtLeast(36)
-                ? "On your phone, open Launcher → Settings → Wear OS → Install Launcher Roll."
-                : "Installing faces from Launcher requires Wear OS 6 or later.",
             TextSize = 16,
             Gravity = GravityFlags.Center
         };
         instructions.SetPadding(padding, padding, padding, padding);
         SetContentView(instructions);
+    }
+
+    protected override void OnStart()
+    {
+        base.OnStart();
+        RollData.LanguageChanged += OnLanguageChanged;
+        RefreshInstructions();
+        _ = RollData.RestoreLanguageAsync(ApplicationContext ?? this);
+    }
+
+    protected override void OnStop()
+    {
+        RollData.LanguageChanged -= OnLanguageChanged;
+        base.OnStop();
+    }
+
+    private void OnLanguageChanged() => RunOnUiThread(RefreshInstructions);
+
+    private void RefreshInstructions()
+    {
+        using var settings = RollData.Settings(this);
+        var message = WearText.For(this, settings).Get(OperatingSystem.IsAndroidVersionAtLeast(36)
+            ? WatchResource.String.setup_install
+            : WatchResource.String.setup_requires_wear_six);
+        instructions!.Text = message;
     }
 }

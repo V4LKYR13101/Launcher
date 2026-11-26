@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
@@ -17,23 +17,23 @@ public partial class MainActivity
         workspaceTimerViews.Clear();
         overviewTimerView = null;
         var cards = new Dictionary<string, Action>();
-        cards["overview"] = () => RootCard("overview", "At a glance", "calendar", BuildOverview, DateTime.Today.ToString("dddd, d MMMM"));
+        cards["overview"] = () => RootCard("overview", Localize(Resource.String.ui_at_a_glance), "calendar", BuildOverview, DateTime.Today.ToString("dddd, d MMMM", UiCulture));
         if (state.CalendarVisible)
-            cards["calendar"] = () => RootCard("calendar", "Agenda", "calendar", BuildAgenda, agendaEvents.FirstOrDefault()?.Title ?? "Your upcoming events");
+            cards["calendar"] = () => RootCard("calendar", Localize(Resource.String.ui_agenda), "calendar", BuildAgenda, agendaEvents.FirstOrDefault()?.Title ?? Localize(Resource.String.ui_your_upcoming_events));
         if (!string.IsNullOrEmpty(state.Weather.City))
-            cards["weather"] = () => RootCard("weather", "Weather", "cloud", BuildForecast, WeatherSummary());
+            cards["weather"] = () => RootCard("weather", Localize(Resource.String.ui_weather), "cloud", BuildForecast, WeatherSummary());
         if (state.ShowMediaCard && media.Controller is not null)
-            cards["media"] = () => RootCard("media", "Now playing", "music", panel =>
+            cards["media"] = () => RootCard("media", Localize(Resource.String.ui_now_playing), "music", panel =>
         {
             var old = body;
             body = panel;
             AddMediaCard();
             body = old;
             if (panel.ChildCount == 0)
-                Paragraph("Start playback in a media app to show its controls.", panel);
-        }, media.Controller?.Metadata?.GetString(Android.Media.MediaMetadata.MetadataKeyTitle) ?? "No active player");
+                Paragraph(Localize(Resource.String.ui_start_playback_in_a_media_app_to_show_its), panel);
+        }, media.Controller?.Metadata?.GetString(Android.Media.MediaMetadata.MetadataKeyTitle) ?? Localize(Resource.String.ui_no_active_player));
         if (state.FocusCardVisible)
-            cards["focus"] = () => RootCard("focus", "Focus", "focus", panel =>
+            cards["focus"] = () => RootCard("focus", Localize(Resource.String.ui_focus), "focus", panel =>
         {
             timerText = Text(FocusTime(), 38, true);
             panel.AddView(timerText, Match());
@@ -41,7 +41,7 @@ public partial class MainActivity
             buttons.BaselineAligned = false;
             foreach (int minutes in new[] { 15, 25, 50 })
             {
-                var choice = RootAction(minutes + " min", () => { state.Focus = true; state.FocusEndsAt = Now + minutes * 60000; Save(); Render(); });
+                var choice = RootAction(minutes + Localize(Resource.String.ui_min), () => { state.Focus = true; state.FocusEndsAt = Now + minutes * 60000; Save(); Render(); });
                 choice.Background = Background(Color.Transparent, 10, palette.Divider);
                 var lp = new LinearLayout.LayoutParams(0, -1, 1);
                 lp.SetMargins(0, Dp(8), Dp(6), 0);
@@ -49,12 +49,12 @@ public partial class MainActivity
             }
             panel.AddView(buttons, Match());
             if (state.Focus)
-                RootActions(panel, ("End focus", () => { state.Focus = false; state.FocusEndsAt = 0; Save(); Render(); }
+                RootActions(panel, (Localize(Resource.String.ui_end_focus), () => { state.Focus = false; state.FocusEndsAt = 0; Save(); Render(); }
                 ));
         }, FocusTime());
         if (state.NotesVisible)
         {
-            cards["notes"] = () => RootCard("notes", "Notes", "note", panel => { Paragraph(Counted(state.Notes.Count, "saved note"), panel); panel.AddView(RootAction("+ New note", () => CreateNote(""), true), new LinearLayout.LayoutParams(-2, -2)); }, Counted(state.Notes.Count, "saved note"));
+            cards["notes"] = () => RootCard("notes", Localize(Resource.String.ui_notes), "note", panel => { Paragraph(Counted(state.Notes.Count, Resource.Plurals.saved_note), panel); panel.AddView(RootAction(Localize(Resource.String.ui_new_note_action), () => CreateNote(""), true), new LinearLayout.LayoutParams(-2, -2)); }, Counted(state.Notes.Count, Resource.Plurals.saved_note));
             foreach (var note in state.Notes.ToArray())
             {
                 var item = note;
@@ -66,7 +66,7 @@ public partial class MainActivity
                         BuildChecklist(panel, item);
                         return;
                     }
-                    var input = new EditText(this) { Text = item.Text, Hint = "Write a note…", TextSize = 16, Typeface = regular, Gravity = GravityFlags.Top };
+                    var input = new EditText(this) { Text = item.Text, Hint = Localize(Resource.String.ui_write_a_note), TextSize = 16, Typeface = regular, Gravity = GravityFlags.Top };
                     StyleEntry(input);
                     input.SetMinLines(3);
                     input.SetMaxLines(10);
@@ -74,14 +74,14 @@ public partial class MainActivity
                     input.TextChanged += (_, _) => { item.Text = input.Text ?? ""; item.UpdatedAt = Math.Max(Now, item.UpdatedAt + 1); QueueNoteSave(item); };
                     input.FocusChange += (_, e) => WorkspaceEditing.NoteId = e.HasFocus ? item.Id : null;
                     panel.AddView(input, Match());
-                    RootActions(panel, ("Rename", () => Prompt("Note title", item.Title, s => { item.Title = LauncherState.CleanName(s, "Note"); item.UpdatedAt = Now; Save(); RenderBody(); })));
-                }, liveSummary: () => item.Checklist ? Counted(Checklist.Read(item.Text).Count(entry => !entry.Done), "task") + " left"
+                    RootActions(panel, (Localize(Resource.String.ui_rename), () => Prompt(Resource.String.ui_note_title, item.Title, s => { item.Title = LauncherState.CleanName(s, "Note"); item.UpdatedAt = Now; Save(); RenderBody(); })));
+                }, liveSummary: () => item.Checklist ? Counted(Checklist.Read(item.Text).Count(entry => !entry.Done), Resource.Plurals.task) + " left"
                     : item.Text.Length == 0 ? "Empty note" : item.Text.Split('\n')[0]);
             }
         }
-        cards["timers"] = () => RootCard("timers", "Timers", "clock", panel =>
+        cards["timers"] = () => RootCard("timers", Localize(Resource.String.ui_timers), "clock", panel =>
         {
-            panel.AddView(RootAction("+ New timer", () => Prompt("Timer duration", "10 min", CreateTimer), true), new LinearLayout.LayoutParams(-2, -2));
+            panel.AddView(RootAction(Localize(Resource.String.ui_new_timer_action), () => Prompt(Resource.String.ui_timer_duration, "10 min", CreateTimer), true), new LinearLayout.LayoutParams(-2, -2));
             foreach (var timer in state.Timers.ToArray())
             {
                 var item = timer;
@@ -91,17 +91,17 @@ public partial class MainActivity
                 var label = Text(TimerDisplay(item), 30, true, palette.Accent);
                 workspaceTimerViews.Add((item, label));
                 panel.AddView(label, Match());
-                RootActions(panel, (item.EndsAt > 0 ? "Pause" : "Start", () => ToggleTimer(item)),
-                    ("Reset", () => { TimerAlerts.Cancel(this, item); item.EndsAt = 0; item.RemainingMs = item.DurationMs; Save(); RenderBody(); }
+                RootActions(panel, (item.EndsAt > 0 ? Localize(Resource.String.ui_pause) : Localize(Resource.String.ui_start), () => ToggleTimer(item)),
+                    (Localize(Resource.String.ui_reset), () => { TimerAlerts.Cancel(this, item); item.EndsAt = 0; item.RemainingMs = item.DurationMs; Save(); RenderBody(); }
                 ),
-                    ("Remove", () => { TimerAlerts.Cancel(this, item); state.Timers.Remove(item); Save(); RenderBody(); }
+                    (Localize(Resource.String.ui_remove), () => { TimerAlerts.Cancel(this, item); state.Timers.Remove(item); Save(); RenderBody(); }
                 ));
             }
-        }, $"{state.Timers.Count(t => t.EndsAt > 0)} running · {state.Timers.Count} timers");
+        }, Localize(Resource.String.ui_value_running_value_timers, state.Timers.Count(t => t.EndsAt > 0), state.Timers.Count));
         if (state.Reminders.Count > 0)
-            cards["reminders"] = () => RootCard("reminders", "Reminders", "clock", BuildReminders, Counted(state.Reminders.Count(r => !r.Completed), "upcoming reminder"));
+            cards["reminders"] = () => RootCard("reminders", Localize(Resource.String.ui_reminders), "clock", BuildReminders, Counted(state.Reminders.Count(r => !r.Completed), Resource.Plurals.upcoming_reminder));
         if (state.CalculatorVisible)
-            cards["calculator"] = () => RootCard("calculator", "Calculator", "calculator", panel =>
+            cards["calculator"] = () => RootCard("calculator", Localize(Resource.String.ui_calculator), "calculator", panel =>
         {
             var input = new EditText(this) { Hint = "(24 + 6) × 3", TextSize = 21, Typeface = regular };
             input.SetSingleLine(true);
@@ -110,11 +110,11 @@ public partial class MainActivity
             input.TextChanged += (_, _) => answer.Text = "= " + Calculator.Evaluate(input.Text ?? "");
             panel.AddView(input, Match());
             panel.AddView(answer, Match());
-        }, "Quick arithmetic");
+        }, Localize(Resource.String.ui_quick_arithmetic));
         if (state.ResourcesVisible)
-            cards["resources"] = () => RootCard("resources", "Phone resources", "resources", BuildResources, "Battery, memory & storage");
-        cards["feeds"] = () => RootCard("feeds", "News & feeds", "rss", BuildFeeds, Counted(Sources.Count(s => s.Enabled), "enabled source"));
-        cards["tickets"] = () => RootCard("tickets", "Tickets", "file", BuildTickets, $"{state.Tickets.Count} saved journeys");
+            cards["resources"] = () => RootCard("resources", Localize(Resource.String.ui_phone_resources), "resources", BuildResources, Localize(Resource.String.ui_battery_memory_storage));
+        cards["feeds"] = () => RootCard("feeds", Localize(Resource.String.ui_news_feeds), "rss", BuildFeeds, Counted(Sources.Count(s => s.Enabled), Resource.Plurals.enabled_source));
+        cards["tickets"] = () => RootCard("tickets", Localize(Resource.String.ui_tickets), "file", BuildTickets, Localize(Resource.String.ui_value_saved_journeys, state.Tickets.Count));
         foreach (var extra in state.ExtraCards.ToArray())
         {
             var item = extra;
@@ -134,9 +134,9 @@ public partial class MainActivity
         foreach (string key in order)
         if (!state.RootHidden.Contains(key))
             cards[key]();
-        RootActions(body, ("+ Add card", ShowAddCard), ("Arrange", BeginTodayLayout), ("+ Add widget", AddWidget));
+        RootActions(body, (Localize(Resource.String.ui_add_card_action), ShowAddCard), (Localize(Resource.String.ui_arrange), BeginTodayLayout), (Localize(Resource.String.ui_add_widget_action), AddWidget));
     }
-    private void RootOptions(string id, string title) => Choose(title, [state.RootPinned.Contains(id) ? "Unpin" : "Pin to top", "Move earlier", "Move later", "Hide card", "Remove card"], i =>
+    private void RootOptions(string id, string title) => Choose(title, [state.RootPinned.Contains(id) ? Localize(Resource.String.ui_unpin) : Localize(Resource.String.ui_pin_to_top), Localize(Resource.String.ui_move_earlier), Localize(Resource.String.ui_move_later), Localize(Resource.String.ui_hide_card), Localize(Resource.String.ui_remove_card)], i =>
     {
         if (i == 0)
         {
@@ -153,7 +153,7 @@ public partial class MainActivity
                 state.RootHidden.Add(id);
         }
         else
-            Confirm("Remove " + title + "?", "Remove this card and its content?", "Remove", () =>
+            Confirm(Localize(Resource.String.ui_remove_2) + title + "?", Localize(Resource.String.ui_remove_this_card_and_its_content), Localize(Resource.String.ui_remove), () =>
         {
             if (id.StartsWith("note:"))
             {
@@ -169,24 +169,24 @@ public partial class MainActivity
         Save();
         RenderBody();
     });
-    private void ManageRootCards() => Sheet("Root cards", (panel, dialog) =>
+    private void ManageRootCards() => Sheet(Localize(Resource.String.ui_root_cards), (panel, dialog) =>
     {
-        Paragraph("Hold any card header to pin, move, hide or remove it. Restore hidden cards below.", panel);
+        Paragraph(Localize(Resource.String.ui_hold_any_card_header_to_pin_move_hide_or), panel);
         foreach (string id in state.RootHidden.ToArray())
-            panel.AddView(Button("Restore " + CardLabel(id), () => { if (id == "resources") state.ResourcesVisible = true; state.RootHidden.Remove(id); Save(); dialog.Dismiss(); RenderBody(); }), Match());
+            panel.AddView(Button(Localize(Resource.String.ui_restore) + CardLabel(id), () => { if (id == "resources") state.ResourcesVisible = true; state.RootHidden.Remove(id); Save(); dialog.Dismiss(); RenderBody(); }), Match());
         if (page != "Root settings")
-            panel.AddView(Button("Today cards settings", () => { dialog.Dismiss(); Navigate("Root settings"); }), Match());
+            panel.AddView(Button(Localize(Resource.String.ui_today_cards_settings), () => { dialog.Dismiss(); Navigate("Root settings"); }), Match());
     });
     private void CreateNote(string title)
     {
         if (state.Notes.Count >= 200)
         {
-            Toast("The note limit is 200.");
+            Toast(Localize(Resource.String.ui_the_note_limit_is_200));
             return;
         }
         if (title.Length == 0)
         {
-            Prompt("Note title", "", CreateNote);
+            Prompt(Resource.String.ui_note_title, "", CreateNote);
             return;
         }
         var note = new WorkspaceNote { Title = LauncherState.CleanName(title, "Note") };
@@ -202,7 +202,7 @@ public partial class MainActivity
         {
             if (state.Timers.Count >= 20)
             {
-                Toast("The timer limit is 20.");
+                Toast(Localize(Resource.String.ui_the_timer_limit_is_20));
                 return;
             }
             long ms = RootCommand.TimerDuration(duration);
@@ -215,7 +215,7 @@ public partial class MainActivity
             Save();
             Navigate("Root");
         }
-        catch (ArgumentException e) { Toast(e.Message); }
+        catch (ArgumentException e) { Toast(PromptError(e)); }
     }
     private string TimerDisplay(WorkspaceTimer timer)
     {
@@ -260,8 +260,8 @@ public partial class MainActivity
     {
         if (string.IsNullOrEmpty(state.Weather.City))
         {
-            Paragraph("Choose a city to show the forecast.", panel);
-            RootActions(panel, ("Set location", () => Navigate("Weather")));
+            Paragraph(Localize(Resource.String.ui_choose_a_city_to_show_the_forecast), panel);
+            RootActions(panel, (Localize(Resource.String.ui_set_location), () => Navigate("Weather")));
             return;
         }
         var city = Text(state.Weather.City, 13, true);
@@ -275,7 +275,7 @@ public partial class MainActivity
         var condition = Stack();
         condition.SetPadding(Dp(16), 0, 0, 0);
         condition.AddView(Text(WeatherCondition.Label(state.Weather.Code), 14, true, palette.Accent), Match());
-        var range = Text("High " + Degrees(state.Weather.High) + "  /  Low " + Degrees(state.Weather.Low), 11, color: palette.Muted);
+        var range = Text(Localize(Resource.String.ui_high) + Degrees(state.Weather.High) + Localize(Resource.String.ui_low) + Degrees(state.Weather.Low), 11, color: palette.Muted);
         range.SetPadding(0, Dp(6), 0, 0);
         condition.AddView(range, Match());
         current.AddView(condition, new LinearLayout.LayoutParams(0, -2, 1));
@@ -287,7 +287,7 @@ public partial class MainActivity
         {
             var row = Stack(true);
             row.SetGravity(GravityFlags.CenterVertical);
-            string label = DateTime.TryParse(day.Date, out var date) ? date.ToString("ddd") : day.Date;
+            string label = DateTime.TryParse(day.Date, out var date) ? date.ToString("ddd", UiCulture) : day.Date;
             row.AddView(Text(label, 12, true), new LinearLayout.LayoutParams(Dp(42), -2));
             row.AddView(new GlyphView(this, WeatherCondition.Glyph(day.Code), palette.Muted), new LinearLayout.LayoutParams(Dp(17), Dp(17)));
             var description = Text(WeatherCondition.Label(day.Code), 11, color: palette.Muted);

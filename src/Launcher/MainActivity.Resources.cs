@@ -1,4 +1,4 @@
-﻿using Android.Views;
+using Android.Views;
 using Android.Widget;
 using LauncherApp.Services;
 using LauncherApp.UI;
@@ -44,9 +44,9 @@ public partial class MainActivity
             row.AddView(column, new LinearLayout.LayoutParams(0, -2, 1));
             return (donut, amount);
         }
-        (powerDonut, powerStatus) = Metric("Battery", "left", () => ResourceDetails("Battery"));
-        (memoryDonut, memoryAmount) = Metric("Memory", "used", () => ResourceDetails("Memory"));
-        (storageDonut, storageAmount) = Metric("Storage", "used", () => ResourceDetails("Storage"));
+        (powerDonut, powerStatus) = Metric(Localize(Resource.String.ui_battery_2), Localize(Resource.String.ui_left_2), () => ResourceDetails(Localize(Resource.String.ui_battery_2)));
+        (memoryDonut, memoryAmount) = Metric(Localize(Resource.String.ui_memory), Localize(Resource.String.ui_used_2), () => ResourceDetails(Localize(Resource.String.ui_memory)));
+        (storageDonut, storageAmount) = Metric(Localize(Resource.String.ui_storage), Localize(Resource.String.ui_used_2), () => ResourceDetails(Localize(Resource.String.ui_storage)));
         panel.AddView(row, Match());
         resourcesFootnote = Text("", 10, color: palette.Muted);
         resourcesFootnote.SetLineSpacing(Dp(2), 1);
@@ -79,17 +79,17 @@ public partial class MainActivity
         if (powerStatus is not null)
             powerStatus.Text = value.BatteryState;
         if (memoryAmount is not null)
-            memoryAmount.Text = value.MemoryTotal > 0 ? PhoneResources.Size(value.MemoryTotal - value.MemoryAvailable) + " used" : "Unavailable";
+            memoryAmount.Text = value.MemoryTotal > 0 ? PhoneResources.Size(value.MemoryTotal - value.MemoryAvailable) + Localize(Resource.String.ui_used_3) : Localize(Resource.String.ui_unavailable);
         if (storageAmount is not null)
-            storageAmount.Text = value.StorageTotal > 0 ? PhoneResources.Size(value.StorageAvailable) + " available" : "Unavailable";
+            storageAmount.Text = value.StorageTotal > 0 ? PhoneResources.Size(value.StorageAvailable) + Localize(Resource.String.ui_available_2) : Localize(Resource.String.ui_unavailable);
         if (memoryDonut is not null)
-            memoryDonut.ContentDescription = "Memory used: " + (value.Memory is { } memory ? $"{memory:0}%" : "unavailable");
+            memoryDonut.ContentDescription = Localize(Resource.String.ui_memory_used) + (value.Memory is { } memory ? $"{memory:0}%" : Localize(Resource.String.ui_unavailable_2));
         if (storageDonut is not null)
-            storageDonut.ContentDescription = "Storage used: " + (value.Storage is { } storage ? $"{storage:0}%" : "unavailable");
+            storageDonut.ContentDescription = Localize(Resource.String.ui_storage_used) + (value.Storage is { } storage ? $"{storage:0}%" : Localize(Resource.String.ui_unavailable_2));
         if (powerDonut is not null)
-            powerDonut.ContentDescription = "Battery remaining: " + (value.Battery is { } power ? $"{power:0}%" : "unavailable");
+            powerDonut.ContentDescription = Localize(Resource.String.ui_battery_remaining) + (value.Battery is { } power ? $"{power:0}%" : Localize(Resource.String.ui_unavailable_2));
         if (resourcesFootnote is not null)
-            resourcesFootnote.Text = (value.Temperature is { } temperature ? $"Battery {temperature:0.#}°C · " : "") + "Updates every 10s while open.";
+            resourcesFootnote.Text = (value.Temperature is { } temperature ? Localize(Resource.String.ui_battery_valuec, temperature) : "") + Localize(Resource.String.ui_updates_every_10s_while_open);
     }
     private void ResourceDetails(string metric) => Sheet(metric, (panel, sheet) =>
     {
@@ -104,33 +104,33 @@ public partial class MainActivity
         {
             if (value.MemoryTotal > 0)
             {
-                Detail("Used", PhoneResources.Size(value.MemoryTotal - value.MemoryAvailable));
-                Detail("Available", PhoneResources.Size(value.MemoryAvailable));
-                Detail("System total", PhoneResources.Size(value.MemoryTotal));
+                Detail(Localize(Resource.String.ui_used), PhoneResources.Size(value.MemoryTotal - value.MemoryAvailable));
+                Detail(Localize(Resource.String.ui_available), PhoneResources.Size(value.MemoryAvailable));
+                Detail(Localize(Resource.String.ui_system_total), PhoneResources.Size(value.MemoryTotal));
             }
             else
-                Paragraph("Memory information is unavailable on this device.", panel);
-            Paragraph("Android can reclaim cached memory when apps need it. A high used percentage does not by itself mean the phone is struggling. The total excludes memory reserved by the device.", panel);
+                Paragraph(Localize(Resource.String.ui_memory_information_is_unavailable_on_this_device), panel);
+            Paragraph(Localize(Resource.String.ui_android_can_reclaim_cached_memory_when_apps_need_it), panel);
         }
         else if (metric == "Storage")
         {
             if (value.StorageTotal > 0)
             {
-                Detail("Used", PhoneResources.Size(value.StorageTotal - value.StorageAvailable));
-                Detail("Available to apps", PhoneResources.Size(value.StorageAvailable));
-                Detail("Data volume total", PhoneResources.Size(value.StorageTotal));
+                Detail(Localize(Resource.String.ui_used), PhoneResources.Size(value.StorageTotal - value.StorageAvailable));
+                Detail(Localize(Resource.String.ui_available_to_apps), PhoneResources.Size(value.StorageAvailable));
+                Detail(Localize(Resource.String.ui_data_volume_total), PhoneResources.Size(value.StorageTotal));
             }
             else
-                Paragraph("Storage information is unavailable on this device.", panel);
-            Paragraph("This is the internal data volume used by apps, rather than the device's advertised capacity. Space reserved by Android is included in the unavailable portion.", panel);
+                Paragraph(Localize(Resource.String.ui_storage_information_is_unavailable_on_this_device), panel);
+            Paragraph(Localize(Resource.String.ui_this_is_the_internal_data_volume_used_by_apps), panel);
         }
         else
         {
-            Detail("Remaining", value.Battery is { } battery ? $"{battery:0}%" : "Unavailable");
-            Detail("State", value.BatteryState);
+            Detail(Localize(Resource.String.ui_remaining), value.Battery is { } battery ? $"{battery:0}%" : "Unavailable");
+            Detail(Localize(Resource.String.ui_state), value.BatteryState);
             if (value.Temperature is { } temperature)
-                Detail("Battery temperature", $"{temperature:0.#}°C");
-            Paragraph("Temperature is reported by the battery sensor. It is not a CPU temperature reading.", panel);
+                Detail(Localize(Resource.String.ui_battery_temperature), $"{temperature:0.#}°C");
+            Paragraph(Localize(Resource.String.ui_temperature_is_reported_by_the_battery_sensor_it_is), panel);
         }
     });
 }

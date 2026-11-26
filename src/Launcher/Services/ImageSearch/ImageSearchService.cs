@@ -174,7 +174,7 @@ internal sealed class ImageSearchService
         catch (Exception error) when (error is IOException or UnauthorizedAccessException)
         {
             Android.Util.Log.Warn("ImageSearch", error.ToString());
-            progress = progress with { Error = "Couldn't remove the image search data. Try again." };
+            progress = progress with { Error = Localize(Resource.String.ui_couldn_t_remove_the_image_search_data_try_again) };
         }
         finally
         {

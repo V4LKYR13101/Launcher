@@ -1,4 +1,4 @@
-﻿using Android.Widget;
+using Android.Widget;
 using Launcher.Core;
 using LauncherApp.Services;
 namespace LauncherApp;
@@ -17,14 +17,14 @@ public partial class MainActivity
     Choose(
         article.Title,
         [
-            "Open story",
-            "Read aloud",
+            Localize(Resource.String.ui_open_story),
+            Localize(Resource.String.ui_read_aloud),
             state.SavedArticles.Any(a => a.Url == article.Url)
-                ? "Remove from saved"
-                : "Save for later",
+                ? Localize(Resource.String.ui_remove_from_saved)
+                : Localize(Resource.String.ui_save_for_later),
             state.ReadArticleUrls.Contains(article.Url)
-                ? "Mark unread"
-                : "Mark read"
+                ? Localize(Resource.String.ui_mark_unread)
+                : Localize(Resource.String.ui_mark_read)
         ],
         index =>
         {
@@ -51,7 +51,7 @@ public partial class MainActivity
                 {
                     if (state.SavedArticles.Count >= 200)
                     {
-                        Toast("The saved-story limit is 200.");
+                        Toast(Localize(Resource.String.ui_the_saved_story_limit_is_200));
                         return;
                     }
 
@@ -78,10 +78,10 @@ public partial class MainActivity
             if (feedPanel is { } panel)
                 RenderFeeds(panel);
         });
-    private void ShowSavedArticles() => Sheet("Saved stories", (panel, dialog) =>
+    private void ShowSavedArticles() => Sheet(Localize(Resource.String.ui_saved_stories), (panel, dialog) =>
     {
         if (state.SavedArticles.Count == 0)
-            Paragraph("Hold a story in News & feeds and choose Save for later. Saved titles and links stay on this device.", panel);
+            Paragraph(Localize(Resource.String.ui_hold_a_story_in_news_feeds_and_choose_save), panel);
         foreach (var article in state.SavedArticles.OrderByDescending(a => a.SavedAt))
         {
             var item = article;

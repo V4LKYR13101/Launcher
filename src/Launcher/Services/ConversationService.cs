@@ -9,7 +9,7 @@ namespace LauncherApp.Services;
 
 public sealed record Conversation(string Key, string Package, string Title, string Text, long Time, PendingIntent? Open, bool Dismissible = true);
 
-[Service(Label = "Launcher notifications", Permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE", Exported = true)]
+[Service(Label = "@string/ui_launcher_notifications", Permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE", Exported = true)]
 [IntentFilter(["android.service.notification.NotificationListenerService"])]
 public sealed class ConversationService : NotificationListenerService
 {

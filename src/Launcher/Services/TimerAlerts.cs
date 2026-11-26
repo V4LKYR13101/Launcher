@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Launcher.Core;
@@ -82,10 +82,10 @@ public sealed class TimerReceiver : BroadcastReceiver
         }
         var manager = (NotificationManager)context.GetSystemService(Context.NotificationService)!;
         if (OperatingSystem.IsAndroidVersionAtLeast(26))
-            manager.CreateNotificationChannel(new NotificationChannel("timers", "Timer alerts", NotificationImportance.High));
+            manager.CreateNotificationChannel(new NotificationChannel("timers", Localize(Resource.String.ui_timer_alerts), NotificationImportance.High));
         var builder = OperatingSystem.IsAndroidVersionAtLeast(26) ? new Notification.Builder(context, "timers") : new Notification.Builder(context);
         var open = PendingIntent.GetActivity(context, 0, new Intent(context, typeof(MainActivity)).PutExtra("open_root", true), PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
-        builder.SetSmallIcon(global::Launcher.Resource.Drawable.launcher_icon)!.SetContentTitle("Timer finished")!.SetContentText(timer.Title)!.SetContentIntent(open)!.SetAutoCancel(true)!.SetCategory(Notification.CategoryAlarm);
+        builder.SetSmallIcon(global::Launcher.Resource.Drawable.launcher_icon)!.SetContentTitle(Localize(Resource.String.ui_timer_finished))!.SetContentText(timer.Title)!.SetContentIntent(open)!.SetAutoCancel(true)!.SetCategory(Notification.CategoryAlarm);
         builder.SetVisibility(NotificationVisibility.Private);
         try
         {

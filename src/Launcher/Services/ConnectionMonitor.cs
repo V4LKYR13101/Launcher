@@ -93,7 +93,7 @@ public sealed class ConnectionMonitor : BroadcastReceiver, IBluetoothProfileServ
             var wifi = (WifiManager?)context.ApplicationContext!.GetSystemService(Context.WifiService);
             bool active = wifi?.IsWifiEnabled == true;
             if (!active)
-                return (false, "Off");
+                return (false, Localize(Resource.String.ui_off));
 #pragma warning disable CA1422 // Current connection only; this API provides the permission-gated SSID on Android 7+.
             var info = wifi?.ConnectionInfo;
 #pragma warning restore CA1422
@@ -102,23 +102,23 @@ public sealed class ConnectionMonitor : BroadcastReceiver, IBluetoothProfileServ
                 return (true, name);
             var network = (ConnectivityManager?)context.GetSystemService(Context.ConnectivityService);
             bool connected = network?.GetNetworkCapabilities(network.ActiveNetwork)?.HasTransport(TransportType.Wifi) == true;
-            return (true, connected ? (CanReadWifiName ? "Connected" : "Connected · show names") : "On · not connected");
+            return (true, connected ? (CanReadWifiName ? Localize(Resource.String.ui_connected) : Localize(Resource.String.ui_connected_show_names)) : Localize(Resource.String.ui_on_not_connected));
         }
-        catch (Java.Lang.SecurityException) { return (false, "Show connection details"); }
+        catch (Java.Lang.SecurityException) { return (false, Localize(Resource.String.ui_show_connection_details)); }
     }
     public (bool Active, string Detail) Bluetooth()
     {
         if (!CanReadBluetooth)
-            return (false, "Allow nearby devices");
+            return (false, Localize(Resource.String.ui_allow_nearby_devices));
         try
         {
             if (Adapter?.IsEnabled != true)
-                return (false, "Off");
+                return (false, Localize(Resource.String.ui_off));
             var names = profiles.Values.SelectMany(p => p.ConnectedDevices ?? []).DistinctBy(d => d.Address)
                 .Select(d => d.Name).Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
-            return (true, names.Length > 0 ? string.Join(", ", names) : "On · not connected");
+            return (true, names.Length > 0 ? string.Join(", ", names) : Localize(Resource.String.ui_on_not_connected));
         }
-        catch (Java.Lang.SecurityException) { return (false, "Allow nearby devices"); }
+        catch (Java.Lang.SecurityException) { return (false, Localize(Resource.String.ui_allow_nearby_devices)); }
     }
     public string? AudioDeviceName()
     {
